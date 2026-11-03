@@ -1,51 +1,53 @@
-# Arquitetura planejada
+# Planned architecture
 
-Estado: direção aprovada para iniciar; detalhes serão ajustados por experimentos.
+Status: accepted initial direction; details remain subject to experiments.
 
-| Camada | Tecnologia / responsabilidade |
+| Layer | Technology / responsibility |
 |---|---|
-| Interface | React, TypeScript e Tailwind CSS; biblioteca, tarefas e transferências |
-| Aplicativo | Tauri 2; comandos explicitamente expostos à interface |
-| Núcleo local | Rust; importação, hashes, formatos, políticas e tarefas |
-| Persistência | SQLite com migrações versionadas |
-| Transferência | Adaptador BitTorrent; engine ainda não escolhida |
-| Integrações futuras | Adaptadores independentes para IPFS e provas temporais |
+| Interface | React, TypeScript, Tailwind CSS; library, tasks, and transfers |
+| Application shell | Tauri 2; explicitly exposed interface commands |
+| Local core | Rust; import, hashes, formats, policies, and tasks |
+| Persistence | SQLite with versioned migrations |
+| Transfers | BitTorrent adapter; engine not yet selected |
+| Future integrations | Independent IPFS and timestamp adapters |
 
-## Limites
+## Boundaries
 
-A interface solicita operações; o núcleo valida entradas e aplica permissões. A engine de transferência não deve controlar o modelo do catálogo. Falhas de rede não devem impedir a consulta da biblioteca local. Operações longas executam fora da thread da interface, com eventos de progresso e cancelamento cooperativo.
+The interface requests operations; the core validates input and enforces permissions. The transfer engine must not own the catalog model. Network failures must not prevent local library browsing. Long operations run outside the UI thread, with progress events and cooperative cancellation.
 
-## Fluxo de importação
+User-facing strings use locale resources for English and Brazilian Portuguese. Rust errors expose stable codes and structured parameters for localized presentation. Internal identifiers, schema keys, and logs remain stable across locales. See [localization](localization.md).
 
-Selecionar caminho → enumerar com limites → registrar tarefa → ler arquivo em blocos → calcular hash → verificar estabilidade do arquivo → persistir resultado → apresentar resumo e falhas individuais.
+## Import flow
 
-Não carregar jogos inteiros em memória. Links simbólicos, junctions e ciclos precisam de política explícita; inicialmente não seguir diretórios redirecionados automaticamente. Reinícios devem permitir repetir operações sem duplicar registros inadvertidamente.
+Select path → enumerate with limits → register task → read file in chunks → calculate hash → check file stability → persist result → show summary and individual failures.
 
-## Entidades iniciais
+Do not load whole games into memory. Symbolic links, junctions, and cycles require explicit policy; initially do not automatically follow redirected directories. Restarting and retrying must not create unintended duplicate records.
 
-- Arquivo: identidade interna, tamanho, hash e estado de verificação.
-- Localização: caminho e vínculo com arquivo; um conteúdo pode ter várias localizações.
-- Item de acervo: título, plataforma, versão e referências aos arquivos.
-- Manifesto: versão do esquema, entradas, metadados e identificadores.
-- Tarefa: tipo, estado, progresso e erro recuperável.
-- Transferência: identificador BitTorrent, destino e estado; separado do acervo.
+## Initial entities
 
-Detalhar o esquema em uma migração antes de implementá-lo. Hash do conteúdo e identidade editorial são conceitos diferentes: duas versões do mesmo jogo podem ter hashes distintos.
+- File: internal identity, size, hash, and verification state.
+- Location: path and associated file; content may have multiple locations.
+- Collection item: title, platform, version, and file references.
+- Manifest: schema version, entries, metadata, and identifiers.
+- Task: type, state, progress, and recoverable error.
+- Transfer: BitTorrent identifier, destination, and state; separate from the collection.
 
-## Estrutura prevista
+Detail the schema in a migration before implementation. Content hash and editorial identity are different concepts: two versions of a game can have different hashes.
+
+## Proposed structure
 
 ```text
-apps/desktop/src/           Interface
-apps/desktop/src-tauri/src/ Núcleo Rust e adaptadores
-packages/manifest-schema/  Esquemas e exemplos interoperáveis
-docs/decisions/            Decisões de arquitetura
-tests/fixtures/            Amostras sintéticas ou redistribuíveis
+apps/desktop/src/           Interface and locale resources
+apps/desktop/src-tauri/src/ Rust core and adapters
+packages/manifest-schema/  Schemas and interoperable examples
+docs/decisions/            Architecture decisions
+tests/fixtures/            Synthetic or redistributable samples
 ```
 
-## Escolha da engine
+## Engine selection
 
-Criar ADR comparando licença compatível com a distribuição, integração Rust/Tauri, manutenção, DHT, magnets, trackers, retomada, limites de recursos e comportamento em Windows. Não escolher exclusivamente por popularidade. Executar uma transferência e uma retomada reais antes da decisão.
+Create an ADR comparing distribution-compatible licensing, Rust/Tauri integration, maintenance, DHT, magnets, trackers, resume, resource limits, and Windows behavior. Do not choose solely by popularity. Run a real transfer and resume experiment before deciding.
 
-## Verificação e distribuição
+## Verification and distribution
 
-Verificar regras de domínio e parsing com testes; testar integração de SQLite, arquivos e transferências. Validar interface e instalador em Windows. Registrar versões das ferramentas. Nunca incluir jogos comerciais, chaves ou dados pessoais nas fixtures. Atualização automática e assinatura do instalador exigem decisão posterior sobre infraestrutura e chaves.
+Test domain rules and parsers; integration-test SQLite, files, and transfers. Validate the interface and installer on Windows. Record tool versions. Never include commercial games, keys, or personal data in fixtures. Automatic updates and installer signing require a later infrastructure and key-management decision.

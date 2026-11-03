@@ -1,50 +1,61 @@
-# Gestão e registros do projeto
+# Project management and records
 
-## Situação em 03/11/2026
+## Status on November 3, 2026
 
-- Nome: Game4∞.
-- Estágio: planejamento e documentação; sem aplicativo implementado.
-- Plataforma inicial: Windows.
-- Direção técnica: Tauri 2, Rust, React, TypeScript, Tailwind CSS e SQLite.
-- Transporte inicial planejado: BitTorrent, com engine ainda em avaliação.
-- Política de trabalho: commits relevantes em Conventional Commits; nenhum push pelo agente.
-- Próxima entrega: M0, fundação executável e verificável do desktop.
+- Name: Game4∞.
+- Stage: planning and documentation; no implemented application.
+- Initial platform: Windows.
+- Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
+- Planned initial transport: BitTorrent; engine still under evaluation.
+- Languages: English repository content; planned English and Brazilian Portuguese application.
+- Workflow: relevant Conventional Commits; no agent push.
+- Next delivery: M0, a runnable and verifiable desktop foundation.
 
-## Backlog imediato
+## Immediate backlog
 
-| ID | Trabalho | Aceitação | Estado |
+| ID | Work | Acceptance | Status |
 |---|---|---|---|
-| B01 | Inventariar ferramentas locais | Versões e pré-requisitos conhecidos | Pendente |
-| B02 | Inicializar desktop | Aplicativo abre em Windows com nome Game4∞ | Pendente |
-| B03 | Criar estrutura visual | Navegação de biblioteca, tarefas e configurações com estados vazios claros | Pendente |
-| B04 | Configurar verificações | Formatação, tipos e build reproduzíveis documentados | Pendente |
-| B05 | Definir modelo local | Migração SQLite e estados de importação revisados | Pendente |
-| B06 | Implementar importação e hash | Progresso, cancelamento e tratamento de erros demonstrados | Pendente |
+| B01 | Inventory local tools | Known versions and prerequisites | Pending |
+| B02 | Initialize desktop | Application launches on Windows as Game4∞ | Pending |
+| B03 | Establish interface | Library, tasks, settings, and clear empty states | Pending |
+| B04 | Configure checks | Documented reproducible formatting, types, and build | Pending |
+| B05 | Define local model | Reviewed SQLite migration and import states | Pending |
+| B06 | Implement import and hashing | Demonstrated progress, cancellation, and error handling | Pending |
+| B07 | Establish localization | English and Portuguese resources, persistent selector, and fallback | Pending |
 
-## Definição de concluído
+## Definition of done
 
-Uma tarefa termina quando o comportamento atende à aceitação, as verificações adequadas passaram, as limitações foram registradas e a documentação afetada foi atualizada. Registrar testes realmente executados; não declarar aprovação por inferência. Fazer commit da entrega coerente, sem incluir segredos, builds ou acervos pessoais.
+A task is complete when behavior meets acceptance criteria, appropriate checks pass, limitations are recorded, and affected documentation is updated. Record tests actually executed; do not infer passing results. Commit a coherent delivery without secrets, build outputs, or personal collections. Delivered user-facing features must cover both supported locales.
 
-## Histórico
+## History
 
-### 03/11/2026 — Fundação documental
+### November 3, 2026 — Documentation foundation
 
-- Revisado o README e o estágio inicial do repositório.
-- Consolidada a direção de biblioteca local, P2P, comunidades e preservação de longo prazo.
-- Planejados Modo Guardião, resgate, catálogos assinados e reconstrução offline.
-- Mantidas criptomoedas como integrações opcionais, sem token próprio ou custódia no núcleo.
-- Criados plano, cronograma estimado, arquitetura, preservação, segurança, riscos e ADR inicial.
-- Nenhuma funcionalidade de aplicativo implementada nesta etapa.
+- Reviewed the README and initial repository state.
+- Consolidated the local library, P2P, community, and long-term preservation direction.
+- Planned Guardian Mode, rescue, signed catalogs, and offline reconstruction.
+- Kept cryptocurrency integrations optional, without a native token or core custody.
+- Created product plan, estimated schedule, architecture, preservation, security, risks, and initial ADR.
+- No application functionality was implemented.
+- Commit: `6657e23`.
 
-## Modelo para próximas entradas
+### November 3, 2026 — Language policy
+
+- Translated the README, plans, risk register, progress records, and ADRs into English.
+- Established English as the initial language for repository and GitHub-facing content.
+- Added planned English (`en`) and Brazilian Portuguese (`pt-BR`) application support to M0 and delivery acceptance.
+- Documented persistent language selection, fallback, locale parity, and stable nonlocalized data identifiers.
+- No application localization has been implemented; this change establishes policy and scope.
+
+## Template for future entries
 
 ```text
-Data — entrega
-Objetivo:
-Alterações:
-Verificações executadas e resultados:
-Limitações / riscos:
-Decisões relacionadas:
-Próximo passo:
-Commit: registrar hash quando conhecido; o histórico Git é a referência definitiva.
+Date — delivery
+Goal:
+Changes:
+Checks executed and results:
+Limitations / risks:
+Related decisions:
+Next step:
+Commit: add hash when known; Git history is the definitive reference.
 ```

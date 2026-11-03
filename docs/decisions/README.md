@@ -1,11 +1,12 @@
-# Decisões de arquitetura
+# Architecture decisions
 
-ADRs registram contexto, decisão e consequências. Uma decisão aceita pode ser substituída por outra; preservar o histórico e apontar a substituição.
+ADRs capture context, decisions, and consequences. An accepted decision may be superseded; retain the record and link its replacement.
 
-| ADR | Estado | Assunto |
+| ADR | Status | Subject |
 |---|---|---|
-| [0001](0001-product-foundation.md) | Aceito como direção inicial | Fundação local, P2P e integrações opcionais |
+| [0001](0001-product-foundation.md) | Accepted initial direction | Local foundation, P2P, and optional integrations |
+| [0002](0002-language-policy.md) | Accepted | English repository and bilingual application |
 
-Próximas decisões necessárias: engine BitTorrent, manifesto v0, contêiner `.g4`, identidade e assinatura de catálogos, distribuição e atualizações.
+Upcoming decisions: BitTorrent engine, manifest v0, `.g4` container, catalog identity and signatures, distribution, and updates.
 
-Modelo: título, data, estado, contexto, alternativas, decisão, consequências e evidência de validação. Não registrar uma tecnologia experimental como aprovada antes do experimento correspondente.
+Template: title, date, status, context, alternatives, decision, consequences, and validation evidence. Do not mark experimental technology as accepted before its experiment.

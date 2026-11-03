@@ -1,49 +1,48 @@
-# Plano do produto
+# Product plan
 
-## Visão
+## Vision and audiences
 
-O Game4∞ deve ajudar pessoas e comunidades a manter acervos verificáveis, recuperáveis e utilizáveis, mesmo sem os serviços dos criadores do projeto. O foco inicial é Windows, com funcionamento local sem conta obrigatória.
+Game4∞ should help people and communities maintain verifiable, recoverable, usable collections even without services operated by the project's creators. The initial platform is Windows, with local functionality and no mandatory account.
 
-## Públicos e necessidades
-
-| Público | Necessidade |
+| Audience | Need |
 |---|---|
-| Colecionador | Catalogar arquivos e verificar alterações ou danos |
-| Curador | Documentar origem, versões e condições de execução |
-| Comunidade | Compartilhar coleções e manter cópias independentes |
-| Guardião | Oferecer armazenamento e rede dentro de limites explícitos |
+| Collector | Catalog files and detect changes or damage |
+| Curator | Document provenance, versions, and execution requirements |
+| Community | Share collections and maintain independent copies |
+| Guardian | Offer storage and bandwidth within explicit limits |
 
-## Primeira entrega: biblioteca local
+## First delivery: local library
 
-- Importar arquivos e pastas com progresso e cancelamento.
-- Registrar tamanho, caminho, plataforma, versão e SHA-256.
-- Detectar duplicatas exatas sem excluir arquivos automaticamente.
-- Consultar e editar metadados locais em SQLite.
-- Verificar novamente um arquivo e distinguir íntegro, alterado, ausente e não verificado.
-- Exportar e importar um manifesto versionado, sem exigir internet.
-- Orientar o usuário quando um arquivo mudar durante a leitura.
+- Import files and folders with progress and cancellation.
+- Record size, location, platform, version, and SHA-256.
+- Detect exact duplicates without automatic deletion.
+- Browse and edit local metadata stored in SQLite.
+- Recheck files and distinguish intact, changed, missing, and unverified states.
+- Export and import a versioned manifest offline.
+- Explain when a file changes during reading.
+- Support English and Brazilian Portuguese through shared localization infrastructure.
 
-Aceitação: importar um acervo de teste, fechar e reabrir o app, verificar integridade, exportar o manifesto e reconstruir o catálogo em uma instalação limpa. Erros não devem interromper silenciosamente toda a operação.
+Acceptance: import a test collection, restart the app, verify integrity, export a manifest, and reconstruct the catalog in a clean installation. Errors must not silently stop the entire operation. Language selection must persist, and both locales must cover the delivered interface.
 
-## Alpha P2P
+## P2P alpha
 
-Adicionar torrents e magnet links, criação de torrents, fila, progresso, limites de velocidade, pausa, retomada, persistência e verificação das peças. Compartilhar exige ação explícita e explicação da exposição de rede.
+Add torrents and magnet links, torrent creation, queues, progress, speed limits, pause, resume, persistence, and piece verification. Sharing requires explicit action and an explanation of network exposure.
 
-Aceitação: duas instalações transferem um acervo autorizado, retomam após reinício e validam os arquivos finais. O aplicativo deve continuar útil quando não houver peers disponíveis.
+Acceptance: two installations transfer authorized content, resume after restart, and verify final files. The application remains useful when no peers are available.
 
-## Diferenciais posteriores
+## Later differentiators
 
-1. Modo Guardião com seleção de coleções, quota de disco, limites de rede e horários.
-2. Resgate de conteúdos com baixa disponibilidade observada.
-3. Catálogos assinados e histórico de versões.
-4. Documentação de execução e kit de reconstrução offline.
-5. Redundância, recuperação e verificação periódica.
-6. Provas temporais e financiamento opcional de acervos.
+1. Guardian Mode with collection selection, disk quotas, bandwidth limits, and schedules.
+2. Rescue of content with low observed availability.
+3. Signed catalogs and version history.
+4. Execution documentation and offline reconstruction kits.
+5. Redundancy, recovery, and scheduled verification.
+6. Timestamp proofs and optional collection funding.
 
-## Fora do escopo inicial
+## Outside the initial scope
 
-Moeda própria, NFTs, custódia financeira, recompensas automáticas por seed, marketplace, emulador embutido, execução automática, suporte simultâneo a múltiplos sistemas operacionais e formatos proprietários complexos.
+A native token, NFTs, financial custody, automatic seeding rewards, a marketplace, an embedded emulator, automatic execution, simultaneous multi-OS support, and complex proprietary formats.
 
-## Indicadores de qualidade
+## Quality indicators
 
-Medir em acervos de teste: sucesso de restauração, detecção de corrupção, erros de importação, capacidade de retomada e consumo de memória. Registrar tamanho do acervo, hardware e versões para permitir comparação. Metas numéricas de desempenho serão definidas depois da primeira medição; não haverá telemetria pessoal por padrão.
+Measure restoration success, corruption detection, import failures, resume reliability, and memory usage on test collections. Record collection size, hardware, and tool versions for comparison. Define numerical performance targets after initial measurements. No personal telemetry by default.

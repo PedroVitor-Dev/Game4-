@@ -1,43 +1,43 @@
-# Descentralização e financiamento
+# Decentralization and funding
 
-## Direção
+## Direction
 
-As funções essenciais não exigem conta, carteira, token ou pagamento. BitTorrent é o transporte inicial. Identidade de curadores, integridade dos arquivos, disponibilidade e financiamento são problemas distintos.
+Essential features do not require an account, wallet, token, or payment. BitTorrent is the initial transport. Curator identity, file integrity, availability, and funding are separate concerns.
 
-## Modo Guardião e resgate
+## Guardian Mode and rescue
 
-Planejar adesão explícita por coleção, quota de disco, limites de upload/download, horários e saída voluntária. Não apagar arquivos pessoais para liberar quota. Informar o que permanece compartilhado ao pausar ou remover uma coleção.
+Plan explicit per-collection participation, disk quotas, upload/download limits, schedules, and voluntary withdrawal. Never delete personal files to free quota. Explain what remains shared when a collection is paused or removed.
 
-O painel deve mostrar fontes observadas, última observação e verificações recentes. Classificar risco com base nesses sinais, sem declarar contagem global de cópias. Priorizar resgate de conteúdos com poucas fontes e evitar que todos os guardiões escolham apenas os mesmos itens populares. Resistência a identidades falsas e relatos falsos precisa de pesquisa antes de qualquer incentivo econômico.
+Show observed sources, last observation, and recent verification. Assess risk from those signals without claiming a global copy count. Prioritize content with few sources and avoid all guardians choosing only popular items. Resistance to fake identities and false reports requires research before economic incentives.
 
-## Catálogos assinados
+## Signed catalogs
 
-Assinaturas permitem verificar integridade e vínculo com uma chave. Planejar exportação, rotação, recuperação e revogação de chaves. Confiança é local: usuários escolhem curadores e comunidades; não haverá autoridade editorial global obrigatória.
+Signatures verify integrity and association with a key. Plan key export, rotation, recovery, and revocation. Trust is local: users choose curators and communities, without a mandatory global editorial authority.
 
-## Integrações
+## Integrations
 
-| Tecnologia | Uso proposto | Condição de adoção |
+| Technology | Proposed use | Adoption gate |
 |---|---|---|
-| IPFS | Distribuição complementar de manifestos e conteúdos | Testar pinning, restauração e consumo de recursos |
-| OpenTimestamps / Bitcoin | Prova temporal de manifestos | Preservar e verificar a prova junto com o manifesto |
-| Bitcoin / Lightning | Doação voluntária para projeto ou acervo | Preferir fluxo externo; sem custódia de chaves pelo app |
-| Filecoin | Cópia adicional financiada | Experimento com contrato, prazo, custo e recuperação real |
+| IPFS | Complementary manifest and content distribution | Test pinning, restoration, and resource usage |
+| OpenTimestamps / Bitcoin | Manifest timestamp proofs | Preserve and verify proofs with manifests |
+| Bitcoin / Lightning | Voluntary project or collection donations | Prefer external flows; no app custody of keys |
+| Filecoin | Funded additional copy | Experiment covering agreement, duration, cost, and actual retrieval |
 
-IPFS requer retenção efetiva por nós; identificação por conteúdo não garante persistência. OpenTimestamps não armazena os jogos nem certifica autoria. Filecoin exige planejamento de armazenamento e recuperação; não prometer permanência.
+IPFS requires nodes to retain data; content addressing does not guarantee persistence. OpenTimestamps neither stores games nor certifies authorship. Filecoin requires storage and retrieval planning; do not promise permanence.
 
-## Patrocínio de acervos
+## Collection sponsorship
 
-Hipótese futura: apresentar objetivo, orçamento, período, responsáveis, política de encerramento e relatórios de verificação. Financiamento recebido não equivale automaticamente a armazenamento comprovado. Começar com processo transparente e contribuição externa, antes de considerar contratos inteligentes.
+Future hypothesis: publish a goal, budget, period, responsible parties, closure policy, and verification reports. Received funding does not automatically prove storage. Start with transparent processes and external contributions before considering smart contracts.
 
-## Exclusões iniciais
+## Initial exclusions
 
-Não criar token próprio, NFTs, mineração no dispositivo, custódia, rendimento financeiro ou pagamento automático por tráfego. Esses mecanismos ampliariam a superfície de fraude e desviariam o foco da restauração verificável.
+No native token, NFTs, device mining, custody, financial yield, or automatic traffic payments. These mechanisms would increase fraud exposure and distract from verifiable restoration.
 
-## Referências técnicas
+## Technical references
 
-- [Persistência no IPFS](https://docs.ipfs.tech/concepts/persistence/)
+- [IPFS persistence](https://docs.ipfs.tech/concepts/persistence/)
 - [OpenTimestamps](https://opentimestamps.org/)
-- [Especificação Filecoin](https://spec.filecoin.io/)
+- [Filecoin specification](https://spec.filecoin.io/)
 - [BTCPay Server](https://docs.btcpayserver.org/FAQ/General/)
 
-Referências consultadas no planejamento de 03/11/2026. Revalidar APIs, custos, licenças e condições quando uma integração entrar em implementação.
+References consulted for planning on November 3, 2026. Revalidate APIs, costs, licenses, and terms when implementing an integration.

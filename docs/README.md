@@ -1,28 +1,27 @@
-# Documentação do Game4∞
+# Game4∞ documentation
 
-Uma rede aberta para preservar, verificar e compartilhar acervos digitais.
+An open network for preserving, verifying, and sharing digital collections.
 
-## Navegação
-
-| Documento | Finalidade |
+| Document | Purpose |
 |---|---|
-| [Plano do produto](product-plan.md) | Visão, usuários, escopo e prioridades |
-| [Cronograma](roadmap.md) | Fases, estimativas, dependências e critérios de conclusão |
-| [Arquitetura](architecture.md) | Componentes, fluxo de dados e limites técnicos |
-| [Preservação e formatos](preservation.md) | Integridade, metadados, recuperação e interoperabilidade |
-| [Descentralização e financiamento](decentralization.md) | Guardiões, IPFS, Bitcoin e integrações experimentais |
-| [Segurança](security.md) | Ameaças e controles previstos |
-| [Gestão e registros](project-log.md) | Situação atual, backlog imediato e histórico |
-| [Riscos](risks.md) | Incertezas, mitigação e gatilhos de revisão |
-| [Decisões](decisions/README.md) | Registro das decisões de arquitetura |
+| [Product plan](product-plan.md) | Vision, audiences, scope, and priorities |
+| [Roadmap](roadmap.md) | Estimates, dependencies, milestones, and acceptance criteria |
+| [Architecture](architecture.md) | Components, data flow, and boundaries |
+| [Preservation and formats](preservation.md) | Integrity, metadata, recovery, and interoperability |
+| [Decentralization and funding](decentralization.md) | Guardians, IPFS, Bitcoin, and experimental integrations |
+| [Localization](localization.md) | English repository content and bilingual application policy |
+| [Security](security.md) | Threats and planned controls |
+| [Project log](project-log.md) | Current status, immediate backlog, and progress records |
+| [Risks](risks.md) | Uncertainties, mitigation, and review triggers |
+| [Decisions](decisions/README.md) | Architecture decision records |
 
-## Como ler e manter
+## Maintenance and status vocabulary
 
-- Planejado: direção de trabalho; não significa recurso implementado.
-- Experimental: depende de pesquisa e validação antes de entrar no produto.
-- Implementado: exige código e verificação registrados.
-- Concluído: atende aos critérios de aceitação da entrega.
+- Planned: development direction, not implemented functionality.
+- Experimental: requires research and validation before adoption.
+- Implemented: supported by code and recorded verification.
+- Done: meets the delivery's acceptance criteria.
 
-Atualizar os documentos afetados no mesmo commit de uma mudança relevante. Registrar decisões duradouras em ADRs e progresso no diário. Nenhuma data deste plano representa promessa de lançamento.
+Update affected documents in the same commit as a relevant change. Record lasting decisions in ADRs and progress in the project log. Dates are estimates, not release promises.
 
-Base do planejamento: 03/11/2026. O repositório contém documentação e licença; o aplicativo ainda não foi implementado.
+Planning baseline: November 3, 2026. The repository contains documentation and the license; the application has not been implemented. GitHub-facing content is initially in English. The planned application supports English and Brazilian Portuguese.

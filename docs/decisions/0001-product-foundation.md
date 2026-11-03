@@ -1,27 +1,27 @@
-# ADR 0001 — Fundação local e descentralização progressiva
+# ADR 0001 — Local foundation and progressive decentralization
 
-Data: 03/11/2026. Estado: aceito como direção inicial.
+Date: November 3, 2026. Status: accepted initial direction.
 
-## Contexto
+## Context
 
-O repositório começa com README e licença. A visão inclui preservação de arquivos, P2P e tecnologias descentralizadas. Implementar todas as integrações de início aumentaria o risco de não entregar uma ferramenta utilizável.
+The repository starts with a README and license. The vision includes file preservation, P2P, and decentralized technologies. Implementing every integration immediately would increase the risk of never delivering a usable tool.
 
-## Alternativas
+## Alternatives
 
-1. Construir primeiro uma plataforma financeira com token e incentivos.
-2. Depender de serviço central para catálogo, identidade e arquivos.
-3. Entregar biblioteca local e evoluir a descentralização em módulos.
+1. Build a financial platform with a token and incentives first.
+2. Depend on a central service for catalog, identity, and files.
+3. Deliver a local library and evolve decentralization through modules.
 
-## Decisão
+## Decision
 
-Adotar a alternativa 3. Seguir a stack prevista no README: Tauri 2, Rust, React, TypeScript, Tailwind CSS e SQLite. Usar BitTorrent inicialmente, escolhendo a engine após experimento. Manter formatos abertos, exportação offline e compartilhamento explícito.
+Adopt option 3. Follow the README's stack: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite. Start with BitTorrent, selecting an engine after experimentation. Keep formats open, support offline exports, and require explicit sharing.
 
-IPFS, provas temporais, doações e armazenamento pago serão opcionais e posteriores. Não criar token próprio, custódia ou recompensas automáticas na fundação. O usuário controla o push; o trabalho será registrado em commits Conventional Commits.
+IPFS, timestamp proofs, donations, and paid storage are optional later integrations. No native token, custody, or automatic rewards in the foundation. The user controls push; work is recorded through Conventional Commits.
 
-## Consequências
+## Consequences
 
-A primeira versão será menor que a visão completa. Será possível validar importação, integridade e restauração antes de depender de redes externas. O núcleo precisa de limites claros para permitir adaptadores futuros. Detalhes de engine, formatos e chaves continuam em aberto.
+The first version is smaller than the full vision. Import, integrity, and restoration can be validated before external networks become dependencies. The core needs clear boundaries for future adapters. Engine, format, and key-management details remain open.
 
-## Evidência
+## Evidence
 
-Direção baseada no README e no alinhamento de planejamento com o responsável pelo projeto. Ainda não há protótipo, benchmark ou validação operacional da stack neste repositório.
+Direction based on the README and planning alignment with the project owner. No prototype, benchmark, or operational stack validation exists in this repository yet.

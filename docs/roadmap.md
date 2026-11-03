@@ -1,36 +1,36 @@
-# Cronograma e marcos
+# Schedule and milestones
 
-Base: 03/11/2026. Estimativa inicial de 16 semanas ativas para um alpha P2P, seguida de 4 semanas de reserva. Pressupõe um desenvolvedor principal com dedicação regular e revisão do responsável pelo projeto. Não foi validada por velocidade histórica da equipe.
+Baseline: November 3, 2026. Initial estimate: 16 active weeks for a P2P alpha, followed by a 4-week contingency. Assumes one main developer with regular availability and project-owner review. The estimate has not been validated against historical delivery velocity.
 
-As semanas contam a partir do início efetivo da implementação. Feriados, disponibilidade, incompatibilidades e mudanças de escopo podem deslocar as datas. Revisar a previsão ao concluir cada marco; não substituir critérios de qualidade por uma data.
+Weeks start when implementation actually begins. Holidays, availability, incompatibilities, and scope changes may shift dates. Review estimates after each milestone; acceptance criteria take precedence over dates.
 
-| Marco | Semanas | Entrega | Critério de saída |
+| Milestone | Weeks | Delivery | Exit criteria |
 |---|---|---|---|
-| M0 — Fundação | 1–2 | Tauri, React, TypeScript, Rust, CI e interface base | Build e execução em Windows limpo; verificação automatizada básica |
-| M1 — Biblioteca | 3–5 | Importação, SQLite, hashes e consulta | Persistência após reinício; cancelamento e arquivos problemáticos tratados |
-| M2 — Preservação local | 6–7 | Manifesto v0, exportação e verificação | Reconstrução do catálogo e detecção de corrupção demonstradas |
-| M3 — Prova P2P | 8–9 | Experimento de engine BitTorrent | Transferência entre duas instalações; licença e integração avaliadas |
-| M4 — Transferências | 10–12 | Fila, torrents, magnets, limites e retomada | Reinício sem perda do estado e integridade final validada |
-| M5 — Alpha Windows | 13–16 | Integração, testes, instalador e documentação | Instalação limpa, restauração e revisão de segurança concluídas |
-| Reserva | 17–20 | Correções e compatibilidade | Usar conforme riscos observados; não preencher com novos recursos |
+| M0 — Foundation | 1–2 | Tauri, React, TypeScript, Rust, CI, base interface, and localization | Windows build and launch; basic automated checks; persistent English/Portuguese selection |
+| M1 — Library | 3–5 | Import, SQLite, hashes, and browsing | Persistence after restart; cancellation and problematic files handled |
+| M2 — Local preservation | 6–7 | Manifest v0, export, and verification | Catalog reconstruction and corruption detection demonstrated |
+| M3 — P2P prototype | 8–9 | BitTorrent engine experiment | Transfer between two installations; license and integration assessed |
+| M4 — Transfers | 10–12 | Queue, torrents, magnets, limits, and resume | State survives restart; final integrity verified |
+| M5 — Windows alpha | 13–16 | Integration, tests, installer, and documentation | Clean installation, restoration, security review, and both locales verified |
+| Contingency | 17–20 | Fixes and compatibility | Use for observed risks, not additional features |
 
-## Dependências e alternativas
+## Dependencies and alternatives
 
-- M0 depende de ferramentas e SDKs Windows disponíveis.
-- M1 define o modelo utilizado por M2; M3 pode exigir mudanças na integração, mas não deve acoplar o catálogo à engine.
-- M3 é um ponto de decisão: se nenhuma engine atender aos critérios, publicar primeiro uma versão de biblioteca local e replanejar o P2P.
-- `.g4` e `.g4t` exigem especificação e fixtures antes da implementação. Não são bloqueadores da prova P2P; usar `.torrent` e manifestos JSON enquanto isso.
-- Alpha não significa estabilidade de formato. Migrações e limitações devem ser documentadas.
+- M0 requires available Windows tools and SDKs. Localization is part of M0; review its effect on estimates when implementation starts.
+- M1 defines the model used by M2. M3 may affect integration, but the catalog must remain independent of the engine.
+- M3 is a decision gate: if no engine meets requirements, release a local-library version first and replan P2P.
+- `.g4` and `.g4t` require specifications and fixtures before implementation. They do not block the P2P prototype; use `.torrent` files and JSON manifests first.
+- Alpha does not imply stable formats. Document migrations and limitations.
 
-## Horizonte posterior, sem data comprometida
+## Later horizon without committed dates
 
-| Fase | Escopo | Entrada necessária |
+| Phase | Scope | Prerequisite |
 |---|---|---|
-| Comunidades | Catálogos assinados, histórico e espelhamento | Alpha utilizável e formato de manifesto validado |
-| Guardiões | Quotas, agendamento, saúde e resgate | Observação de disponibilidade e controle de compartilhamento confiáveis |
-| Longo prazo | Recuperação, kit offline, IPFS e provas temporais | Testes de restauração e política de compatibilidade |
-| Financiamento | Doações e patrocínio; estudo de armazenamento pago | Necessidade demonstrada, custos e responsabilidades definidos |
+| Communities | Signed catalogs, history, and mirroring | Usable alpha and validated manifest format |
+| Guardians | Quotas, scheduling, health, and rescue | Reliable availability observation and sharing controls |
+| Long term | Recovery, offline kits, IPFS, and timestamps | Restoration tests and compatibility policy |
+| Funding | Donations, sponsorship, and paid-storage research | Demonstrated need, costs, and responsibilities |
 
-## Cadência
+## Cadence
 
-Planejar um incremento pequeno por vez. Ao concluir: validar, atualizar o diário, registrar riscos novos e fazer commit. A cada marco: comparar estimativa com esforço observado, revisar backlog e apresentar a próxima entrega. Publicação e push permanecem sob controle do responsável pelo projeto.
+Plan one small increment at a time. On completion, validate it, update the log, record new risks, and commit. At each milestone, compare estimates with observed effort, review the backlog, and present the next delivery. Publication and push remain under the project owner's control.

@@ -1,132 +1,101 @@
-
 <div align="center">
 
 # 🎮 Game4∞
 
 ### Preserve the Past. Share the Future.
 
-**Uma rede aberta e descentralizada para a preservação digital dos videogames.**
+**An open, decentralized network for video game preservation.**
 
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Status](https://img.shields.io/badge/status-in%20development-yellow)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
 ![Open Source](https://img.shields.io/badge/open%20source-❤️-red)
 
----
-
-**Preservar. Compartilhar. Descentralizar.**
+**Preserve. Share. Decentralize.**
 
 </div>
 
-## 📖 Documentação do projeto
+## 📖 Project documentation
 
-Consulte o [índice de documentação](docs/README.md) para o plano do produto, cronograma estimado, arquitetura, preservação, segurança, riscos e registros de decisões e progresso.
+See the [documentation index](docs/README.md) for the product plan, estimated schedule, architecture, preservation strategy, security, risks, decisions, and progress records.
 
-As fases e integrações descritas são planejadas; acompanhe o estado real em [Gestão e registros](docs/project-log.md).
+The features below are planned. See the [project log](docs/project-log.md) for actual implementation status.
 
----
+## 🌌 About
 
-## 🌌 Sobre o projeto
+**Game4∞** is an open-source project dedicated to digital video game preservation through decentralized technologies and peer-to-peer (P2P) networks.
 
-O **Game4∞** é um projeto open source dedicado à preservação digital de videogames por meio de tecnologias descentralizadas e redes peer-to-peer (P2P).
+Our mission is to help communities preserve, organize, verify, and share digital files independently, without relying exclusively on centralized servers or commercial platforms.
 
-Nossa missão é desenvolver ferramentas que permitam às comunidades preservar, organizar, verificar e compartilhar arquivos digitais de maneira independente, sem depender exclusivamente de servidores centralizados ou plataformas comerciais.
+Video game history deserves to survive for future generations. Game4∞ aims to provide open infrastructure for long-term preservation, beyond file downloads.
 
-Acreditamos que a história dos videogames merece ser preservada para as próximas gerações.
+> **Our vision:** build technology that keeps working even if its original creators stop maintaining it.
 
-O Game4∞ não pretende ser apenas um aplicativo de downloads, mas uma infraestrutura aberta para preservação digital de longo prazo.
+## 🎯 Goals
 
-> **Nossa visão:** construir uma tecnologia que continue funcionando mesmo que seus criadores deixem de mantê-la.
+- Support the historical preservation of video games.
+- Develop decentralized infrastructure and open preservation formats.
+- Verify file integrity using cryptographic hashes.
+- Enable communities to maintain their own collections.
+- Provide free, open-source tools.
+- Reduce dependence on centralized servers and organizations.
+- Encourage collaboration and interoperability.
 
----
+## 🚧 Development status
 
-## 🎯 Objetivos
+**Current stage: planning and initial development toward v0.1.0-alpha.**
 
-- 🌍 Incentivar a preservação histórica dos videogames.
-- 🔗 Desenvolver uma infraestrutura descentralizada.
-- 📦 Criar formatos abertos para preservação digital.
-- 🛡️ Garantir a integridade dos arquivos por meio de hashes criptográficos.
-- 🌱 Permitir que comunidades mantenham seus próprios acervos.
-- 💻 Disponibilizar ferramentas gratuitas e open source.
-- ♾️ Reduzir a dependência de servidores e organizações centralizadas.
-- 🤝 Promover colaboração e interoperabilidade.
+The repository currently contains documentation and the license; the application has not been implemented. The features and architecture described here are development goals, not available capabilities.
 
----
+The first application targets Windows, starting with a local library and progressing to P2P transfers.
 
-## 🚧 Status do desenvolvimento
+## 🌍 Languages
 
-**Fase atual: Planejamento e desenvolvimento inicial — v0.1.0-alpha**
+The application is planned to support **English (`en`) and Brazilian Portuguese (`pt-BR`)**. English will be the default and fallback language, with a persistent language selector. Localization will be part of the desktop foundation.
 
-O Game4∞ ainda está em desenvolvimento.
+Repository documentation, GitHub-facing content, code identifiers, and commit messages use English initially. Portuguese application support remains part of the product scope. See the [language policy](docs/localization.md).
 
-As funcionalidades descritas neste documento representam os objetivos técnicos e a arquitetura planejada. Elas não devem ser interpretadas como recursos já implementados.
+## ⚡ Planned features
 
-A primeira versão terá como foco um aplicativo desktop para Windows, capaz de gerenciar arquivos locais e realizar transferências P2P.
+### 📚 Local library
 
----
+- Import files and directories.
+- Organize by platform and category.
+- Identify file sizes and formats.
+- Generate SHA-256 hashes.
+- Store metadata locally.
+- Verify integrity and export manifests.
 
-## ⚡ Funcionalidades planejadas
+### 🌐 P2P sharing
 
-### 📚 Biblioteca local
+Game4∞ plans to use technologies compatible with the BitTorrent ecosystem for decentralized transfers:
 
-- Importação de arquivos e diretórios.
-- Organização por plataforma e categoria.
-- Identificação de tamanho e formato.
-- Geração de hashes SHA-256.
-- Armazenamento local de metadados.
-- Verificação de integridade.
-- Exportação de manifestos.
+- Torrent creation and import, plus magnet links.
+- Peer discovery through DHT and tracker compatibility.
+- Simultaneous downloads and uploads.
+- Seeder and leecher information.
+- Pause, resume, transfer persistence, and speed monitoring.
+- Upload and download limits.
+- Piece integrity verification.
 
-### 🌐 Compartilhamento P2P
+Files will move directly between participants when connectivity allows, without relying on Game4∞ servers to carry their contents.
 
-O Game4∞ utilizará tecnologias compatíveis com o ecossistema BitTorrent para permitir transferências descentralizadas.
+### 🔐 Privacy and control
 
-Funcionalidades previstas:
+- No mandatory account or personal telemetry by default.
+- Explicit action to start sharing.
+- Control over shared files and local settings.
+- Clear information about P2P connections.
 
-- Criação e importação de torrents.
-- Suporte a magnet links.
-- Descoberta de peers via DHT.
-- Compatibilidade com trackers.
-- Download e upload simultâneos.
-- Gerenciamento de seeders e leechers.
-- Pausa e retomada de transferências.
-- Monitoramento de velocidade.
-- Limites de upload e download.
-- Verificação de integridade das peças.
+**Note:** BitTorrent connections can expose participants' public IP addresses to other peers.
 
-Os arquivos serão transferidos diretamente entre os participantes sempre que a conectividade permitir, sem depender de servidores do Game4∞ para transportar seu conteúdo.
+## 📦 Game4∞ formats
 
-### 🔐 Privacidade e controle
-
-- Funcionamento sem cadastro obrigatório.
-- Ausência de telemetria pessoal por padrão.
-- Compartilhamento iniciado mediante ação explícita.
-- Controle dos arquivos disponibilizados.
-- Configurações locais.
-- Transparência sobre conexões P2P.
-
-**Nota:** conexões BitTorrent podem revelar o endereço IP público dos participantes aos demais peers.
-
----
-
-## 📦 Formatos Game4∞
-
-O projeto pretende desenvolver formatos próprios, abertos e documentados para facilitar a preservação e o compartilhamento de arquivos.
+The project proposes open, documented formats for preservation and sharing. These are conceptual and not stable specifications. See [preservation and formats](docs/preservation.md).
 
 ### `.g4` — Game4 Package
 
-Formato de pacote portátil de preservação digital.
-
-Poderá conter:
-
-- Arquivos originais.
-- Manifesto de preservação.
-- Informações históricas.
-- Documentação.
-- Imagens e capas autorizadas.
-- Hashes de integridade.
-
-Estrutura conceitual:
+A portable preservation package that may contain original files, a preservation manifest, historical information, documentation, authorized artwork, and integrity hashes.
 
 ```text
 example.g4
@@ -138,69 +107,36 @@ example.g4
 └── checksums.sha256
 ```
 
-O formato deverá preservar a integridade dos arquivos originais e possuir uma especificação pública.
+The format must preserve original file integrity and have a public specification.
 
 ### `.g4t` — Game4 Torrent
 
-Formato de manifesto para descoberta e compartilhamento P2P.
-
-Poderá conter:
-
-- Identificador do conteúdo.
-- Hashes de integridade.
-- Metadados básicos.
-- Referências BitTorrent.
-- Magnet links.
-- Informações de versão.
-
-O arquivo `.g4t` não precisará conter o jogo propriamente dito.
+A proposed discovery and P2P sharing manifest containing content identifiers, hashes, metadata, BitTorrent references, magnet links, and version information. It does not need to contain the game itself. Its benefits over standard `.torrent` files plus JSON must be validated.
 
 ### `.g4lib` — Game4 Library
 
-Formato planejado para as próximas fases.
+A future catalog format for library export, catalog import, community mirroring, metadata synchronization, and digital signature verification.
 
-Permitirá:
+All formats should prioritize public specifications, interoperability, verifiable integrity, original file preservation, independence from proprietary services, and future compatibility.
 
-- Exportação de bibliotecas.
-- Importação de catálogos.
-- Espelhamento comunitário.
-- Sincronização de metadados.
-- Verificação de assinaturas digitais.
+## 🏗️ Planned architecture
 
-### Princípios dos formatos
-
-Todos os formatos Game4∞ deverão priorizar:
-
-1. Especificações públicas.
-2. Compatibilidade entre implementações.
-3. Integridade verificável.
-4. Preservação dos arquivos originais.
-5. Independência de serviços proprietários.
-6. Compatibilidade futura.
-
----
-
-## 🏗️ Arquitetura planejada
-
-O Game4∞ utilizará uma arquitetura modular, permitindo a evolução independente dos componentes.
-
-| Componente | Tecnologia |
+| Component | Technology |
 |---|---|
-| Desktop | Tauri 2 |
-| Backend local | Rust |
-| Frontend | React |
-| Linguagem da interface | TypeScript |
-| Estilização | Tailwind CSS |
-| Banco de dados | SQLite |
-| Transferência P2P | BitTorrent |
-| Descoberta de peers | DHT / Trackers |
-| Integridade | SHA-256 |
-| Metadados | JSON |
-| Distribuição | GitHub Releases |
+| Desktop shell | Tauri 2 |
+| Local backend | Rust |
+| Frontend | React and TypeScript |
+| Styling | Tailwind CSS |
+| Database | SQLite |
+| P2P transfers | BitTorrent |
+| Peer discovery | DHT / trackers |
+| Integrity | SHA-256 |
+| Metadata | JSON |
+| Distribution | GitHub Releases |
 
-A implementação da engine BitTorrent será definida após testes de compatibilidade, desempenho, segurança e licenciamento.
+The BitTorrent engine will be selected after compatibility, performance, security, and licensing evaluation. Components should evolve independently.
 
-### Estrutura prevista
+### Proposed structure
 
 ```text
 Game4Infinity/
@@ -221,204 +157,94 @@ Game4Infinity/
 ├── packages/
 │   └── manifest-schema/
 ├── docs/
-│   ├── architecture.md
-│   ├── protocol.md
-│   └── security.md
 ├── tests/
 ├── README.md
 ├── CONTRIBUTING.md
 └── LICENSE
 ```
 
----
+This tree includes planned directories and files that do not exist yet.
 
 ## 🗺️ Roadmap
 
-### Fase 1 — Fundação P2P
+See the [estimated schedule and acceptance criteria](docs/roadmap.md). Custom formats are subject to specification and validation; they are not prerequisites for the P2P prototype.
 
-**Objetivo:** desenvolver um cliente desktop funcional para preservação e compartilhamento descentralizado.
+### Phase 1 — Local foundation and P2P
 
-- [ ] Configuração do projeto Tauri + React + Rust.
-- [ ] Interface inicial do Game4∞.
-- [ ] Biblioteca local.
-- [ ] Banco de dados SQLite.
-- [ ] Geração de hashes SHA-256.
-- [ ] Criação de manifestos.
-- [ ] Implementação inicial do formato `.g4`.
-- [ ] Implementação inicial do formato `.g4t`.
-- [ ] Integração da engine BitTorrent.
-- [ ] Criação e importação de torrents.
-- [ ] Suporte a magnet links.
-- [ ] Descoberta de peers via DHT.
-- [ ] Upload e download P2P.
-- [ ] Gerenciamento de seeds e leechers.
-- [ ] Persistência de transferências.
-- [ ] Verificação de integridade.
-- [ ] Testes de segurança.
-- [ ] Publicação da versão alpha para Windows.
+- [ ] Set up Tauri, React, Rust, and the initial interface.
+- [ ] Establish English and Portuguese localization.
+- [ ] Build the local library with SQLite and SHA-256 hashing.
+- [ ] Create manifests and support offline catalog reconstruction.
+- [ ] Specify and evaluate initial `.g4` and `.g4t` formats.
+- [ ] Integrate and validate a BitTorrent engine.
+- [ ] Support torrents, magnet links, DHT, and P2P uploads/downloads.
+- [ ] Provide peer information, transfer persistence, and integrity checks.
+- [ ] Complete security testing and prepare a Windows alpha.
 
-### Fase 2 — Comunidades descentralizadas
+### Phase 2 — Decentralized communities
 
-**Objetivo:** permitir a criação de bibliotecas independentes.
+- [ ] Evaluate the `.g4lib` format.
+- [ ] Support community catalogs, import, export, and discovery.
+- [ ] Add digital signatures and metadata synchronization.
+- [ ] Develop community moderation and library mirroring.
+- [ ] Support interoperability between communities.
 
-- [ ] Implementação do formato `.g4lib`.
-- [ ] Catálogos comunitários.
-- [ ] Importação e exportação de bibliotecas.
-- [ ] Assinaturas digitais.
-- [ ] Descoberta de catálogos.
-- [ ] Sincronização de metadados.
-- [ ] Ferramentas de moderação.
-- [ ] Espelhamento de bibliotecas.
-- [ ] Interoperabilidade entre comunidades.
+### Phase 3 — Long-term preservation
 
-### Fase 3 — Preservação de longo prazo
+- [ ] Add optional IPFS integration.
+- [ ] Develop guardian nodes and voluntary replication.
+- [ ] Show observed availability and identify at-risk content.
+- [ ] Schedule integrity checks and support recovery and redundancy.
+- [ ] Add optional OpenTimestamps proofs anchored to Bitcoin.
+- [ ] Research community storage incentives.
 
-**Objetivo:** aumentar a resiliência e a disponibilidade dos acervos.
+## ♾️ Decentralized preservation
 
-- [ ] Integração opcional com IPFS.
-- [ ] Nós guardiões de preservação.
-- [ ] Replicação voluntária.
-- [ ] Indicadores de disponibilidade.
-- [ ] Identificação de arquivos com poucas cópias.
-- [ ] Verificações periódicas de integridade.
-- [ ] Mecanismos de recuperação e redundância.
-- [ ] Integração opcional com OpenTimestamps.
-- [ ] Ancoragem criptográfica no Bitcoin.
-- [ ] Pesquisa sobre incentivos comunitários de armazenamento.
+Digital preservation should not depend on a single website, server, or organization. Game4∞ aims to support replicated files, exportable and reconstructable catalogs, independently verifiable metadata, community infrastructure, and software that survives its original maintainers.
 
----
+**Decentralization does not guarantee permanent storage.** Availability depends on accessible copies, data integrity, and continued community participation.
 
-## ♾️ Preservação descentralizada
+## 🔗 Bitcoin and decentralized technologies
 
-A preservação digital não deve depender exclusivamente da existência de um único site, servidor ou organização.
+- **Bitcoin / OpenTimestamps:** optional timestamp proofs for manifests without storing game files on the blockchain. These proofs do not establish authorship or availability.
+- **IPFS:** optional content addressing and complementary replication, requiring actual retention by nodes.
+- **Funding:** future optional donations and collection sponsorship; paid decentralized storage remains experimental.
 
-O Game4∞ buscará permitir que:
+Game4∞ will not require cryptocurrency, mining, or payments for essential features. A native token, NFTs, custody, and automatic seeding rewards are outside the initial scope. See the [decentralization plan](docs/decentralization.md).
 
-- Arquivos sejam replicados entre participantes.
-- Catálogos sejam exportados e reconstruídos.
-- Metadados possam ser verificados independentemente.
-- Comunidades mantenham infraestrutura própria.
-- O software continue funcionando sem seus desenvolvedores originais.
+## ⚖️ Copyright
 
-**Descentralização não significa armazenamento eterno garantido.**
+Game4∞ is a general-purpose tool for digital preservation and P2P sharing. It does not grant reproduction or distribution rights over copyrighted works. Users are responsible for checking authorization or another applicable legal basis for sharing content.
 
-A disponibilidade de arquivos dependerá da existência de cópias acessíveis, da integridade dos dados e da participação contínua da comunidade.
+The project encourages preservation and distribution of open-source games, homebrew, public-domain works, games released by their rights holders, content licensed for redistribution, and lawfully distributed historical documentation.
 
----
+A game's age, rarity, or commercial unavailability does not by itself authorize its distribution.
 
-## 🔗 Bitcoin e tecnologias descentralizadas
+## 🤝 Contributions
 
-O Game4∞ poderá utilizar tecnologias adicionais para fortalecer a verificabilidade dos acervos.
+Game4∞ is intended to grow through open collaboration: features, bug fixes, performance improvements, security testing, documentation, translations, design, user experience, and preservation research.
 
-### Bitcoin
+Contribution guidelines will be documented in `CONTRIBUTING.md`. Public repository contributions should initially use English; application translations are an exception.
 
-A blockchain Bitcoin poderá ser utilizada indiretamente para registrar provas criptográficas de existência de determinados dados.
+## 🔒 Security
 
-### OpenTimestamps
+Planned safeguards include no automatic execution of received files, path validation, prevention of writes outside authorized destinations, download integrity verification, explicit sharing consent, minimal data collection, dependency maintenance, and documented vulnerability handling.
 
-Integração futura para produzir provas de existência verificáveis sem armazenar os arquivos completos na blockchain.
+See the [security plan](docs/security.md) for controls and release checks.
 
-### IPFS
+## 📜 License
 
-Tecnologia considerada para identificação de conteúdo e replicação complementar.
+**Game4∞** is licensed under the **GNU General Public License version 3 or later (GPL-3.0-or-later)**.
 
-Essas integrações serão opcionais.
+You may use, study, modify, and redistribute the software, including commercially, subject to the GPL and its applicable corresponding-source requirements. See [LICENSE](LICENSE) for the full text.
 
-O Game4∞ não exigirá criptomoedas, mineração ou pagamentos para utilizar suas funcionalidades essenciais.
+The software license does not automatically apply to games or files shared by users.
 
----
+## 💜 Philosophy
 
-## ⚖️ Direitos autorais
+Video games are part of the history of technology, art, music, and digital culture. Preserving that history requires open, interoperable tools that can survive technological change. Digital preservation is a shared responsibility.
 
-O Game4∞ é uma ferramenta tecnológica de propósito geral, voltada à preservação digital e ao compartilhamento P2P.
-
-O projeto não concede direitos de reprodução ou distribuição sobre obras protegidas por direitos autorais.
-
-Os usuários são responsáveis por verificar se possuem autorização ou outra base legal aplicável para compartilhar os conteúdos.
-
-O projeto incentiva a preservação e a distribuição de:
-
-- Jogos open source.
-- Homebrews.
-- Obras em domínio público.
-- Jogos disponibilizados pelos próprios titulares.
-- Conteúdos com licenças que permitam redistribuição.
-- Documentação e materiais históricos distribuídos legalmente.
-
-O fato de um jogo ser antigo, raro ou não estar mais disponível comercialmente não significa, por si só, que sua distribuição seja autorizada.
-
----
-
-## 🤝 Contribuições
-
-O Game4∞ pretende ser desenvolvido de forma aberta e colaborativa.
-
-Contribuições poderão incluir:
-
-- Desenvolvimento de funcionalidades.
-- Correção de bugs.
-- Melhorias de desempenho.
-- Testes de segurança.
-- Documentação.
-- Traduções.
-- Design e experiência do usuário.
-- Pesquisa sobre preservação digital.
-
-As diretrizes de contribuição serão documentadas em `CONTRIBUTING.md`.
-
----
-
-## 🔒 Segurança
-
-A segurança é uma prioridade do projeto.
-
-Diretrizes previstas:
-
-- Não executar automaticamente arquivos recebidos.
-- Validar caminhos de arquivos e diretórios.
-- Prevenir escrita fora dos diretórios autorizados.
-- Verificar a integridade dos downloads.
-- Solicitar confirmação antes de compartilhar arquivos.
-- Evitar coleta desnecessária de informações.
-- Manter dependências atualizadas.
-- Documentar vulnerabilidades e correções.
-
----
-
-## 📜 Licença
-
-O **Game4∞** é distribuído sob a licença **GNU General Public License versão 3 ou posterior (GPL-3.0-or-later)**.
-
-Isso permite:
-
-- Utilizar o software para qualquer finalidade.
-- Estudar seu funcionamento.
-- Modificar seu código-fonte.
-- Redistribuir cópias.
-- Distribuir versões modificadas.
-- Utilizar o software comercialmente.
-
-A redistribuição do programa e de versões derivadas deverá respeitar as condições da GPL, incluindo as obrigações aplicáveis de disponibilização do código-fonte correspondente.
-
-Consulte o arquivo [LICENSE](LICENSE) para o texto integral da licença.
-
-A licença do software não se estende automaticamente aos jogos ou arquivos compartilhados por seus usuários.
-
----
-
-## 💜 Filosofia
-
-Videogames são mais do que entretenimento.
-
-São parte da história da tecnologia, da arte, da música e da cultura digital.
-
-Preservar essa história exige ferramentas abertas, interoperáveis e capazes de sobreviver às mudanças tecnológicas.
-
-O Game4∞ nasce da ideia de que a preservação digital deve ser uma responsabilidade compartilhada.
-
-**Nenhum servidor deveria ser o único guardião da história.**
-
----
+**No single server should be the sole guardian of history.**
 
 <div align="center">
 
@@ -426,7 +252,7 @@ O Game4∞ nasce da ideia de que a preservação digital deve ser uma responsabi
 
 **Preserve the Past. Share the Future.**
 
-*Construído para preservar. Projetado para durar.*
+*Built to preserve. Designed to last.*
 
 **Open Source • P2P • Digital Preservation**
 

@@ -1,19 +1,20 @@
-# Registro de riscos
+# Risk register
 
-Avaliação inicial qualitativa em 03/11/2026. Responsável pela revisão técnica: manutenção do projeto; decisões de orçamento e publicação: responsável pelo projeto.
+Initial qualitative assessment: November 3, 2026. Technical review owner: project maintenance. Budget and publication decisions: project owner.
 
-| ID | Risco | Impacto | Mitigação / gatilho |
+| ID | Risk | Impact | Mitigation / review trigger |
 |---|---|---|---|
-| R01 | Escopo maior que capacidade | Alto | Entregar biblioteca antes das integrações; revisar a cada marco |
-| R02 | Engine P2P incompatível ou inadequada | Alto | Prova real e revisão de licença em M3; alternativa: release local |
-| R03 | Formatos próprios impedirem interoperabilidade | Alto | JSON e `.torrent` primeiro; especificação e fixtures antes de estabilizar |
-| R04 | Poucos peers e desaparecimento de acervos | Alto | Mostrar indisponibilidade; guardiões e teste de restauração posteriores |
-| R05 | Medidas de disponibilidade manipuladas | Alto | Exibir observações com data; não remunerar métricas não confiáveis |
-| R06 | Falhas de disco, caminhos ou parsing | Alto | Revisão de segurança, limites e cenários de interrupção |
-| R07 | Custos ou dependência de redes pagas | Alto | Integração opcional; orçamento e restauração testados |
-| R08 | Perda de chaves de curadores | Alto | Projetar rotação e recuperação antes de assinaturas em produção |
-| R09 | Ambiente Windows e instalador frágeis | Médio | Build e instalação em ambiente limpo em M0 e M5 |
-| R10 | Metadados incorretos ou redistribuição indevida | Alto | Registrar procedência declarada e separar confiança de integridade |
-| R11 | Estimativa sem histórico de execução | Alto | Reestimar após M0/M1; usar semanas ativas e reserva explícita |
+| R01 | Scope exceeds capacity | High | Deliver library before integrations; review each milestone |
+| R02 | Incompatible or unsuitable P2P engine | High | Real prototype and license review at M3; fallback: local release |
+| R03 | Custom formats obstruct interoperability | High | Start with JSON and `.torrent`; specify and test before stabilization |
+| R04 | Few peers and disappearing collections | High | Show unavailability; later guardians and restoration testing |
+| R05 | Manipulated availability metrics | High | Timestamp observations; no rewards for untrusted metrics |
+| R06 | Disk, path, or parser failures | High | Security review, limits, and interruption scenarios |
+| R07 | Costs or dependency on paid networks | High | Optional integration, budget, and tested retrieval |
+| R08 | Lost curator keys | High | Design rotation and recovery before production signatures |
+| R09 | Fragile Windows setup and installer | Medium | Clean build and installation at M0 and M5 |
+| R10 | Incorrect metadata or unauthorized redistribution | High | Record declared provenance; separate trust from integrity |
+| R11 | Estimates lack execution history | High | Reestimate after M0/M1; active weeks and explicit contingency |
+| R12 | Incomplete or inconsistent translations | Medium | Shared locale keys, parity checks, and review of both languages per delivery |
 
-Registrar ocorrência, responsável específico e ação quando um risco se materializar. Alterações de cronograma e arquitetura devem apontar o risco que motivou a revisão.
+When a risk materializes, record the occurrence, specific owner, and action. Schedule and architecture changes should reference the risk prompting review.

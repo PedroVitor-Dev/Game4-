@@ -1,33 +1,33 @@
-# Preservação e formatos
+# Preservation and formats
 
-## Princípios
+## Principles
 
-Preservar os bytes originais e registrar transformações em cópias separadas. Um hash detecta diferenças; sozinho não comprova autenticidade histórica, autoria ou autorização de distribuição. Disponibilidade observada não é prova de existência de cópias independentes.
+Preserve original bytes and record transformations as separate copies. A hash detects differences; it does not establish historical authenticity, authorship, or redistribution rights. Observed availability does not prove independent copies exist.
 
-## Manifesto inicial
+## Initial manifest
 
-Projetar primeiro um manifesto JSON versionado, com esquema público e exemplos. Campos candidatos: versão do esquema, identificador da coleção, caminhos relativos, tamanho, SHA-256, plataforma, edição, idioma, origem declarada, licença declarada e instruções de execução.
+Design a versioned JSON manifest first, with a public schema and examples. Candidate fields: schema version, collection identifier, relative paths, size, SHA-256, platform, edition, language, declared provenance, declared license, and execution instructions.
 
-Metadados declarados devem ser identificados como tal. Separar campos obrigatórios de extensões. Rejeitar versões incompatíveis explicitamente. Definir normalização de caminhos, Unicode e serialização canônica antes de assinar documentos. Nunca exportar caminhos absolutos pessoais por padrão.
+Label declared metadata accordingly. Separate required fields from extensions. Explicitly reject incompatible versions. Define path normalization, Unicode handling, and canonical serialization before signing documents. Do not export personal absolute paths by default. Schema keys remain in English and do not change with the interface language; preserve original titles, paths, and user metadata.
 
-## Formatos propostos
+## Proposed formats
 
-| Formato | Papel | Situação |
+| Format | Purpose | Status |
 |---|---|---|
-| `.g4` | Pacote portátil com manifesto e arquivos | Conceitual; contêiner e limites a definir |
-| `.g4t` | Referências de compartilhamento e metadados | Conceitual; justificar vantagem sobre `.torrent` + JSON |
-| `.g4lib` | Exportação de catálogo e referências | Futuro; não implica inclusão dos jogos |
+| `.g4` | Portable package containing manifest and files | Conceptual; container and limits undecided |
+| `.g4t` | Sharing references and metadata | Conceptual; justify benefits over `.torrent` + JSON |
+| `.g4lib` | Catalog and reference export | Future; does not imply game files are included |
 
-Não fixar extensões como formatos estáveis antes de especificar segurança, compatibilidade e migrações. Evitar recompressão obrigatória que dificulte acesso aleatório, retomada e interoperabilidade com torrents.
+Do not treat extensions as stable formats before specifying security, compatibility, and migrations. Avoid mandatory recompression that impedes random access, resume, and torrent interoperability.
 
-## Integridade e recuperação
+## Integrity and recovery
 
-Verificar ao importar, após transferência e sob demanda. Agendamento futuro deve respeitar disco e energia. Exibir data da última verificação e distinguir arquivo inacessível de arquivo corrompido. Reparação usa cópias verificadas ou redundância disponível; nunca sobrescrever o único original silenciosamente.
+Verify during import, after transfers, and on demand. Future scheduling must respect disk load and power usage. Display the last verification time and distinguish inaccessible files from corruption. Repairs use verified copies or available redundancy; never silently overwrite the only original.
 
-## Preservação utilizável
+## Usable preservation
 
-Registrar manuais autorizados, dependências, versões de ferramentas, configurações e instruções de execução. Incluir arquivos auxiliares apenas quando redistribuíveis. Não executar conteúdo automaticamente.
+Record authorized manuals, dependencies, tool versions, settings, and execution instructions. Include auxiliary files only when redistributable. Never execute content automatically.
 
-## Teste de sobrevivência
+## Survival test
 
-Exportar uma coleção de teste com manifesto, esquema, instruções e hashes. Em ambiente separado e offline, reconstruir o catálogo e verificar os arquivos sem consultar servidores do Game4∞. Repetir o teste após mudanças relevantes de formato. Assinaturas e provas temporais devem viajar junto com a exportação quando existirem.
+Export a test collection with manifest, schema, instructions, and hashes. Reconstruct the catalog and verify files in a separate offline environment without Game4∞ servers. Repeat after relevant format changes. Include signatures and timestamp proofs in exports when available.
