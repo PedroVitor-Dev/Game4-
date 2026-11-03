@@ -18,6 +18,14 @@
 
 </div>
 
+## 📖 Documentação do projeto
+
+Consulte o [índice de documentação](docs/README.md) para o plano do produto, cronograma estimado, arquitetura, preservação, segurança, riscos e registros de decisões e progresso.
+
+As fases e integrações descritas são planejadas; acompanhe o estado real em [Gestão e registros](docs/project-log.md).
+
+---
+
 ## 🌌 Sobre o projeto
 
 O **Game4∞** é um projeto open source dedicado à preservação digital de videogames por meio de tecnologias descentralizadas e redes peer-to-peer (P2P).
