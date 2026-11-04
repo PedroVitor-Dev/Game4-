@@ -9,6 +9,8 @@ ADRs capture context, decisions, and consequences. An accepted decision may be s
 
 | [0003](0003-desktop-tooling.md) | Accepted | Desktop tooling and localization foundation |
 
+| [0004](0004-sqlite-foundation.md) | Accepted | SQLite persistence and modular folder structure |
+
 Upcoming decisions: BitTorrent engine, manifest v0, `.g4` container, catalog identity and signatures, distribution, and updates.
 
 Template: title, date, status, context, alternatives, decision, consequences, and validation evidence. Do not mark experimental technology as accepted before its experiment.

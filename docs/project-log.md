@@ -3,13 +3,13 @@
 ## Status on November 4, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation implemented; local library and P2P remain pending.
+- Stage: desktop foundation and SQLite startup persistence implemented; importing, hashing, and P2P remain pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; engine still under evaluation.
 - Languages: English repository content; implemented English and Brazilian Portuguese interface.
 - Workflow: relevant Conventional Commits; no agent push.
-- Next delivery: define the SQLite model and import task states, then implement the local library. M0 clean-machine verification and the first hosted CI run remain outstanding.
+- Next delivery: implement local-library import and hashing using the SQLite model and task vocabulary. M0 clean-machine verification and the first hosted CI run remain outstanding.
 
 ## Immediate backlog
 
@@ -19,7 +19,7 @@
 | B02 | Initialize desktop           | Application launches on Windows as Game4∞                           | Done    |
 | B03 | Establish interface          | Library, tasks, settings, and clear empty states                    | Done    |
 | B04 | Configure checks             | Documented reproducible formatting, types, and build                | Done    |
-| B05 | Define local model           | Reviewed SQLite migration and import states                         | Pending |
+| B05 | Define local model           | Reviewed SQLite migration and import states                         | Done    |
 | B06 | Implement import and hashing | Demonstrated progress, cancellation, and error handling             | Pending |
 | B07 | Establish localization       | English and Portuguese resources, persistent selector, and fallback | Done    |
 
@@ -61,6 +61,21 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Browser checks passed: navigation, language switching, saved preference after reload, layout at 1180px and 720px, and no JavaScript runtime errors.
 - Native smoke test passed: embedded React page, real Rust version response, and Portuguese switching.
 - Limits: no clean-machine install test, signed release, release-mode build, NSIS installer test, or hosted GitHub Actions run yet. Scaffold icons remain placeholders. No SQLite or P2P implementation.
+
+### November 4, 2026 — SQLite and modular folders
+
+- Added bundled SQLite through rusqlite, initialized in Tauri local application data under `database/game4.sqlite3`.
+- Added transaction-managed schema version 1 for content, physical locations, collection metadata, item-file links, and import/verification tasks.
+- Enabled foreign keys, WAL, FULL synchronous mode, and a bounded busy timeout; future schemas are rejected without resets.
+- Added read-only database summary IPC on a blocking worker, with stable error codes and no arbitrary SQL exposure.
+- Organized Rust commands, database/migrations/tests, library, and tasks; reserved security and torrent boundaries with documentation.
+- Organized React components, hooks, pages, and typed services; reserved manifest-schema and shared-fixture directories.
+- Added five temporary-database tests and the `rust:test` command to Windows CI.
+- Checks passed: five Rust tests, Clippy across all targets with warnings denied, TypeScript, 27-key locale parity, production frontend build, and native debug build.
+- Native smoke checks passed: library/task/settings navigation, Portuguese switching, Rust version response, and SQLite summary reporting schema 1 with zero initial records. The on-disk database file was confirmed in LocalAppData.
+- Updated setup instructions to use `npm.cmd` on PowerShell without changing execution policy.
+- Limits: file import/hashing, user-facing catalog editing, task execution/recovery, path normalization, and automated backup/export remain unimplemented. No personal database is committed. Hosted CI has not run.
+- Next step: implement cancellable import and SHA-256 hashing against the new schema.
 
 ## Template for future entries
 

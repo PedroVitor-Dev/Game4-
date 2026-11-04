@@ -15,10 +15,12 @@ Follow the [official Tauri prerequisites](https://v2.tauri.app/start/prerequisit
 
 ## Commands from the repository root
 
-```sh
-npm ci
-npm run desktop:dev
+```powershell
+npm.cmd ci
+npm.cmd run desktop:dev
 ```
+
+On Windows PowerShell, use `npm.cmd` if the execution policy blocks `npm.ps1`; changing the policy is unnecessary. Commands below use the generic `npm` spelling; `npm.cmd` works for each on Windows.
 
 | Command                                | Purpose                                                     |
 | -------------------------------------- | ----------------------------------------------------------- |
@@ -32,7 +34,9 @@ npm run desktop:dev
 | `npm run desktop:build -- --no-bundle` | Build the native executable without an installer            |
 | `npm run desktop:build`                | Build an unsigned NSIS installer                            |
 
-The development server binds to the loopback interface and fails if port 1420 is occupied. The application uses a restrictive production CSP and no filesystem, shell, or external opener plugin. The only custom Rust command is a read-only application-version query.
+The development server binds to the loopback interface and fails if port 1420 is occupied. The application uses a restrictive production CSP and no filesystem, shell, or external opener plugin. Custom Rust commands provide read-only application-version and database-summary queries. SQLite is owned by the Rust core and initialized in local application data, not exposed through a generic SQL plugin.
+
+Run `npm.cmd run rust:test` for the database persistence and migration tests. See [SQLite storage](database.md) for schema and backup limitations.
 
 ## Localization
 
@@ -40,4 +44,4 @@ Edit `apps/desktop/src/locales/en.json` and `pt-BR.json` together. Locale checks
 
 ## Current limits
 
-This is the desktop foundation, not a library or transfer implementation. No game import, SQLite persistence, network sharing, automatic updater, or signed distribution is included. Generated scaffold icons are placeholders pending visual identity work. CI configuration is committed but is only executed by GitHub after the owner pushes the changes.
+This is the desktop foundation, not a library or transfer implementation. SQLite startup persistence is implemented. No game import, network sharing, automatic updater, or signed distribution is included. Generated scaffold icons are placeholders pending visual identity work. CI configuration is committed but is only executed by GitHub after the owner pushes the changes.

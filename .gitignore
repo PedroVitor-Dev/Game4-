@@ -10,3 +10,6 @@ target/
 Thumbs.db
 apps/desktop/src-tauri/gen/
 *.tsbuildinfo
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm

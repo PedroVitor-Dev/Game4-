@@ -15,6 +15,8 @@ An open network for preserving, verifying, and sharing digital collections.
 | [Risks](risks.md)                                   | Uncertainties, mitigation, and review triggers               |
 | [Decisions](decisions/README.md)                    | Architecture decision records                                |
 
+See also [SQLite storage](database.md), [project structure](project-structure.md), and [development setup](development.md).
+
 ## Maintenance and status vocabulary
 
 - Planned: development direction, not implemented functionality.
@@ -24,4 +26,4 @@ An open network for preserving, verifying, and sharing digital collections.
 
 Update affected documents in the same commit as a relevant change. Record lasting decisions in ADRs and progress in the project log. Dates are estimates, not release promises.
 
-Planning baseline: November 3, 2026. As of November 4, the desktop foundation and bilingual interface are implemented; library and P2P features remain planned. GitHub-facing content is initially in English. See the [development setup](development.md) for commands and prerequisites.
+Planning baseline: November 3, 2026. As of November 4, the desktop foundation, bilingual interface, and initial SQLite storage are implemented; file import and P2P features remain planned. GitHub-facing content is initially in English. See the [development setup](development.md) for commands and prerequisites.

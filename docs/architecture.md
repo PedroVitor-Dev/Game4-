@@ -1,6 +1,6 @@
 # Planned architecture
 
-Status: the Tauri / React / Rust shell and localization are implemented. Database, file operations, and transfers remain planned. Details remain subject to experiments. See [development setup](development.md).
+Status: the Tauri / React / Rust shell and localization are implemented. The initial SQLite schema and startup initialization are implemented; file operations and transfers remain planned. Details remain subject to experiments. See [development setup](development.md).
 
 | Layer               | Technology / responsibility                                    |
 | ------------------- | -------------------------------------------------------------- |
@@ -25,14 +25,16 @@ Do not load whole games into memory. Symbolic links, junctions, and cycles requi
 
 ## Initial entities
 
-- File: internal identity, size, hash, and verification state.
+- File: internal identity, size, and hash. Verification state belongs to each physical location.
 - Location: path and associated file; content may have multiple locations.
 - Collection item: title, platform, version, and file references.
 - Manifest: schema version, entries, metadata, and identifiers.
 - Task: type, state, progress, and recoverable error.
 - Transfer: BitTorrent identifier, destination, and state; separate from the collection.
 
-Detail the schema in a migration before implementation. Content hash and editorial identity are different concepts: two versions of a game can have different hashes.
+The initial schema is defined in migration `0001_initial.sql`; see [SQLite storage](database.md). Content hash and editorial identity are different concepts: two versions of a game can have different hashes.
+
+See the [current project structure](project-structure.md) for implemented and reserved boundaries.
 
 ## Proposed structure
 

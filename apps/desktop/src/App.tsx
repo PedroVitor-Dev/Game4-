@@ -1,63 +1,21 @@
-import { useEffect, useState } from "react";
-import { invoke, isTauri } from "@tauri-apps/api/core";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { Locale } from "./i18n";
+import { LanguageSelect } from "./components/LanguageSelect";
+import { useAppInfo } from "./hooks/useAppInfo";
+import { WorkspacePage, type Page } from "./pages/WorkspacePage";
 import "./App.css";
-
-type Page = "library" | "tasks" | "settings";
-type Runtime = "checking" | "connected" | "preview" | "unavailable";
-
-function LanguageSelect() {
-  const { t, i18n } = useTranslation();
-  return (
-    <label className="language-control">
-      <span>{t("language.label")}</span>
-      <select
-        value={i18n.language}
-        onChange={(event) =>
-          void i18n.changeLanguage(event.target.value as Locale)
-        }
-      >
-        <option value="en">English</option>
-        <option value="pt-BR">Português (Brasil)</option>
-      </select>
-    </label>
-  );
-}
 
 export default function App() {
   const { t } = useTranslation();
   const [page, setPage] = useState<Page>("library");
-  const [runtime, setRuntime] = useState<Runtime>("checking");
-  const [version, setVersion] = useState<string>();
-
-  useEffect(() => {
-    let active = true;
-    if (!isTauri()) {
-      setRuntime("preview");
-      return;
-    }
-    invoke<{ version: string }>("app_info")
-      .then((info) => {
-        if (active) {
-          setVersion(info.version);
-          setRuntime("connected");
-        }
-      })
-      .catch(() => {
-        if (active) setRuntime("unavailable");
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
+  const { runtime, version } = useAppInfo();
 
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#main" aria-label="Game4∞">
-          <span className="brand-mark">∞</span>Game4
-          <span className="brand-infinity">∞</span>
+        <a className="brand" href="#main" aria-label="Game4Ã¢Ë†Å¾">
+          <span className="brand-mark">Ã¢Ë†Å¾</span>Game4
+          <span className="brand-infinity">Ã¢Ë†Å¾</span>
         </a>
         <p className="sidebar-caption">{t("app.workspace")}</p>
         <nav aria-label={t("nav.label")}>
@@ -91,24 +49,7 @@ export default function App() {
           <h1>{t(`${page}.title`)}</h1>
           <p>{t(`${page}.description`)}</p>
         </section>
-        {page === "settings" ? (
-          <section className="content-card settings-card">
-            <div>
-              <h2>{t("language.title")}</h2>
-              <p>{t("language.description")}</p>
-            </div>
-            <LanguageSelect />
-          </section>
-        ) : (
-          <section className="content-card empty-state">
-            <div className="empty-icon" aria-hidden="true">
-              {page === "library" ? "▤" : "≋"}
-            </div>
-            <h2>{t(`${page}.emptyTitle`)}</h2>
-            <p>{t(`${page}.emptyDescription`)}</p>
-            <span className="planned-label">{t("app.planned")}</span>
-          </section>
-        )}
+        <WorkspacePage page={page} />
         <footer className="runtime-status" role="status">
           <span>{t(`runtime.${runtime}`)}</span>
           {version && <span>v{version}</span>}
