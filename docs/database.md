@@ -1,6 +1,6 @@
 # SQLite storage
 
-Status: schema v3, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Editorial editing, cancellation, and standalone integrity rechecks remain future work. Full-catalog backup/restore is implemented separately.
+Status: schema v4, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Editorial editing, cancellation, and standalone integrity rechecks remain future work. Full-catalog backup/restore is implemented separately.
 
 ## Location and lifecycle
 
@@ -52,8 +52,12 @@ Migration 0002 adds nullable unique request IDs and selection-token fingerprints
 
 ## Schema version 3
 
-Migration 0003 adds `collection_manifest_ids`, a one-to-one mapping from local item rows to unique portable UUIDs. It preserves all catalog/task records. UUIDs are assigned lazily when a valid manifest snapshot is first built, retained on reimport, and deleted with their item. The table contains no machine path. See [manifest v1](manifest-v1.md). The current `database_info.schemaVersion` is 3; this is independent of manifest/IPC versions.
+Migration 0003 adds `collection_manifest_ids`, a one-to-one mapping from local item rows to unique portable UUIDs. It preserves all catalog/task records. UUIDs are assigned lazily when a valid manifest snapshot is first built, retained on reimport, and deleted with their item. The table contains no machine path. See [manifest v1](manifest-v1.md). The current `database_info.schemaVersion` is 4; this is independent of manifest/IPC versions.
 
 ## Private backups and restoration
 
 The backup feature reads known tables under a transaction rather than copying a live SQLite file. Restore validates data using trusted schema SQL, writes a recovery copy under `database/backups`, and replaces rows transactionally. Existing schema v3 is unchanged. Restored locations require fresh verification, unfinished historical tasks become interrupted, and pending picker tokens are discarded. See [the guide](library-backup.md).
+
+## Schema version 4
+
+Migration 0004 adds `file_identifications`, keyed by content ID with constrained header format/platform observations and detector version 1. Old rows are not scanned or relabeled as signature matches. Declared collection metadata is untouched; filename hints are derived per relative entry. Backups now include the eighth table and write v2/schema v4, while v1/schema v3 remains readable. See [identification](file-identification.md).

@@ -3,7 +3,7 @@
 ## Status on November 4, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation, SQLite v3, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; independent integrity rechecks and P2P integration remain pending.
+- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; independent integrity rechecks and P2P integration remain pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
@@ -168,6 +168,15 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Validation passed: 29 Rust tests, 11 IPC tests, 3 manifest-schema tests, 95 translation keys, TypeScript, generated-contract drift checks, formatting, Clippy with warnings denied, and Windows native debug builds.
 - Native smoke in the isolated synthetic catalog confirmed saving through the native dialog, Portuguese success feedback, loading the saved file for preview (2 items / 2 content identities / 3 copies / 2 tasks), and a disabled restore button until explicit confirmation. Closed the preview without replacing the test catalog. Independent checks verified envelope/table counts and original file hashes/sizes. Actual restoration/rollback/reopen were exercised by integration tests. Restored the normal app identifier in the final build.
 - Documented private paths/notes, no game-file inclusion, format/schema compatibility, restore replacement semantics, recovery location, and retained copies in ADR 0010 and the guide.
+
+### November 4, 2026 — Platforms, formats, and readable sizes
+
+- Added bounded signature detection during the existing SHA-256 pass, separate filename hints, explicit evidence/unknown states, and preservation of declared platform metadata.
+- Added schema v4 content-bound identification observations, Library summary groups, paginated per-file details, localized IEC sizes, exact bytes, and SHA-256 display.
+- Kept manifest v1 compatible through an optional namespaced extension. Added backup v2/schema v4 writes with the eighth table, retaining v1/schema v3 restore support without invented evidence.
+- Tests cover signatures, endian variants, ambiguous/truncated/conflicting names, content deduplication, mixed folders, migration, pagination, legacy backup restoration, precise totals, and localization.
+- Validation passed: 36 Rust tests, 13 IPC/frontend tests, 3 public-schema tests, 112 locale keys, TypeScript, generated-contract checks, formatting, Clippy with warnings denied, and native Windows debug builds. Signature metadata was also round-tripped through full-library backup/restore.
+- Native smoke in the isolated catalog imported five synthetic files (16,442 bytes) and displayed per-file details in Portuguese. Verified NES header evidence, GBA extension evidence, a ZIP renamed as GBA without a false platform, empty/ambiguous files, exact bytes, IEC size, and SHA-256. Independent closed-catalog inspection confirmed schema v4, stored evidence, unchanged source hashes/sizes, and integrity_check=ok. The normal app identifier was restored for the final build.
 
 ## Template for future entries
 

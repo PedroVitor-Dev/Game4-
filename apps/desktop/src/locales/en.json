@@ -40,7 +40,19 @@
     "exportManifest": "Export JSON manifest",
     "exportManifestLabel": "Export manifest for {{title}}",
     "manifestSaved": "Manifest saved: {{fileName}}",
-    "manifestHint": "JSON exports contain catalog hashes and relative paths. Choose a new filename; existing files are preserved."
+    "manifestHint": "JSON exports contain catalog hashes and relative paths. Choose a new filename; existing files are preserved.",
+    "platforms": "Suggested platforms",
+    "platformUnknown": "Platform undetermined",
+    "formats": "Formats",
+    "declaredPlatform": "Declared platform",
+    "exactSize": "{{bytes}} bytes",
+    "viewFiles": "View files",
+    "hideFiles": "Hide files",
+    "filesFor": "Files in {{title}}",
+    "loadingFiles": "Loading file details…",
+    "moreFiles": "Load more files",
+    "otherFormats_one": "+{{count}} other format group",
+    "otherFormats_other": "+{{count}} other format groups"
   },
   "tasks": {
     "title": "Every step, accounted for.",
@@ -115,5 +127,12 @@
     "confirmReplacement": "I understand that this backup will replace my current library.",
     "restore": "Replace library and restore",
     "cancel": "Cancel"
+  },
+  "identification": {
+    "signature": "Header signature",
+    "extension": "Extension hint",
+    "unknown": "Unknown",
+    "rawBinary": "Binary data (.bin)",
+    "rawRom": "Raw ROM (.rom)"
   }
 }

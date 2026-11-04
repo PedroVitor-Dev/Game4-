@@ -26,3 +26,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0009](0009-versioned-manifests.md) | Accepted initial format | Versioned portable JSON manifests and safe Library export |
 
 | [0010](0010-library-backup-restore.md) | Accepted | Validated private library backups and transactional restoration |
+
+| [0011](0011-file-identification.md) | Accepted initial detector | Content signatures, filename hints, exact sizes, and compatibility |

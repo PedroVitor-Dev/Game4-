@@ -4,7 +4,7 @@ Status: implemented in **Settings → Save and restore your library**, with Engl
 
 ## What is saved
 
-A backup includes all seven current catalog tables: content hashes/sizes, physical-copy paths and verification observations, collection metadata (including private notes), relative file mappings, task history/request deduplication, source-to-item mappings, and portable manifest UUIDs. Local IDs, timestamps, and metadata remain intact. Game-file bytes, interface language/preferences, pending native-picker authorizations, VPN configuration, and application binaries are not included.
+A backup includes all eight current catalog tables: content hashes/sizes, physical-copy paths and verification observations, collection metadata (including private notes), relative file mappings, task history/request deduplication, source-to-item mappings, portable manifest UUIDs, and content-bound identification observations. Local IDs, timestamps, and metadata remain intact. Game-file bytes, interface language/preferences, pending native-picker authorizations, VPN configuration, and application binaries are not included.
 
 **Backups contain private local paths and notes.** The Settings screen states this before export. Keep the file in a trusted location; it is plain UTF-8 JSON, without encryption or signatures. The app does not upload it or start P2P sharing.
 
@@ -33,13 +33,13 @@ Only selecting a file is insufficient to start restoration. The UI requires a re
 
 ## Backup format and compatibility
 
-The envelope is `format: "game4-library-backup"`, `backupVersion: 1`, `databaseSchemaVersion: 3`, a UTC `createdAt`, and `data`. The seven data arrays are `files`, `fileLocations`, `collectionItems`, `collectionItemFiles`, `tasks`, `importSources`, and `collectionManifestIds`. Row field names use camelCase matching the current embedded schema. The writer emits optional SQL fields as explicit nulls; omitted optional fields are read as null. All SQLite integer cells are canonical decimal **strings** (including IDs, sizes, revisions, and counts), preserving the full signed-64-bit range without JavaScript precision loss. Envelope versions are JSON integers. IDs must be positive and task revisions nonnegative with room for recovery increments.
+The current envelope is `format: "game4-library-backup"`, `backupVersion: 2`, `databaseSchemaVersion: 4`, a UTC `createdAt`, and `data`. The eight data arrays are `files`, `fileLocations`, `collectionItems`, `collectionItemFiles`, `tasks`, `importSources`, `collectionManifestIds`, and `fileIdentifications`. Row field names use camelCase matching the current embedded schema. The writer emits optional SQL fields as explicit nulls; omitted optional fields are read as null. All SQLite integer cells are canonical decimal **strings** (including IDs, sizes, revisions, and counts), preserving the full signed-64-bit range without JavaScript precision loss. Envelope versions are JSON integers. IDs must be positive and task revisions nonnegative with room for recovery increments.
 
-This internal full-catalog format is intentionally tied to schema v3. Unsupported backup/database versions are rejected without mutation; no silent migrations from earlier backup formats are attempted. Future schema support needs an explicit format compatibility decision. Portable manifests remain independent and omit private physical locations; they cannot be selected as full-library backups.
+The current full-catalog format is tied to schema v4. The original v1/schema v3 pair is also accepted, with absent identification rows treated as unavailable evidence rather than scanned or invented. Unsupported version/schema pairs are rejected without mutation. Future schema support needs an explicit format compatibility decision. Portable manifests remain independent and omit private physical locations; they cannot be selected as full-library backups.
 
 Input/output is limited to 64 MiB and 500,000 total records across all arrays. Typed Rust deserialization rejects malformed JSON, invalid decimal strings, unknown typed fields, and duplicate typed fields. SQLite validation enforces STRICT types, uniqueness, foreign keys, hashes, sizes, statuses, and progress constraints. Task error codes/update timestamps and portable UUIDs also receive semantic checks. Restored values are always parameter-bound; SQL/schema/triggers from the selected file are never executed. Backup paths are catalog data, not instructions to access those files. Parsing inherits serde_json's recursion guard.
 
-The new backup feature requires no database migration. The app's schema remains v3. Backups saved by this version include durable catalog data only; in-memory dialog state is excluded.
+Backup/restore uses the current embedded schema. Identification introduced migration 0004; backup compatibility is checked independently. The app's current schema is v4. Backups saved by this version include durable catalog data only; in-memory dialog state is excluded.
 
 ## Verification
 
@@ -48,3 +48,5 @@ Rust integration tests cover a full save/restore with metadata, hashes, original
 Frontend contract tests validate no-argument picker commands, token-only confirmation, preview counts, filename-only responses, cancellation combinations, bounds, and both locales. Run `npm.cmd run check` and `npm.cmd run rust:test`. See [ADR 0010](decisions/0010-library-backup-restore.md).
 
 Native Windows smoke passed for saving a synthetic catalog, Portuguese success feedback, loading the written file for preview, correct counts, and a disabled restore action before the checkbox is selected. The preview was closed without native replacement; actual replacement, rollback, and reopening are covered by Rust integration tests. Independent inspection verified the saved backup and its source hashes/sizes.
+
+The original v1/schema v3 reader remains supported. Current writes/recovery copies use v2/schema v4, including `fileIdentifications` in row limits, fingerprints, validation, snapshots, and transactional replacement. Restored content evidence remains historical; location health always resets to unverified. See [identification compatibility](file-identification.md).

@@ -2,6 +2,7 @@ pub mod backups;
 pub mod commands;
 pub mod contracts;
 pub mod database;
+pub mod identification;
 pub mod library;
 pub mod manifests;
 pub mod tasks;
@@ -27,6 +28,7 @@ pub fn run() {
             commands::library::library_select_sources,
             commands::library::library_import,
             commands::library::library_list,
+            commands::library::library_item_files,
             commands::library::tasks_list,
             commands::library::task_get,
             commands::manifests::library_export_manifest,

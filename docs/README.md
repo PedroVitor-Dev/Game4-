@@ -37,3 +37,5 @@ See [local library import](library-import.md) for file/folder selection, SHA-256
 See [manifest v1](manifest-v1.md) for the public JSON format, schema, compatibility, and Library export.
 
 See [save and restore the local library](library-backup.md) for private full-catalog backups and recovery.
+
+See [platform, format, and size identification](file-identification.md) for detector scope, evidence, file details, and compatibility.

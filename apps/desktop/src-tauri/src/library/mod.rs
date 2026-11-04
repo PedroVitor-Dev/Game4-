@@ -212,7 +212,8 @@ fn run_import_observed(
         for (root, entries) in batches {
             let mut files = Vec::new();
             for path in entries {
-                let (size, hash) = hash_file_with_buffer(&path, &mut buffer, after_chunk)?;
+                let (size, hash, signature) =
+                    hash_file_with_buffer(&path, &mut buffer, after_chunk)?;
                 let relative = if root.is_file() {
                     path.file_name().map(Path::new).unwrap().to_path_buf()
                 } else {
@@ -225,6 +226,7 @@ fn run_import_observed(
                     relative: text_path(&relative)?.replace('\\', "/"),
                     size,
                     hash,
+                    signature,
                 });
                 processed += 1;
                 // Avoid an SQLite FULL-sync write for every tiny file. Final
@@ -312,9 +314,10 @@ struct ImportedFile {
     relative: String,
     size: i64,
     hash: String,
+    signature: Option<crate::identification::Signature>,
 }
 #[cfg(test)]
-fn hash_file(path: &Path) -> Result<(i64, String)> {
+fn hash_file(path: &Path) -> Result<(i64, String, Option<crate::identification::Signature>)> {
     hash_file_with_buffer(path, &mut vec![0u8; 1024 * 1024], &mut || {})
 }
 
@@ -322,7 +325,7 @@ fn hash_file_with_buffer(
     path: &Path,
     buffer: &mut [u8],
     after_chunk: &mut impl FnMut(),
-) -> Result<(i64, String)> {
+) -> Result<(i64, String, Option<crate::identification::Signature>)> {
     reject_ancestors(path)?;
     let mut options = File::options();
     options.read(true);
@@ -339,11 +342,14 @@ fn hash_file_with_buffer(
     let size = i64::try_from(before.len()).map_err(|_| err(ErrorCode::ImportLimitExceeded))?;
     let mut hash = Sha256::new();
     let mut bytes = 0u64;
+    let mut prefix = Vec::with_capacity((size as usize).min(crate::identification::PREFIX_BYTES));
     loop {
         let n = file.read(buffer).map_err(io_err)?;
         if n == 0 {
             break;
         }
+        let keep = (crate::identification::PREFIX_BYTES - prefix.len()).min(n);
+        prefix.extend_from_slice(&buffer[..keep]);
         hash.update(&buffer[..n]);
         bytes += n as u64;
         after_chunk();
@@ -355,7 +361,11 @@ fn hash_file_with_buffer(
     {
         return Err(err(ErrorCode::SourceChanged));
     }
-    Ok((size, format!("{:x}", hash.finalize())))
+    Ok((
+        size,
+        format!("{:x}", hash.finalize()),
+        crate::identification::signature(&prefix),
+    ))
 }
 fn commit_import(
     db: &Database,
@@ -411,6 +421,12 @@ fn commit_import(
                     |r| r.get(0),
                 )
                 .map_err(db_err)?;
+            let detected_format = f.signature.map_or(FileFormat::Unknown, |s| s.format);
+            let detected_platform = f
+                .signature
+                .and_then(|s| s.platform)
+                .map(crate::identification::wire);
+            tx.execute("INSERT INTO file_identifications(file_id,format_id,platform_id,detector_version) VALUES (?1,?2,?3,?4) ON CONFLICT(file_id) DO UPDATE SET format_id=excluded.format_id,platform_id=excluded.platform_id,detector_version=excluded.detector_version",params![file_id,crate::identification::wire(detected_format),detected_platform,crate::identification::DETECTOR_VERSION]).map_err(db_err)?;
             tx.execute("INSERT INTO file_locations (file_id,path,path_key,verification_status,last_verified_at) VALUES (?1,?2,?2,'verified',strftime('%Y-%m-%dT%H:%M:%fZ','now')) ON CONFLICT(path_key) DO UPDATE SET file_id=excluded.file_id, verification_status='verified', last_verified_at=excluded.last_verified_at",params![file_id,f.path]).map_err(db_err)?;
             tx.execute(
                 "INSERT INTO collection_item_files VALUES (?1,?2,?3)",
@@ -517,23 +533,35 @@ pub fn library_list(db: &Database, request: LibraryListRequest) -> Result<Librar
         .connection
         .lock()
         .map_err(|_| err(ErrorCode::DatabaseUnavailable))?;
-    let mut stmt = c.prepare("SELECT i.id,i.title,i.platform,count(f.id),coalesce(sum(f.size_bytes),0) FROM collection_items i LEFT JOIN collection_item_files cf ON cf.item_id=i.id LEFT JOIN files f ON f.id=cf.file_id WHERE i.id>?1 AND (?2='' OR instr(lower(i.title),lower(?2))>0) GROUP BY i.id ORDER BY i.id LIMIT ?3").map_err(db_err)?;
-    let mut items = stmt
+    let mut stmt=c.prepare("SELECT id,title,platform FROM collection_items WHERE id>?1 AND (?2='' OR instr(lower(title),lower(?2))>0) ORDER BY id LIMIT ?3").map_err(db_err)?;
+    let rows = stmt
         .query_map(
             params![cursor, query, i64::from(request.page.limit) + 1],
             |row| {
-                Ok(LibraryItemSummary {
-                    id: row.get::<_, i64>(0)?.to_string(),
-                    title: row.get(1)?,
-                    platform: row.get(2)?,
-                    file_count: row.get(3)?,
-                    total_bytes: row.get::<_, i64>(4)?.to_string(),
-                })
+                Ok((
+                    row.get::<_, i64>(0)?,
+                    row.get::<_, String>(1)?,
+                    row.get::<_, Option<String>>(2)?,
+                ))
             },
         )
         .map_err(db_err)?
         .collect::<std::result::Result<Vec<_>, _>>()
         .map_err(db_err)?;
+    let mut items = Vec::new();
+    for (id, title, platform) in rows {
+        let (file_count, total_bytes, formats, detected_platforms) =
+            crate::identification::summary(&c, id)?;
+        items.push(LibraryItemSummary {
+            id: id.to_string(),
+            title,
+            platform,
+            file_count,
+            total_bytes,
+            formats,
+            detected_platforms,
+        });
+    }
     let more = items.len() > request.page.limit as usize;
     items.truncate(request.page.limit as usize);
     let next_cursor = if more {

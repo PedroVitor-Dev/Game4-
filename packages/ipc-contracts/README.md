@@ -13,6 +13,6 @@ npm.cmd run rust:test
 
 Do not edit generated artifacts. Update Rust DTOs, regenerate, update runtime validators and both error translations where needed, and run the checks. Generated files are excluded from Prettier because the exporter owns their exact contents.
 
-`ImplementedCommand` and the client expose `app_info`, `database_info`, `library_select_sources`, `library_import`, `library_list`, `tasks_list`, `task_get`, `library_export_manifest`, `library_save_backup`, `library_prepare_restore`, and `library_restore_backup`. Runtime decoders validate all active responses. `library_verify`, `task_cancel`, and `DRAFT_TASK_UPDATED_EVENT` remain drafts; they do not perform rechecks, cancel tasks, or emit events.
+`ImplementedCommand` and the client expose `app_info`, `database_info`, `library_select_sources`, `library_import`, `library_list`, `library_item_files`, `tasks_list`, `task_get`, `library_export_manifest`, `library_save_backup`, `library_prepare_restore`, and `library_restore_backup`. Runtime decoders validate all active responses. `library_verify`, `task_cancel`, and `DRAFT_TASK_UPDATED_EVENT` remain drafts; they do not perform rechecks, cancel tasks, or emit events.
 
 See [the protocol specification](../../docs/ipc-contracts.md) for versioning, types, command mapping, semantic validation, and future prerequisites.

@@ -31,6 +31,7 @@ Canonical application response:
     "library_select_sources",
     "library_import",
     "library_list",
+    "library_item_files",
     "tasks_list",
     "task_get",
     "library_export_manifest",
@@ -49,7 +50,7 @@ Canonical database response:
 
 ```json
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "fileCount": 0,
   "locationCount": 0,
   "itemCount": 0,
@@ -181,4 +182,10 @@ A noncancelled preview includes `restoreToken`, `fileName`, and numeric `itemCou
 
 The UI must review the preview and explicitly confirm replacement. Tokens are single-use for accepted confirmation attempts, process-local, expire after five minutes, and are bound to a current-catalog fingerprint. A new preparation invalidates the previous preview. Active imports, stale previews, and write/restore failures require explicit user action rather than automatic mutation retries.
 
-Additional stable errors: `BACKUP_INVALID`, `BACKUP_VERSION_UNSUPPORTED`, `BACKUP_WRITE_FAILED`, `LIBRARY_BUSY`, `RESTORE_STALE`, and `RESTORE_FAILED`, all localized. Restore may retain a recovery file after rollback. Backup v1/schema v3 is separate from IPC v1 and manifest v1. See [the backup guide](library-backup.md).
+Additional stable errors: `BACKUP_INVALID`, `BACKUP_VERSION_UNSUPPORTED`, `BACKUP_WRITE_FAILED`, `LIBRARY_BUSY`, `RESTORE_STALE`, and `RESTORE_FAILED`, all localized. Restore may retain a recovery file after rollback. Current backup v2/schema v4 (with legacy v1/schema v3 read support) is separate from IPC v1 and manifest v1. See [the backup guide](library-backup.md).
+
+## Active file identification and details
+
+Library summaries now include `formats` and `detectedPlatforms` groups while preserving declared `platform`. Missing groups from an older backend decode to empty arrays. `library_item_files` accepts `LibraryItemFilesRequest` (item ID and page) and returns `LibraryItemFilesPage` (relative paths, precise sizes, hashes, format/platform evidence, detector version, cursor). The native capability, Rust enums, generated TypeScript vocabulary, and runtime decoders are implemented. No physical filesystem path is accepted or returned. See [the identification contract](file-identification.md).
+
+Current backup writes are v2/schema v4; the original v1/schema v3 remains readable. SQLite schema version is now 4; manifest/IPC major versions remain 1.

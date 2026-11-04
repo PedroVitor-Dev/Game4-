@@ -268,3 +268,78 @@ test("library backup and restore use preview tokens, validate counts, and never 
     "recovery.json",
   );
 });
+
+test("readable IEC sizes preserve exact integers and localize decimal separators", async () => {
+  const { formatBytes } =
+    await import("../src/services/file-identification.ts");
+  for (const [value, en, pt] of [
+    ["0", "0 B", "0 B"],
+    ["1023", "1,023 B", "1.023 B"],
+    ["1024", "1 KiB", "1 KiB"],
+    ["1536", "1.5 KiB", "1,5 KiB"],
+    ["1048576", "1 MiB", "1 MiB"],
+    ["9007199254740993", "8 PiB", "8 PiB"],
+    ["18446744073709551614", "16 EiB", "16 EiB"],
+  ]) {
+    assert.equal(formatBytes(value, "en"), en);
+    assert.equal(formatBytes(value, "pt-BR"), pt);
+  }
+  for (const invalid of ["-1", "01", "NaN", "1.5"])
+    assert.throws(() => formatBytes(invalid, "en"), RangeError);
+});
+test("file identification responses validate vocabulary, evidence and precise sizes", async () => {
+  const {
+    parseLibraryFileInfo,
+    parseLibraryItemFilesPage,
+    FILE_FORMATS,
+    PLATFORM_IDS,
+  } = await import("@game4/ipc-contracts");
+  const { formatLabels, platformLabels } =
+    await import("../src/services/file-identification.ts");
+  for (const id of FILE_FORMATS) assert.ok(formatLabels[id]);
+  for (const id of PLATFORM_IDS) assert.ok(platformLabels[id]);
+  const file = {
+    path: "日本語.nes",
+    sizeBytes: "9007199254740993",
+    sha256: "a".repeat(64),
+    format: "ines",
+    formatEvidence: "signature",
+    platform: "nes",
+    platformEvidence: "signature",
+    detectorVersion: 1,
+  };
+  assert.deepEqual(parseLibraryFileInfo(file), file);
+  for (const patch of [
+    { format: "invented" },
+    { sizeBytes: 3 },
+    { sha256: "x" },
+    { detectorVersion: null },
+    { platform: null },
+    { format: "unknown" },
+  ])
+    assert.throws(
+      () => parseLibraryFileInfo({ ...file, ...patch }),
+      code("INVALID_RESPONSE"),
+    );
+  assert.throws(
+    () => parseLibraryItemFilesPage({ files: [], nextCursor: "cursor" }),
+    code("INVALID_RESPONSE"),
+  );
+  const client = make(async (command, args) => {
+    if (command === "app_info") return examples.appInfo;
+    assert.equal(command, "library_item_files");
+    assert.deepEqual(args, {
+      request: { itemId: "1", page: { cursor: null, limit: 50 } },
+    });
+    return { files: [file], nextCursor: null };
+  });
+  assert.equal(
+    (
+      await client.getItemFiles({
+        itemId: "1",
+        page: { cursor: null, limit: 50 },
+      })
+    ).files[0].sizeBytes,
+    file.sizeBytes,
+  );
+});

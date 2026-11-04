@@ -2,6 +2,9 @@ import {
   ERROR_CODES,
   ERROR_FIELDS,
   IPC_CONTRACT_VERSION,
+  FILE_FORMATS,
+  PLATFORM_IDS,
+  IDENTIFICATION_EVIDENCE,
 } from "./generated.ts";
 import type {
   AppInfo,
@@ -14,6 +17,13 @@ import type {
   LibraryRestorePreview,
   LibraryPrepareRestoreResult,
   LibraryRestoreResult,
+  FileFormat,
+  PlatformId,
+  IdentificationEvidence,
+  FormatSummary,
+  PlatformSummary,
+  LibraryFileInfo,
+  LibraryItemFilesPage,
   SourceSelection,
   TaskAccepted,
   TaskSnapshot,
@@ -207,6 +217,14 @@ export function parseLibraryPage(v: unknown): LibraryPage {
         id: decimal(i.id, true),
         title: text(i.title),
         platform: nullableText(i.platform),
+        formats:
+          i.formats === undefined
+            ? []
+            : values(i.formats).map(parseFormatSummary),
+        detectedPlatforms:
+          i.detectedPlatforms === undefined
+            ? []
+            : values(i.detectedPlatforms).map(parsePlatformSummary),
         fileCount: safeCount(i.fileCount, 0, 4294967295),
         totalBytes: decimal(i.totalBytes),
       };
@@ -269,4 +287,79 @@ export function parseLibraryPrepareRestoreResult(
 export function parseLibraryRestoreResult(v: unknown): LibraryRestoreResult {
   const o = object(v);
   return { ...backupCounts(o), recoveryFileName: filename(o.recoveryFileName) };
+}
+
+function enumValue<T extends string>(v: unknown, choices: readonly T[]): T {
+  if (!choices.some((c) => c === v)) throw failure("INVALID_RESPONSE");
+  return v as T;
+}
+export function parseFormatSummary(v: unknown): FormatSummary {
+  const o = object(v);
+  return {
+    format: enumValue<FileFormat>(o.format, FILE_FORMATS),
+    evidence: enumValue<IdentificationEvidence>(
+      o.evidence,
+      IDENTIFICATION_EVIDENCE,
+    ),
+    fileCount: safeCount(o.fileCount, 1, 4294967295),
+  };
+}
+export function parsePlatformSummary(v: unknown): PlatformSummary {
+  const o = object(v);
+  return {
+    platform: enumValue<PlatformId>(o.platform, PLATFORM_IDS),
+    evidence: enumValue<IdentificationEvidence>(
+      o.evidence,
+      IDENTIFICATION_EVIDENCE,
+    ),
+    fileCount: safeCount(o.fileCount, 1, 4294967295),
+  };
+}
+export function parseLibraryFileInfo(v: unknown): LibraryFileInfo {
+  const o = object(v);
+  const path = text(o.path);
+  const sha256 = text(o.sha256);
+  const format = enumValue<FileFormat>(o.format, FILE_FORMATS);
+  const formatEvidence = enumValue<IdentificationEvidence>(
+    o.formatEvidence,
+    IDENTIFICATION_EVIDENCE,
+  );
+  const platform =
+    o.platform === null
+      ? null
+      : enumValue<PlatformId>(o.platform, PLATFORM_IDS);
+  const platformEvidence = enumValue<IdentificationEvidence>(
+    o.platformEvidence,
+    IDENTIFICATION_EVIDENCE,
+  );
+  const detectorVersion =
+    o.detectorVersion === null
+      ? null
+      : safeCount(o.detectorVersion, 1, 4294967295);
+  if (
+    !path ||
+    !/^[0-9a-f]{64}$/.test(sha256) ||
+    (platform === null) !== (platformEvidence === "unknown") ||
+    (format === "unknown") !== (formatEvidence === "unknown") ||
+    (formatEvidence === "signature" && detectorVersion === null)
+  )
+    throw failure("INVALID_RESPONSE");
+  return {
+    path,
+    sizeBytes: decimal(o.sizeBytes),
+    sha256,
+    format,
+    formatEvidence,
+    platform,
+    platformEvidence,
+    detectorVersion,
+  };
+}
+export function parseLibraryItemFilesPage(v: unknown): LibraryItemFilesPage {
+  const o = object(v);
+  const files = values(o.files).map(parseLibraryFileInfo);
+  const nextCursor = nullableText(o.nextCursor);
+  if (files.length > 100 || (nextCursor !== null && files.length === 0))
+    throw failure("INVALID_RESPONSE");
+  return { files, nextCursor };
 }

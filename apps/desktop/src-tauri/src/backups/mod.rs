@@ -19,8 +19,8 @@ use std::{
 };
 use uuid::Uuid;
 const FORMAT: &str = "game4-library-backup";
-const VERSION: u32 = 1;
-const DATABASE_SCHEMA: u32 = 3;
+const VERSION: u32 = 2;
+const DATABASE_SCHEMA: u32 = 4;
 const MAX_BYTES: usize = 64 * 1024 * 1024;
 const MAX_ROWS: usize = 500_000;
 type Result<T> = std::result::Result<T, IpcError>;
@@ -92,6 +92,7 @@ table!(ItemFile,"collection_item_files","item_id,relative_path",{item_id:Decimal
 table!(Task,"tasks","id",{id:Decimal,kind:String,status:String,processed_count:Decimal,total_count:Option<Decimal>,error_code:Option<String>,created_at:String,started_at:Option<String>,finished_at:Option<String>,request_id:Option<String>,selection_token:Option<String>,revision:Decimal,updated_at:String});
 table!(Source,"import_sources","source_key",{source_key:String,item_id:Decimal});
 table!(Identity,"collection_manifest_ids","item_id",{item_id:Decimal,manifest_id:String});
+table!(Identification,"file_identifications","file_id",{file_id:Decimal,format_id:String,platform_id:Option<String>,detector_version:Decimal});
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -103,6 +104,8 @@ struct Data {
     tasks: Vec<Task>,
     import_sources: Vec<Source>,
     collection_manifest_ids: Vec<Identity>,
+    #[serde(default)]
+    file_identifications: Vec<Identification>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -124,6 +127,7 @@ impl Data {
             tasks: Task::read(c)?,
             import_sources: Source::read(c)?,
             collection_manifest_ids: Identity::read(c)?,
+            file_identifications: Identification::read(c)?,
         };
         data.check_limits()?;
         Ok(data)
@@ -135,7 +139,8 @@ impl Data {
             + self.collection_item_files.len()
             + self.tasks.len()
             + self.import_sources.len()
-            + self.collection_manifest_ids.len();
+            + self.collection_manifest_ids.len()
+            + self.file_identifications.len();
         if count > MAX_ROWS
             || self.files.iter().any(|r| r.id.0 <= 0)
             || self
@@ -205,6 +210,9 @@ impl Data {
         for r in &self.import_sources {
             r.insert(tx)?;
         }
+        for r in &self.file_identifications {
+            r.insert(tx)?;
+        }
         for r in &self.collection_manifest_ids {
             r.insert(tx)?;
         }
@@ -237,8 +245,14 @@ impl Backup {
         Ok(bytes)
     }
     fn validate(&self) -> Result<()> {
-        if self.backup_version != VERSION || self.database_schema_version != DATABASE_SCHEMA {
+        if !matches!(
+            (self.backup_version, self.database_schema_version),
+            (1, 3) | (2, 4)
+        ) {
             return Err(error(ErrorCode::BackupVersionUnsupported));
+        }
+        if self.backup_version == 1 && !self.data.file_identifications.is_empty() {
+            return Err(invalid());
         }
         if self.format != FORMAT || self.created_at.is_empty() || self.created_at.len() > 64 {
             return Err(invalid());
@@ -278,16 +292,22 @@ impl Backup {
             return Err(invalid());
         }
         let value: serde_json::Value = serde_json::from_slice(bytes).map_err(|_| invalid())?;
-        if value
-            .get("backupVersion")
-            .and_then(|v| v.as_u64())
-            .is_some_and(|n| n != u64::from(VERSION))
-            || value
-                .get("databaseSchemaVersion")
-                .and_then(|v| v.as_u64())
-                .is_some_and(|n| n != u64::from(DATABASE_SCHEMA))
+        let pair = (
+            value.get("backupVersion").and_then(|v| v.as_u64()),
+            value.get("databaseSchemaVersion").and_then(|v| v.as_u64()),
+        );
+        if let (Some(version), Some(schema)) = pair
+            && !matches!((version, schema), (1, 3) | (2, 4))
         {
             return Err(error(ErrorCode::BackupVersionUnsupported));
+        }
+        if pair == (Some(2), Some(4))
+            && value
+                .get("data")
+                .and_then(|d| d.get("fileIdentifications"))
+                .is_none()
+        {
+            return Err(invalid());
         }
         let backup: Self = serde_json::from_slice(bytes).map_err(|_| invalid())?;
         // A compact input must also fit the writer's expanded representation.
@@ -470,7 +490,7 @@ impl BackupState {
     }
 }
 fn replace(tx: &Transaction<'_>, data: &Data) -> Result<()> {
-    tx.execute_batch("DELETE FROM collection_manifest_ids; DELETE FROM import_sources; DELETE FROM collection_item_files; DELETE FROM file_locations; DELETE FROM collection_items; DELETE FROM files; DELETE FROM tasks;").map_err(sql_error)?;
+    tx.execute_batch("DELETE FROM file_identifications; DELETE FROM collection_manifest_ids; DELETE FROM import_sources; DELETE FROM collection_item_files; DELETE FROM file_locations; DELETE FROM collection_items; DELETE FROM files; DELETE FROM tasks;").map_err(sql_error)?;
     data.insert(tx)?;
     tx.execute(
         "UPDATE file_locations SET verification_status='unverified',last_verified_at=NULL",

@@ -235,13 +235,19 @@ pub fn from_catalog(db: &Database, id: &str) -> Result<Manifest> {
         .collect::<std::result::Result<Vec<_>, _>>()
         .map_err(database_error)?
     };
+    let identified = crate::identification::files(&tx, id, "", MAX_FILES + 1)?;
+    let mut extensions = BTreeMap::new();
+    extensions.insert(
+        "org.game4.identification".into(),
+        serde_json::json!({"version":1,"files":identified}),
+    );
     let manifest = Manifest {
         schema: SCHEMA_ID.into(),
         format: "game4-manifest".into(),
         schema_version: SCHEMA_VERSION,
         collection,
         files,
-        extensions: BTreeMap::new(),
+        extensions,
     };
     validate(&manifest)?;
     tx.commit().map_err(database_error)?;

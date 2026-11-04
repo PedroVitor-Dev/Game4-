@@ -28,6 +28,14 @@ pub fn typescript() -> String {
         PageRequest::decl(&config),
         LibraryListRequest::decl(&config),
         LibraryItemSummary::decl(&config),
+        FileFormat::decl(&config),
+        PlatformId::decl(&config),
+        IdentificationEvidence::decl(&config),
+        FormatSummary::decl(&config),
+        PlatformSummary::decl(&config),
+        LibraryFileInfo::decl(&config),
+        LibraryItemFilesRequest::decl(&config),
+        LibraryItemFilesPage::decl(&config),
         LibraryPage::decl(&config),
         SourceKind::decl(&config),
         SelectSourcesRequest::decl(&config),
@@ -66,6 +74,18 @@ pub fn typescript() -> String {
     output.push_str(&format!(
         "export const DRAFT_TASK_UPDATED_EVENT = {TASK_UPDATED_EVENT:?} as const;\n"
     ));
+    output.push_str(&format!(
+        "export const FILE_FORMATS = {} as const;\n",
+        serde_json::to_string(crate::identification::FORMATS).unwrap()
+    ));
+    output.push_str(&format!(
+        "export const PLATFORM_IDS = {} as const;\n",
+        serde_json::to_string(crate::identification::PLATFORMS).unwrap()
+    ));
+    output.push_str(&format!(
+        "export const IDENTIFICATION_EVIDENCE = {} as const;\n",
+        serde_json::to_string(crate::identification::EVIDENCE).unwrap()
+    ));
     for declaration in declarations {
         output.push_str("export ");
         output.push_str(&declaration);
@@ -90,7 +110,7 @@ pub fn examples() -> String {
             .collect(),
     };
     let database_info = DatabaseInfo {
-        schema_version: 3,
+        schema_version: 4,
         file_count: 0,
         location_count: 0,
         item_count: 0,

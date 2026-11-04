@@ -113,7 +113,7 @@ fn malformed_incompatible_or_inconsistent_backups_never_change_live_data() {
     let original = fingerprint(&db);
     let snapshot = Backup::snapshot(&db.connection.lock().unwrap()).unwrap();
     let mut incompatible = snapshot.clone();
-    incompatible.backup_version = 2;
+    incompatible.backup_version = 99;
     assert!(matches!(
         Backup::parse(&incompatible.bytes().unwrap())
             .unwrap_err()
@@ -295,4 +295,39 @@ fn empty_library_roundtrip_and_exact_decimal_identifiers_are_supported() {
     );
     assert!(serde_json::from_str::<Decimal>("1").is_err());
     assert!(serde_json::from_str::<Decimal>("\"01\"").is_err());
+}
+
+#[test]
+fn schema3_backup_v1_restores_without_signature_claims() {
+    let (d, db, imports) = setup();
+    let file = source(d.path(), "legacy.nes");
+    import(&db, &file);
+    let backup = Backup::snapshot(&db.connection.lock().unwrap()).unwrap();
+    let mut legacy = serde_json::to_value(&backup).unwrap();
+    legacy["backupVersion"] = serde_json::json!(1);
+    legacy["databaseSchemaVersion"] = serde_json::json!(3);
+    legacy["data"]
+        .as_object_mut()
+        .unwrap()
+        .remove("fileIdentifications");
+    let path = d.path().join("legacy.json");
+    std::fs::write(&path, serde_json::to_vec(&legacy).unwrap()).unwrap();
+    let state = BackupState::default();
+    let preview = state.prepare(&db, &imports, &path).unwrap();
+    state
+        .restore(&db, &imports, &preview.restore_token)
+        .unwrap();
+    let c = db.connection.lock().unwrap();
+    let count: i64 = c
+        .query_row("SELECT count(*) FROM file_identifications", [], |r| {
+            r.get(0)
+        })
+        .unwrap();
+    assert_eq!(count, 0);
+    let files = crate::identification::files(&c, 1, "", 50).unwrap();
+    assert!(matches!(
+        files[0].format_evidence,
+        IdentificationEvidence::Extension
+    ));
+    assert!(files[0].detector_version.is_none());
 }

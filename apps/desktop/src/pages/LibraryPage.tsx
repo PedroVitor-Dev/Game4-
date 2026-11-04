@@ -15,6 +15,7 @@ import {
   isTauri,
   exportManifest,
 } from "../services/desktop";
+import { LibraryItemCard } from "../components/LibraryItemCard";
 import { getIpcErrorKey } from "../services/errors";
 
 export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
@@ -239,28 +240,12 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
         ) : (
           <section aria-label={t("nav.library")} className="library-grid">
             {items.map((item) => (
-              <article className="content-card library-item" key={item.id}>
-                <span className="item-icon" aria-hidden="true">
-                  ▤
-                </span>
-                <h2>{item.title}</h2>
-                <p>
-                  {t("library.fileCount", { count: item.fileCount })} ·{" "}
-                  {number(item.totalBytes)} {t("library.bytes")}
-                </p>
-                <span className="local-badge">{t("library.localItem")}</span>
-                <div className="manifest-action">
-                  <button
-                    disabled={busy || !isTauri()}
-                    aria-label={t("library.exportManifestLabel", {
-                      title: item.title,
-                    })}
-                    onClick={() => void saveManifest(item.id)}
-                  >
-                    {t("library.exportManifest")}
-                  </button>
-                </div>
-              </article>
+              <LibraryItemCard
+                key={item.id}
+                item={item}
+                busy={busy}
+                onExport={(id) => void saveManifest(id)}
+              />
             ))}
           </section>
         ))}

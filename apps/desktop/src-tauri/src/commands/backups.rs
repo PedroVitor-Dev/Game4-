@@ -14,7 +14,7 @@ pub async fn library_save_backup(
         let path = rfd::FileDialog::new()
             .set_parent(&window)
             .add_filter("Game4 library JSON", &["json"])
-            .set_file_name("game4-library-backup-v1.json")
+            .set_file_name("game4-library-backup-v2.json")
             .save_file();
         let Some(path) = path else {
             return Ok(LibraryBackupResult {

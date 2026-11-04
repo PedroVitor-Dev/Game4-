@@ -64,3 +64,5 @@ npm.cmd run manifests:validate -- "C:\path\collection.manifest.v1.json"
 The development CLI reads at most 32 MiB plus one sentinel byte, returns a JSON validation summary, and exits nonzero for invalid documents. It neither verifies referenced game bytes nor changes the catalog. It requires the repository's Rust build tools; a standalone validator binary is not distributed yet.
 
 Native Windows smoke passed for a two-file Library export through the save dialog with Portuguese success feedback. The actual written JSON passed both offline schema and Rust semantic validation; an independent SHA-256 calculation matched each referenced synthetic source file.
+
+Exports may include the optional `org.game4.identification` extension (version 1) with per-file format/platform evidence and detector version. Core fields/schema remain v1. This metadata is advisory and tied to stored content hashes; it is not a fresh integrity check. See [file identification](file-identification.md).

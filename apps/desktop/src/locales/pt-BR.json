@@ -40,7 +40,19 @@
     "exportManifest": "Exportar manifesto JSON",
     "exportManifestLabel": "Exportar manifesto de {{title}}",
     "manifestSaved": "Manifesto salvo: {{fileName}}",
-    "manifestHint": "As exportações JSON contêm hashes do catálogo e caminhos relativos. Escolha um novo nome; os arquivos existentes são preservados."
+    "manifestHint": "As exportações JSON contêm hashes do catálogo e caminhos relativos. Escolha um novo nome; os arquivos existentes são preservados.",
+    "platforms": "Plataformas sugeridas",
+    "platformUnknown": "Plataforma não determinada",
+    "formats": "Formatos",
+    "declaredPlatform": "Plataforma declarada",
+    "exactSize": "{{bytes}} bytes",
+    "viewFiles": "Ver arquivos",
+    "hideFiles": "Ocultar arquivos",
+    "filesFor": "Arquivos de {{title}}",
+    "loadingFiles": "Carregando detalhes dos arquivos…",
+    "moreFiles": "Carregar mais arquivos",
+    "otherFormats_one": "+{{count}} outro grupo de formato",
+    "otherFormats_other": "+{{count}} outros grupos de formato"
   },
   "tasks": {
     "title": "Cada etapa, acompanhada.",
@@ -115,5 +127,12 @@
     "confirmReplacement": "Entendo que este backup substituirá minha Biblioteca atual.",
     "restore": "Substituir Biblioteca e restaurar",
     "cancel": "Cancelar"
+  },
+  "identification": {
+    "signature": "Assinatura do cabeçalho",
+    "extension": "Sugestão pela extensão",
+    "unknown": "Desconhecido",
+    "rawBinary": "Dados binários (.bin)",
+    "rawRom": "ROM bruta (.rom)"
   }
 }

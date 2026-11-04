@@ -13,6 +13,7 @@ import {
   parseLibraryBackupResult,
   parseLibraryPrepareRestoreResult,
   parseLibraryRestoreResult,
+  parseLibraryItemFilesPage,
 } from "@game4/ipc-contracts";
 import type {
   AppInfo,
@@ -24,6 +25,7 @@ import type {
   TaskIdRequest,
   ExportManifestRequest,
   LibraryRestoreRequest,
+  LibraryItemFilesRequest,
 } from "@game4/ipc-contracts";
 
 export type IpcTransport = {
@@ -39,6 +41,7 @@ const decoders = {
   library_select_sources: parseSourceSelection,
   library_import: parseTaskAccepted,
   library_list: parseLibraryPage,
+  library_item_files: parseLibraryItemFilesPage,
   tasks_list: parseTaskPage,
   task_get: parseTaskSnapshot,
   library_export_manifest: parseExportManifestResult,
@@ -103,6 +106,8 @@ export function createIpcClient(transport: IpcTransport) {
       capable("library_select_sources", request),
     importSources: (request: StartImportRequest) =>
       capable("library_import", request),
+    getItemFiles: (request: LibraryItemFilesRequest) =>
+      capable("library_item_files", request),
     listLibrary: (request: LibraryListRequest) =>
       capable("library_list", request),
     listTasks: (request: PageRequest) => capable("tasks_list", request),

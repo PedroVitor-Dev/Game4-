@@ -6,6 +6,7 @@
       "library_select_sources",
       "library_import",
       "library_list",
+      "library_item_files",
       "tasks_list",
       "task_get",
       "library_export_manifest",
@@ -20,7 +21,7 @@
     "fileCount": 0,
     "itemCount": 0,
     "locationCount": 0,
-    "schemaVersion": 3,
+    "schemaVersion": 4,
     "taskCount": 0
   },
   "draftTaskEvent": {

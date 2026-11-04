@@ -13,6 +13,7 @@ pub enum ImplementedCommand {
     LibrarySelectSources,
     LibraryImport,
     LibraryList,
+    LibraryItemFiles,
     TasksList,
     TaskGet,
     LibraryExportManifest,
@@ -21,12 +22,13 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 11] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 12] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
     ImplementedCommand::LibraryImport,
     ImplementedCommand::LibraryList,
+    ImplementedCommand::LibraryItemFiles,
     ImplementedCommand::TasksList,
     ImplementedCommand::TaskGet,
     ImplementedCommand::LibraryExportManifest,
@@ -204,6 +206,8 @@ pub struct LibraryListRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct LibraryItemSummary {
+    pub formats: Vec<FormatSummary>,
+    pub detected_platforms: Vec<PlatformSummary>,
     pub id: String,
     pub title: String,
     pub platform: Option<String>,
@@ -351,4 +355,114 @@ pub struct LibraryRestoreResult {
     pub location_count: u32,
     pub task_count: u32,
     pub recovery_file_name: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, TS)]
+#[serde(rename_all = "snake_case")]
+pub enum FileFormat {
+    Unknown,
+    Ines,
+    N64Z64,
+    N64V64,
+    N64N64,
+    SnesRom,
+    GameBoyRom,
+    GameBoyColorRom,
+    GbaRom,
+    NdsRom,
+    N3dsRom,
+    Cia,
+    Nsp,
+    Xci,
+    MasterSystemRom,
+    GameGearRom,
+    MegaDriveRom,
+    PcEngineRom,
+    Adf,
+    D64,
+    Zip,
+    SevenZip,
+    Rar,
+    Gzip,
+    Chd,
+    Iso9660,
+    Cue,
+    Pe,
+    Elf,
+    PsxExe,
+    Xbe,
+    DoomWad,
+    RawBinary,
+    RawRom,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, TS)]
+#[serde(rename_all = "snake_case")]
+pub enum PlatformId {
+    Nes,
+    Snes,
+    GameBoy,
+    GameBoyColor,
+    GameBoyAdvance,
+    NintendoDs,
+    Nintendo3ds,
+    NintendoSwitch,
+    Nintendo64,
+    MasterSystem,
+    GameGear,
+    MegaDrive,
+    PcEngine,
+    Amiga,
+    Commodore64,
+    Windows,
+    Playstation,
+    Xbox,
+    Android,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize, TS)]
+#[serde(rename_all = "snake_case")]
+pub enum IdentificationEvidence {
+    Signature,
+    Extension,
+    Unknown,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct FormatSummary {
+    pub format: FileFormat,
+    pub evidence: IdentificationEvidence,
+    pub file_count: u32,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct PlatformSummary {
+    pub platform: PlatformId,
+    pub evidence: IdentificationEvidence,
+    pub file_count: u32,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryFileInfo {
+    pub path: String,
+    pub size_bytes: String,
+    pub sha256: String,
+    pub format: FileFormat,
+    pub format_evidence: IdentificationEvidence,
+    pub platform: Option<PlatformId>,
+    pub platform_evidence: IdentificationEvidence,
+    pub detector_version: Option<u32>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryItemFilesRequest {
+    pub item_id: String,
+    pub page: PageRequest,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryItemFilesPage {
+    pub files: Vec<LibraryFileInfo>,
+    pub next_cursor: Option<String>,
 }

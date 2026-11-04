@@ -21,3 +21,5 @@ export const {
   prepareLibraryRestore,
   restoreLibraryBackup,
 } = client;
+
+export const getItemFiles = client.getItemFiles;

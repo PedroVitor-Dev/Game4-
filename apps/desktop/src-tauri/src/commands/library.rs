@@ -88,3 +88,20 @@ pub async fn task_get(
         .await
         .map_err(|_| IpcError::new(ErrorCode::DatabaseTaskFailed))?
 }
+
+#[tauri::command]
+pub async fn library_item_files(
+    database: tauri::State<'_, Arc<Database>>,
+    request: LibraryItemFilesRequest,
+) -> Result<LibraryItemFilesPage, IpcError> {
+    let db = Arc::clone(database.inner());
+    tauri::async_runtime::spawn_blocking(move || {
+        let c = db
+            .connection
+            .lock()
+            .map_err(|_| IpcError::new(ErrorCode::DatabaseUnavailable))?;
+        crate::identification::item_files(&c, request)
+    })
+    .await
+    .map_err(|_| IpcError::new(ErrorCode::DatabaseTaskFailed))?
+}
