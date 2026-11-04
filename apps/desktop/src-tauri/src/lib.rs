@@ -21,5 +21,5 @@ pub fn run() {
             commands::database::database_info
         ])
         .run(tauri::generate_context!())
-        .expect("failed to run Game4âˆž");
+        .expect("failed to run Game4∞");
 }

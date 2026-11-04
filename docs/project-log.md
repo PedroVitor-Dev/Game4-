@@ -89,6 +89,11 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Limits: no physical LAN/WAN, DHT, tracker, multi-file, cross-client, or performance acceptance. The probe is not a general torrent importer.
 - Next P2P actions: resolve creator correctness and execute the two-PC procedure when hardware is available. Local-library development can continue independently.
 
+### November 4, 2026 — Restore application branding
+
+- Fixed incorrectly transcoded UTF-8 infinity characters in the interface and native startup message.
+- Verified the production frontend build and the rendered accessible Game4∞ brand and both infinity symbols in Microsoft Edge.
+
 ## Template for future entries
 
 ```text

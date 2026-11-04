@@ -13,9 +13,9 @@ export default function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#main" aria-label="Game4Ã¢Ë†Å¾">
-          <span className="brand-mark">Ã¢Ë†Å¾</span>Game4
-          <span className="brand-infinity">Ã¢Ë†Å¾</span>
+        <a className="brand" href="#main" aria-label="Game4∞">
+          <span className="brand-mark">∞</span>Game4
+          <span className="brand-infinity">∞</span>
         </a>
         <p className="sidebar-caption">{t("app.workspace")}</p>
         <nav aria-label={t("nav.label")}>
