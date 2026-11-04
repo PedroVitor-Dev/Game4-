@@ -1,3 +1,5 @@
+mod metainfo;
+
 use anyhow::{Context, Result, bail, ensure};
 use clap::{Parser, Subcommand};
 use librqbit::{
@@ -21,7 +23,7 @@ const PAYLOAD_SIZE: usize = 8 * 1024 * 1024 + 17;
 
 #[derive(Parser)]
 #[command(
-    about = "Game4Ã¢Ë†Å¾ synthetic BitTorrent evaluation. No desktop integration or public discovery."
+    about = "Game4\u{221e} synthetic BitTorrent evaluation. No desktop integration or public discovery."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -167,23 +169,17 @@ async fn prepare(directory: &Path) -> Result<Fixture> {
         *byte = state as u8;
     }
     write_new(&path, &data)?;
-    let torrent = librqbit::create_torrent(
-        &path,
-        CreateTorrentOptions {
-            piece_length: Some(PIECE_LENGTH),
-            ..Default::default()
-        },
-        &librqbit::spawn_utils::BlockingSpawner::new(1),
-    )
-    .await?;
+    let source = path.clone();
+    let torrent =
+        tokio::task::spawn_blocking(move || metainfo::create(&source, PIECE_LENGTH)).await??;
     let fixture = Fixture {
         engine: librqbit::version().to_owned(),
         name: "payload.bin".into(),
         size_bytes: PAYLOAD_SIZE as u64,
         sha256: hash(&path)?,
-        magnet: torrent.as_magnet().to_string(),
+        magnet: torrent.magnet,
     };
-    write_new(&directory.join("fixture.torrent"), &torrent.as_bytes()?)?;
+    write_new(&directory.join("fixture.torrent"), &torrent.bytes)?;
     write_new(
         &directory.join("fixture.json"),
         &serde_json::to_vec_pretty(&fixture)?,
@@ -282,6 +278,13 @@ async fn download(
         options.download_bps >= 16384,
         "Download limit must be at least 16384 bytes/s"
     );
+    ensure!(options.timeout_seconds > 0, "Timeout must be positive");
+    if let Some(bytes) = options.stop_after_bytes {
+        ensure!(
+            bytes > 0 && bytes < fixture.size_bytes,
+            "Partial threshold must be inside the file"
+        );
+    }
     if output.exists() {
         ensure!(
             options.resume || fs::read_dir(output)?.next().is_none(),
@@ -299,12 +302,6 @@ async fn download(
         );
     } else {
         write_new(&marker, fixture.sha256.as_bytes())?;
-    }
-    if let Some(bytes) = options.stop_after_bytes {
-        ensure!(
-            bytes > 0 && bytes < fixture.size_bytes,
-            "Partial threshold must be inside the file"
-        );
     }
     let started = Instant::now();
     let session = session(
@@ -386,8 +383,16 @@ async fn check_creator_boundary(directory: &Path) -> Result<serde_json::Value> {
     )
     .await?;
     let observed = torrent.meta.info.data.pieces.0.len() / 20;
+    let fixed = metainfo::create(&path, PIECE_LENGTH)?;
+    write_new(&directory.join("boundary-fixed.torrent"), &fixed.bytes)?;
+    let meta = librqbit::torrent_from_bytes(&fixed.bytes)?;
+    let fixed_count = meta.info.data.pieces.0.len() / 20;
+    ensure!(
+        fixed_count == 1,
+        "Creator adapter failed exact-boundary validation"
+    );
     Ok(
-        serde_json::json!({ "file_bytes": PIECE_LENGTH, "expected_piece_hashes": 1, "observed_piece_hashes": observed, "passed": observed == 1 }),
+        serde_json::json!({ "file_bytes": PIECE_LENGTH, "expected_piece_hashes": 1, "observed_piece_hashes": observed, "passed": observed == 1, "adapter_piece_hashes": fixed_count, "adapter_passed": fixed_count == 1 }),
     )
 }
 
@@ -413,10 +418,10 @@ async fn loopback(directory: &Path) -> Result<()> {
         let creator_boundary = check_creator_boundary(directory).await?;
         let report = serde_json::json!({
             "engine": format!("librqbit {}", librqbit::version()), "topology": "two sessions on one Windows host; loopback TCP",
-            "fixture_sha256": fixture.sha256, "transport_checks_passed": true,
+            "fixture_sha256": fixture.sha256, "transport_checks_passed": true, "creator_adapter": "Game4 BEP 3 streaming v1",
             "partial": partial, "restart_resume": resumed, "corruption_repair": repaired, "magnet": magnet,
             "seed_uploaded_bytes": seed_handle.stats().uploaded_bytes, "creator_exact_piece_boundary": creator_boundary,
-            "two_computer_test": "pending; second computer unavailable", "candidate_approved": false,
+            "two_computer_test": "not executed by this local probe", "candidate_approved": false,
             "unvalidated": ["physical LAN", "NAT/WAN", "DHT", "trackers", "multi-file", "cross-client interoperability", "performance benchmarks"]
         });
         write_new(&directory.join("report.json"), &serde_json::to_vec_pretty(&report)?)?;
@@ -443,6 +448,7 @@ async fn main() -> Result<()> {
                 listen.is_ipv4(),
                 "Only IPv4 is supported in this experiment"
             );
+            ensure!(seconds > 0, "Seed duration must be positive");
             let (session, _handle) = start_seed(&directory, listen).await?;
             println!(
                 "Seed ready at {}. DHT, trackers, LSD, and UPnP disabled. Ctrl+C stops sharing.",
@@ -535,5 +541,86 @@ mod tests {
         bytes[index..index + 11].copy_from_slice(b"../evil.bin");
         fs::write(&path, bytes).unwrap();
         assert!(load_torrent(&directory).is_err());
+    }
+    #[tokio::test(flavor = "multi_thread")]
+    async fn invalid_options_do_not_create_output_or_marker() {
+        let temp = tempfile::tempdir().unwrap();
+        let directory = temp.path().join("fixture");
+        prepare(&directory).await.unwrap();
+        for (threshold, duration) in [(Some(0), 1), (Some(PAYLOAD_SIZE as u64), 1), (None, 0)] {
+            let output = temp.path().join("must-not-exist");
+            let result = download(
+                &directory,
+                &output,
+                "127.0.0.1:1".parse().unwrap(),
+                DownloadOptions {
+                    resume: false,
+                    magnet: false,
+                    stop_after_bytes: threshold,
+                    download_bps: 1048576,
+                    timeout_seconds: duration,
+                },
+            )
+            .await;
+            assert!(result.is_err());
+            assert!(!output.exists());
+        }
+    }
+
+    #[tokio::test(flavor = "multi_thread")]
+    async fn fixed_exact_boundary_torrent_seeds_and_downloads() -> Result<()> {
+        let temp = tempfile::tempdir()?;
+        let source = temp.path().join("seed");
+        let output = temp.path().join("download");
+        fs::create_dir(&source)?;
+        fs::create_dir(&output)?;
+        let path = source.join("exact.bin");
+        fs::write(&path, vec![0x39; PIECE_LENGTH as usize])?;
+        let torrent = metainfo::create(&path, PIECE_LENGTH)?;
+        let seed = session(source, Some("127.0.0.1:0".parse()?), None).await?;
+        let receiver = session(output.clone(), None, None).await?;
+        let result = async {
+            let seed_handle = seed
+                .add_torrent(
+                    AddTorrent::from_bytes(torrent.bytes.clone()),
+                    Some(AddTorrentOptions {
+                        overwrite: true,
+                        ..Default::default()
+                    }),
+                )
+                .await?
+                .into_handle()
+                .context("Missing seed")?;
+            timeout(
+                Duration::from_secs(20),
+                seed_handle.wait_until_initialized(),
+            )
+            .await??;
+            ensure!(
+                seed_handle.stats().finished,
+                "Exact boundary seed not complete"
+            );
+            let handle = receiver
+                .add_torrent(
+                    AddTorrent::from_bytes(torrent.bytes),
+                    Some(AddTorrentOptions {
+                        initial_peers: Some(vec![seed.listen_addr().unwrap()]),
+                        ..Default::default()
+                    }),
+                )
+                .await?
+                .into_handle()
+                .context("Missing receiver")?;
+            timeout(Duration::from_secs(20), handle.wait_until_completed()).await??;
+            ensure!(
+                hash(&path)? == hash(&output.join("exact.bin"))?,
+                "Exact-boundary transfer hash mismatch"
+            );
+            Ok(())
+        }
+        .await;
+        receiver.stop().await;
+        seed.stop().await;
+        result
     }
 }

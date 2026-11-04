@@ -1,0 +1,22 @@
+{
+  "validator": "independent Python bencode decoder and hashlib",
+  "passed": true,
+  "checks": [
+    {
+      "file": "fixture.torrent",
+      "bytes": 8388625,
+      "piece_hashes": 33,
+      "canonical_bencode": true,
+      "piece_sha1_matches": true,
+      "info_hash": "027bdf4ebb303cc389336601d7bdbd3e21ff1cc8"
+    },
+    {
+      "file": "boundary-fixed.torrent",
+      "bytes": 262144,
+      "piece_hashes": 1,
+      "canonical_bencode": true,
+      "piece_sha1_matches": true,
+      "info_hash": "b25a910d744e55dcfb4f4e10070d9710344ca000"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Reproducing torrent validation
 
-Status: the local checks have passed, with a separate creator defect recorded in [the evaluation](torrent-engine-evaluation.md). **Two physical computers have not been tested.** This procedure is ready for when the second PC becomes available.
+Status: local transport checks and corrected-creator regressions have passed; the unmodified upstream creator defect remains documented in [the evaluation](torrent-engine-evaluation.md). **Two physical computers have not been tested.** A second Windows PC is now available on another network; connectivity setup is pending.
 
 ## Build on each test PC
 
@@ -58,6 +58,18 @@ The engine receives the magnet, not `.torrent` bytes, in this mode. The probe st
 
 Save command output and fill [the result template](evaluations/two-computer-result-template.md). Errors exit nonzero; partial data is retained. Resume here means disk recheck after a new session/process, not an automatic saved transfer queue. Hard-kill/power-loss behavior is a separate test.
 
+## Two different networks: current VPN test plan
+
+The owner chose Tailscale. Install it on both Windows PCs, sign into the same Tailscale account/network, and confirm both devices are online. No matching Windows account is required. Do not share passwords, auth keys, or login links in committed reports.
+
+On each machine, Tailscale's `ip -4` command shows its overlay IPv4 address. From PC B, `tailscale ping <PC-A-overlay-IP>` checks the path; record whether it is direct or relay. A relayed connection is a valid overlay transport test but not proof of a direct native WAN BitTorrent connection.
+
+Use the same seed/download commands above with PC A's overlay address in `--listen` and `--peer`, instead of its LAN address. This test does not require router port forwarding. If an app-specific firewall exception is needed, restrict it to the probe executable, TCP 42420, and the second device's overlay address; do not disable the firewall or open it to all remote addresses. Remove any temporary rule after the test.
+
+The optional portable test package contains the probe, its source/license notices, and metadata only; the payload remains on PC A so PC B must receive it via BitTorrent. No account credentials are included.
+
+References: [Windows installation](https://tailscale.com/docs/install/windows), [device connections](https://tailscale.com/docs/how-to/connect-to-devices), and [direct/relay connection types](https://tailscale.com/docs/reference/connection-types).
+
 ## Local repeat without a second PC
 
 ```powershell
@@ -66,8 +78,8 @@ npm.cmd run torrent:probe -- loopback --directory $run
 Get-Content (Join-Path $run "report.json")
 ```
 
-This runs two engine sessions on one host, checks repair and magnets, and records the creator boundary defect. A successful command means transport checks passed; it does not override `candidate_approved: false` or the creator result. Choose a fresh directory for every run; no recursive cleanup is performed by the probe.
+This runs two engine sessions on one host, checks repair and magnets, and records both the upstream creator defect and the corrected adapter result. A successful command means transport checks passed; it does not override `candidate_approved: false` or the creator result. Choose a fresh directory for every run; no recursive cleanup is performed by the probe.
 
 ## Boundaries
 
-Discovery services and automatic port mapping are disabled. This guide validates direct private-LAN TCP only. For different networks, first design an explicit reachable-peer topology and assess IP exposure; this guide does not solve NAT or CGNAT. Do not present local results as two-PC, WAN, anonymous, or permanent-storage validation.
+Discovery services and automatic port mapping are disabled. This guide validates direct private-LAN TCP only. For different networks, the current plan uses an explicit VPN topology; this does not validate the engine's native NAT or CGNAT traversal. Do not present local results as two-PC, WAN, anonymous, or permanent-storage validation.

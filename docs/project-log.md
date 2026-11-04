@@ -6,7 +6,7 @@
 - Stage: desktop foundation and SQLite startup persistence implemented; importing, hashing, and P2P remain pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
-- Planned initial transport: BitTorrent; librqbit 9.1.0 evaluated locally in an isolated tool, with a creator defect and physical two-PC test still pending.
+- Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Second Windows PC is available on another network; VPN setup and physical two-PC validation are pending.
 - Languages: English repository content; implemented English and Brazilian Portuguese interface.
 - Workflow: relevant Conventional Commits; no agent push.
 - Next delivery: implement local-library import and hashing using the SQLite model and task vocabulary. M0 clean-machine verification and the first hosted CI run remain outstanding.
@@ -99,6 +99,16 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Rejected negative `user_version` values before converting them to a migration index.
 - Added a regression proving that the invalid version and existing records remain unchanged on refusal.
 - All six database tests and Clippy across all desktop targets passed; no personal database was modified by the tests.
+
+### November 4, 2026 — Fix torrent creation and prepare physical test
+
+- Replaced experiment fixture generation with a streaming Game4 BEP 3 creator; the upstream creator is retained only as a defect diagnostic.
+- Seven probe tests passed, covering exact/partial piece counts, deterministic encoding, cross-file hashing and trailing empty files, invalid-output side effects, and a real exact-boundary transfer.
+- Independent Python decoding/hash checks and a repeated full loopback transfer/resume/repair/magnet run passed with adapter-created metainfo.
+- Rejected zero timeout/duration and invalid partial thresholds before network/output side effects where applicable. Fixed the probe's UTF-8 display text.
+- Preserved original evidence; added corrected-creator and independent-validation reports. Production engine selection remains pending.
+- Owner confirmed a second Windows PC on another network and selected Tailscale. Installed Tailscale on PC A, without accepting DNS changes or subnet routes; authentication/connectivity and the physical transfer remain pending.
+- No public torrent, router forwarding, exit node, firewall rule, or upstream patch was configured.
 
 ## Template for future entries
 

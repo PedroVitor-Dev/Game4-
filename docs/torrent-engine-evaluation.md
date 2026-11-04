@@ -2,7 +2,7 @@
 
 Date: November 4, 2026. Status: **local evidence collected; production selection and two-computer acceptance remain open**.
 
-The owner confirmed that a second computer is not currently available. No physical two-computer or cross-network result is claimed.
+The owner initially lacked a second computer, then confirmed a second Windows PC on another network. Tailscale was chosen for the test and installed on PC A; device authentication/connectivity is still being prepared. No physical two-computer or cross-network result is claimed.
 
 ## Candidate comparison
 
@@ -42,17 +42,29 @@ The standalone `tools/torrent-probe` crate uses a pinned engine and its own Carg
 
 Raw observations: [session report](evaluations/torrent-loopback-2026-11-04.json) and [process report](evaluations/torrent-processes-2026-11-04.json). Elapsed times are observations from a throttled synthetic debug run, not throughput benchmarks. These tests demonstrate recovery of the deliberately corrupted fixture; they are not an adversarial peer-security evaluation.
 
-## Blocking finding: torrent creation
+## Corrective implementation — November 4, 2026
+
+The experiment now uses a Game4-owned streaming BitTorrent v1 metainfo adapter instead of librqbit's defective creator. It hashes the concatenated file stream, emits a final piece only when bytes remain, keeps a partial piece across file boundaries, and preserves zero-byte files within nonempty collections. Dictionary keys are encoded in canonical byte order. Input ordering is deterministic; unreadable/changing files, links/reparse points, invalid piece lengths, and empty datasets are rejected explicitly.
+
+Seven probe tests pass, including exact and partial sizes, deterministic output, nested multi-file hashing with a trailing empty file, invalid options leaving no output, and an actual exact-boundary seed/download. Six desktop database tests also pass after a separate negative-schema-version fix.
+
+Independent Python decoding verified canonical bencode, each SHA-1 piece, and the info hash for both the full synthetic fixture and the exact-boundary fixture. The full transfer/resume/magnet/corruption experiment was repeated successfully using adapter-created metainfo.
+
+New evidence: [corrected-creator transport report](evaluations/torrent-fixed-creator-2026-11-04.json) and [independent metainfo report](evaluations/torrent-independent-metainfo-2026-11-04.json). The older reports above are preserved as historical observations.
+
+The report's `creator_exact_piece_boundary.passed` describes the unmodified upstream diagnostic and remains false. Its `adapter_passed` is true. `candidate_approved` remains false because physical-network, independent-client, and other acceptance gates are still open. The adapter is experimental and not connected to desktop user imports.
+
+## Upstream finding and local resolution: torrent creation
 
 The exact-boundary probe reproduces an additional piece hash in `create_torrent` on librqbit 9.1.0. The upstream report describes the same issue for 9.0.1: [rqbit issue 698](https://github.com/ikatson/rqbit/issues/698). Our current-version result is local evidence, independent of the older report.
 
-Do not adopt this creator unchanged for Game4∞. Before approval, evaluate a fixed upstream release or an independently validated creator adapter, and add multi-file, trailing-empty-file, empty-file, and exact-boundary interoperability tests. No registry source was patched and no upstream issue/comment was posted.
+Do not adopt the upstream creator unchanged. The local adapter removes this dependency from fixture generation and covers the relevant local regressions. Independent-client interoperability is still required before production adoption. No registry source was patched and no upstream issue/comment was posted.
 
 ## Remaining acceptance gates
 
-1. Repeat the transfer, process restart, magnet, and SHA-256 checks on two physical Windows PCs over a private LAN.
+1. Repeat transfer, process restart, magnet, and SHA-256 checks on the two physical Windows PCs. For the current different-network setup, record VPN topology and direct/relay path explicitly; this does not validate native BitTorrent NAT traversal.
 2. Test with an independent BitTorrent client and validate generated metainfo, including exact piece boundaries and multi-file collections.
-3. Resolve the creator defect and review file/path handling before accepting user torrents.
+3. Validate the corrected creator with an independent client and review file/path handling before accepting user torrents.
 4. Evaluate DHT, trackers, disconnection behavior, peer limits, and cancellation independently.
 5. Treat WAN/NAT as a separate topology requiring explicit connectivity planning; LAN success is insufficient.
 6. Review dependency licensing/security, resource consumption, release builds, and integration with the desktop task model.

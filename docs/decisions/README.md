@@ -13,6 +13,8 @@ ADRs capture context, decisions, and consequences. An accepted decision may be s
 
 | [0005](0005-torrent-engine-experiment.md) | Accepted experiment | Isolated torrent evaluation; production selection pending |
 
+| [0006](0006-metainfo-creator-adapter.md) | Accepted experiment | Streaming BEP 3 creator replaces defective upstream generator |
+
 Upcoming decisions: BitTorrent engine, manifest v0, `.g4` container, catalog identity and signatures, distribution, and updates.
 
 Template: title, date, status, context, alternatives, decision, consequences, and validation evidence. Do not mark experimental technology as accepted before its experiment.
