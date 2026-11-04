@@ -1,6 +1,6 @@
 # Reproducing torrent validation
 
-Status: local transport checks and corrected-creator regressions have passed; the unmodified upstream creator defect remains documented in [the evaluation](torrent-engine-evaluation.md). **Two physical computers have not been tested.** A second Windows PC is now available on another network; connectivity setup is pending.
+Status: local transport checks and corrected-creator regressions have passed; the unmodified upstream creator defect remains documented in [the evaluation](torrent-engine-evaluation.md). **Two physical Windows PCs on different networks passed transfer, new-process resume, independent SHA-256, and magnet through Tailscale DERP relay.** See [the result record](evaluations/two-computer-result-2026-11-04.md). The procedure below is retained for reproduction.
 
 ## Build on each test PC
 
@@ -82,4 +82,4 @@ This runs two engine sessions on one host, checks repair and magnets, and record
 
 ## Boundaries
 
-Discovery services and automatic port mapping are disabled. This guide validates direct private-LAN TCP only. For different networks, the current plan uses an explicit VPN topology; this does not validate the engine's native NAT or CGNAT traversal. Do not present local results as two-PC, WAN, anonymous, or permanent-storage validation.
+Discovery services and automatic port mapping are disabled. The LAN procedure targets direct private-LAN TCP; the separate VPN procedure records overlay transport, including relay. For different networks, the current plan uses an explicit VPN topology; this does not validate the engine's native NAT or CGNAT traversal. Do not present local results as two-PC, WAN, anonymous, or permanent-storage validation.

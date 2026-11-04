@@ -17,3 +17,7 @@ Boundary and multi-file regression tests, an exact-boundary transfer, independen
 This adds code to maintain and does not close independent-client or physical-network acceptance gates. The adapter remains outside desktop user imports. The owner has a second Windows PC on another network and chose Tailscale for the next test; direct versus relayed overlay connectivity must be recorded accurately.
 
 Reference: [BEP 3](https://www.bittorrent.org/beps/bep_0003.html) and [evaluation evidence](../torrent-engine-evaluation.md).
+
+## Follow-up evidence
+
+The two physical Windows PCs subsequently passed transfer, process restart, SHA-256, and magnet checks over Tailscale DERP relay. See [the result](../evaluations/two-computer-result-2026-11-04.md). Native-network and independent-client acceptance remain open.

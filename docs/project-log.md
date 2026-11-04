@@ -6,7 +6,7 @@
 - Stage: desktop foundation and SQLite startup persistence implemented; importing, hashing, and P2P remain pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
-- Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Second Windows PC is available on another network; VPN setup and physical two-PC validation are pending.
+- Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
 - Languages: English repository content; implemented English and Brazilian Portuguese interface.
 - Workflow: relevant Conventional Commits; no agent push.
 - Next delivery: implement local-library import and hashing using the SQLite model and task vocabulary. M0 clean-machine verification and the first hosted CI run remain outstanding.
@@ -109,6 +109,16 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Preserved original evidence; added corrected-creator and independent-validation reports. Production engine selection remains pending.
 - Owner confirmed a second Windows PC on another network and selected Tailscale. Installed Tailscale on PC A, without accepting DNS changes or subnet routes; authentication/connectivity and the physical transfer remain pending.
 - No public torrent, router forwarding, exit node, firewall rule, or upstream patch was configured.
+
+### November 4, 2026 — Physical two-PC overlay validation
+
+- Connected two Windows PCs on different networks through the owner-approved Tailscale setup; pings before and after the test used DERP relay in the sao region.
+- Provided a source-traceable portable test package with metadata but no payload to PC B.
+- Owner-reported PC B output confirmed an intentional partial stop at 524,305 bytes, a new process reusing those bytes, and completion of all 8,388,625 bytes with matching SHA-256.
+- Independent PowerShell Get-FileHash on PC B matched the expected SHA-256. Magnet metadata exchange and full download also completed with matching SHA-256.
+- Added sanitized structured and narrative evidence. No personal hostnames, account information, VPN IP addresses, or private paths are committed.
+- Stopped the test seeder/package service and removed the temporary peer-scoped firewall exceptions. Tailscale remains installed and connected.
+- Limits: the passing topology is BitTorrent over an encrypted overlay with relay, not native direct-WAN/NAT traversal. Independent-client, discovery, multi-file transfer, and production review remain open.
 
 ## Template for future entries
 

@@ -20,7 +20,7 @@ M0 foundation code is implemented and locally verified through a Windows native 
 
 ## M3 experiment status — November 4, 2026
 
-The isolated librqbit 9.1.0 probe passed loopback transfer, session/process resume, corruption repair, magnet, and SHA-256 checks. Its exact-piece-boundary torrent creator failed. The local creator adapter now passes boundary, multi-file, and independent metadata checks. The owner now has a second Windows PC on another network; Tailscale setup is underway and physical validation remains pending. M3 remains in progress; no production engine selection is approved. See [the evaluation](torrent-engine-evaluation.md) and [test procedure](torrent-validation.md).
+The isolated librqbit 9.1.0 probe passed loopback transfer, session/process resume, corruption repair, magnet, and SHA-256 checks. Its exact-piece-boundary torrent creator failed. The local creator adapter now passes boundary, multi-file, and independent metadata checks. Two physical Windows PCs on different networks subsequently passed transfer, process restart, independent SHA-256, and magnet over Tailscale DERP relay. Native direct-WAN/NAT, discovery, independent-client, and production adoption gates remain open. M3 remains in progress; no production engine selection is approved. See [the evaluation](torrent-engine-evaluation.md) and [test procedure](torrent-validation.md).
 
 ## Dependencies and alternatives
 

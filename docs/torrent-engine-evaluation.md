@@ -1,8 +1,8 @@
 # BitTorrent engine evaluation
 
-Date: November 4, 2026. Status: **local evidence collected; production selection and two-computer acceptance remain open**.
+Date: November 4, 2026. Status: **local checks and physical two-PC overlay transfer/resume/magnet passed; production adoption and native-network acceptance remain open**.
 
-The owner initially lacked a second computer, then confirmed a second Windows PC on another network. Tailscale was chosen for the test and installed on PC A; device authentication/connectivity is still being prepared. No physical two-computer or cross-network result is claimed.
+The owner provided a second Windows PC on another network. Both PCs were connected through Tailscale and completed the physical test using a DERP relay in the sao region. This is an overlay transport result, not a native direct-WAN or NAT-traversal result. See [the physical test record](evaluations/two-computer-result-2026-11-04.md).
 
 ## Candidate comparison
 
@@ -38,7 +38,7 @@ The standalone `tools/torrent-probe` crate uses a pinned engine and its own Carg
 | Independent hash             | Python hashlib matched expected SHA-256 after the separate-process run                            |
 | Fixture safety tests         | Two tests passed: no overwrite, malformed filename/tracker rejection, and unmarked resume refusal |
 | Exact-piece creator boundary | **Failed:** 262,144-byte input produced two hashes instead of one                                 |
-| Two physical computers       | **Pending:** second computer unavailable                                                          |
+| Two physical computers       | Passed transfer, new-process resume, independent hash, and magnet through Tailscale DERP relay    |
 
 Raw observations: [session report](evaluations/torrent-loopback-2026-11-04.json) and [process report](evaluations/torrent-processes-2026-11-04.json). Elapsed times are observations from a throttled synthetic debug run, not throughput benchmarks. These tests demonstrate recovery of the deliberately corrupted fixture; they are not an adversarial peer-security evaluation.
 
@@ -52,7 +52,7 @@ Independent Python decoding verified canonical bencode, each SHA-1 piece, and th
 
 New evidence: [corrected-creator transport report](evaluations/torrent-fixed-creator-2026-11-04.json) and [independent metainfo report](evaluations/torrent-independent-metainfo-2026-11-04.json). The older reports above are preserved as historical observations.
 
-The report's `creator_exact_piece_boundary.passed` describes the unmodified upstream diagnostic and remains false. Its `adapter_passed` is true. `candidate_approved` remains false because physical-network, independent-client, and other acceptance gates are still open. The adapter is experimental and not connected to desktop user imports.
+The report's `creator_exact_piece_boundary.passed` describes the unmodified upstream diagnostic and remains false. Its `adapter_passed` is true. `candidate_approved` in that historical local-only report remains false. The subsequent physical two-PC overlay gate passed; independent-client, native-network, and production acceptance remain open. The adapter is experimental and not connected to desktop user imports.
 
 ## Upstream finding and local resolution: torrent creation
 
@@ -62,14 +62,14 @@ Do not adopt the upstream creator unchanged. The local adapter removes this depe
 
 ## Remaining acceptance gates
 
-1. Repeat transfer, process restart, magnet, and SHA-256 checks on the two physical Windows PCs. For the current different-network setup, record VPN topology and direct/relay path explicitly; this does not validate native BitTorrent NAT traversal.
+1. **Completed for the overlay topology:** transfer, process restart, magnet, and SHA-256 checks on two physical Windows PCs. The recorded path was Tailscale DERP relay; native BitTorrent NAT traversal is not validated.
 2. Test with an independent BitTorrent client and validate generated metainfo, including exact piece boundaries and multi-file collections.
 3. Validate the corrected creator with an independent client and review file/path handling before accepting user torrents.
 4. Evaluate DHT, trackers, disconnection behavior, peer limits, and cancellation independently.
 5. Treat WAN/NAT as a separate topology requiring explicit connectivity planning; LAN success is insufficient.
 6. Review dependency licensing/security, resource consumption, release builds, and integration with the desktop task model.
 
-M3 remains in progress. The immediate local-library roadmap can continue while physical testing is unavailable.
+The M3 physical transport experiment now has passing evidence for the tested overlay. Full engine adoption and desktop integration remain open. The local-library roadmap can continue independently.
 
 ## Primary references
 

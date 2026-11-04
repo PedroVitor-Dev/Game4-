@@ -23,3 +23,5 @@ Use [the two-computer procedure](../../docs/torrent-validation.md) for separate 
 Invalid transfer thresholds and zero timeouts are rejected before output creation. Resume markers are retained for legitimate retries. Empty datasets and filesystem links/reparse points are rejected by the creator; empty files inside nonempty collections are supported.
 
 Only use trusted, self-generated fixtures in this experimental tool. It is not a general-purpose torrent importer, security audit, production transfer manager, or anonymous sharing system. See [the evaluation record](../../docs/torrent-engine-evaluation.md).
+
+Physical test follow-up: two Windows PCs on different networks passed transfer, process restart, independent SHA-256, and magnet over Tailscale DERP relay. See [the result record](../../docs/evaluations/two-computer-result-2026-11-04.md). This does not establish native NAT traversal or production readiness.
