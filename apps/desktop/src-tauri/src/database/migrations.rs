@@ -12,6 +12,9 @@ fn apply_steps(connection: &mut Connection, migrations: &[&str]) -> Result<()> {
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     let version: i64 = transaction.pragma_query_value(None, "user_version", |row| row.get(0))?;
     let supported = migrations.len() as i64;
+    if version < 0 {
+        return Err(DatabaseError::InvalidSchemaVersion(version));
+    }
     if version > supported {
         return Err(DatabaseError::NewerSchema {
             found: version,
@@ -52,5 +55,22 @@ mod tests {
             )
             .unwrap();
         assert_eq!(tables, 0);
+    }
+    #[test]
+    fn negative_schema_version_is_rejected_without_changes() {
+        let mut connection = Connection::open_in_memory().unwrap();
+        connection.execute_batch("CREATE TABLE keep_data (value TEXT); INSERT INTO keep_data VALUES ('preserve'); PRAGMA user_version = -1;").unwrap();
+        assert!(matches!(
+            apply(&mut connection),
+            Err(DatabaseError::InvalidSchemaVersion(-1))
+        ));
+        let version: i64 = connection
+            .pragma_query_value(None, "user_version", |row| row.get(0))
+            .unwrap();
+        assert_eq!(version, -1);
+        let value: String = connection
+            .query_row("SELECT value FROM keep_data", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(value, "preserve");
     }
 }

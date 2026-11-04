@@ -11,6 +11,8 @@ pub enum DatabaseError {
     Sqlite(#[from] rusqlite::Error),
     #[error("database schema {found} is newer than supported schema {supported}")]
     NewerSchema { found: i64, supported: i64 },
+    #[error("invalid negative database schema version {0}")]
+    InvalidSchemaVersion(i64),
     #[error("database connection lock is unavailable")]
     LockUnavailable,
 }

@@ -32,7 +32,7 @@ Path keys will be computed by the future importer under an explicit Windows norm
 
 SQL lives under `apps/desktop/src-tauri/src/database/migrations/`. An ordered embedded migration list maps to `PRAGMA user_version`. Startup obtains an immediate write transaction, reads the version under that lock, applies pending steps, updates the version, and commits. A failed migration rolls back schema changes and version updates together.
 
-Reopening the same schema is idempotent. A schema newer than the application supports is rejected without downgrading or resetting it. Do not edit an already released migration; append a new numbered migration and register it in order. Existing databases are never deleted automatically.
+Reopening the same schema is idempotent. A schema newer than the application supports is rejected without downgrading or resetting it. Negative schema versions are rejected before indexing migrations, preserving the database unchanged. Do not edit an already released migration; append a new numbered migration and register it in order. Existing databases are never deleted automatically.
 
 Future schema changes must include migration and data-preservation tests. Do not insert transaction-control statements into migration files; the runner owns the transaction.
 

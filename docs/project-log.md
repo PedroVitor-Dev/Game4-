@@ -94,6 +94,12 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Fixed incorrectly transcoded UTF-8 infinity characters in the interface and native startup message.
 - Verified the production frontend build and the rendered accessible Game4∞ brand and both infinity symbols in Microsoft Edge.
 
+### November 4, 2026 — Reject invalid SQLite schema versions
+
+- Rejected negative `user_version` values before converting them to a migration index.
+- Added a regression proving that the invalid version and existing records remain unchanged on refusal.
+- All six database tests and Clippy across all desktop targets passed; no personal database was modified by the tests.
+
 ## Template for future entries
 
 ```text
