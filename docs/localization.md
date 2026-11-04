@@ -1,6 +1,6 @@
 # Language and localization policy
 
-Status: accepted planning policy; application implementation is pending.
+Status: accepted policy. The desktop foundation implements English and Brazilian Portuguese using i18next and react-i18next; future features must maintain coverage.
 
 ## Repository and GitHub
 
@@ -26,7 +26,7 @@ Expose a language selector in settings and persist the choice locally. Changing 
 - Use locale-aware date and number formatting; serialize machine data in stable formats.
 - Preserve original filenames, titles, user metadata, hashes, schema keys, and technical identifiers.
 - Missing translations fall back to English. Check missing keys during development so fallback does not mask incomplete coverage.
-- Select the localization library during M0, based on React integration and pluralization support.
+- Use i18next with react-i18next for locale resources, fallback, interpolation, and pluralization support.
 
 ## Acceptance
 

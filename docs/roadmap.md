@@ -4,15 +4,19 @@ Baseline: November 3, 2026. Initial estimate: 16 active weeks for a P2P alpha, f
 
 Weeks start when implementation actually begins. Holidays, availability, incompatibilities, and scope changes may shift dates. Review estimates after each milestone; acceptance criteria take precedence over dates.
 
-| Milestone | Weeks | Delivery | Exit criteria |
-|---|---|---|---|
-| M0 — Foundation | 1–2 | Tauri, React, TypeScript, Rust, CI, base interface, and localization | Windows build and launch; basic automated checks; persistent English/Portuguese selection |
-| M1 — Library | 3–5 | Import, SQLite, hashes, and browsing | Persistence after restart; cancellation and problematic files handled |
-| M2 — Local preservation | 6–7 | Manifest v0, export, and verification | Catalog reconstruction and corruption detection demonstrated |
-| M3 — P2P prototype | 8–9 | BitTorrent engine experiment | Transfer between two installations; license and integration assessed |
-| M4 — Transfers | 10–12 | Queue, torrents, magnets, limits, and resume | State survives restart; final integrity verified |
-| M5 — Windows alpha | 13–16 | Integration, tests, installer, and documentation | Clean installation, restoration, security review, and both locales verified |
-| Contingency | 17–20 | Fixes and compatibility | Use for observed risks, not additional features |
+| Milestone               | Weeks | Delivery                                                             | Exit criteria                                                                             |
+| ----------------------- | ----- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| M0 — Foundation         | 1–2   | Tauri, React, TypeScript, Rust, CI, base interface, and localization | Windows build and launch; basic automated checks; persistent English/Portuguese selection |
+| M1 — Library            | 3–5   | Import, SQLite, hashes, and browsing                                 | Persistence after restart; cancellation and problematic files handled                     |
+| M2 — Local preservation | 6–7   | Manifest v0, export, and verification                                | Catalog reconstruction and corruption detection demonstrated                              |
+| M3 — P2P prototype      | 8–9   | BitTorrent engine experiment                                         | Transfer between two installations; license and integration assessed                      |
+| M4 — Transfers          | 10–12 | Queue, torrents, magnets, limits, and resume                         | State survives restart; final integrity verified                                          |
+| M5 — Windows alpha      | 13–16 | Integration, tests, installer, and documentation                     | Clean installation, restoration, security review, and both locales verified               |
+| Contingency             | 17–20 | Fixes and compatibility                                              | Use for observed risks, not additional features                                           |
+
+## Current milestone status — November 4, 2026
+
+M0 foundation code is implemented and locally verified through a Windows native debug build and WebView2 smoke test. English/Portuguese switching and persistence work. The CI workflow is configured but has not run on GitHub. A clean-machine build and installation check remains required before declaring the full M0 exit criterion met. Later milestones remain planned; no delivery-velocity claim is made from this initial setup.
 
 ## Dependencies and alternatives
 
@@ -24,12 +28,12 @@ Weeks start when implementation actually begins. Holidays, availability, incompa
 
 ## Later horizon without committed dates
 
-| Phase | Scope | Prerequisite |
-|---|---|---|
-| Communities | Signed catalogs, history, and mirroring | Usable alpha and validated manifest format |
-| Guardians | Quotas, scheduling, health, and rescue | Reliable availability observation and sharing controls |
-| Long term | Recovery, offline kits, IPFS, and timestamps | Restoration tests and compatibility policy |
-| Funding | Donations, sponsorship, and paid-storage research | Demonstrated need, costs, and responsibilities |
+| Phase       | Scope                                             | Prerequisite                                           |
+| ----------- | ------------------------------------------------- | ------------------------------------------------------ |
+| Communities | Signed catalogs, history, and mirroring           | Usable alpha and validated manifest format             |
+| Guardians   | Quotas, scheduling, health, and rescue            | Reliable availability observation and sharing controls |
+| Long term   | Recovery, offline kits, IPFS, and timestamps      | Restoration tests and compatibility policy             |
+| Funding     | Donations, sponsorship, and paid-storage research | Demonstrated need, costs, and responsibilities         |
 
 ## Cadence
 

@@ -45,13 +45,15 @@ Video game history deserves to survive for future generations. Game4∞ aims to 
 
 **Current stage: planning and initial development toward v0.1.0-alpha.**
 
-The repository currently contains documentation and the license; the application has not been implemented. The features and architecture described here are development goals, not available capabilities.
+The desktop foundation is implemented: Tauri 2, React, TypeScript, Rust, Tailwind CSS, navigation, and persistent language selection. The native Windows debug executable has been built and smoke-tested. File importing, SQLite storage, and P2P transfers are not implemented yet.
+
+To run the project, follow the [development setup](docs/development.md). The remaining features below are development goals.
 
 The first application targets Windows, starting with a local library and progressing to P2P transfers.
 
 ## 🌍 Languages
 
-The application is planned to support **English (`en`) and Brazilian Portuguese (`pt-BR`)**. English will be the default and fallback language, with a persistent language selector. Localization will be part of the desktop foundation.
+The desktop foundation supports **English (`en`) and Brazilian Portuguese (`pt-BR`)**. English is the default and fallback language, with a persistent language selector. Future features must maintain both locales.
 
 Repository documentation, GitHub-facing content, code identifiers, and commit messages use English initially. Portuguese application support remains part of the product scope. See the [language policy](docs/localization.md).
 
@@ -121,18 +123,18 @@ All formats should prioritize public specifications, interoperability, verifiabl
 
 ## 🏗️ Planned architecture
 
-| Component | Technology |
-|---|---|
-| Desktop shell | Tauri 2 |
-| Local backend | Rust |
-| Frontend | React and TypeScript |
-| Styling | Tailwind CSS |
-| Database | SQLite |
-| P2P transfers | BitTorrent |
-| Peer discovery | DHT / trackers |
-| Integrity | SHA-256 |
-| Metadata | JSON |
-| Distribution | GitHub Releases |
+| Component      | Technology           |
+| -------------- | -------------------- |
+| Desktop shell  | Tauri 2              |
+| Local backend  | Rust                 |
+| Frontend       | React and TypeScript |
+| Styling        | Tailwind CSS         |
+| Database       | SQLite               |
+| P2P transfers  | BitTorrent           |
+| Peer discovery | DHT / trackers       |
+| Integrity      | SHA-256              |
+| Metadata       | JSON                 |
+| Distribution   | GitHub Releases      |
 
 The BitTorrent engine will be selected after compatibility, performance, security, and licensing evaluation. Components should evolve independently.
 
@@ -171,8 +173,8 @@ See the [estimated schedule and acceptance criteria](docs/roadmap.md). Custom fo
 
 ### Phase 1 — Local foundation and P2P
 
-- [ ] Set up Tauri, React, Rust, and the initial interface.
-- [ ] Establish English and Portuguese localization.
+- [x] Set up Tauri, React, Rust, and the initial interface.
+- [x] Establish English and Portuguese localization.
 - [ ] Build the local library with SQLite and SHA-256 hashing.
 - [ ] Create manifests and support offline catalog reconstruction.
 - [ ] Specify and evaluate initial `.g4` and `.g4t` formats.
@@ -252,7 +254,7 @@ Video games are part of the history of technology, art, music, and digital cultu
 
 **Preserve the Past. Share the Future.**
 
-*Built to preserve. Designed to last.*
+_Built to preserve. Designed to last._
 
 **Open Source • P2P • Digital Preservation**
 

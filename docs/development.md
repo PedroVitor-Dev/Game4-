@@ -1,0 +1,43 @@
+# Development setup
+
+## Repository
+
+Use the existing Git repository and its configured origin. Do not initialize a nested repository under `apps/desktop`. Workspaces share the root `package-lock.json`; the Rust application tracks its own `Cargo.lock`.
+
+## Windows prerequisites
+
+- Node.js 24 or newer with npm 11 or newer (Node 24 is used in CI).
+- Rust stable with the MSVC target, Cargo, rustfmt, and Clippy.
+- Microsoft Visual Studio 2022 Build Tools with Desktop development with C++, including the Windows SDK.
+- Microsoft Edge WebView2 Runtime.
+
+Follow the [official Tauri prerequisites](https://v2.tauri.app/start/prerequisites/). Restart the terminal after tool installation so PATH changes are available. No mobile or non-Windows development target is configured yet.
+
+## Commands from the repository root
+
+```sh
+npm ci
+npm run desktop:dev
+```
+
+| Command                                | Purpose                                                     |
+| -------------------------------------- | ----------------------------------------------------------- |
+| `npm run dev`                          | Browser-only frontend preview on port 1420; no Rust backend |
+| `npm run desktop:dev`                  | Native Tauri development window with Rust                   |
+| `npm run build`                        | TypeScript check and production frontend build              |
+| `npm run check`                        | TypeScript, locale parity, and formatting checks            |
+| `npm run format`                       | Format supported source and documentation files             |
+| `npm run rust:fmt`                     | Check Rust formatting                                       |
+| `npm run rust:check`                   | Check Rust with the committed lockfile                      |
+| `npm run desktop:build -- --no-bundle` | Build the native executable without an installer            |
+| `npm run desktop:build`                | Build an unsigned NSIS installer                            |
+
+The development server binds to the loopback interface and fails if port 1420 is occupied. The application uses a restrictive production CSP and no filesystem, shell, or external opener plugin. The only custom Rust command is a read-only application-version query.
+
+## Localization
+
+Edit `apps/desktop/src/locales/en.json` and `pt-BR.json` together. Locale checks validate key and interpolation parity. English is the default and fallback; selection is saved locally. Browser preview explicitly reports that the desktop backend is unavailable by design. See [language policy](localization.md).
+
+## Current limits
+
+This is the desktop foundation, not a library or transfer implementation. No game import, SQLite persistence, network sharing, automatic updater, or signed distribution is included. Generated scaffold icons are placeholders pending visual identity work. CI configuration is committed but is only executed by GitHub after the owner pushes the changes.

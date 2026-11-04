@@ -16,12 +16,12 @@ Signatures verify integrity and association with a key. Plan key export, rotatio
 
 ## Integrations
 
-| Technology | Proposed use | Adoption gate |
-|---|---|---|
-| IPFS | Complementary manifest and content distribution | Test pinning, restoration, and resource usage |
-| OpenTimestamps / Bitcoin | Manifest timestamp proofs | Preserve and verify proofs with manifests |
-| Bitcoin / Lightning | Voluntary project or collection donations | Prefer external flows; no app custody of keys |
-| Filecoin | Funded additional copy | Experiment covering agreement, duration, cost, and actual retrieval |
+| Technology               | Proposed use                                    | Adoption gate                                                       |
+| ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------- |
+| IPFS                     | Complementary manifest and content distribution | Test pinning, restoration, and resource usage                       |
+| OpenTimestamps / Bitcoin | Manifest timestamp proofs                       | Preserve and verify proofs with manifests                           |
+| Bitcoin / Lightning      | Voluntary project or collection donations       | Prefer external flows; no app custody of keys                       |
+| Filecoin                 | Funded additional copy                          | Experiment covering agreement, duration, cost, and actual retrieval |
 
 IPFS requires nodes to retain data; content addressing does not guarantee persistence. OpenTimestamps neither stores games nor certifies authorship. Filecoin requires storage and retrieval planning; do not promise permanence.
 

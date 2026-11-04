@@ -1,0 +1,27 @@
+{
+  "name": "game4-infinity",
+  "version": "0.1.0",
+  "private": true,
+  "license": "GPL-3.0-or-later",
+  "workspaces": [
+    "apps/desktop"
+  ],
+  "engines": {
+    "node": ">=24",
+    "npm": ">=11"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace @game4/desktop",
+    "desktop:dev": "npm run tauri --workspace @game4/desktop -- dev",
+    "desktop:build": "npm run tauri --workspace @game4/desktop -- build",
+    "build": "npm run build --workspace @game4/desktop",
+    "check": "npm run typecheck --workspace @game4/desktop && npm run test --workspace @game4/desktop && npm run format:check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "rust:check": "cargo check --locked --manifest-path apps/desktop/src-tauri/Cargo.toml",
+    "rust:fmt": "cargo fmt --manifest-path apps/desktop/src-tauri/Cargo.toml -- --check"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

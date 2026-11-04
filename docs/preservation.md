@@ -12,11 +12,11 @@ Label declared metadata accordingly. Separate required fields from extensions. E
 
 ## Proposed formats
 
-| Format | Purpose | Status |
-|---|---|---|
-| `.g4` | Portable package containing manifest and files | Conceptual; container and limits undecided |
-| `.g4t` | Sharing references and metadata | Conceptual; justify benefits over `.torrent` + JSON |
-| `.g4lib` | Catalog and reference export | Future; does not imply game files are included |
+| Format   | Purpose                                        | Status                                              |
+| -------- | ---------------------------------------------- | --------------------------------------------------- |
+| `.g4`    | Portable package containing manifest and files | Conceptual; container and limits undecided          |
+| `.g4t`   | Sharing references and metadata                | Conceptual; justify benefits over `.torrent` + JSON |
+| `.g4lib` | Catalog and reference export                   | Future; does not imply game files are included      |
 
 Do not treat extensions as stable formats before specifying security, compatibility, and migrations. Avoid mandatory recompression that impedes random access, resume, and torrent interoperability.
 

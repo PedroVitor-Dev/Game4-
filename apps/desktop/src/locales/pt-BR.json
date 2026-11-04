@@ -1,0 +1,43 @@
+{
+  "app": {
+    "workspace": "Espaço de preservação",
+    "localFirst": "Seus dados ficam com você",
+    "tagline": "Preserve o passado. Compartilhe o futuro.",
+    "stage": "Prévia de desenvolvimento",
+    "eyebrow": "Seu espaço de preservação",
+    "planned": "Recurso planejado"
+  },
+  "nav": {
+    "label": "Navegação principal",
+    "library": "Biblioteca",
+    "tasks": "Tarefas",
+    "settings": "Configurações"
+  },
+  "language": {
+    "label": "Idioma",
+    "title": "Do seu jeito",
+    "description": "Escolha o idioma da interface. Sua preferência fica salva neste dispositivo."
+  },
+  "library": {
+    "title": "Um lar para a história dos jogos.",
+    "description": "Organize e verifique seu acervo digital. Mantenha sua história viva, um arquivo de cada vez.",
+    "emptyTitle": "Seu acervo começa aqui",
+    "emptyDescription": "A importação de arquivos e a verificação de integridade são o próximo marco. Nenhum arquivo foi importado ou compartilhado."
+  },
+  "tasks": {
+    "title": "Cada etapa, acompanhada.",
+    "description": "Um espaço para acompanhar importações, verificações de integridade e futuras transferências.",
+    "emptyTitle": "Nenhuma tarefa por enquanto",
+    "emptyDescription": "As tarefas em segundo plano aparecerão aqui quando as operações da biblioteca estiverem disponíveis."
+  },
+  "settings": {
+    "title": "Seu espaço, suas escolhas.",
+    "description": "Comece pelo idioma de sua preferência. Os controles de biblioteca e rede chegarão junto com seus recursos."
+  },
+  "runtime": {
+    "checking": "Verificando a conexão com o aplicativo…",
+    "connected": "Backend desktop conectado · Rust + Tauri",
+    "preview": "Prévia no navegador · sem backend desktop",
+    "unavailable": "Backend desktop indisponível. Reinicie o aplicativo para tentar novamente."
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "app": {
+    "workspace": "Preservation workspace",
+    "localFirst": "Local-first by design",
+    "tagline": "Preserve the past. Share the future.",
+    "stage": "Development preview",
+    "eyebrow": "Your preservation workspace",
+    "planned": "Planned feature"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "library": "Library",
+    "tasks": "Tasks",
+    "settings": "Settings"
+  },
+  "language": {
+    "label": "Language",
+    "title": "Make it yours",
+    "description": "Choose your interface language. Your preference is saved on this device."
+  },
+  "library": {
+    "title": "A home for game history.",
+    "description": "Organize and verify your digital collection. Keep its story alive, one file at a time.",
+    "emptyTitle": "Your collection starts here",
+    "emptyDescription": "File importing and integrity verification are the next milestone. No files have been imported or shared."
+  },
+  "tasks": {
+    "title": "Every step, accounted for.",
+    "description": "A place to follow imports, integrity checks, and future transfers.",
+    "emptyTitle": "No tasks yet",
+    "emptyDescription": "Background tasks will appear here when library operations become available."
+  },
+  "settings": {
+    "title": "Your workspace, your way.",
+    "description": "Start with your preferred language. Library and network controls will arrive with their features."
+  },
+  "runtime": {
+    "checking": "Checking the desktop connection…",
+    "connected": "Desktop backend connected · Rust + Tauri",
+    "preview": "Browser preview · no desktop backend",
+    "unavailable": "Desktop backend unavailable. Restart the application to retry."
+  }
+}

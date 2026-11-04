@@ -1,15 +1,15 @@
 # Planned architecture
 
-Status: accepted initial direction; details remain subject to experiments.
+Status: the Tauri / React / Rust shell and localization are implemented. Database, file operations, and transfers remain planned. Details remain subject to experiments. See [development setup](development.md).
 
-| Layer | Technology / responsibility |
-|---|---|
-| Interface | React, TypeScript, Tailwind CSS; library, tasks, and transfers |
-| Application shell | Tauri 2; explicitly exposed interface commands |
-| Local core | Rust; import, hashes, formats, policies, and tasks |
-| Persistence | SQLite with versioned migrations |
-| Transfers | BitTorrent adapter; engine not yet selected |
-| Future integrations | Independent IPFS and timestamp adapters |
+| Layer               | Technology / responsibility                                    |
+| ------------------- | -------------------------------------------------------------- |
+| Interface           | React, TypeScript, Tailwind CSS; library, tasks, and transfers |
+| Application shell   | Tauri 2; explicitly exposed interface commands                 |
+| Local core          | Rust; import, hashes, formats, policies, and tasks             |
+| Persistence         | SQLite with versioned migrations                               |
+| Transfers           | BitTorrent adapter; engine not yet selected                    |
+| Future integrations | Independent IPFS and timestamp adapters                        |
 
 ## Boundaries
 

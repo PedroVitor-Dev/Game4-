@@ -4,12 +4,12 @@
 
 Game4∞ should help people and communities maintain verifiable, recoverable, usable collections even without services operated by the project's creators. The initial platform is Windows, with local functionality and no mandatory account.
 
-| Audience | Need |
-|---|---|
-| Collector | Catalog files and detect changes or damage |
-| Curator | Document provenance, versions, and execution requirements |
-| Community | Share collections and maintain independent copies |
-| Guardian | Offer storage and bandwidth within explicit limits |
+| Audience  | Need                                                      |
+| --------- | --------------------------------------------------------- |
+| Collector | Catalog files and detect changes or damage                |
+| Curator   | Document provenance, versions, and execution requirements |
+| Community | Share collections and maintain independent copies         |
+| Guardian  | Offer storage and bandwidth within explicit limits        |
 
 ## First delivery: local library
 
