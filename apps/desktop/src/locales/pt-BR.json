@@ -22,13 +22,41 @@
     "title": "Um lar para a história dos jogos.",
     "description": "Organize e verifique seu acervo digital. Mantenha sua história viva, um arquivo de cada vez.",
     "emptyTitle": "Seu acervo começa aqui",
-    "emptyDescription": "A importação de arquivos e a verificação de integridade são o próximo marco. Nenhum arquivo foi importado ou compartilhado."
+    "emptyDescription": "Escolha arquivos ou pastas para iniciar sua coleção local.",
+    "importTitle": "Importar para a Biblioteca",
+    "importDescription": "Selecione arquivos ou pastas. O SHA-256 é calculado localmente. Os originais ficam no lugar; importar não compartilha os arquivos.",
+    "addFiles": "Adicionar arquivos",
+    "addFolders": "Adicionar pastas",
+    "selection": "Pronto para importar",
+    "startImport": "Importar seleção",
+    "dismiss": "Descartar",
+    "refresh": "Atualizar",
+    "loading": "Carregando sua Biblioteca…",
+    "fileCount_one": "{{count}} arquivo",
+    "fileCount_other": "{{count}} arquivos",
+    "bytes": "bytes",
+    "localItem": "Indexado localmente",
+    "loadMore": "Carregar mais"
   },
   "tasks": {
     "title": "Cada etapa, acompanhada.",
     "description": "Um espaço para acompanhar importações, verificações de integridade e futuras transferências.",
     "emptyTitle": "Nenhuma tarefa por enquanto",
-    "emptyDescription": "As tarefas em segundo plano aparecerão aqui quando as operações da biblioteca estiverem disponíveis."
+    "emptyDescription": "Importações e verificações de integridade aparecerão aqui.",
+    "recent": "Tarefas recentes",
+    "progress": "{{processed}} / {{total}} arquivos processados",
+    "kind": {
+      "import": "Importação",
+      "verify": "Verificação de integridade"
+    },
+    "status": {
+      "queued": "Na fila",
+      "running": "Em andamento",
+      "succeeded": "Concluída",
+      "failed": "Falhou",
+      "cancelled": "Cancelada",
+      "interrupted": "Interrompida"
+    }
   },
   "settings": {
     "title": "Seu espaço, suas escolhas.",
@@ -50,6 +78,9 @@
     "invalidArgument": "Confira os valores informados e tente novamente.",
     "notFound": "O item solicitado não foi encontrado.",
     "taskNotCancellable": "Esta tarefa não pode ser cancelada no estado atual.",
-    "capabilityUnavailable": "Este recurso está indisponível no backend atual."
+    "capabilityUnavailable": "Este recurso está indisponível no backend atual.",
+    "sourceUnavailable": "Uma origem está vazia, indisponível, não é suportada ou contém um link simbólico/junção. Confira e selecione novamente.",
+    "sourceChanged": "Um arquivo mudou durante o cálculo do hash. Feche programas que o utilizam e selecione novamente.",
+    "importLimitExceeded": "Limite da seleção excedido: até 100 origens, 100.000 arquivos e 128 níveis de pastas por importação."
   }
 }

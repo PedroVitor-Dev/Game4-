@@ -17,6 +17,8 @@ ADRs capture context, decisions, and consequences. An accepted decision may be s
 
 | [0007](0007-ipc-contracts.md) | Accepted | Rust-owned IPC contracts and validated frontend client |
 
+| [0008](0008-local-import.md) | Accepted | Atomic local import, SHA-256, task recovery, and reimport policy |
+
 Upcoming decisions: BitTorrent engine, manifest v0, `.g4` container, catalog identity and signatures, distribution, and updates.
 
 Template: title, date, status, context, alternatives, decision, consequences, and validation evidence. Do not mark experimental technology as accepted before its experiment.

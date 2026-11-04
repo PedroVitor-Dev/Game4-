@@ -30,4 +30,6 @@ See [frontend–backend IPC contracts](ipc-contracts.md) for active commands, ge
 
 Update affected documents in the same commit as a relevant change. Record lasting decisions in ADRs and progress in the project log. Dates are estimates, not release promises.
 
-Planning baseline: November 3, 2026. As of November 4, the desktop foundation, bilingual interface, and initial SQLite storage are implemented; file import and P2P features remain planned. GitHub-facing content is initially in English. See the [development setup](development.md) for commands and prerequisites.
+Planning baseline: November 3, 2026. As of November 4, the desktop foundation, bilingual interface, and initial SQLite storage are implemented; local file/folder import with SHA-256 and tasks is implemented; P2P integration remains planned. GitHub-facing content is initially in English. See the [development setup](development.md) for commands and prerequisites.
+
+See [local library import](library-import.md) for file/folder selection, SHA-256, reimport, tasks, and limitations.

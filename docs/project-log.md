@@ -3,25 +3,25 @@
 ## Status on November 4, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation and SQLite startup persistence implemented; importing, hashing, and P2P remain pending.
+- Stage: desktop foundation, SQLite v2, local import/hashing, task progress/recovery, and library browsing implemented; independent integrity rechecks and P2P integration remain pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
 - Languages: English repository content; implemented English and Brazilian Portuguese interface.
 - Workflow: relevant Conventional Commits; no agent push.
-- Next delivery: implement local-library import and hashing using the SQLite model and task vocabulary. M0 clean-machine verification and the first hosted CI run remain outstanding.
+- Next delivery: task cancellation and explicit integrity rechecks; import/hashing and browsing are implemented. M0 clean-machine verification and the first hosted CI run remain outstanding.
 
 ## Immediate backlog
 
-| ID  | Work                         | Acceptance                                                          | Status  |
-| --- | ---------------------------- | ------------------------------------------------------------------- | ------- |
-| B01 | Inventory local tools        | Known versions and prerequisites                                    | Done    |
-| B02 | Initialize desktop           | Application launches on Windows as Game4∞                           | Done    |
-| B03 | Establish interface          | Library, tasks, settings, and clear empty states                    | Done    |
-| B04 | Configure checks             | Documented reproducible formatting, types, and build                | Done    |
-| B05 | Define local model           | Reviewed SQLite migration and import states                         | Done    |
-| B06 | Implement import and hashing | Demonstrated progress, cancellation, and error handling             | Pending |
-| B07 | Establish localization       | English and Portuguese resources, persistent selector, and fallback | Done    |
+| ID  | Work                         | Acceptance                                                          | Status                             |
+| --- | ---------------------------- | ------------------------------------------------------------------- | ---------------------------------- |
+| B01 | Inventory local tools        | Known versions and prerequisites                                    | Done                               |
+| B02 | Initialize desktop           | Application launches on Windows as Game4∞                           | Done                               |
+| B03 | Establish interface          | Library, tasks, settings, and clear empty states                    | Done                               |
+| B04 | Configure checks             | Documented reproducible formatting, types, and build                | Done                               |
+| B05 | Define local model           | Reviewed SQLite migration and import states                         | Done                               |
+| B06 | Implement import and hashing | Demonstrated progress, cancellation, and error handling             | In progress (cancellation pending) |
+| B07 | Establish localization       | English and Portuguese resources, persistent selector, and fallback | Done                               |
 
 ## Definition of done
 
@@ -130,6 +130,17 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Documented pagination, selection tokens, request idempotency, task revisions, precision, compatibility, and required future migrations.
 - Seven frontend contract tests and ten Rust tests passed, alongside 37-key localization parity, generated-artifact checks, TypeScript, formatting, and Clippy. Production frontend and native debug builds passed. A real WebView2 smoke test confirmed contract v1, implemented capabilities, database payload, navigation, and Portuguese switching.
 - No import, mutation, task worker, or P2P feature was activated by declaring these contracts.
+
+### November 4, 2026 — Library file and folder import
+
+- Implemented native multi-file/folder selection, source-name review, local SHA-256 hashing, recursive enumeration, atomic SQLite import, reimport, and paginated library browsing.
+- Added schema v2 with durable request deduplication, task revisions/timestamps, source-to-item mapping, and restart interruption recovery.
+- Activated five IPC capabilities with request validation, runtime response decoders, and bilingual error/task/import UI. Browser preview disables native actions.
+- Preserved originals and separated identical content from physical copies. Failed selections leave no partial catalog; errors and progress remain durable.
+- Documented canonical path policy, reparse rejection, limits, and read-time integrity semantics in ADR 0008 and the import guide.
+- Automated checks: nine frontend IPC tests, seventeen Rust tests, 64 translation keys, TypeScript, generation drift, formatting, and Clippy. Native production-asset debug build passed.
+- Native Windows smoke passed under a separate test app identifier: picker cancellation, recursive folder selection/review/import (2 files, 60 bytes), single-file selection/review/import (1 file, 25 bytes), completed-task display, and Portuguese library labels. An independent read of the closed SQLite catalog confirmed schema v2, 2 items, 2 content identities, 3 physical copies, 2 successful tasks, matching SHA-256 for every location, and integrity_check=ok. The test app was closed and the normal identifier restored in the final build.
+- Remaining M1 gates: cancellation, standalone integrity rechecks, richer task history/search UI, and clean-machine validation. No P2P activity is triggered.
 
 ## Template for future entries
 

@@ -22,13 +22,41 @@
     "title": "A home for game history.",
     "description": "Organize and verify your digital collection. Keep its story alive, one file at a time.",
     "emptyTitle": "Your collection starts here",
-    "emptyDescription": "File importing and integrity verification are the next milestone. No files have been imported or shared."
+    "emptyDescription": "Choose files or folders to start your local collection.",
+    "importTitle": "Import into your library",
+    "importDescription": "Select files or folders. SHA-256 is calculated locally. Originals stay in place; importing does not share them.",
+    "addFiles": "Add files",
+    "addFolders": "Add folders",
+    "selection": "Ready to import",
+    "startImport": "Import selection",
+    "dismiss": "Dismiss",
+    "refresh": "Refresh",
+    "loading": "Loading your library…",
+    "fileCount_one": "{{count}} file",
+    "fileCount_other": "{{count}} files",
+    "bytes": "bytes",
+    "localItem": "Indexed locally",
+    "loadMore": "Load more"
   },
   "tasks": {
     "title": "Every step, accounted for.",
     "description": "A place to follow imports, integrity checks, and future transfers.",
     "emptyTitle": "No tasks yet",
-    "emptyDescription": "Background tasks will appear here when library operations become available."
+    "emptyDescription": "Imports and integrity checks will appear here.",
+    "recent": "Recent tasks",
+    "progress": "{{processed}} / {{total}} files processed",
+    "kind": {
+      "import": "Import",
+      "verify": "Integrity check"
+    },
+    "status": {
+      "queued": "Queued",
+      "running": "Running",
+      "succeeded": "Completed",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "interrupted": "Interrupted"
+    }
   },
   "settings": {
     "title": "Your workspace, your way.",
@@ -50,6 +78,9 @@
     "invalidArgument": "Check the supplied values and try again.",
     "notFound": "The requested item was not found.",
     "taskNotCancellable": "This task cannot be cancelled in its current state.",
-    "capabilityUnavailable": "This feature is unavailable in the current backend."
+    "capabilityUnavailable": "This feature is unavailable in the current backend.",
+    "sourceUnavailable": "A source is empty, unavailable, unsupported, or contains a symbolic link/junction. Check it and select again.",
+    "sourceChanged": "A file changed during hashing. Close programs using it and select again.",
+    "importLimitExceeded": "Selection limit exceeded: up to 100 sources, 100,000 files, and 128 folder levels per import."
   }
 }

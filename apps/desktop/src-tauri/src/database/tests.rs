@@ -12,7 +12,7 @@ fn creates_database_and_preserves_records_after_reopening() {
     let (_directory, path) = temporary_database();
     {
         let database = Database::open(&path).unwrap();
-        assert_eq!(database.info().unwrap().schema_version, 1);
+        assert_eq!(database.info().unwrap().schema_version, 2);
         database
             .connection
             .lock()
@@ -161,7 +161,7 @@ fn rejects_future_schema_without_downgrading_or_resetting_data() {
         Database::open(&path),
         Err(DatabaseError::NewerSchema {
             found: 99,
-            supported: 1
+            supported: 2
         })
     ));
     let connection = Connection::open(&path).unwrap();
@@ -173,4 +173,35 @@ fn rejects_future_schema_without_downgrading_or_resetting_data() {
         .query_row("SELECT title FROM collection_items", [], |row| row.get(0))
         .unwrap();
     assert_eq!(title, "Keep me");
+}
+
+#[test]
+fn upgrades_v1_without_losing_catalog_and_recovers_running_tasks() {
+    let (_d, path) = temporary_database();
+    std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+    let c = Connection::open(&path).unwrap();
+    c.execute_batch(include_str!("migrations/0001_initial.sql"))
+        .unwrap();
+    c.pragma_update(None, "user_version", 1).unwrap();
+    c.execute(
+        "INSERT INTO collection_items (title) VALUES ('Existing collection')",
+        [],
+    )
+    .unwrap();
+    c.execute(
+        "INSERT INTO tasks (kind,status) VALUES ('import','running')",
+        [],
+    )
+    .unwrap();
+    drop(c);
+    let db = Database::open(&path).unwrap();
+    assert_eq!(db.info().unwrap().schema_version, 2);
+    assert_eq!(db.info().unwrap().item_count, 1);
+    let snapshot = crate::library::task_get(&db, "1").unwrap();
+    assert!(matches!(
+        snapshot.status,
+        crate::contracts::TaskStatus::Interrupted
+    ));
+    assert_eq!(snapshot.revision, "1");
+    assert!(snapshot.error.is_some());
 }

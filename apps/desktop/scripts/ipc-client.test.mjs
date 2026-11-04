@@ -115,3 +115,63 @@ test("unstructured native errors are sanitized and all known errors have both tr
     }
   }
 });
+
+test("library requests are wrapped and responses validated at the boundary", async () => {
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "library_list")
+      return {
+        items: [
+          {
+            id: "1",
+            title: "Test",
+            platform: null,
+            fileCount: 1,
+            totalBytes: "9007199254740993",
+          },
+        ],
+        nextCursor: null,
+      };
+    return { cancelled: true, selectionToken: null, displayNames: [] };
+  });
+  const request = { page: { cursor: null, limit: 50 }, query: null };
+  const page = await client.listLibrary(request);
+  assert.equal(page.items[0].totalBytes, "9007199254740993");
+  assert.deepEqual(calls[1], ["library_list", { request }]);
+  assert.equal((await client.selectSources({ kind: "files" })).cancelled, true);
+  const invalid = make(async (command) =>
+    command === "app_info"
+      ? examples.appInfo
+      : { items: [{ id: 1 }], nextCursor: null },
+  );
+  await assert.rejects(invalid.listLibrary(request), code("INVALID_RESPONSE"));
+});
+test("task runtime decoders reject malformed state and progress", async () => {
+  const { parseTaskSnapshot, parseSourceSelection } =
+    await import("@game4/ipc-contracts");
+  const task = examples.draftTaskEvent.task;
+  assert.deepEqual(parseTaskSnapshot(task), task);
+  for (const patch of [
+    { status: "unknown" },
+    { processedCount: "6" },
+    { revision: "01" },
+    { updatedAt: "yesterday" },
+    { status: "failed", error: null },
+    { kind: "torrent" },
+  ])
+    assert.throws(
+      () => parseTaskSnapshot({ ...task, ...patch }),
+      code("INVALID_RESPONSE"),
+    );
+  assert.throws(
+    () =>
+      parseSourceSelection({
+        cancelled: false,
+        selectionToken: null,
+        displayNames: [],
+      }),
+    code("INVALID_RESPONSE"),
+  );
+});

@@ -1,13 +1,13 @@
 // Generated from Rust contracts. Do not edit. Run npm.cmd run contracts:generate.
 export const IPC_CONTRACT_VERSION = 1 as const;
-export const IMPLEMENTED_COMMANDS = ["app_info","database_info"] as const;
-export const DRAFT_COMMANDS = ["library_select_sources","library_import","library_verify","library_list","tasks_list","task_get","task_cancel"] as const;
-export const ERROR_CODES = ["IPC_UNAVAILABLE","CONTRACT_MISMATCH","INVALID_RESPONSE","UNEXPECTED_ERROR","DATABASE_UNAVAILABLE","DATABASE_TASK_FAILED","INVALID_ARGUMENT","NOT_FOUND","TASK_NOT_CANCELLABLE","CAPABILITY_UNAVAILABLE"] as const;
+export const IMPLEMENTED_COMMANDS = ["app_info","database_info","library_select_sources","library_import","library_list","tasks_list","task_get"] as const;
+export const DRAFT_COMMANDS = ["library_verify","task_cancel"] as const;
+export const ERROR_CODES = ["IPC_UNAVAILABLE","CONTRACT_MISMATCH","INVALID_RESPONSE","UNEXPECTED_ERROR","DATABASE_UNAVAILABLE","DATABASE_TASK_FAILED","INVALID_ARGUMENT","NOT_FOUND","TASK_NOT_CANCELLABLE","CAPABILITY_UNAVAILABLE","SOURCE_UNAVAILABLE","SOURCE_CHANGED","IMPORT_LIMIT_EXCEEDED"] as const;
 export const ERROR_FIELDS = ["request","cursor","limit","taskId","itemId","selectionToken","requestId"] as const;
 export const DRAFT_TASK_UPDATED_EVENT = "game4://task-updated" as const;
-export type ImplementedCommand = "app_info" | "database_info";
-export type DraftCommand = "library_select_sources" | "library_import" | "library_verify" | "library_list" | "tasks_list" | "task_get" | "task_cancel";
-export type ErrorCode = "IPC_UNAVAILABLE" | "CONTRACT_MISMATCH" | "INVALID_RESPONSE" | "UNEXPECTED_ERROR" | "DATABASE_UNAVAILABLE" | "DATABASE_TASK_FAILED" | "INVALID_ARGUMENT" | "NOT_FOUND" | "TASK_NOT_CANCELLABLE" | "CAPABILITY_UNAVAILABLE";
+export type ImplementedCommand = "app_info" | "database_info" | "library_select_sources" | "library_import" | "library_list" | "tasks_list" | "task_get";
+export type DraftCommand = "library_verify" | "task_cancel";
+export type ErrorCode = "IPC_UNAVAILABLE" | "CONTRACT_MISMATCH" | "INVALID_RESPONSE" | "UNEXPECTED_ERROR" | "DATABASE_UNAVAILABLE" | "DATABASE_TASK_FAILED" | "INVALID_ARGUMENT" | "NOT_FOUND" | "TASK_NOT_CANCELLABLE" | "CAPABILITY_UNAVAILABLE" | "SOURCE_UNAVAILABLE" | "SOURCE_CHANGED" | "IMPORT_LIMIT_EXCEEDED";
 export type ErrorField = "request" | "cursor" | "limit" | "taskId" | "itemId" | "selectionToken" | "requestId";
 export type IpcError = { code: ErrorCode, retryable: boolean, field: ErrorField | null, };
 export type AppInfo = { version: string, contractVersion: number, capabilities: Array<string>, };

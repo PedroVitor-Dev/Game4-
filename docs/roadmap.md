@@ -16,7 +16,7 @@ Weeks start when implementation actually begins. Holidays, availability, incompa
 
 ## Current milestone status — November 4, 2026
 
-M0 foundation code is implemented and locally verified through a Windows native debug build and WebView2 smoke test. English/Portuguese switching and persistence work. The CI workflow is configured but has not run on GitHub. A clean-machine build and installation check remains required before declaring the full M0 exit criterion met. Later milestones remain planned; no delivery-velocity claim is made from this initial setup.
+M0 foundation code is implemented and locally verified through a Windows native debug build and WebView2 smoke test. English/Portuguese switching and persistence work. The CI workflow is configured but has not run on GitHub. A clean-machine build and installation check remains required before declaring the full M0 exit criterion met. M1 import/hashing/browsing is implemented with task progress, error handling, and restart recovery; cancellation and independent rechecks remain open. Other milestones remain planned; no delivery-velocity claim is made from this initial setup.
 
 ## M3 experiment status — November 4, 2026
 

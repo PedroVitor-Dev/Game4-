@@ -57,3 +57,7 @@ Create an ADR comparing distribution-compatible licensing, Rust/Tauri integratio
 ## Verification and distribution
 
 Test domain rules and parsers; integration-test SQLite, files, and transfers. Validate the interface and installer on Windows. Record tool versions. Never include commercial games, keys, or personal data in fixtures. Automatic updates and installer signing require a later infrastructure and key-management decision.
+
+## Implemented local import
+
+Native source selection authorizes process-local tokens. Serialized blocking workers enumerate and stream SHA-256 outside the database mutex. Schema v2 persists request IDs, progress/revisions, and source identities; catalog mutations and successful completion share one transaction. React polls task snapshots while mounted and lists library items. Events, cooperative cancellation, and standalone rechecks remain planned. See [library import](library-import.md) and [ADR 0008](decisions/0008-local-import.md).

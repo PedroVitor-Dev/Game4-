@@ -1,6 +1,6 @@
 # SQLite storage
 
-Status: the initial schema, migrations, startup initialization, and read-only summary command are implemented. Importing files and editing collection records through the interface remain future work.
+Status: schema v2, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Editorial editing, cancellation, standalone integrity rechecks, and backups remain future work.
 
 ## Location and lifecycle
 
@@ -24,9 +24,9 @@ Tables use SQLite STRICT typing and constraints. Foreign keys prevent deletion o
 
 Verification states are `unverified`, `verified`, `changed`, `missing`, and `inaccessible`. Health belongs to a location because separate copies of the same content may be damaged independently.
 
-Task states are `queued`, `running`, `succeeded`, `failed`, `cancelled`, and `interrupted`. These are persistence vocabulary only: scheduling, transition validation, cancellation, and crash recovery are not implemented yet. Applications must update `updated_at` explicitly when editing collection items.
+Task states are `queued`, `running`, `succeeded`, `failed`, `cancelled`, and `interrupted`. Imports transition queued → running → succeeded/failed; startup marks unfinished work interrupted. Cancellation and independent verification workers remain planned. Applications must update `updated_at` explicitly when editing collection items.
 
-Path keys will be computed by the future importer under an explicit Windows normalization policy; the schema only enforces uniqueness of the supplied key. Relative paths still require traversal, junction, and export validation in application code. Schema constraints do not establish filesystem safety.
+Import path keys use exact Rust-canonicalized UTF-8 spelling. Links/reparse points are rejected; relative separators are `/`. Case aliases and hard links can retain separate locations. See [import path policy](library-import.md).
 
 ## Migration rules
 
@@ -45,3 +45,7 @@ Future schema changes must include migration and data-preservation tests. Do not
 Run `npm.cmd run rust:test` on Windows PowerShell. Tests use temporary databases and cover initialization, reopening with preserved records, duplicate content, separate copy health, foreign keys, invalid states/progress, relationship deletion, future-version refusal, and migration rollback.
 
 Personal databases and WAL sidecars are ignored by Git. Never commit them as fixtures. Do not copy only the main database while the app is writing in WAL mode. A live-backup/export feature is future work; for manual offline copies, close all application instances first and preserve the database directory, including any remaining sidecars. No backup is created automatically by this initial setup.
+
+## Schema version 2
+
+Migration 0002 adds nullable unique request IDs and selection-token fingerprints to tasks, persisted monotonic revisions and update timestamps, plus `import_sources` mapping canonical source roots to stable collection items. Existing v1 records remain intact. On startup queued/running tasks become interrupted, with a revision increase and sanitized error. Import work is serialized; task progress is committed separately, while successful catalog records and task completion share one transaction. See [import behavior](library-import.md).

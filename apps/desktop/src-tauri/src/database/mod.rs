@@ -20,7 +20,7 @@ pub enum DatabaseError {
 pub type Result<T> = std::result::Result<T, DatabaseError>;
 
 pub struct Database {
-    connection: Mutex<Connection>,
+    pub(crate) connection: Mutex<Connection>,
 }
 
 #[derive(Debug)]
@@ -47,6 +47,7 @@ impl Database {
         // WAL allows readers during writes; SQLite manages its sidecar files.
         connection.pragma_update(None, "journal_mode", "WAL")?;
         connection.pragma_update(None, "synchronous", "FULL")?;
+        connection.execute("UPDATE tasks SET status = 'interrupted', error_code = 'UNEXPECTED_ERROR', revision = revision + 1, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), finished_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE status IN ('queued', 'running')", [])?;
         Ok(Self {
             connection: Mutex::new(connection),
         })

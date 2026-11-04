@@ -13,6 +13,9 @@ const keys = {
   NOT_FOUND: "notFound",
   TASK_NOT_CANCELLABLE: "taskNotCancellable",
   CAPABILITY_UNAVAILABLE: "capabilityUnavailable",
+  SOURCE_UNAVAILABLE: "sourceUnavailable",
+  SOURCE_CHANGED: "sourceChanged",
+  IMPORT_LIMIT_EXCEEDED: "importLimitExceeded",
 } as const satisfies Record<ErrorCode, keyof typeof en.errors>;
 
 export function getIpcErrorKey(error: unknown) {

@@ -1,6 +1,6 @@
 # Frontend–backend IPC contract v1
 
-Status: active contract implemented for `app_info` and `database_info`. Library/task commands and events below are **draft declarations only**. They have no handlers, persistence workflow, event emission, or public client methods yet.
+Status: v1 implements app/database information, source selection, import, library/task listing, and task lookup. Verification, cancellation, and task events remain drafts. See [local import](library-import.md) for implemented behavior and limits.
 
 ## Ownership and boundary
 
@@ -25,7 +25,15 @@ Canonical application response:
 {
   "version": "0.1.0",
   "contractVersion": 1,
-  "capabilities": ["app_info", "database_info"]
+  "capabilities": [
+    "app_info",
+    "database_info",
+    "library_select_sources",
+    "library_import",
+    "library_list",
+    "tasks_list",
+    "task_get"
+  ]
 }
 ```
 
@@ -37,7 +45,7 @@ Canonical database response:
 
 ```json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "fileCount": 0,
   "locationCount": 0,
   "itemCount": 0,
@@ -65,12 +73,14 @@ Schema version is a positive u32. Counts are integers from zero through `Number.
 | `UNEXPECTED_ERROR`       | Unrecognized or unstructured failure, sanitized by the client |
 | `DATABASE_UNAVAILABLE`   | Local database operation failed                               |
 | `DATABASE_TASK_FAILED`   | Blocking database worker could not finish                     |
-| `INVALID_ARGUMENT`       | Planned handler rejected an input value                       |
-| `NOT_FOUND`              | Planned handler could not find the requested entity           |
+| `INVALID_ARGUMENT`       | Handler rejected an input value                               |
+| `NOT_FOUND`              | Handler could not find the requested entity                   |
 | `TASK_NOT_CANCELLABLE`   | Planned task cannot accept cancellation                       |
 | `CAPABILITY_UNAVAILABLE` | Requested feature is not advertised by this backend           |
 
 `field` is null or one of `request`, `cursor`, `limit`, `taskId`, `itemId`, `selectionToken`, `requestId`. It identifies a field, not its supplied value. Never include absolute paths, database errors, tokens, stack traces, or user-provided secrets in errors.
+
+Import also uses `SOURCE_UNAVAILABLE`, `SOURCE_CHANGED`, and `IMPORT_LIMIT_EXCEEDED`, without exposing failed paths.
 
 All codes map to English and Brazilian Portuguese strings in the frontend. Backend errors contain no natural-language UI messages. Unknown codes, raw strings, and malformed error objects become `UNEXPECTED_ERROR`. `retryable` is a hint, not permission to automatically repeat a mutation; current backend errors conservatively return false. The UI uses these translations if bootstrap fails.
 
@@ -78,17 +88,17 @@ All codes map to English and Brazilian Portuguese strings in the frontend. Backe
 
 - DTO field names use camelCase. Persisted domain enums use snake_case. Error codes use SCREAMING_SNAKE_CASE.
 - Nullable fields serialize as explicit `null`; canonical requests include them. No `undefined`, NaN, Infinity, native Date, or BigInt values cross JSON.
-- Future entity IDs are positive SQLite identifiers encoded as canonical decimal strings (`^[1-9][0-9]*$`). Do not parse them through JavaScript Number.
-- Future byte totals, task progress counts, and revisions use decimal strings (`0` or a positive integer without leading zeroes). Use BigInt only after receiving/parsing JSON when exact arithmetic is needed.
+- Entity IDs are positive SQLite identifiers encoded as canonical decimal strings (`^[1-9][0-9]*$`). Do not parse them through JavaScript Number.
+- Byte totals, task progress counts, and revisions use decimal strings (`0` or a positive integer without leading zeroes). Use BigInt only after receiving/parsing JSON when exact arithmetic is needed.
 - The existing bounded database counts remain numeric. Their explicit safe range is part of v1.
 - Timestamps are UTC RFC 3339 strings, normally with milliseconds and a trailing `Z`; the UI formats them using its locale.
 - Responses may include additional fields; current decoders ignore them. Required fields cannot be silently removed or change type. Names, paths, titles, and hashes are never translated.
 
-## Draft command mapping — not callable yet
+## Library and task command mapping
 
-Every future argument-bearing handler uses one top-level `request` object, for example `{ request: { taskId: "42" } }`. Request/response names below refer to the generated DTOs.
+Every argument-bearing handler uses one top-level `request` object, for example `{ request: { taskId: "42" } }`. Request/response names below refer to the generated DTOs.
 
-| Draft command            | Request                | Response             |
+| Command                  | Request                | Response             |
 | ------------------------ | ---------------------- | -------------------- |
 | `library_select_sources` | `SelectSourcesRequest` | `SourceSelection`    |
 | `library_import`         | `StartImportRequest`   | `TaskAccepted`       |
@@ -98,15 +108,17 @@ Every future argument-bearing handler uses one top-level `request` object, for e
 | `task_get`               | `TaskIdRequest`        | `TaskSnapshot`       |
 | `task_cancel`            | `TaskIdRequest`        | `CancelTaskResponse` |
 
-`DraftCommand` and `DRAFT_COMMANDS` are separate from the implemented registry. There are no executable stubs that report success. A draft becomes callable only after adding a real handler, input/business validation, tests, capability advertisement, runtime response decoder, and typed client method.
+The table includes both active and draft contracts. `library_verify` and `task_cancel` are drafts; all other rows are active. `DraftCommand` and `DRAFT_COMMANDS` are separate from the implemented registry. There are no executable stubs that report success. A draft becomes callable only after adding a real handler, input/business validation, tests, capability advertisement, runtime response decoder, and typed client method.
 
 ### Selection and start requests
 
-`SelectSourcesRequest.kind` is `files` or `directories`. The planned native picker owns authorization. Cancellation returns `cancelled: true`, `selectionToken: null`, and an empty `displayNames` array. A successful selection returns an opaque token and display names, not arbitrary frontend-supplied absolute paths.
+`SelectSourcesRequest.kind` is `files` or `directories`. The native picker owns authorization. Cancellation returns `cancelled: true`, `selectionToken: null`, and an empty `displayNames` array. A successful selection returns an opaque token and display names, not arbitrary frontend-supplied absolute paths.
 
-Planned tokens are scoped to the current app process and expire after five minutes. A new import consumes a valid selection token; repeating an already accepted request ID must resolve the existing task before attempting token consumption. No token store or picker is implemented yet.
+Tokens are scoped to the current app process and expire after five minutes. A new import consumes a valid selection token; repeating an already accepted request ID must resolve the existing task before attempting token consumption. The token store and native picker are implemented. Tokens are never accepted as filesystem paths.
 
 `StartImportRequest` supplies `requestId` and `selectionToken`; `StartVerifyRequest` supplies `requestId` and `itemId`. `requestId` is a frontend-created UUID v4 reused for retries of the same action. Same command/ID and same payload must return the same task; a conflicting payload must reject with `INVALID_ARGUMENT`. Deduplication must be retained for at least the task record's lifetime. Persisting task creation and idempotency requires a transaction.
+
+Active import handlers persist task creation/request deduplication in one insert under the admission lock. A token may need re-selection if persistence fails before acceptance.
 
 The immediate response identifies an accepted task; it does not mean work has completed. A newly created task is queued. A duplicate can return that task's current state. No automatic sharing starts with import or verification.
 
@@ -114,9 +126,9 @@ The immediate response identifies an accepted task; it does not mean work has co
 
 `PageRequest` has explicit `cursor: string | null` and `limit: number` (1–100; UI default 50). `LibraryListRequest.query` is null or trimmed text up to 200 characters. Cursors are opaque, bound to the command/filter/sort, and validated by Rust; `nextCursor: null` means the end. Initial ordering is library ID ascending and task ID descending. Do not expose SQL offsets or construct queries from cursors.
 
-Future handlers must validate IDs, bounds, token expiry, semantic field combinations, and authorization before side effects. Generated TypeScript and Rust deserialization are not substitutes for these business rules. Draft DTOs currently describe shapes only; they do not implement those validators.
+Handlers must validate IDs, bounds, token expiry, semantic field combinations, and authorization before side effects. Generated TypeScript and Rust deserialization are not substitutes for these business rules. Active commands validate these rules. Verification/cancellation DTOs still describe shapes only.
 
-## Draft task lifecycle and events
+## Task lifecycle and draft events
 
 Task kinds are `import` and `verify`; statuses are `queued`, `running`, `succeeded`, `failed`, `cancelled`, and `interrupted`. Normal flow is queued → running → succeeded/failed/cancelled. A queued task may cancel immediately. Recovery must mark unfinished work interrupted before an explicit retry policy; do not silently report success after a restart.
 
@@ -126,7 +138,7 @@ Task kinds are `import` and `verify`; statuses are `queued`, `running`, `succeed
 
 Reserved event: `game4://task-updated`, payload `TaskUpdatedEvent` containing `contractVersion` and the full task snapshot. **No event is emitted in the current app.** Future consumers subscribe before querying snapshots, keep only increasing revisions per task, and reconcile through `task_get`/`tasks_list` after gaps or reconnects. Events are notifications, not durable storage or delivery guarantees. Await subscription registration and dispose the returned listener, including React unmount races.
 
-The current SQLite task table does not yet store request deduplication, revisions, or cancellation requests. Add a migration and recovery tests before activating these commands/events. No schema migration is introduced solely to declare this draft.
+SQLite schema v2 stores import request deduplication, revisions, and update timestamps. Startup interrupts queued/running work. Workers update durable snapshots; the frontend polls them. Cancellation requests are not stored, `task_cancel` is not registered, and no events are emitted. Events/cancellation require their own implementation and tests before activation.
 
 ## Versioning and verification
 

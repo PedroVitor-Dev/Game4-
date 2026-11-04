@@ -83,7 +83,7 @@ pub fn examples() -> String {
             .collect(),
     };
     let database_info = DatabaseInfo {
-        schema_version: 1,
+        schema_version: 2,
         file_count: 0,
         location_count: 0,
         item_count: 0,

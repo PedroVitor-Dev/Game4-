@@ -10,33 +10,31 @@ pub const TASK_UPDATED_EVENT: &str = "game4://task-updated";
 pub enum ImplementedCommand {
     AppInfo,
     DatabaseInfo,
+    LibrarySelectSources,
+    LibraryImport,
+    LibraryList,
+    TasksList,
+    TaskGet,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 2] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 7] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
+    ImplementedCommand::LibrarySelectSources,
+    ImplementedCommand::LibraryImport,
+    ImplementedCommand::LibraryList,
+    ImplementedCommand::TasksList,
+    ImplementedCommand::TaskGet,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
 #[serde(rename_all = "snake_case")]
 pub enum DraftCommand {
-    LibrarySelectSources,
-    LibraryImport,
     LibraryVerify,
-    LibraryList,
-    TasksList,
-    TaskGet,
     TaskCancel,
 }
-pub const DRAFT_COMMANDS: [DraftCommand; 7] = [
-    DraftCommand::LibrarySelectSources,
-    DraftCommand::LibraryImport,
-    DraftCommand::LibraryVerify,
-    DraftCommand::LibraryList,
-    DraftCommand::TasksList,
-    DraftCommand::TaskGet,
-    DraftCommand::TaskCancel,
-];
+pub const DRAFT_COMMANDS: [DraftCommand; 2] =
+    [DraftCommand::LibraryVerify, DraftCommand::TaskCancel];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
@@ -51,9 +49,12 @@ pub enum ErrorCode {
     NotFound,
     TaskNotCancellable,
     CapabilityUnavailable,
+    SourceUnavailable,
+    SourceChanged,
+    ImportLimitExceeded,
 }
 
-pub const ERROR_CODES: [ErrorCode; 10] = [
+pub const ERROR_CODES: [ErrorCode; 13] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -64,6 +65,9 @@ pub const ERROR_CODES: [ErrorCode; 10] = [
     ErrorCode::NotFound,
     ErrorCode::TaskNotCancellable,
     ErrorCode::CapabilityUnavailable,
+    ErrorCode::SourceUnavailable,
+    ErrorCode::SourceChanged,
+    ErrorCode::ImportLimitExceeded,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -156,7 +160,7 @@ pub enum VerificationStatus {
     Inaccessible,
 }
 
-// Drafts: type declarations only. No handlers, subscriptions, or mutations exist yet.
+// Shared library/task DTOs. Verification, cancellation and events remain drafts.
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct PageRequest {

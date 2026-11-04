@@ -15,11 +15,17 @@ pub fn run() {
                 .app_local_data_dir()?
                 .join("database/game4.sqlite3");
             app.manage(Arc::new(database::Database::open(&path)?));
+            app.manage(Arc::new(library::ImportState::default()));
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
             commands::application::app_info,
-            commands::database::database_info
+            commands::database::database_info,
+            commands::library::library_select_sources,
+            commands::library::library_import,
+            commands::library::library_list,
+            commands::library::tasks_list,
+            commands::library::task_get
         ])
         .run(tauri::generate_context!())
         .expect("failed to run Game4∞");

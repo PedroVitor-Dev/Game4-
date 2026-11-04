@@ -6,7 +6,10 @@ export type { AppInfo, DatabaseInfo, IpcError } from "@game4/ipc-contracts";
 
 const client = createIpcClient({
   isAvailable: isTauri,
-  invoke: (command) => invoke<unknown>(command),
+  invoke: (command, args) => invoke<unknown>(command, args),
 });
 export const getAppInfo = client.getAppInfo;
 export const getDatabaseInfo = client.getDatabaseInfo;
+
+export const { selectSources, importSources, listLibrary, listTasks, getTask } =
+  client;

@@ -290,3 +290,101 @@ h2 {
     padding: 36px 20px;
   }
 }
+
+.library-workspace {
+  display: grid;
+  gap: 22px;
+}
+.import-panel,
+.task-panel {
+  padding: 24px;
+}
+.import-panel p {
+  max-width: 650px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.library-workspace button {
+  border: 1px solid #554572;
+  background: #28223b;
+  color: #e9ddff;
+  border-radius: 7px;
+  padding: 10px 16px;
+}
+.library-workspace button:hover {
+  background: #39304e;
+}
+.library-workspace button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.library-workspace button.primary {
+  background: #a38afa;
+  color: #171220;
+}
+.selection {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid #363044;
+}
+.selection ul {
+  max-height: 180px;
+  overflow: auto;
+  padding-left: 22px;
+  overflow-wrap: anywhere;
+}
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.library-item {
+  padding: 24px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.item-icon {
+  font-size: 30px;
+  color: #b8a2ff;
+}
+.local-badge {
+  color: #8dd7b0;
+  font-size: 11px;
+}
+.task-row {
+  padding: 16px 0;
+  border-top: 1px solid #2a2e3e;
+}
+.task-row > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+.task-status {
+  font-size: 12px;
+  color: #b8a2ff;
+}
+.task-status.failed,
+.task-status.interrupted,
+.error-message {
+  color: #ffb9b9;
+}
+.task-status.succeeded {
+  color: #8dd7b0;
+}
+.task-row p {
+  margin: 8px 0;
+}
+.task-row progress {
+  width: 100%;
+  accent-color: #a38afa;
+}
+.error-message {
+  border: 1px solid #71454f;
+  padding: 16px;
+  border-radius: 8px;
+}

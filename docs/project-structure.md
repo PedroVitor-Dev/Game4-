@@ -17,7 +17,7 @@ Game4-/
 │       │   ├── commands/          Validated Tauri entry points
 │       │   ├── contracts/         Versioned DTOs and TypeScript exporter
 │       │   ├── database/          SQLite connection, migrations, and tests
-│       │   ├── library/           Collection domain vocabulary
+│       │   ├── library/           Local import, hashing, catalog queries, and tests
 │       │   ├── tasks/             Task kind and status vocabulary
 │       │   ├── security/          Reserved validation boundary (documentation only)
 │       │   └── torrent/           Reserved transfer boundary (documentation only)
