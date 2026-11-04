@@ -16,6 +16,9 @@ const keys = {
   SOURCE_UNAVAILABLE: "sourceUnavailable",
   SOURCE_CHANGED: "sourceChanged",
   IMPORT_LIMIT_EXCEEDED: "importLimitExceeded",
+  MANIFEST_INVALID: "manifestInvalid",
+  MANIFEST_VERSION_UNSUPPORTED: "manifestVersionUnsupported",
+  MANIFEST_WRITE_FAILED: "manifestWriteFailed",
 } as const satisfies Record<ErrorCode, keyof typeof en.errors>;
 
 export function getIpcErrorKey(error: unknown) {

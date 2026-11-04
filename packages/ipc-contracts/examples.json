@@ -7,7 +7,8 @@
       "library_import",
       "library_list",
       "tasks_list",
-      "task_get"
+      "task_get",
+      "library_export_manifest"
     ],
     "contractVersion": 1,
     "version": "0.1.0"
@@ -16,7 +17,7 @@
     "fileCount": 0,
     "itemCount": 0,
     "locationCount": 0,
-    "schemaVersion": 2,
+    "schemaVersion": 3,
     "taskCount": 0
   },
   "draftTaskEvent": {

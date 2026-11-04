@@ -42,3 +42,7 @@ The isolated librqbit 9.1.0 probe passed loopback transfer, session/process resu
 ## Cadence
 
 Plan one small increment at a time. On completion, validate it, update the log, record new risks, and commit. At each milestone, compare estimates with observed effort, review the backlog, and present the next delivery. Publication and push remain under the project owner's control.
+
+## M2 manifest increment — November 4, 2026
+
+Manifest v1, public JSON Schema, offline parser/validation, and per-item Library JSON export are implemented and locally tested. Export records stored catalog hashes rather than performing a new disk check. Manifest import/catalog reconstruction, independent integrity verification, and the offline survival test remain open, so M2 is not complete. See [the format](manifest-v1.md).

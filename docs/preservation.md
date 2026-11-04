@@ -6,9 +6,9 @@ Preserve original bytes and record transformations as separate copies. A hash de
 
 ## Initial manifest
 
-Design a versioned JSON manifest first, with a public schema and examples. Candidate fields: schema version, collection identifier, relative paths, size, SHA-256, platform, edition, language, declared provenance, declared license, and execution instructions.
+Manifest v1 is implemented with a public JSON Schema, examples, Rust serializer/parser, semantic validation, and a per-item Library export action. It records a portable collection UUID, declared metadata, exact relative paths, decimal-string byte sizes, and stored SHA-256 hashes. Machine-specific locations are omitted. Exporting is a catalog snapshot, not a fresh integrity check or file package.
 
-Label declared metadata accordingly. Separate required fields from extensions. Explicitly reject incompatible versions. Define path normalization, Unicode handling, and canonical serialization before signing documents. Do not export personal absolute paths by default. Schema keys remain in English and do not change with the interface language; preserve original titles, paths, and user metadata.
+See [manifest v1](manifest-v1.md) for version compatibility, validation limits, path rules, deterministic serialization, and no-clobber export. Standalone rechecks, manifest import/reconstruction, signatures, canonical signing serialization, and the full offline survival test remain planned.
 
 ## Proposed formats
 

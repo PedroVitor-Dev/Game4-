@@ -33,3 +33,5 @@ Update affected documents in the same commit as a relevant change. Record lastin
 Planning baseline: November 3, 2026. As of November 4, the desktop foundation, bilingual interface, and initial SQLite storage are implemented; local file/folder import with SHA-256 and tasks is implemented; P2P integration remains planned. GitHub-facing content is initially in English. See the [development setup](development.md) for commands and prerequisites.
 
 See [local library import](library-import.md) for file/folder selection, SHA-256, reimport, tasks, and limitations.
+
+See [manifest v1](manifest-v1.md) for the public JSON format, schema, compatibility, and Library export.

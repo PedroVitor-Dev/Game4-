@@ -1,6 +1,6 @@
 # Frontend–backend IPC contract v1
 
-Status: v1 implements app/database information, source selection, import, library/task listing, and task lookup. Verification, cancellation, and task events remain drafts. See [local import](library-import.md) for implemented behavior and limits.
+Status: v1 implements app/database information, source selection, import, library/task listing, task lookup, and manifest export. Verification, cancellation, and task events remain drafts. See [local import](library-import.md) for implemented behavior and limits.
 
 ## Ownership and boundary
 
@@ -32,7 +32,8 @@ Canonical application response:
     "library_import",
     "library_list",
     "tasks_list",
-    "task_get"
+    "task_get",
+    "library_export_manifest"
   ]
 }
 ```
@@ -45,7 +46,7 @@ Canonical database response:
 
 ```json
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "fileCount": 0,
   "locationCount": 0,
   "itemCount": 0,
@@ -156,3 +157,11 @@ Rust tests compare generated bindings/examples with committed artifacts. Fronten
 Native smoke verification must confirm the current executable's version handshake, database payload, and UI boot. Hosted CI execution remains pending until the owner pushes.
 
 Primary references: [Tauri command serialization](https://v2.tauri.app/develop/calling-rust/), [Tauri events](https://v2.tauri.app/develop/calling-frontend/), and [ts-rs](https://docs.rs/ts-rs/12.0.1/ts_rs/).
+
+## Active manifest export
+
+`library_export_manifest` accepts `{ request: { itemId: "1" } }` (`ExportManifestRequest`). It validates the positive canonical i64 item ID, opens a parented native save dialog, reads a consistent catalog snapshot, and validates/writes a new JSON file on a blocking worker. React never provides an absolute destination path. The capability is advertised and generated in `ImplementedCommand`.
+
+`ExportManifestResult` is `{ cancelled: true, fileName: null }` on dialog cancellation or `{ cancelled: false, fileName: "collection.manifest.v1.json" }` after a successful write. No absolute path or JSON body crosses the IPC response. The client decoder checks cancellation/filename consistency. Export does not create a task or rehash source data.
+
+Errors additionally include `MANIFEST_INVALID`, `MANIFEST_VERSION_UNSUPPORTED`, and `MANIFEST_WRITE_FAILED`, with both locale mappings. Existing files are not overwritten; request another unused filename after a write failure. Manifest schema versioning is independent of IPC v1 and SQLite v3. See [the format](manifest-v1.md).

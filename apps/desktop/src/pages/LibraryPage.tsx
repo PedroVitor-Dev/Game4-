@@ -13,6 +13,7 @@ import {
   listLibrary,
   listTasks,
   isTauri,
+  exportManifest,
 } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 
@@ -22,6 +23,7 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
   const [tasks, setTasks] = useState<TaskSnapshot[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [exported, setExported] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>();
   const [selection, setSelection] = useState<SourceSelection>();
@@ -131,6 +133,20 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
       if (mounted.current) setBusy(false);
     }
   }
+  async function saveManifest(itemId: string) {
+    setBusy(true);
+    setError(undefined);
+    setExported(undefined);
+    try {
+      const result = await exportManifest({ itemId });
+      if (mounted.current && !result.cancelled && result.fileName)
+        setExported(result.fileName);
+    } catch (e) {
+      if (mounted.current) setError(e);
+    } finally {
+      if (mounted.current) setBusy(false);
+    }
+  }
   const active = tasks.some(
     (j) => j.status === "queued" || j.status === "running",
   );
@@ -143,6 +159,7 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
           <div>
             <h2>{t("library.importTitle")}</h2>
             <p>{t("library.importDescription")}</p>
+            <p>{t("library.manifestHint")}</p>
           </div>
           <div className="actions">
             <button
@@ -203,6 +220,11 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
           </button>
         </div>
       )}
+      {exported && (
+        <p role="status">
+          {t("library.manifestSaved", { fileName: exported })}
+        </p>
+      )}
       {loading && <p role="status">{t("library.loading")}</p>}
       {!tasksOnly &&
         !loading &&
@@ -227,6 +249,17 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
                   {number(item.totalBytes)} {t("library.bytes")}
                 </p>
                 <span className="local-badge">{t("library.localItem")}</span>
+                <div className="manifest-action">
+                  <button
+                    disabled={busy || !isTauri()}
+                    aria-label={t("library.exportManifestLabel", {
+                      title: item.title,
+                    })}
+                    onClick={() => void saveManifest(item.id)}
+                  >
+                    {t("library.exportManifest")}
+                  </button>
+                </div>
               </article>
             ))}
           </section>

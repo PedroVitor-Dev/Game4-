@@ -3,7 +3,7 @@
 ## Status on November 4, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation, SQLite v2, local import/hashing, task progress/recovery, and library browsing implemented; independent integrity rechecks and P2P integration remain pending.
+- Stage: desktop foundation, SQLite v3, versioned JSON manifest export, local import/hashing, task progress/recovery, and library browsing implemented; independent integrity rechecks and P2P integration remain pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
@@ -148,6 +148,16 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Reused one 1 MiB hashing buffer across files and throttled intermediate progress persistence to 200 ms, avoiding a synchronous SQLite commit per tiny file. Terminal progress and catalog atomicity are preserved.
 - Added a deterministic concurrency regression: pause a real background import mid-hash, complete task/library/database reads on another worker, release hashing, then verify the digest across multiple buffer boundaries and final counts.
 - Validation passed: 18 Rust tests, including the concurrent mid-hash read regression, Rust formatting, and Clippy with warnings denied. No new IPC/schema fields or network functionality were introduced.
+
+### November 4, 2026 — Versioned JSON manifests
+
+- Implemented portable manifest v1, public JSON Schema 2020-12, synthetic example, shared rejection corpus, typed Rust serializer/parser, and structural/semantic validation.
+- Added schema v3 for durable portable collection UUIDs, independent of local SQLite row IDs. Repeated snapshots remain stable across restart and reimport.
+- Added Library JSON export with a parented native save dialog, blocking worker, validated IPC result, and both locales. Exports omit private locations/internal identifiers and reflect stored hashes.
+- Added temporary-sibling/no-clobber writes, exact decimal sizes, Unicode path preservation, unsafe-path checks, version rejection, and documented 32 MiB/100,000-file limits.
+- Validation passed: 23 Rust tests, 10 IPC tests, 3 public-schema tests, 71-key locale parity, generated-contract drift checks, TypeScript, formatting, Clippy with warnings denied, and the Windows native debug build. The offline semantic-validation CLI accepted both the example and the actual native export.
+- Native smoke passed with the isolated test catalog: exported a two-file item through the save dialog, observed the Portuguese success message, and independently validated the written document against the public schema, relative paths, exact sizes, and SHA-256 of both source files. Closed the test app and rebuilt with the normal application identifier.
+- Manifest import/reconstruction, fresh rechecks, signatures, and archive containers remain planned. No push or network sharing is performed.
 
 ## Template for future entries
 

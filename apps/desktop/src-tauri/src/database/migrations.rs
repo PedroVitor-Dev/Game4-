@@ -4,6 +4,7 @@ use rusqlite::{Connection, TransactionBehavior};
 const MIGRATIONS: &[&str] = &[
     include_str!("migrations/0001_initial.sql"),
     include_str!("migrations/0002_import.sql"),
+    include_str!("migrations/0003_manifest_identity.sql"),
 ];
 
 pub(super) fn apply(connection: &mut Connection) -> Result<()> {

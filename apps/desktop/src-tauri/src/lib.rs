@@ -2,6 +2,7 @@ pub mod commands;
 pub mod contracts;
 pub mod database;
 pub mod library;
+pub mod manifests;
 pub mod tasks;
 
 use std::sync::Arc;
@@ -25,7 +26,8 @@ pub fn run() {
             commands::library::library_import,
             commands::library::library_list,
             commands::library::tasks_list,
-            commands::library::task_get
+            commands::library::task_get,
+            commands::manifests::library_export_manifest
         ])
         .run(tauri::generate_context!())
         .expect("failed to run Game4∞");

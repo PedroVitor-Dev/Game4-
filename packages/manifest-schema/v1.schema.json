@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:game4:manifest:1",
+  "title": "Game4∞ preservation manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "format",
+    "schemaVersion",
+    "collection",
+    "files",
+    "extensions"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "urn:game4:manifest:1"
+    },
+    "format": {
+      "const": "game4-manifest"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "collection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "platform",
+        "edition",
+        "language",
+        "declaredSource",
+        "declaredLicense"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^(?!.*[\\u0000-\\u001f\\u007f-\\u009f])(?=.*\\S).*$"
+        },
+        "platform": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "^(?!.*[\\u0000-\\u001f\\u007f-\\u009f])(?=.*\\S).*$"
+        },
+        "edition": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "^(?!.*[\\u0000-\\u001f\\u007f-\\u009f])(?=.*\\S).*$"
+        },
+        "language": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "^(?!.*[\\u0000-\\u001f\\u007f-\\u009f])(?=.*\\S).*$"
+        },
+        "declaredSource": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^(?!.*[\\u0000-\\u001f\\u007f-\\u009f])(?=.*\\S).*$"
+        },
+        "declaredLicense": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^(?!.*[\\u0000-\\u001f\\u007f-\\u009f])(?=.*\\S).*$"
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sizeBytes", "sha256"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096,
+            "pattern": "^(?!/)(?!.*[\\\\:*?\"<>|\\u0000-\\u001f\\u007f-\\u009f])(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*[. ](?:/|$))(?!.*//)(?!.*(?:^|/)(?:[Cc][Oo][Nn]|[Pp][Rr][Nn]|[Aa][Uu][Xx]|[Nn][Uu][Ll]|[Cc][Oo][Mm][1-9¹²³]|[Ll][Pp][Tt][1-9¹²³])(?:\\.|/|$)).*[^/]$"
+          },
+          "sizeBytes": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,19})$",
+            "description": "Canonical decimal u64; semantic validator also checks <= 18446744073709551615."
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "maxLength": 200,
+        "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+$"
+      }
+    }
+  }
+}

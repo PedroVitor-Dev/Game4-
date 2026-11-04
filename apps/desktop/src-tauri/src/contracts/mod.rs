@@ -15,9 +15,10 @@ pub enum ImplementedCommand {
     LibraryList,
     TasksList,
     TaskGet,
+    LibraryExportManifest,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 7] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 8] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -25,6 +26,7 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 7] = [
     ImplementedCommand::LibraryList,
     ImplementedCommand::TasksList,
     ImplementedCommand::TaskGet,
+    ImplementedCommand::LibraryExportManifest,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -52,9 +54,12 @@ pub enum ErrorCode {
     SourceUnavailable,
     SourceChanged,
     ImportLimitExceeded,
+    ManifestInvalid,
+    ManifestVersionUnsupported,
+    ManifestWriteFailed,
 }
 
-pub const ERROR_CODES: [ErrorCode; 13] = [
+pub const ERROR_CODES: [ErrorCode; 16] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -68,6 +73,9 @@ pub const ERROR_CODES: [ErrorCode; 13] = [
     ErrorCode::SourceUnavailable,
     ErrorCode::SourceChanged,
     ErrorCode::ImportLimitExceeded,
+    ErrorCode::ManifestInvalid,
+    ErrorCode::ManifestVersionUnsupported,
+    ErrorCode::ManifestWriteFailed,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -276,3 +284,16 @@ pub struct TaskUpdatedEvent {
 }
 
 pub mod export;
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct ExportManifestRequest {
+    pub item_id: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct ExportManifestResult {
+    pub cancelled: bool,
+    pub file_name: Option<String>,
+}

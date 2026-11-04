@@ -1,6 +1,6 @@
 # SQLite storage
 
-Status: schema v2, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Editorial editing, cancellation, standalone integrity rechecks, and backups remain future work.
+Status: schema v3, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Editorial editing, cancellation, standalone integrity rechecks, and backups remain future work.
 
 ## Location and lifecycle
 
@@ -49,3 +49,7 @@ Personal databases and WAL sidecars are ignored by Git. Never commit them as fix
 ## Schema version 2
 
 Migration 0002 adds nullable unique request IDs and selection-token fingerprints to tasks, persisted monotonic revisions and update timestamps, plus `import_sources` mapping canonical source roots to stable collection items. Existing v1 records remain intact. On startup queued/running tasks become interrupted, with a revision increase and sanitized error. Import work is serialized; task progress is committed separately, while successful catalog records and task completion share one transaction. See [import behavior](library-import.md).
+
+## Schema version 3
+
+Migration 0003 adds `collection_manifest_ids`, a one-to-one mapping from local item rows to unique portable UUIDs. It preserves all catalog/task records. UUIDs are assigned lazily when a valid manifest snapshot is first built, retained on reimport, and deleted with their item. The table contains no machine path. See [manifest v1](manifest-v1.md). The current `database_info.schemaVersion` is 3; this is independent of manifest/IPC versions.

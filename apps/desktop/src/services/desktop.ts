@@ -13,3 +13,5 @@ export const getDatabaseInfo = client.getDatabaseInfo;
 
 export const { selectSources, importSources, listLibrary, listTasks, getTask } =
   client;
+
+export const exportManifest = client.exportManifest;

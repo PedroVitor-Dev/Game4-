@@ -36,7 +36,11 @@
     "fileCount_other": "{{count}} files",
     "bytes": "bytes",
     "localItem": "Indexed locally",
-    "loadMore": "Load more"
+    "loadMore": "Load more",
+    "exportManifest": "Export JSON manifest",
+    "exportManifestLabel": "Export manifest for {{title}}",
+    "manifestSaved": "Manifest saved: {{fileName}}",
+    "manifestHint": "JSON exports contain catalog hashes and relative paths. Choose a new filename; existing files are preserved."
   },
   "tasks": {
     "title": "Every step, accounted for.",
@@ -81,6 +85,9 @@
     "capabilityUnavailable": "This feature is unavailable in the current backend.",
     "sourceUnavailable": "A source is empty, unavailable, unsupported, or contains a symbolic link/junction. Check it and select again.",
     "sourceChanged": "A file changed during hashing. Close programs using it and select again.",
-    "importLimitExceeded": "Selection limit exceeded: up to 100 sources, 100,000 files, and 128 folder levels per import."
+    "importLimitExceeded": "Selection limit exceeded: up to 100 sources, 100,000 files, and 128 folder levels per import.",
+    "manifestInvalid": "The collection cannot be represented by manifest v1. Check its metadata and relative paths.",
+    "manifestVersionUnsupported": "This manifest version is unsupported. Use a compatible Game4 build.",
+    "manifestWriteFailed": "The manifest could not be saved. Choose an unused .json filename in a writable folder."
   }
 }

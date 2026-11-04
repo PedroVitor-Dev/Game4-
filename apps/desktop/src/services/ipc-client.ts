@@ -9,6 +9,7 @@ import {
   parseLibraryPage,
   parseTaskPage,
   parseTaskSnapshot,
+  parseExportManifestResult,
 } from "@game4/ipc-contracts";
 import type {
   AppInfo,
@@ -18,6 +19,7 @@ import type {
   LibraryListRequest,
   PageRequest,
   TaskIdRequest,
+  ExportManifestRequest,
 } from "@game4/ipc-contracts";
 
 export type IpcTransport = {
@@ -35,6 +37,7 @@ const decoders = {
   library_list: parseLibraryPage,
   tasks_list: parseTaskPage,
   task_get: parseTaskSnapshot,
+  library_export_manifest: parseExportManifestResult,
 } satisfies Record<ImplementedCommand, (value: unknown) => unknown>;
 type Responses = {
   [K in ImplementedCommand]: ReturnType<(typeof decoders)[K]>;
@@ -93,5 +96,7 @@ export function createIpcClient(transport: IpcTransport) {
       capable("library_list", request),
     listTasks: (request: PageRequest) => capable("tasks_list", request),
     getTask: (request: TaskIdRequest) => capable("task_get", request),
+    exportManifest: (request: ExportManifestRequest) =>
+      capable("library_export_manifest", request),
   };
 }

@@ -45,7 +45,7 @@ Video game history deserves to survive for future generations. Game4∞ aims to 
 
 **Current stage: planning and initial development toward v0.1.0-alpha.**
 
-The desktop foundation is implemented: Tauri 2, React, TypeScript, Rust, Tailwind CSS, navigation, and persistent language selection. The native Windows debug executable has been built and smoke-tested. SQLite storage and versioned migrations are initialized at startup. Local file/folder import, streamed SHA-256, durable tasks, and library browsing are implemented. P2P integration remains planned. See [library import](docs/library-import.md).
+The desktop foundation is implemented: Tauri 2, React, TypeScript, Rust, Tailwind CSS, navigation, and persistent language selection. The native Windows debug executable has been built and smoke-tested. SQLite storage and versioned migrations are initialized at startup. Local file/folder import, streamed SHA-256, durable tasks, and library browsing are implemented. P2P integration remains planned. See [library import](docs/library-import.md). Versioned [JSON manifest v1](docs/manifest-v1.md) exports are also implemented, with a public schema and offline semantic validator.
 
 To run the project, follow the [development setup](docs/development.md). The remaining features below are development goals.
 

@@ -9,6 +9,7 @@ import type {
   ErrorCode,
   ErrorField,
   IpcError,
+  ExportManifestResult,
   SourceSelection,
   TaskAccepted,
   TaskSnapshot,
@@ -208,4 +209,15 @@ export function parseLibraryPage(v: unknown): LibraryPage {
     }),
     nextCursor: nullableText(o.nextCursor),
   };
+}
+
+export function parseExportManifestResult(v: unknown): ExportManifestResult {
+  const o = object(v);
+  const fileName = nullableText(o.fileName);
+  if (
+    typeof o.cancelled !== "boolean" ||
+    (o.cancelled ? fileName !== null : !fileName || /[\\/]/.test(fileName))
+  )
+    throw failure("INVALID_RESPONSE");
+  return { cancelled: o.cancelled, fileName };
 }

@@ -1,0 +1,27 @@
+{
+  "$schema": "urn:game4:manifest:1",
+  "format": "game4-manifest",
+  "schemaVersion": 1,
+  "collection": {
+    "id": "12345678-1234-4234-9234-123456789abc",
+    "title": "Synthetic preservation fixture",
+    "platform": null,
+    "edition": null,
+    "language": null,
+    "declaredSource": "Synthetic test bytes; no game content.",
+    "declaredLicense": "CC0-1.0"
+  },
+  "files": [
+    {
+      "path": "data/abc.bin",
+      "sizeBytes": "3",
+      "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    },
+    {
+      "path": "empty.bin",
+      "sizeBytes": "0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "extensions": {}
+}

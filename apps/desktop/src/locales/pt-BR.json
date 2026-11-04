@@ -36,7 +36,11 @@
     "fileCount_other": "{{count}} arquivos",
     "bytes": "bytes",
     "localItem": "Indexado localmente",
-    "loadMore": "Carregar mais"
+    "loadMore": "Carregar mais",
+    "exportManifest": "Exportar manifesto JSON",
+    "exportManifestLabel": "Exportar manifesto de {{title}}",
+    "manifestSaved": "Manifesto salvo: {{fileName}}",
+    "manifestHint": "As exportações JSON contêm hashes do catálogo e caminhos relativos. Escolha um novo nome; os arquivos existentes são preservados."
   },
   "tasks": {
     "title": "Cada etapa, acompanhada.",
@@ -81,6 +85,9 @@
     "capabilityUnavailable": "Este recurso está indisponível no backend atual.",
     "sourceUnavailable": "Uma origem está vazia, indisponível, não é suportada ou contém um link simbólico/junção. Confira e selecione novamente.",
     "sourceChanged": "Um arquivo mudou durante o cálculo do hash. Feche programas que o utilizam e selecione novamente.",
-    "importLimitExceeded": "Limite da seleção excedido: até 100 origens, 100.000 arquivos e 128 níveis de pastas por importação."
+    "importLimitExceeded": "Limite da seleção excedido: até 100 origens, 100.000 arquivos e 128 níveis de pastas por importação.",
+    "manifestInvalid": "A coleção não pode ser representada pelo manifesto v1. Confira os metadados e caminhos relativos.",
+    "manifestVersionUnsupported": "Esta versão de manifesto não é suportada. Use uma versão compatível do Game4.",
+    "manifestWriteFailed": "Não foi possível salvar o manifesto. Escolha um nome .json ainda não utilizado em uma pasta com permissão de escrita."
   }
 }

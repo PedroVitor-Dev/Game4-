@@ -18,6 +18,7 @@ Game4-/
 │       │   ├── contracts/         Versioned DTOs and TypeScript exporter
 │       │   ├── database/          SQLite connection, migrations, and tests
 │       │   ├── library/           Local import, hashing, catalog queries, and tests
+│       │   ├── manifests/         Versioned JSON snapshots, validation, and export
 │       │   ├── tasks/             Task kind and status vocabulary
 │       │   ├── security/          Reserved validation boundary (documentation only)
 │       │   └── torrent/           Reserved transfer boundary (documentation only)
@@ -35,3 +36,5 @@ Game4-/
 Only npm workspaces with a package manifest are application packages. Reserved directories contain documentation, not implemented adapters or stable formats. Database tests currently live beside the Rust database module and create their own temporary fixtures.
 
 Runtime data is outside the repository. See [SQLite storage](database.md) for its location and lifecycle. Build outputs, dependencies, personal databases, and secrets must remain untracked.
+
+The `packages/manifest-schema` folder now contains the public v1 schema, synthetic example, shared rejection corpus, and offline schema tests. Rust manifest tests exercise the same data. This format folder is not an npm application workspace.

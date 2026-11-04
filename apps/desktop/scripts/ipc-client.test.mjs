@@ -175,3 +175,27 @@ test("task runtime decoders reject malformed state and progress", async () => {
     code("INVALID_RESPONSE"),
   );
 });
+
+test("manifest export uses item IDs and validates cancellation and filenames", async () => {
+  const { parseExportManifestResult } = await import("@game4/ipc-contracts");
+  assert.deepEqual(
+    parseExportManifestResult({ cancelled: true, fileName: null }),
+    { cancelled: true, fileName: null },
+  );
+  for (const v of [
+    { cancelled: true, fileName: "x.json" },
+    { cancelled: false, fileName: null },
+    { cancelled: false, fileName: "C:/private/x.json" },
+  ])
+    assert.throws(() => parseExportManifestResult(v), code("INVALID_RESPONSE"));
+  const client = make(async (command, args) => {
+    if (command === "app_info") return examples.appInfo;
+    assert.equal(command, "library_export_manifest");
+    assert.deepEqual(args, { request: { itemId: "1" } });
+    return { cancelled: false, fileName: "manifest.v1.json" };
+  });
+  assert.equal(
+    (await client.exportManifest({ itemId: "1" })).fileName,
+    "manifest.v1.json",
+  );
+});

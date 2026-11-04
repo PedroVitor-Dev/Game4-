@@ -1,0 +1,960 @@
+[
+  {
+    "name": "future version",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 2,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "wrong schema identifier",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:9",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unknown root field",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {},
+      "privatePath": "C:/private"
+    }
+  },
+  {
+    "name": "missing nullable metadata",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "invalid UUID",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "1",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "empty title",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "  ",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unknown file field",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+          "absolutePath": "C:/secret"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "uppercase hash",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "numeric byte count",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": 3,
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "leading zero byte count",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "03",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "u64 overflow",
+    "schemaValid": true,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "18446744073709551616",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "empty file list",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path '/absolute'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "/absolute",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path '../outside'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "../outside",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'data/../outside'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/../outside",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'C:/secret'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "C:/secret",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'data\\\\secret'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data\\secret",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'a//b'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "a//b",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'a/'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "a/",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path './a'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "./a",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'a/CON.bin'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "a/CON.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'NUL'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "NUL",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'Lpt1.txt'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "Lpt1.txt",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'a:stream'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "a:stream",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'trailing.'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "trailing.",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'trailing '",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "trailing ",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unsafe path 'a\\x00b'",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "a\u0000b",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "duplicate path",
+    "schemaValid": true,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "file ancestor conflict",
+    "schemaValid": true,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "data",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  },
+  {
+    "name": "unnamespaced extension",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "Synthetic preservation fixture",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {
+        "custom": {}
+      }
+    }
+  },
+  {
+    "name": "control-only title",
+    "schemaValid": false,
+    "manifest": {
+      "$schema": "urn:game4:manifest:1",
+      "format": "game4-manifest",
+      "schemaVersion": 1,
+      "collection": {
+        "id": "12345678-1234-4234-9234-123456789abc",
+        "title": "\u0000",
+        "platform": null,
+        "edition": null,
+        "language": null,
+        "declaredSource": "Synthetic test bytes; no game content.",
+        "declaredLicense": "CC0-1.0"
+      },
+      "files": [
+        {
+          "path": "data/abc.bin",
+          "sizeBytes": "3",
+          "sha256": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        },
+        {
+          "path": "empty.bin",
+          "sizeBytes": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "extensions": {}
+    }
+  }
+]

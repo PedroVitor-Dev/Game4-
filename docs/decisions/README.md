@@ -22,3 +22,5 @@ ADRs capture context, decisions, and consequences. An accepted decision may be s
 Upcoming decisions: BitTorrent engine, manifest v0, `.g4` container, catalog identity and signatures, distribution, and updates.
 
 Template: title, date, status, context, alternatives, decision, consequences, and validation evidence. Do not mark experimental technology as accepted before its experiment.
+
+| [0009](0009-versioned-manifests.md) | Accepted initial format | Versioned portable JSON manifests and safe Library export |

@@ -15,6 +15,8 @@ pub fn typescript() -> String {
         IpcError::decl(&config),
         AppInfo::decl(&config),
         DatabaseInfo::decl(&config),
+        ExportManifestRequest::decl(&config),
+        ExportManifestResult::decl(&config),
         TaskKind::decl(&config),
         TaskStatus::decl(&config),
         VerificationStatus::decl(&config),
@@ -83,7 +85,7 @@ pub fn examples() -> String {
             .collect(),
     };
     let database_info = DatabaseInfo {
-        schema_version: 2,
+        schema_version: 3,
         file_count: 0,
         location_count: 0,
         item_count: 0,
