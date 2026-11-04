@@ -38,3 +38,5 @@ Only npm workspaces with a package manifest are application packages. Reserved d
 Runtime data is outside the repository. See [SQLite storage](database.md) for its location and lifecycle. Build outputs, dependencies, personal databases, and secrets must remain untracked.
 
 The `packages/manifest-schema` folder now contains the public v1 schema, synthetic example, shared rejection corpus, and offline schema tests. Rust manifest tests exercise the same data. This format folder is not an npm application workspace.
+
+The Rust `backups` module owns full-catalog JSON snapshots, validation, preview tokens, and transactional restoration. `LibraryBackup.tsx` provides the bilingual Settings workflow. See [library backup](library-backup.md).

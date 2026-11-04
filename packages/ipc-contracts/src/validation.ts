@@ -10,6 +10,10 @@ import type {
   ErrorField,
   IpcError,
   ExportManifestResult,
+  LibraryBackupResult,
+  LibraryRestorePreview,
+  LibraryPrepareRestoreResult,
+  LibraryRestoreResult,
   SourceSelection,
   TaskAccepted,
   TaskSnapshot,
@@ -220,4 +224,49 @@ export function parseExportManifestResult(v: unknown): ExportManifestResult {
   )
     throw failure("INVALID_RESPONSE");
   return { cancelled: o.cancelled, fileName };
+}
+
+export function parseLibraryBackupResult(v: unknown): LibraryBackupResult {
+  return parseExportManifestResult(v);
+}
+function backupCounts(o: Record<string, unknown>) {
+  return {
+    itemCount: safeCount(o.itemCount, 0, 500000),
+    fileCount: safeCount(o.fileCount, 0, 500000),
+    locationCount: safeCount(o.locationCount, 0, 500000),
+    taskCount: safeCount(o.taskCount, 0, 500000),
+  };
+}
+function filename(v: unknown): string {
+  const name = text(v);
+  if (!name.trim() || /[\\/]/.test(name)) throw failure("INVALID_RESPONSE");
+  return name;
+}
+export function parseLibraryPrepareRestoreResult(
+  v: unknown,
+): LibraryPrepareRestoreResult {
+  const o = object(v);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  if (o.cancelled) {
+    if (o.preview !== null) throw failure("INVALID_RESPONSE");
+    return { cancelled: true, preview: null };
+  }
+  const p = object(o.preview);
+  const restoreToken = text(p.restoreToken);
+  if (
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+      restoreToken,
+    )
+  )
+    throw failure("INVALID_RESPONSE");
+  const preview: LibraryRestorePreview = {
+    restoreToken,
+    fileName: filename(p.fileName),
+    ...backupCounts(p),
+  };
+  return { cancelled: false, preview };
+}
+export function parseLibraryRestoreResult(v: unknown): LibraryRestoreResult {
+  const o = object(v);
+  return { ...backupCounts(o), recoveryFileName: filename(o.recoveryFileName) };
 }

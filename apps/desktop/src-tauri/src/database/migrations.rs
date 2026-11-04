@@ -7,7 +7,7 @@ const MIGRATIONS: &[&str] = &[
     include_str!("migrations/0003_manifest_identity.sql"),
 ];
 
-pub(super) fn apply(connection: &mut Connection) -> Result<()> {
+pub(crate) fn apply(connection: &mut Connection) -> Result<()> {
     apply_steps(connection, MIGRATIONS)
 }
 

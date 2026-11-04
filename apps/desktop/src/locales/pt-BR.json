@@ -64,7 +64,7 @@
   },
   "settings": {
     "title": "Seu espaço, suas escolhas.",
-    "description": "Comece pelo idioma de sua preferência. Os controles de biblioteca e rede chegarão junto com seus recursos."
+    "description": "Escolha seu idioma, salve sua Biblioteca local ou restaure um backup após revisá-lo."
   },
   "runtime": {
     "checking": "Verificando a conexão com o aplicativo…",
@@ -88,6 +88,32 @@
     "importLimitExceeded": "Limite da seleção excedido: até 100 origens, 100.000 arquivos e 128 níveis de pastas por importação.",
     "manifestInvalid": "A coleção não pode ser representada pelo manifesto v1. Confira os metadados e caminhos relativos.",
     "manifestVersionUnsupported": "Esta versão de manifesto não é suportada. Use uma versão compatível do Game4.",
-    "manifestWriteFailed": "Não foi possível salvar o manifesto. Escolha um nome .json ainda não utilizado em uma pasta com permissão de escrita."
+    "manifestWriteFailed": "Não foi possível salvar o manifesto. Escolha um nome .json ainda não utilizado em uma pasta com permissão de escrita.",
+    "backupInvalid": "Este arquivo não é um backup válido da Biblioteca Game4, viola as regras do catálogo ou excede o limite de 64 MiB / 500.000 registros.",
+    "backupVersionUnsupported": "Esta versão de backup ou de banco de dados não é suportada. Use uma versão compatível do Game4.",
+    "backupWriteFailed": "Não foi possível gravar o backup. Escolha um novo nome .json em uma pasta com permissão de escrita; a restauração também precisa de espaço para a cópia de recuperação.",
+    "libraryBusy": "Aguarde todas as importações terminarem antes de salvar ou restaurar a Biblioteca.",
+    "restoreStale": "A prévia de restauração expirou ou o catálogo mudou. Selecione o backup novamente para revisá-lo.",
+    "restoreFailed": "Não foi possível concluir a restauração. O catálogo atual foi preservado; eventuais arquivos de recuperação continuam disponíveis."
+  },
+  "backup": {
+    "title": "Salvar e restaurar sua Biblioteca",
+    "description": "Salve um backup completo do catálogo, incluindo metadados, hashes, caminhos e histórico de tarefas. Os arquivos dos jogos e as preferências da interface não são incluídos.",
+    "privateData": "Os backups contêm caminhos locais e notas privadas. Guarde-os em um lugar confiável. As cópias restauradas precisam de uma nova verificação de integridade.",
+    "save": "Salvar backup da Biblioteca",
+    "chooseRestore": "Escolher backup para restaurar",
+    "saved": "Backup da Biblioteca salvo: {{fileName}}",
+    "restored_one": "Biblioteca restaurada: {{count}} item. Catálogo anterior salvo em database/backups como {{recovery}}.",
+    "restored_other": "Biblioteca restaurada: {{count}} itens. Catálogo anterior salvo em database/backups como {{recovery}}.",
+    "working": "Processando o catálogo local…",
+    "previewTitle": "Confira o backup",
+    "items": "Itens da Biblioteca",
+    "files": "Conteúdos únicos",
+    "locations": "Cópias físicas",
+    "tasks": "Tarefas",
+    "replaceWarning": "A restauração substitui o catálogo atual. Uma cópia de recuperação é salva antes. Os arquivos dos jogos ficam intactos. Aguarde as importações terminarem para continuar.",
+    "confirmReplacement": "Entendo que este backup substituirá minha Biblioteca atual.",
+    "restore": "Substituir Biblioteca e restaurar",
+    "cancel": "Cancelar"
   }
 }

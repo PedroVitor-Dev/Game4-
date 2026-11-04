@@ -61,3 +61,5 @@ Test domain rules and parsers; integration-test SQLite, files, and transfers. Va
 ## Implemented local import
 
 Native source selection authorizes process-local tokens. Serialized blocking workers enumerate and stream SHA-256 outside the database mutex. Schema v2 persists request IDs, progress/revisions, and source identities; catalog mutations and successful completion share one transaction. React polls task snapshots while mounted and lists library items. Events, cooperative cancellation, and standalone rechecks remain planned. See [library import](library-import.md) and [ADR 0008](decisions/0008-local-import.md).
+
+The `backups` Rust module implements bounded private catalog snapshots, independent validation, preview tokens/fingerprints, recovery files, and transactional replacement. See [library backup](library-backup.md).

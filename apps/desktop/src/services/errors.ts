@@ -19,6 +19,12 @@ const keys = {
   MANIFEST_INVALID: "manifestInvalid",
   MANIFEST_VERSION_UNSUPPORTED: "manifestVersionUnsupported",
   MANIFEST_WRITE_FAILED: "manifestWriteFailed",
+  BACKUP_INVALID: "backupInvalid",
+  BACKUP_VERSION_UNSUPPORTED: "backupVersionUnsupported",
+  BACKUP_WRITE_FAILED: "backupWriteFailed",
+  LIBRARY_BUSY: "libraryBusy",
+  RESTORE_STALE: "restoreStale",
+  RESTORE_FAILED: "restoreFailed",
 } as const satisfies Record<ErrorCode, keyof typeof en.errors>;
 
 export function getIpcErrorKey(error: unknown) {

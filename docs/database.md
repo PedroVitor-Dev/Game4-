@@ -1,6 +1,6 @@
 # SQLite storage
 
-Status: schema v3, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Editorial editing, cancellation, standalone integrity rechecks, and backups remain future work.
+Status: schema v3, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Editorial editing, cancellation, and standalone integrity rechecks remain future work. Full-catalog backup/restore is implemented separately.
 
 ## Location and lifecycle
 
@@ -44,7 +44,7 @@ Future schema changes must include migration and data-preservation tests. Do not
 
 Run `npm.cmd run rust:test` on Windows PowerShell. Tests use temporary databases and cover initialization, reopening with preserved records, duplicate content, separate copy health, foreign keys, invalid states/progress, relationship deletion, future-version refusal, and migration rollback.
 
-Personal databases and WAL sidecars are ignored by Git. Never commit them as fixtures. Do not copy only the main database while the app is writing in WAL mode. A live-backup/export feature is future work; for manual offline copies, close all application instances first and preserve the database directory, including any remaining sidecars. No backup is created automatically by this initial setup.
+Personal databases and WAL sidecars are ignored by Git. Never commit them as fixtures. Do not copy only the main database while the app is writing in WAL mode. Use the implemented [library backup/restore](library-backup.md) in Settings for a consistent catalog snapshot. For manual offline SQLite copies, close all application instances first and preserve the database directory including remaining sidecars. Restore creates a recovery JSON automatically; scheduled backups are not implemented.
 
 ## Schema version 2
 
@@ -53,3 +53,7 @@ Migration 0002 adds nullable unique request IDs and selection-token fingerprints
 ## Schema version 3
 
 Migration 0003 adds `collection_manifest_ids`, a one-to-one mapping from local item rows to unique portable UUIDs. It preserves all catalog/task records. UUIDs are assigned lazily when a valid manifest snapshot is first built, retained on reimport, and deleted with their item. The table contains no machine path. See [manifest v1](manifest-v1.md). The current `database_info.schemaVersion` is 3; this is independent of manifest/IPC versions.
+
+## Private backups and restoration
+
+The backup feature reads known tables under a transaction rather than copying a live SQLite file. Restore validates data using trusted schema SQL, writes a recovery copy under `database/backups`, and replaces rows transactionally. Existing schema v3 is unchanged. Restored locations require fresh verification, unfinished historical tasks become interrupted, and pending picker tokens are discarded. See [the guide](library-backup.md).

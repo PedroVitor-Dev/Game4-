@@ -64,7 +64,7 @@
   },
   "settings": {
     "title": "Your workspace, your way.",
-    "description": "Start with your preferred language. Library and network controls will arrive with their features."
+    "description": "Choose your language, save your local library, or restore a reviewed backup."
   },
   "runtime": {
     "checking": "Checking the desktop connection…",
@@ -88,6 +88,32 @@
     "importLimitExceeded": "Selection limit exceeded: up to 100 sources, 100,000 files, and 128 folder levels per import.",
     "manifestInvalid": "The collection cannot be represented by manifest v1. Check its metadata and relative paths.",
     "manifestVersionUnsupported": "This manifest version is unsupported. Use a compatible Game4 build.",
-    "manifestWriteFailed": "The manifest could not be saved. Choose an unused .json filename in a writable folder."
+    "manifestWriteFailed": "The manifest could not be saved. Choose an unused .json filename in a writable folder.",
+    "backupInvalid": "This file is not a valid Game4 library backup, violates catalog constraints, or exceeds the 64 MiB / 500,000-record limit.",
+    "backupVersionUnsupported": "This backup or database schema version is unsupported. Use a compatible Game4 build.",
+    "backupWriteFailed": "The backup could not be written. Choose an unused .json filename in a writable folder; restoration also requires space for a recovery copy.",
+    "libraryBusy": "Wait for all imports to finish before saving or restoring the library.",
+    "restoreStale": "The restore preview expired or the catalog changed. Select the backup again to review it.",
+    "restoreFailed": "Restoration could not finish. The current catalog was preserved; any recovery file remains available."
+  },
+  "backup": {
+    "title": "Save and restore your library",
+    "description": "Save a complete catalog backup, including metadata, hashes, paths, and task history. Game files and interface preferences are not included.",
+    "privateData": "Backups contain private local paths and notes. Keep them in a trusted place. Restored copies require a new integrity check.",
+    "save": "Save library backup",
+    "chooseRestore": "Choose backup to restore",
+    "saved": "Library backup saved: {{fileName}}",
+    "restored_one": "Library restored: {{count}} item. Previous catalog saved in database/backups as {{recovery}}.",
+    "restored_other": "Library restored: {{count}} items. Previous catalog saved in database/backups as {{recovery}}.",
+    "working": "Working on your local catalog…",
+    "previewTitle": "Review the backup",
+    "items": "Library items",
+    "files": "Unique contents",
+    "locations": "Physical copies",
+    "tasks": "Tasks",
+    "replaceWarning": "Restoring replaces the current catalog. A recovery copy is saved first. Game files remain untouched. Wait for imports to finish before continuing.",
+    "confirmReplacement": "I understand that this backup will replace my current library.",
+    "restore": "Replace library and restore",
+    "cancel": "Cancel"
   }
 }

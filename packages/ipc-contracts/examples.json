@@ -8,7 +8,10 @@
       "library_list",
       "tasks_list",
       "task_get",
-      "library_export_manifest"
+      "library_export_manifest",
+      "library_save_backup",
+      "library_prepare_restore",
+      "library_restore_backup"
     ],
     "contractVersion": 1,
     "version": "0.1.0"

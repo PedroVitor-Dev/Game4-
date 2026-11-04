@@ -24,3 +24,5 @@ Upcoming decisions: BitTorrent engine, manifest v0, `.g4` container, catalog ide
 Template: title, date, status, context, alternatives, decision, consequences, and validation evidence. Do not mark experimental technology as accepted before its experiment.
 
 | [0009](0009-versioned-manifests.md) | Accepted initial format | Versioned portable JSON manifests and safe Library export |
+
+| [0010](0010-library-backup-restore.md) | Accepted | Validated private library backups and transactional restoration |

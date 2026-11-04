@@ -1,4 +1,4 @@
-mod migrations;
+pub(crate) mod migrations;
 
 use rusqlite::Connection;
 use std::{path::Path, sync::Mutex, time::Duration};
@@ -21,6 +21,7 @@ pub type Result<T> = std::result::Result<T, DatabaseError>;
 
 pub struct Database {
     pub(crate) connection: Mutex<Connection>,
+    pub(crate) path: std::path::PathBuf,
 }
 
 #[derive(Debug)]
@@ -50,6 +51,7 @@ impl Database {
         connection.execute("UPDATE tasks SET status = 'interrupted', error_code = 'UNEXPECTED_ERROR', revision = revision + 1, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), finished_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now') WHERE status IN ('queued', 'running')", [])?;
         Ok(Self {
             connection: Mutex::new(connection),
+            path: path.to_path_buf(),
         })
     }
 

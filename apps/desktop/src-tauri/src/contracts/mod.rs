@@ -16,9 +16,12 @@ pub enum ImplementedCommand {
     TasksList,
     TaskGet,
     LibraryExportManifest,
+    LibrarySaveBackup,
+    LibraryPrepareRestore,
+    LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 8] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 11] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -27,6 +30,9 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 8] = [
     ImplementedCommand::TasksList,
     ImplementedCommand::TaskGet,
     ImplementedCommand::LibraryExportManifest,
+    ImplementedCommand::LibrarySaveBackup,
+    ImplementedCommand::LibraryPrepareRestore,
+    ImplementedCommand::LibraryRestoreBackup,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -57,9 +63,15 @@ pub enum ErrorCode {
     ManifestInvalid,
     ManifestVersionUnsupported,
     ManifestWriteFailed,
+    BackupInvalid,
+    BackupVersionUnsupported,
+    BackupWriteFailed,
+    LibraryBusy,
+    RestoreStale,
+    RestoreFailed,
 }
 
-pub const ERROR_CODES: [ErrorCode; 16] = [
+pub const ERROR_CODES: [ErrorCode; 22] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -76,6 +88,12 @@ pub const ERROR_CODES: [ErrorCode; 16] = [
     ErrorCode::ManifestInvalid,
     ErrorCode::ManifestVersionUnsupported,
     ErrorCode::ManifestWriteFailed,
+    ErrorCode::BackupInvalid,
+    ErrorCode::BackupVersionUnsupported,
+    ErrorCode::BackupWriteFailed,
+    ErrorCode::LibraryBusy,
+    ErrorCode::RestoreStale,
+    ErrorCode::RestoreFailed,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -296,4 +314,41 @@ pub struct ExportManifestRequest {
 pub struct ExportManifestResult {
     pub cancelled: bool,
     pub file_name: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryBackupResult {
+    pub cancelled: bool,
+    pub file_name: Option<String>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryRestorePreview {
+    pub restore_token: String,
+    pub file_name: String,
+    pub item_count: u32,
+    pub file_count: u32,
+    pub location_count: u32,
+    pub task_count: u32,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryPrepareRestoreResult {
+    pub cancelled: bool,
+    pub preview: Option<LibraryRestorePreview>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryRestoreRequest {
+    pub restore_token: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryRestoreResult {
+    pub item_count: u32,
+    pub file_count: u32,
+    pub location_count: u32,
+    pub task_count: u32,
+    pub recovery_file_name: String,
 }

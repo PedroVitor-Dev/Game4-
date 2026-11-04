@@ -1,6 +1,6 @@
 # Frontend–backend IPC contract v1
 
-Status: v1 implements app/database information, source selection, import, library/task listing, task lookup, and manifest export. Verification, cancellation, and task events remain drafts. See [local import](library-import.md) for implemented behavior and limits.
+Status: v1 implements app/database information, source selection, import, library/task listing, task lookup, manifest export, and private library backup/restore. Verification, cancellation, and task events remain drafts. See [local import](library-import.md) for implemented behavior and limits.
 
 ## Ownership and boundary
 
@@ -33,7 +33,10 @@ Canonical application response:
     "library_list",
     "tasks_list",
     "task_get",
-    "library_export_manifest"
+    "library_export_manifest",
+    "library_save_backup",
+    "library_prepare_restore",
+    "library_restore_backup"
   ]
 }
 ```
@@ -165,3 +168,17 @@ Primary references: [Tauri command serialization](https://v2.tauri.app/develop/c
 `ExportManifestResult` is `{ cancelled: true, fileName: null }` on dialog cancellation or `{ cancelled: false, fileName: "collection.manifest.v1.json" }` after a successful write. No absolute path or JSON body crosses the IPC response. The client decoder checks cancellation/filename consistency. Export does not create a task or rehash source data.
 
 Errors additionally include `MANIFEST_INVALID`, `MANIFEST_VERSION_UNSUPPORTED`, and `MANIFEST_WRITE_FAILED`, with both locale mappings. Existing files are not overwritten; request another unused filename after a write failure. Manifest schema versioning is independent of IPC v1 and SQLite v3. See [the format](manifest-v1.md).
+
+## Active private library backup and restore
+
+| Command                   | Arguments                           | Response                                                        |
+| ------------------------- | ----------------------------------- | --------------------------------------------------------------- |
+| `library_save_backup`     | None; native destination picker     | `LibraryBackupResult` (`cancelled`, nullable `fileName`)        |
+| `library_prepare_restore` | None; native source picker          | `LibraryPrepareRestoreResult` (`cancelled`, nullable `preview`) |
+| `library_restore_backup`  | `{request:{restoreToken:"<UUID>"}}` | `LibraryRestoreResult` (counts and `recoveryFileName`)          |
+
+A noncancelled preview includes `restoreToken`, `fileName`, and numeric `itemCount`, `fileCount`, `locationCount`, `taskCount` (0–500,000). File count measures content identities; location count measures physical copies. Cancelled preparation has `preview:null`. Confirmation returns the same count names and the filename of the current catalog's pre-restore recovery copy. Only filenames/counts/tokens cross IPC, never private paths or backup bodies. Restoring does not create a task or invoke file verification.
+
+The UI must review the preview and explicitly confirm replacement. Tokens are single-use for accepted confirmation attempts, process-local, expire after five minutes, and are bound to a current-catalog fingerprint. A new preparation invalidates the previous preview. Active imports, stale previews, and write/restore failures require explicit user action rather than automatic mutation retries.
+
+Additional stable errors: `BACKUP_INVALID`, `BACKUP_VERSION_UNSUPPORTED`, `BACKUP_WRITE_FAILED`, `LIBRARY_BUSY`, `RESTORE_STALE`, and `RESTORE_FAILED`, all localized. Restore may retain a recovery file after rollback. Backup v1/schema v3 is separate from IPC v1 and manifest v1. See [the backup guide](library-backup.md).

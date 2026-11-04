@@ -41,6 +41,12 @@ pub struct ImportState {
     pub worker: Mutex<()>,
 }
 impl ImportState {
+    pub(crate) fn invalidate_selections(&self) {
+        self.selections
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .clear();
+    }
     pub fn select(&self, paths: Vec<PathBuf>) -> Result<SourceSelection> {
         if paths.is_empty() {
             return Ok(SourceSelection {

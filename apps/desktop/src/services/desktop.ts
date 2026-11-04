@@ -15,3 +15,9 @@ export const { selectSources, importSources, listLibrary, listTasks, getTask } =
   client;
 
 export const exportManifest = client.exportManifest;
+
+export const {
+  saveLibraryBackup,
+  prepareLibraryRestore,
+  restoreLibraryBackup,
+} = client;

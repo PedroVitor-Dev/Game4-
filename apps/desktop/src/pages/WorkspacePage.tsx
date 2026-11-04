@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { LibraryPage } from "./LibraryPage";
+import { LibraryBackup } from "../components/LibraryBackup";
 import { LanguageSelect } from "../components/LanguageSelect";
 
 export type Page = "library" | "tasks" | "settings";
@@ -17,6 +18,7 @@ export function WorkspacePage({ page }: { page: Page }) {
         </div>
         <LanguageSelect />
       </section>
+      <LibraryBackup />
     </>
   );
 }

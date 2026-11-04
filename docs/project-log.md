@@ -3,7 +3,7 @@
 ## Status on November 4, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation, SQLite v3, versioned JSON manifest export, local import/hashing, task progress/recovery, and library browsing implemented; independent integrity rechecks and P2P integration remain pending.
+- Stage: desktop foundation, SQLite v3, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; independent integrity rechecks and P2P integration remain pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
@@ -158,6 +158,16 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Validation passed: 23 Rust tests, 10 IPC tests, 3 public-schema tests, 71-key locale parity, generated-contract drift checks, TypeScript, formatting, Clippy with warnings denied, and the Windows native debug build. The offline semantic-validation CLI accepted both the example and the actual native export.
 - Native smoke passed with the isolated test catalog: exported a two-file item through the save dialog, observed the Portuguese success message, and independently validated the written document against the public schema, relative paths, exact sizes, and SHA-256 of both source files. Closed the test app and rebuilt with the normal application identifier.
 - Manifest import/reconstruction, fresh rechecks, signatures, and archive containers remain planned. No push or network sharing is performed.
+
+### November 4, 2026 — Save and restore the local library
+
+- Implemented private versioned full-catalog JSON backups in Settings, preserving metadata/notes, hashes, locations, relative mappings, history, source identities, and manifest UUIDs.
+- Added validated native save/load pickers, a count preview, explicit replacement confirmation, five-minute catalog-bound tokens, import exclusion, and pre-restore recovery files.
+- Restore uses trusted embedded schema validation and one transaction; file health resets to unverified, unfinished historical work is interrupted, and old picker tokens are invalidated. Game bytes remain untouched.
+- Added integration coverage for roundtrip/reopen, metadata/identity, invalid files, bounds, constraints, stale/expired/replayed previews, active work, no-clobber writes, recovery-file failure, injected SQL rollback, and source preservation.
+- Validation passed: 29 Rust tests, 11 IPC tests, 3 manifest-schema tests, 95 translation keys, TypeScript, generated-contract drift checks, formatting, Clippy with warnings denied, and Windows native debug builds.
+- Native smoke in the isolated synthetic catalog confirmed saving through the native dialog, Portuguese success feedback, loading the saved file for preview (2 items / 2 content identities / 3 copies / 2 tasks), and a disabled restore button until explicit confirmation. Closed the preview without replacing the test catalog. Independent checks verified envelope/table counts and original file hashes/sizes. Actual restoration/rollback/reopen were exercised by integration tests. Restored the normal app identifier in the final build.
+- Documented private paths/notes, no game-file inclusion, format/schema compatibility, restore replacement semantics, recovery location, and retained copies in ADR 0010 and the guide.
 
 ## Template for future entries
 

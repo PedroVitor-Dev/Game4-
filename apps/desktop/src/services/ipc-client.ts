@@ -10,6 +10,9 @@ import {
   parseTaskPage,
   parseTaskSnapshot,
   parseExportManifestResult,
+  parseLibraryBackupResult,
+  parseLibraryPrepareRestoreResult,
+  parseLibraryRestoreResult,
 } from "@game4/ipc-contracts";
 import type {
   AppInfo,
@@ -20,6 +23,7 @@ import type {
   PageRequest,
   TaskIdRequest,
   ExportManifestRequest,
+  LibraryRestoreRequest,
 } from "@game4/ipc-contracts";
 
 export type IpcTransport = {
@@ -38,6 +42,9 @@ const decoders = {
   tasks_list: parseTaskPage,
   task_get: parseTaskSnapshot,
   library_export_manifest: parseExportManifestResult,
+  library_save_backup: parseLibraryBackupResult,
+  library_prepare_restore: parseLibraryPrepareRestoreResult,
+  library_restore_backup: parseLibraryRestoreResult,
 } satisfies Record<ImplementedCommand, (value: unknown) => unknown>;
 type Responses = {
   [K in ImplementedCommand]: ReturnType<(typeof decoders)[K]>;
@@ -88,6 +95,10 @@ export function createIpcClient(transport: IpcTransport) {
   return {
     getAppInfo,
     getDatabaseInfo,
+    saveLibraryBackup: () => capable("library_save_backup", undefined),
+    prepareLibraryRestore: () => capable("library_prepare_restore", undefined),
+    restoreLibraryBackup: (request: LibraryRestoreRequest) =>
+      capable("library_restore_backup", request),
     selectSources: (request: SelectSourcesRequest) =>
       capable("library_select_sources", request),
     importSources: (request: StartImportRequest) =>

@@ -55,3 +55,5 @@ Use `npm.cmd run torrent:build`, `npm.cmd run torrent:test`, and `npm.cmd run to
 This is the desktop foundation, not a library or transfer implementation. SQLite startup persistence is implemented. No game import, network sharing, automatic updater, or signed distribution is included. Generated scaffold icons are placeholders pending visual identity work. CI configuration is committed but is only executed by GitHub after the owner pushes the changes.
 
 Manifest validation is included in `npm.cmd run check`; run `npm.cmd run manifests:test` for offline public-schema fixtures. See [manifest v1](manifest-v1.md).
+
+Local catalog backup/restore is available in Settings. Tests use synthetic disposable catalogs; never commit private backup JSON. See [the backup guide](library-backup.md).

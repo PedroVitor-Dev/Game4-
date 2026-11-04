@@ -35,3 +35,5 @@ Planning baseline: November 3, 2026. As of November 4, the desktop foundation, b
 See [local library import](library-import.md) for file/folder selection, SHA-256, reimport, tasks, and limitations.
 
 See [manifest v1](manifest-v1.md) for the public JSON format, schema, compatibility, and Library export.
+
+See [save and restore the local library](library-backup.md) for private full-catalog backups and recovery.

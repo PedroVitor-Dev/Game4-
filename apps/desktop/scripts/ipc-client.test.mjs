@@ -199,3 +199,72 @@ test("manifest export uses item IDs and validates cancellation and filenames", a
     "manifest.v1.json",
   );
 });
+
+test("library backup and restore use preview tokens, validate counts, and never accept paths", async () => {
+  const { parseLibraryPrepareRestoreResult, parseLibraryRestoreResult } =
+    await import("@game4/ipc-contracts");
+  const preview = {
+    restoreToken: "12345678-1234-4234-9234-123456789abc",
+    fileName: "library.json",
+    itemCount: 1,
+    fileCount: 2,
+    locationCount: 3,
+    taskCount: 4,
+  };
+  assert.deepEqual(
+    parseLibraryPrepareRestoreResult({ cancelled: false, preview }),
+    { cancelled: false, preview },
+  );
+  assert.deepEqual(
+    parseLibraryPrepareRestoreResult({ cancelled: true, preview: null }),
+    { cancelled: true, preview: null },
+  );
+  for (const p of [
+    { ...preview, fileName: "C:/private.json" },
+    { ...preview, itemCount: -1 },
+    { ...preview, restoreToken: "arbitrary-path" },
+    { ...preview, fileCount: 500001 },
+  ])
+    assert.throws(
+      () => parseLibraryPrepareRestoreResult({ cancelled: false, preview: p }),
+      code("INVALID_RESPONSE"),
+    );
+  assert.throws(
+    () =>
+      parseLibraryRestoreResult({
+        ...preview,
+        recoveryFileName: "../recovery.json",
+      }),
+    code("INVALID_RESPONSE"),
+  );
+  const client = make(async (command, args) => {
+    if (command === "app_info") return examples.appInfo;
+    if (command === "library_save_backup") {
+      assert.equal(args, undefined);
+      return { cancelled: false, fileName: "library.json" };
+    }
+    if (command === "library_prepare_restore") {
+      assert.equal(args, undefined);
+      return { cancelled: false, preview };
+    }
+    assert.equal(command, "library_restore_backup");
+    assert.deepEqual(args, { request: { restoreToken: preview.restoreToken } });
+    return {
+      itemCount: 1,
+      fileCount: 2,
+      locationCount: 3,
+      taskCount: 4,
+      recoveryFileName: "recovery.json",
+    };
+  });
+  assert.equal((await client.saveLibraryBackup()).fileName, "library.json");
+  assert.equal(
+    (await client.prepareLibraryRestore()).preview.restoreToken,
+    preview.restoreToken,
+  );
+  assert.equal(
+    (await client.restoreLibraryBackup({ restoreToken: preview.restoreToken }))
+      .recoveryFileName,
+    "recovery.json",
+  );
+});
