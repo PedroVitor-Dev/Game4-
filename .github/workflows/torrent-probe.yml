@@ -1,0 +1,27 @@
+name: Experimental torrent transport smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  loopback:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --manifest-path tools/torrent-probe/Cargo.toml -- --check
+      - run: cargo test --locked --manifest-path tools/torrent-probe/Cargo.toml
+      - run: cargo clippy --locked --manifest-path tools/torrent-probe/Cargo.toml --all-targets -- -D warnings
+      - name: Run local transport checks (not two-computer acceptance)
+        shell: pwsh
+        run: cargo run --locked --manifest-path tools/torrent-probe/Cargo.toml -- loopback --directory "$env:RUNNER_TEMP/game4-torrent-probe"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: torrent-transport-observations
+          path: ${{ runner.temp }}/game4-torrent-probe/report.json

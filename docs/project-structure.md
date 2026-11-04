@@ -23,6 +23,7 @@ Game4-/
 │       ├── capabilities/          Window capabilities
 │       └── icons/                 Temporary scaffold icons
 ├── packages/manifest-schema/      Reserved public-schema workspace
+├── tools/torrent-probe/           Standalone experimental BitTorrent CLI
 ├── tests/fixtures/                Shared-fixture policy; no personal collections
 ├── docs/                          Plans, architecture, decisions, and project log
 ├── package.json                   Root npm workspace and commands

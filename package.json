@@ -20,7 +20,11 @@
     "format:check": "prettier --check .",
     "rust:check": "cargo check --locked --manifest-path apps/desktop/src-tauri/Cargo.toml",
     "rust:fmt": "cargo fmt --manifest-path apps/desktop/src-tauri/Cargo.toml -- --check",
-    "rust:test": "cargo test --locked --manifest-path apps/desktop/src-tauri/Cargo.toml"
+    "rust:test": "cargo test --locked --manifest-path apps/desktop/src-tauri/Cargo.toml",
+    "torrent:build": "cargo build --locked --manifest-path tools/torrent-probe/Cargo.toml",
+    "torrent:probe": "cargo run --locked --manifest-path tools/torrent-probe/Cargo.toml --",
+    "torrent:test": "cargo test --locked --manifest-path tools/torrent-probe/Cargo.toml",
+    "torrent:check": "cargo fmt --manifest-path tools/torrent-probe/Cargo.toml -- --check && cargo clippy --locked --manifest-path tools/torrent-probe/Cargo.toml --all-targets -- -D warnings"
   },
   "devDependencies": {
     "prettier": "^3.6.2"

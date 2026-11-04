@@ -46,6 +46,8 @@ docs/decisions/            Architecture decisions
 tests/fixtures/            Synthetic or redistributable samples
 ```
 
+The [isolated engine evaluation](torrent-engine-evaluation.md) records local evidence and a creator defect; the desktop still has no BitTorrent engine dependency.
+
 ## Engine selection
 
 Create an ADR comparing distribution-compatible licensing, Rust/Tauri integration, maintenance, DHT, magnets, trackers, resume, resource limits, and Windows behavior. Do not choose solely by popularity. Run a real transfer and resume experiment before deciding.

@@ -18,6 +18,10 @@ Weeks start when implementation actually begins. Holidays, availability, incompa
 
 M0 foundation code is implemented and locally verified through a Windows native debug build and WebView2 smoke test. English/Portuguese switching and persistence work. The CI workflow is configured but has not run on GitHub. A clean-machine build and installation check remains required before declaring the full M0 exit criterion met. Later milestones remain planned; no delivery-velocity claim is made from this initial setup.
 
+## M3 experiment status — November 4, 2026
+
+The isolated librqbit 9.1.0 probe passed loopback transfer, session/process resume, corruption repair, magnet, and SHA-256 checks. Its exact-piece-boundary torrent creator failed. Two-computer validation is pending because the owner does not yet have a second PC. M3 remains in progress; no production engine selection is approved. See [the evaluation](torrent-engine-evaluation.md) and [test procedure](torrent-validation.md).
+
 ## Dependencies and alternatives
 
 - M0 requires available Windows tools and SDKs. Localization is part of M0; review its effect on estimates when implementation starts.

@@ -17,6 +17,8 @@ An open network for preserving, verifying, and sharing digital collections.
 
 See also [SQLite storage](database.md), [project structure](project-structure.md), and [development setup](development.md).
 
+See [torrent engine evaluation](torrent-engine-evaluation.md) and [two-computer validation](torrent-validation.md) for the isolated P2P experiment and remaining gates.
+
 ## Maintenance and status vocabulary
 
 - Planned: development direction, not implemented functionality.

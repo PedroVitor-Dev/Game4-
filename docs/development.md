@@ -42,6 +42,10 @@ Run `npm.cmd run rust:test` for the database persistence and migration tests. Se
 
 Edit `apps/desktop/src/locales/en.json` and `pt-BR.json` together. Locale checks validate key and interpolation parity. English is the default and fallback; selection is saved locally. Browser preview explicitly reports that the desktop backend is unavailable by design. See [language policy](localization.md).
 
+## Experimental torrent tool
+
+Use `npm.cmd run torrent:build`, `npm.cmd run torrent:test`, and `npm.cmd run torrent:check` for the separate Rust probe. See [the test procedure](torrent-validation.md). It is not linked into the desktop and does not make M3 complete. The optional GitHub transport workflow requires manual dispatch after push.
+
 ## Current limits
 
 This is the desktop foundation, not a library or transfer implementation. SQLite startup persistence is implemented. No game import, network sharing, automatic updater, or signed distribution is included. Generated scaffold icons are placeholders pending visual identity work. CI configuration is committed but is only executed by GitHub after the owner pushes the changes.

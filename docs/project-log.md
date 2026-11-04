@@ -6,7 +6,7 @@
 - Stage: desktop foundation and SQLite startup persistence implemented; importing, hashing, and P2P remain pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
-- Planned initial transport: BitTorrent; engine still under evaluation.
+- Planned initial transport: BitTorrent; librqbit 9.1.0 evaluated locally in an isolated tool, with a creator defect and physical two-PC test still pending.
 - Languages: English repository content; implemented English and Brazilian Portuguese interface.
 - Workflow: relevant Conventional Commits; no agent push.
 - Next delivery: implement local-library import and hashing using the SQLite model and task vocabulary. M0 clean-machine verification and the first hosted CI run remain outstanding.
@@ -76,6 +76,18 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Updated setup instructions to use `npm.cmd` on PowerShell without changing execution policy.
 - Limits: file import/hashing, user-facing catalog editing, task execution/recovery, path normalization, and automated backup/export remain unimplemented. No personal database is committed. Hosted CI has not run.
 - Next step: implement cancellable import and SHA-256 hashing against the new schema.
+
+### November 4, 2026 — Isolated BitTorrent engine experiment
+
+- Owner confirmed that a second PC is not currently available; physical two-computer validation was not performed.
+- Created a standalone librqbit 9.1.0 probe with pinned dependencies, synthetic data, explicit IPv4 peers, and no discovery or automatic port mapping.
+- Passed local partial transfer, session recreation with reused pieces, corrupted-piece repair, magnet metadata exchange, and SHA-256 verification.
+- Passed a separate-process seeder/downloader test; another downloader process resumed 524,305 verified bytes. Independent Python SHA-256 matched.
+- Reproduced the creator's exact-boundary defect: one full 262,144-byte piece generated two piece hashes. Production engine selection remains open.
+- Added two fixture-safety tests, strict Clippy checks, committed sanitized reports, a manual transport-smoke workflow, and a physical-LAN procedure/result template.
+- No network behavior or dependency was added to the desktop app; no public swarms, firewall changes, upstream comments, or push.
+- Limits: no physical LAN/WAN, DHT, tracker, multi-file, cross-client, or performance acceptance. The probe is not a general torrent importer.
+- Next P2P actions: resolve creator correctness and execute the two-PC procedure when hardware is available. Local-library development can continue independently.
 
 ## Template for future entries
 

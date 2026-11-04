@@ -11,6 +11,8 @@ ADRs capture context, decisions, and consequences. An accepted decision may be s
 
 | [0004](0004-sqlite-foundation.md) | Accepted | SQLite persistence and modular folder structure |
 
+| [0005](0005-torrent-engine-experiment.md) | Accepted experiment | Isolated torrent evaluation; production selection pending |
+
 Upcoming decisions: BitTorrent engine, manifest v0, `.g4` container, catalog identity and signatures, distribution, and updates.
 
 Template: title, date, status, context, alternatives, decision, consequences, and validation evidence. Do not mark experimental technology as accepted before its experiment.

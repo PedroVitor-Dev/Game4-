@@ -1,0 +1,60 @@
+{
+  "candidate_approved": false,
+  "corruption_repair": {
+    "completed": true,
+    "elapsed_seconds": 0.1092015,
+    "final_bytes": 8388625,
+    "mode": "torrent",
+    "resumed_bytes": 8126481,
+    "sha256_matches": true,
+    "total_bytes": 8388625
+  },
+  "creator_exact_piece_boundary": {
+    "expected_piece_hashes": 1,
+    "file_bytes": 262144,
+    "observed_piece_hashes": 2,
+    "passed": false
+  },
+  "engine": "librqbit 9.1.0",
+  "fixture_sha256": "ca1d758393b634d51aea5298b89b6d598403e41d5e72176e8114fc434b4dfe29",
+  "magnet": {
+    "completed": true,
+    "elapsed_seconds": 3.1005865,
+    "final_bytes": 8388625,
+    "mode": "magnet",
+    "resumed_bytes": 0,
+    "sha256_matches": true,
+    "total_bytes": 8388625
+  },
+  "partial": {
+    "completed": false,
+    "elapsed_seconds": 0.3059526,
+    "final_bytes": 524305,
+    "mode": "torrent",
+    "resumed_bytes": 0,
+    "sha256_matches": null,
+    "total_bytes": 8388625
+  },
+  "restart_resume": {
+    "completed": true,
+    "elapsed_seconds": 6.5633909,
+    "final_bytes": 8388625,
+    "mode": "torrent",
+    "resumed_bytes": 524305,
+    "sha256_matches": true,
+    "total_bytes": 8388625
+  },
+  "seed_uploaded_bytes": 17072162,
+  "topology": "two sessions on one Windows host; loopback TCP",
+  "transport_checks_passed": true,
+  "two_computer_test": "pending; second computer unavailable",
+  "unvalidated": [
+    "physical LAN",
+    "NAT/WAN",
+    "DHT",
+    "trackers",
+    "multi-file",
+    "cross-client interoperability",
+    "performance benchmarks"
+  ]
+}
