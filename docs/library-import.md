@@ -10,7 +10,7 @@ Status: implemented on Windows. Imports index local files; they do not copy, mov
 
 Each selected file becomes one item. Each selected folder becomes one item containing files recursively, with paths relative to that folder. Empty files are valid; an empty folder fails the selection. Selecting a folder and one of its children creates distinct items intentionally. Duplicate identical roots within one selection are collapsed.
 
-SHA-256 is streamed with a reusable 1 MiB buffer. Content identity is the pair `(sha256, size_bytes)`. Identical bytes share one content row, while each physical path retains its own location. Byte totals count relative entries, including copies with identical content. This is an initial local fingerprint, not proof of authenticity, provenance, or future file health. A separate user-triggered integrity recheck remains planned.
+SHA-256 is streamed on Tauri’s blocking executor with one reusable 1 MiB buffer per import, independent of file size and reused between files. Progress writes are throttled to at most once per 200 ms during hashing; startup, enumeration, failure, and final completion still persist explicitly. This avoids a FULL-sync SQLite write for every tiny file. Final counts remain exact, and failed imports record the last processed count. Content identity is the pair `(sha256, size_bytes)`. Identical bytes share one content row, while each physical path retains its own location. Byte totals count relative entries, including copies with identical content. This is an initial local fingerprint, not proof of authenticity, provenance, or future file health. A separate user-triggered integrity recheck remains planned.
 
 ## Atomicity, reimport, and failures
 
@@ -43,3 +43,5 @@ Rust tests cover recursive Unicode paths, empty files, a known SHA-256 vector, i
 Native file dialogs use [rfd](https://docs.rs/rfd/0.17.2/rfd/struct.FileDialog.html); request IDs use [uuid](https://docs.rs/uuid/latest/uuid/struct.Uuid.html).
 
 Native Windows smoke also passed for picker cancellation, folder and single-file import through review/completion, and Portuguese result labels. Verification used a separate app identifier and synthetic files. An independent closed-catalog read confirmed two items, two content identities, three copies, two completed tasks, exact hashes, and SQLite integrity_check=ok.
+
+A deterministic concurrency regression test pauses the real import worker after its first hash chunk. Separate blocking read operations must return task progress, library contents, and database statistics before that worker is released. The test then checks the final SHA-256 across multiple buffer boundaries and exact terminal progress. This demonstrates that hashing does not hold the catalog mutex; it does not claim a measured UI frame rate or disk latency bound.

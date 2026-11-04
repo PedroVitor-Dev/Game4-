@@ -262,3 +262,68 @@ fn junctions_and_paths_through_junctions_are_rejected() {
     fs::remove_dir(&link).unwrap();
     assert_eq!(fs::read(outside.join("data.bin")).unwrap(), b"outside");
 }
+
+#[test]
+fn catalog_and_task_queries_finish_while_background_sha256_is_in_progress() {
+    use std::sync::{Arc, mpsc};
+    let (d, db) = setup();
+    let db = Arc::new(db);
+    let file = d.path().join("stream.bin");
+    // Cross multiple read-buffer boundaries with a partial final chunk.
+    let payload = vec![0x5au8; 3 * 1024 * 1024 + 17];
+    fs::write(&file, &payload).unwrap();
+    let expected = format!("{:x}", Sha256::digest(&payload));
+    let task = create_task(
+        &db,
+        &StartImportRequest {
+            request_id: Uuid::new_v4().to_string(),
+            selection_token: Uuid::new_v4().to_string(),
+        },
+    )
+    .unwrap();
+    let id = task.task_id.clone();
+    let worker_db = Arc::clone(&db);
+    let (entered_tx, entered_rx) = mpsc::channel();
+    let (release_tx, release_rx) = mpsc::channel();
+    // Use the same blocking executor as the production IPC command.
+    let worker = tauri::async_runtime::spawn_blocking(move || {
+        let mut first = true;
+        run_import_observed(&worker_db, &id, vec![file], &mut || {
+            if first {
+                first = false;
+                entered_tx.send(()).unwrap();
+                release_rx.recv_timeout(Duration::from_secs(10)).unwrap();
+            }
+        })
+    });
+    entered_rx.recv_timeout(Duration::from_secs(10)).unwrap();
+    let read_db = Arc::clone(&db);
+    let read_id = task.task_id.clone();
+    let (read_tx, read_rx) = mpsc::channel();
+    let reader = tauri::async_runtime::spawn_blocking(move || {
+        let snapshot = task_get(&read_db, &read_id).unwrap();
+        assert!(matches!(snapshot.status, TaskStatus::Running));
+        assert_eq!(snapshot.processed_count, "0");
+        assert_eq!(snapshot.total_count.as_deref(), Some("1"));
+        assert!(listing(&read_db, 50, None).items.is_empty());
+        assert_eq!(read_db.info().unwrap().file_count, 0);
+        read_tx.send(()).unwrap();
+    });
+    // The hash worker cannot finish until explicitly released. This proves
+    // reads are independent of hashing, rather than merely racing a fast hash.
+    let read_result = read_rx.recv_timeout(Duration::from_secs(5));
+    release_tx.send(()).unwrap();
+    tauri::async_runtime::block_on(worker).unwrap().unwrap();
+    tauri::async_runtime::block_on(reader).unwrap();
+    read_result.expect("catalog/task reads blocked behind hashing");
+    let snapshot = task_get(&db, &task.task_id).unwrap();
+    assert!(matches!(snapshot.status, TaskStatus::Succeeded));
+    assert_eq!(snapshot.processed_count, "1");
+    let hash: String = db
+        .connection
+        .lock()
+        .unwrap()
+        .query_row("SELECT sha256 FROM files", [], |row| row.get(0))
+        .unwrap();
+    assert_eq!(hash, expected);
+}

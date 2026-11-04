@@ -165,6 +165,17 @@ fn update(
     Ok(())
 }
 pub fn run_import(db: &Database, id: &str, roots: Vec<PathBuf>) -> Result<()> {
+    run_import_observed(db, id, roots, &mut || {})
+}
+
+// The observer also permits deterministic concurrency tests without huge fixtures
+// or timing-dependent sleeps. Production uses a no-op, optimized away by Rust.
+fn run_import_observed(
+    db: &Database,
+    id: &str,
+    roots: Vec<PathBuf>,
+    after_chunk: &mut impl FnMut(),
+) -> Result<()> {
     let mut processed = 0;
     let mut total = None;
     let result = (|| {
@@ -189,10 +200,13 @@ pub fn run_import(db: &Database, id: &str, roots: Vec<PathBuf>) -> Result<()> {
         total = Some(count);
         update(db, id, "running", 0, total, None)?;
         let mut imports = Vec::new();
+        // Reuse one bounded allocation across every file in this import.
+        let mut buffer = vec![0u8; 1024 * 1024];
+        let mut last_progress = Instant::now();
         for (root, entries) in batches {
             let mut files = Vec::new();
             for path in entries {
-                let (size, hash) = hash_file(&path)?;
+                let (size, hash) = hash_file_with_buffer(&path, &mut buffer, after_chunk)?;
                 let relative = if root.is_file() {
                     path.file_name().map(Path::new).unwrap().to_path_buf()
                 } else {
@@ -207,7 +221,12 @@ pub fn run_import(db: &Database, id: &str, roots: Vec<PathBuf>) -> Result<()> {
                     hash,
                 });
                 processed += 1;
-                update(db, id, "running", processed, total, None)?;
+                // Avoid an SQLite FULL-sync write for every tiny file. Final
+                // progress is always stored atomically with catalog completion.
+                if last_progress.elapsed() >= Duration::from_millis(200) {
+                    update(db, id, "running", processed, total, None)?;
+                    last_progress = Instant::now();
+                }
             }
             imports.push((root, files));
         }
@@ -288,7 +307,16 @@ struct ImportedFile {
     size: i64,
     hash: String,
 }
+#[cfg(test)]
 fn hash_file(path: &Path) -> Result<(i64, String)> {
+    hash_file_with_buffer(path, &mut vec![0u8; 1024 * 1024], &mut || {})
+}
+
+fn hash_file_with_buffer(
+    path: &Path,
+    buffer: &mut [u8],
+    after_chunk: &mut impl FnMut(),
+) -> Result<(i64, String)> {
     reject_ancestors(path)?;
     let mut options = File::options();
     options.read(true);
@@ -304,15 +332,15 @@ fn hash_file(path: &Path) -> Result<(i64, String)> {
     }
     let size = i64::try_from(before.len()).map_err(|_| err(ErrorCode::ImportLimitExceeded))?;
     let mut hash = Sha256::new();
-    let mut buffer = vec![0u8; 1024 * 1024];
     let mut bytes = 0u64;
     loop {
-        let n = file.read(&mut buffer).map_err(io_err)?;
+        let n = file.read(buffer).map_err(io_err)?;
         if n == 0 {
             break;
         }
         hash.update(&buffer[..n]);
         bytes += n as u64;
+        after_chunk();
     }
     let after = file.metadata().map_err(io_err)?;
     if bytes != before.len()

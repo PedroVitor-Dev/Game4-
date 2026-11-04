@@ -142,6 +142,13 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Native Windows smoke passed under a separate test app identifier: picker cancellation, recursive folder selection/review/import (2 files, 60 bytes), single-file selection/review/import (1 file, 25 bytes), completed-task display, and Portuguese library labels. An independent read of the closed SQLite catalog confirmed schema v2, 2 items, 2 content identities, 3 physical copies, 2 successful tasks, matching SHA-256 for every location, and integrity_check=ok. The test app was closed and the normal identifier restored in the final build.
 - Remaining M1 gates: cancellation, standalone integrity rechecks, richer task history/search UI, and clean-machine validation. No P2P activity is triggered.
 
+### November 4, 2026 — Background SHA-256 responsiveness
+
+- Confirmed that native import is accepted asynchronously and SHA-256 runs on Tauri's blocking executor, outside the WebView and without holding SQLite's mutex during reads.
+- Reused one 1 MiB hashing buffer across files and throttled intermediate progress persistence to 200 ms, avoiding a synchronous SQLite commit per tiny file. Terminal progress and catalog atomicity are preserved.
+- Added a deterministic concurrency regression: pause a real background import mid-hash, complete task/library/database reads on another worker, release hashing, then verify the digest across multiple buffer boundaries and final counts.
+- Validation passed: 18 Rust tests, including the concurrent mid-hash read regression, Rust formatting, and Clippy with warnings denied. No new IPC/schema fields or network functionality were introduced.
+
 ## Template for future entries
 
 ```text
