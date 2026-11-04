@@ -5,3 +5,5 @@ package-lock.json
 **/node_modules/
 **/gen/
 LICENSE
+packages/ipc-contracts/src/generated.ts
+packages/ipc-contracts/examples.json

@@ -19,6 +19,8 @@ See also [SQLite storage](database.md), [project structure](project-structure.md
 
 See [torrent engine evaluation](torrent-engine-evaluation.md) and [two-computer validation](torrent-validation.md) for the isolated P2P experiment and remaining gates.
 
+See [frontend–backend IPC contracts](ipc-contracts.md) for active commands, generated types, errors, and draft task/event boundaries.
+
 ## Maintenance and status vocabulary
 
 - Planned: development direction, not implemented functionality.

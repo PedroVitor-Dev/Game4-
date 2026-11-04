@@ -120,6 +120,17 @@ A task is complete when behavior meets acceptance criteria, appropriate checks p
 - Stopped the test seeder/package service and removed the temporary peer-scoped firewall exceptions. Tailscale remains installed and connected.
 - Limits: the passing topology is BitTorrent over an encrypted overlay with relay, not native direct-WAN/NAT traversal. Independent-client, discovery, multi-file transfer, and production review remain open.
 
+### November 4, 2026 — Frontend/backend IPC contracts
+
+- Established contract v1 for app_info and database_info, with version/capability bootstrap and a shared error envelope.
+- Centralized Rust DTOs; generated TypeScript and serde examples into a private npm workspace, with drift checks in Rust tests and CI.
+- Replaced unchecked frontend response casts with runtime decoders, sanitized failures, and English/Portuguese error mappings.
+- Separated internal database stats from wire data and enforced JavaScript-safe numeric counts.
+- Defined draft import/verify/list/task/cancellation DTOs and event semantics without registering handlers or emitting events.
+- Documented pagination, selection tokens, request idempotency, task revisions, precision, compatibility, and required future migrations.
+- Seven frontend contract tests and ten Rust tests passed, alongside 37-key localization parity, generated-artifact checks, TypeScript, formatting, and Clippy. Production frontend and native debug builds passed. A real WebView2 smoke test confirmed contract v1, implemented capabilities, database payload, navigation, and Portuguese switching.
+- No import, mutation, task worker, or P2P feature was activated by declaring these contracts.
+
 ## Template for future entries
 
 ```text

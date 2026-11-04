@@ -39,5 +39,17 @@
     "connected": "Backend desktop conectado · Rust + Tauri",
     "preview": "Prévia no navegador · sem backend desktop",
     "unavailable": "Backend desktop indisponível. Reinicie o aplicativo para tentar novamente."
+  },
+  "errors": {
+    "ipcUnavailable": "Abra o aplicativo desktop para usar este recurso.",
+    "contractMismatch": "As versões da interface e do backend são incompatíveis. Reinicie com uma versão correspondente.",
+    "invalidResponse": "O backend retornou uma resposta inválida.",
+    "unexpectedError": "A operação falhou inesperadamente.",
+    "databaseUnavailable": "O banco local está indisponível. Reinicie o aplicativo e tente novamente.",
+    "databaseTaskFailed": "A operação do banco não pôde ser concluída.",
+    "invalidArgument": "Confira os valores informados e tente novamente.",
+    "notFound": "O item solicitado não foi encontrado.",
+    "taskNotCancellable": "Esta tarefa não pode ser cancelada no estado atual.",
+    "capabilityUnavailable": "Este recurso está indisponível no backend atual."
   }
 }

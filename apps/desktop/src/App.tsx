@@ -2,13 +2,14 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LanguageSelect } from "./components/LanguageSelect";
 import { useAppInfo } from "./hooks/useAppInfo";
+import { getIpcErrorKey } from "./services/errors";
 import { WorkspacePage, type Page } from "./pages/WorkspacePage";
 import "./App.css";
 
 export default function App() {
   const { t } = useTranslation();
   const [page, setPage] = useState<Page>("library");
-  const { runtime, version } = useAppInfo();
+  const { runtime, version, failure } = useAppInfo();
 
   return (
     <div className="app-shell">
@@ -51,7 +52,9 @@ export default function App() {
         </section>
         <WorkspacePage page={page} />
         <footer className="runtime-status" role="status">
-          <span>{t(`runtime.${runtime}`)}</span>
+          <span>
+            {failure ? t(getIpcErrorKey(failure)) : t(`runtime.${runtime}`)}
+          </span>
           {version && <span>v{version}</span>}
         </footer>
       </main>

@@ -1,15 +1,12 @@
 import { invoke, isTauri } from "@tauri-apps/api/core";
+import { createIpcClient } from "./ipc-client.ts";
 
 export { isTauri };
+export type { AppInfo, DatabaseInfo, IpcError } from "@game4/ipc-contracts";
 
-export type AppInfo = { version: string };
-export type DatabaseInfo = {
-  schemaVersion: number;
-  fileCount: number;
-  locationCount: number;
-  itemCount: number;
-  taskCount: number;
-};
-
-export const getAppInfo = () => invoke<AppInfo>("app_info");
-export const getDatabaseInfo = () => invoke<DatabaseInfo>("database_info");
+const client = createIpcClient({
+  isAvailable: isTauri,
+  invoke: (command) => invoke<unknown>(command),
+});
+export const getAppInfo = client.getAppInfo;
+export const getDatabaseInfo = client.getDatabaseInfo;

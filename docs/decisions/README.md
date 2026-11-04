@@ -15,6 +15,8 @@ ADRs capture context, decisions, and consequences. An accepted decision may be s
 
 | [0006](0006-metainfo-creator-adapter.md) | Accepted experiment | Streaming BEP 3 creator replaces defective upstream generator |
 
+| [0007](0007-ipc-contracts.md) | Accepted | Rust-owned IPC contracts and validated frontend client |
+
 Upcoming decisions: BitTorrent engine, manifest v0, `.g4` container, catalog identity and signatures, distribution, and updates.
 
 Template: title, date, status, context, alternatives, decision, consequences, and validation evidence. Do not mark experimental technology as accepted before its experiment.

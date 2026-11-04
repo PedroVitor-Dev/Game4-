@@ -1,0 +1,20 @@
+import { normalizeIpcError } from "@game4/ipc-contracts";
+import type { ErrorCode } from "@game4/ipc-contracts";
+import type en from "../locales/en.json";
+
+const keys = {
+  IPC_UNAVAILABLE: "ipcUnavailable",
+  CONTRACT_MISMATCH: "contractMismatch",
+  INVALID_RESPONSE: "invalidResponse",
+  UNEXPECTED_ERROR: "unexpectedError",
+  DATABASE_UNAVAILABLE: "databaseUnavailable",
+  DATABASE_TASK_FAILED: "databaseTaskFailed",
+  INVALID_ARGUMENT: "invalidArgument",
+  NOT_FOUND: "notFound",
+  TASK_NOT_CANCELLABLE: "taskNotCancellable",
+  CAPABILITY_UNAVAILABLE: "capabilityUnavailable",
+} as const satisfies Record<ErrorCode, keyof typeof en.errors>;
+
+export function getIpcErrorKey(error: unknown) {
+  return `errors.${keys[normalizeIpcError(error).code]}` as const;
+}

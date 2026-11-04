@@ -1,4 +1,5 @@
 pub mod commands;
+pub mod contracts;
 pub mod database;
 pub mod library;
 pub mod tasks;

@@ -23,9 +23,8 @@ pub struct Database {
     connection: Mutex<Connection>,
 }
 
-#[derive(Debug, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct DatabaseInfo {
+#[derive(Debug)]
+pub struct DatabaseStats {
     pub schema_version: i64,
     pub file_count: i64,
     pub location_count: i64,
@@ -53,7 +52,7 @@ impl Database {
         })
     }
 
-    pub fn info(&self) -> Result<DatabaseInfo> {
+    pub fn info(&self) -> Result<DatabaseStats> {
         let connection = self
             .connection
             .lock()
@@ -64,7 +63,7 @@ impl Database {
                     (SELECT count(*) FROM collection_items), (SELECT count(*) FROM tasks)",
             [],
             |row| {
-                Ok(DatabaseInfo {
+                Ok(DatabaseStats {
                     schema_version: row.get(0)?,
                     file_count: row.get(1)?,
                     location_count: row.get(2)?,

@@ -42,6 +42,10 @@ Run `npm.cmd run rust:test` for the database persistence and migration tests. Se
 
 Edit `apps/desktop/src/locales/en.json` and `pt-BR.json` together. Locale checks validate key and interpolation parity. English is the default and fallback; selection is saved locally. Browser preview explicitly reports that the desktop backend is unavailable by design. See [language policy](localization.md).
 
+## IPC contract maintenance
+
+Run `npm.cmd run contracts:generate` after changing Rust DTOs, then commit the generated TypeScript and JSON examples. `npm.cmd run contracts:check` and Rust tests detect drift; frontend checks validate examples and error translations. See [the IPC specification](ipc-contracts.md). Do not register draft commands as executable stubs.
+
 ## Experimental torrent tool
 
 Use `npm.cmd run torrent:build`, `npm.cmd run torrent:test`, and `npm.cmd run torrent:check` for the separate Rust probe. See [the test procedure](torrent-validation.md). It is not linked into the desktop and does not make M3 complete. The optional GitHub transport workflow requires manual dispatch after push.

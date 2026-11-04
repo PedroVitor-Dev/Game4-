@@ -1,0 +1,35 @@
+{
+  "appInfo": {
+    "capabilities": [
+      "app_info",
+      "database_info"
+    ],
+    "contractVersion": 1,
+    "version": "0.1.0"
+  },
+  "databaseInfo": {
+    "fileCount": 0,
+    "itemCount": 0,
+    "locationCount": 0,
+    "schemaVersion": 1,
+    "taskCount": 0
+  },
+  "draftTaskEvent": {
+    "contractVersion": 1,
+    "task": {
+      "error": null,
+      "id": "1",
+      "kind": "import",
+      "processedCount": "2",
+      "revision": "3",
+      "status": "running",
+      "totalCount": "5",
+      "updatedAt": "2026-11-04T12:00:00.000Z"
+    }
+  },
+  "error": {
+    "code": "DATABASE_UNAVAILABLE",
+    "field": null,
+    "retryable": false
+  }
+}

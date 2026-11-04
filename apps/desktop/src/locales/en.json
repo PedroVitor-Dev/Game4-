@@ -39,5 +39,17 @@
     "connected": "Desktop backend connected · Rust + Tauri",
     "preview": "Browser preview · no desktop backend",
     "unavailable": "Desktop backend unavailable. Restart the application to retry."
+  },
+  "errors": {
+    "ipcUnavailable": "Open the desktop app to use this feature.",
+    "contractMismatch": "The interface and backend versions are incompatible. Restart with a matching build.",
+    "invalidResponse": "The backend returned an invalid response.",
+    "unexpectedError": "The operation failed unexpectedly.",
+    "databaseUnavailable": "The local database is unavailable. Restart the app and try again.",
+    "databaseTaskFailed": "The database operation could not finish.",
+    "invalidArgument": "Check the supplied values and try again.",
+    "notFound": "The requested item was not found.",
+    "taskNotCancellable": "This task cannot be cancelled in its current state.",
+    "capabilityUnavailable": "This feature is unavailable in the current backend."
   }
 }

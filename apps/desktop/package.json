@@ -9,14 +9,15 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json",
-    "test": "node scripts/check-locales.mjs"
+    "test": "node scripts/check-locales.mjs && node --test scripts/ipc-client.test.mjs"
   },
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "@tauri-apps/api": "^2",
     "i18next": "^26.7.1",
-    "react-i18next": "^17.1.12"
+    "react-i18next": "^17.1.12",
+    "@game4/ipc-contracts": "*"
   },
   "devDependencies": {
     "@types/react": "^19.1.8",

@@ -38,7 +38,7 @@ Future schema changes must include migration and data-preservation tests. Do not
 
 ## IPC boundary
 
-`database_info` returns `schemaVersion`, `fileCount`, `locationCount`, `itemCount`, and `taskCount`. It does not accept SQL or paths and does not expose a user-data directory. Errors use stable codes `DATABASE_UNAVAILABLE` and `DATABASE_TASK_FAILED`. The frontend adapter is `src/services/desktop.ts`; the current interface does not display these counts yet.
+`database_info` returns `schemaVersion`, `fileCount`, `locationCount`, `itemCount`, and `taskCount`. It does not accept SQL or paths and does not expose a user-data directory. Errors use the common `IpcError` contract, including stable codes `DATABASE_UNAVAILABLE` and `DATABASE_TASK_FAILED`, `retryable: false`, and `field: null`. Internal counts are range-checked before crossing JSON. See [IPC contracts](ipc-contracts.md). The frontend adapter is `src/services/desktop.ts`; the current interface does not display these counts yet.
 
 ## Verification and backups
 

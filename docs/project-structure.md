@@ -15,6 +15,7 @@ Game4-/
 │   └── src-tauri/
 │       ├── src/
 │       │   ├── commands/          Validated Tauri entry points
+│       │   ├── contracts/         Versioned DTOs and TypeScript exporter
 │       │   ├── database/          SQLite connection, migrations, and tests
 │       │   ├── library/           Collection domain vocabulary
 │       │   ├── tasks/             Task kind and status vocabulary
@@ -22,6 +23,7 @@ Game4-/
 │       │   └── torrent/           Reserved transfer boundary (documentation only)
 │       ├── capabilities/          Window capabilities
 │       └── icons/                 Temporary scaffold icons
+├── packages/ipc-contracts/        Rust-generated wire types, examples, and runtime decoders
 ├── packages/manifest-schema/      Reserved public-schema workspace
 ├── tools/torrent-probe/           Standalone experimental BitTorrent CLI
 ├── tests/fixtures/                Shared-fixture policy; no personal collections

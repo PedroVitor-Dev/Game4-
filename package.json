@@ -4,7 +4,8 @@
   "private": true,
   "license": "GPL-3.0-or-later",
   "workspaces": [
-    "apps/desktop"
+    "apps/desktop",
+    "packages/ipc-contracts"
   ],
   "engines": {
     "node": ">=24",
@@ -24,7 +25,9 @@
     "torrent:build": "cargo build --locked --manifest-path tools/torrent-probe/Cargo.toml",
     "torrent:probe": "cargo run --locked --manifest-path tools/torrent-probe/Cargo.toml --",
     "torrent:test": "cargo test --locked --manifest-path tools/torrent-probe/Cargo.toml",
-    "torrent:check": "cargo fmt --manifest-path tools/torrent-probe/Cargo.toml -- --check && cargo clippy --locked --manifest-path tools/torrent-probe/Cargo.toml --all-targets -- -D warnings"
+    "torrent:check": "cargo fmt --manifest-path tools/torrent-probe/Cargo.toml -- --check && cargo clippy --locked --manifest-path tools/torrent-probe/Cargo.toml --all-targets -- -D warnings",
+    "contracts:generate": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example export_contracts",
+    "contracts:check": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example export_contracts -- --check"
   },
   "devDependencies": {
     "prettier": "^3.6.2"

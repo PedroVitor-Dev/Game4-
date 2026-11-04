@@ -15,6 +15,8 @@ Status: the Tauri / React / Rust shell and localization are implemented. The ini
 
 The interface requests operations; the core validates input and enforces permissions. The transfer engine must not own the catalog model. Network failures must not prevent local library browsing. Long operations run outside the UI thread, with progress events and cooperative cancellation.
 
+Public DTOs are Rust-owned and generate TypeScript through the private IPC package. Active responses are validated at runtime, with version/capability negotiation and stable localized error codes. See [IPC contracts](ipc-contracts.md).
+
 User-facing strings use locale resources for English and Brazilian Portuguese. Rust errors expose stable codes and structured parameters for localized presentation. Internal identifiers, schema keys, and logs remain stable across locales. See [localization](localization.md).
 
 ## Import flow
