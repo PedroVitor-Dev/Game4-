@@ -30,6 +30,7 @@ import type {
   TaskPage,
   LibraryPage,
   LibraryIntegrity,
+  PackageOpenResult,
 } from "./generated.ts";
 
 export class IpcFailure extends Error {
@@ -382,5 +383,41 @@ export function parseLibraryIntegrity(v: unknown): LibraryIntegrity {
     unverified: safeCount(o.unverified, 0, 4294967295),
     unlocated: safeCount(o.unlocated, 0, 4294967295),
     lastCheckedAt,
+  };
+}
+
+export function parsePackageOpenResult(v: unknown): PackageOpenResult {
+  const o = object(v);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  if (o.cancelled) {
+    if (o.package !== null) throw failure("INVALID_RESPONSE");
+    return { cancelled: true, package: null };
+  }
+  const p = object(o.package);
+  const collectionId = text(p.collectionId);
+  const title = text(p.title);
+  const totalBytes = decimal(p.totalBytes);
+  if (
+    p.verified !== true ||
+    p.packageVersion !== 1 ||
+    !title.trim() ||
+    title.length > 1024 ||
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+      collectionId,
+    ) ||
+    BigInt(totalBytes) > 1099511627776n
+  )
+    throw failure("INVALID_RESPONSE");
+  return {
+    cancelled: false,
+    package: {
+      fileName: filename(p.fileName),
+      packageVersion: 1,
+      collectionId,
+      title,
+      totalBytes,
+      fileCount: safeCount(p.fileCount, 1, 100000),
+      verified: true,
+    },
   };
 }

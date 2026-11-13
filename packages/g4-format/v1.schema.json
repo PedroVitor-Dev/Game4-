@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:game4:package:1",
+  "title": "Game4 package descriptor v1",
+  "description": "Descriptor inside game4.json. Container and payload rules are specified in spec-v1.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "format",
+    "packageVersion",
+    "manifest",
+    "payloadPrefix"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "urn:game4:package:1"
+    },
+    "format": {
+      "const": "game4-package"
+    },
+    "packageVersion": {
+      "const": 1
+    },
+    "manifest": {
+      "const": "manifest.json"
+    },
+    "payloadPrefix": {
+      "const": "data/"
+    }
+  }
+}

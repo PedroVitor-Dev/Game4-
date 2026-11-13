@@ -321,11 +321,8 @@ fn hash_file(path: &Path) -> Result<(i64, String, Option<crate::identification::
     hash_file_with_buffer(path, &mut vec![0u8; 1024 * 1024], &mut || {})
 }
 
-pub(crate) fn hash_file_with_buffer(
-    path: &Path,
-    buffer: &mut [u8],
-    after_chunk: &mut impl FnMut(),
-) -> Result<(i64, String, Option<crate::identification::Signature>)> {
+// Shared read-only source opening for imports, checks and package creation.
+pub(crate) fn open_source(path: &Path) -> Result<File> {
     reject_ancestors(path)?;
     let mut options = File::options();
     options.read(true);
@@ -334,11 +331,21 @@ pub(crate) fn hash_file_with_buffer(
         use std::os::windows::fs::OpenOptionsExt;
         options.share_mode(1).custom_flags(0x00200000);
     }
-    let mut file = options.open(path).map_err(io_err)?;
+    let file = options.open(path).map_err(io_err)?;
     let before = file.metadata().map_err(io_err)?;
     if is_link(&before) || !before.is_file() {
         return Err(err(ErrorCode::SourceUnavailable));
     }
+    Ok(file)
+}
+
+pub(crate) fn hash_file_with_buffer(
+    path: &Path,
+    buffer: &mut [u8],
+    after_chunk: &mut impl FnMut(),
+) -> Result<(i64, String, Option<crate::identification::Signature>)> {
+    let mut file = open_source(path)?;
+    let before = file.metadata().map_err(io_err)?;
     let size = i64::try_from(before.len()).map_err(|_| err(ErrorCode::ImportLimitExceeded))?;
     let mut hash = Sha256::new();
     let mut bytes = 0u64;

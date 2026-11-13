@@ -19,12 +19,14 @@ pub enum ImplementedCommand {
     TasksList,
     TaskGet,
     LibraryExportManifest,
+    LibraryExportPackage,
+    PackageOpen,
     LibrarySaveBackup,
     LibraryPrepareRestore,
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 14] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 16] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -36,6 +38,8 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 14] = [
     ImplementedCommand::TasksList,
     ImplementedCommand::TaskGet,
     ImplementedCommand::LibraryExportManifest,
+    ImplementedCommand::LibraryExportPackage,
+    ImplementedCommand::PackageOpen,
     ImplementedCommand::LibrarySaveBackup,
     ImplementedCommand::LibraryPrepareRestore,
     ImplementedCommand::LibraryRestoreBackup,
@@ -74,9 +78,14 @@ pub enum ErrorCode {
     LibraryBusy,
     RestoreStale,
     RestoreFailed,
+    PackageInvalid,
+    PackageVersionUnsupported,
+    PackageWriteFailed,
+    PackageIntegrityFailed,
+    PackageLimitExceeded,
 }
 
-pub const ERROR_CODES: [ErrorCode; 23] = [
+pub const ERROR_CODES: [ErrorCode; 28] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -100,6 +109,11 @@ pub const ERROR_CODES: [ErrorCode; 23] = [
     ErrorCode::LibraryBusy,
     ErrorCode::RestoreStale,
     ErrorCode::RestoreFailed,
+    ErrorCode::PackageInvalid,
+    ErrorCode::PackageVersionUnsupported,
+    ErrorCode::PackageWriteFailed,
+    ErrorCode::PackageIntegrityFailed,
+    ErrorCode::PackageLimitExceeded,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -482,4 +496,22 @@ pub struct LibraryIntegrity {
     pub unverified: u32,
     pub unlocated: u32,
     pub last_checked_at: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct PackageSummary {
+    pub file_name: String,
+    pub package_version: u32,
+    pub collection_id: String,
+    pub title: String,
+    pub file_count: u32,
+    pub total_bytes: String,
+    pub verified: bool,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct PackageOpenResult {
+    pub cancelled: bool,
+    pub package: Option<PackageSummary>,
 }

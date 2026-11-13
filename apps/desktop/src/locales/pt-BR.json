@@ -104,10 +104,15 @@
     "backupInvalid": "Este arquivo não é um backup válido da Biblioteca Game4, viola as regras do catálogo ou excede o limite de 64 MiB / 500.000 registros.",
     "backupVersionUnsupported": "Esta versão de backup ou de banco de dados não é suportada. Use uma versão compatível do Game4.",
     "backupWriteFailed": "Não foi possível gravar o backup. Escolha um novo nome .json em uma pasta com permissão de escrita; a restauração também precisa de espaço para a cópia de recuperação.",
-    "libraryBusy": "Aguarde todas as importações terminarem antes de salvar ou restaurar a Biblioteca.",
+    "libraryBusy": "Aguarde as importações, verificações de integridade e exportações de pacotes terminarem e tente novamente.",
     "restoreStale": "A prévia de restauração expirou ou o catálogo mudou. Selecione o backup novamente para revisá-lo.",
     "restoreFailed": "Não foi possível concluir a restauração. O catálogo atual foi preservado; eventuais arquivos de recuperação continuam disponíveis.",
-    "verificationLimitExceeded": "Este item excede o limite de verificação de 500.000 cópias cadastradas."
+    "verificationLimitExceeded": "Este item excede o limite de verificação de 500.000 cópias cadastradas.",
+    "packageInvalid": "Este não é um pacote Game4∞ v1 válido.",
+    "packageVersionUnsupported": "Esta versão de pacote não é suportada. Atualize o Game4∞ para lê-la.",
+    "packageWriteFailed": "Não foi possível salvar o pacote. Escolha um novo nome .g4 e confira as permissões e o espaço livre.",
+    "packageIntegrityFailed": "Um arquivo está ausente, inacessível ou não corresponde ao hash/tamanho de referência. Verifique as origens ou escolha outro pacote.",
+    "packageLimitExceeded": "Este pacote excede os limites suportados (100.000 arquivos, 1 TiB de conteúdo ou limites de metadados)."
   },
   "backup": {
     "title": "Salvar e restaurar sua Biblioteca",
@@ -152,5 +157,17 @@
     "verifyLabel": "Verificar integridade de {{title}}",
     "progress": "{{processed}} / {{total}} cópias cadastradas verificadas",
     "completed": "Verificação concluída. Consulte na Biblioteca as cópias correspondentes, alteradas, ausentes ou inacessíveis."
+  },
+  "packages": {
+    "title": "Pacotes Game4∞",
+    "description": "Crie um .g4 portátil a partir de um item da Biblioteca ou abra um pacote para verificar todos os arquivos incluídos.",
+    "export": "Criar .g4",
+    "exportLabel": "Criar pacote .g4 de {{title}}",
+    "open": "Abrir .g4",
+    "creating": "Criando .g4: lendo e conferindo os arquivos originais. Coleções grandes podem demorar. Mantenha o app aberto.",
+    "reading": "Lendo pacote e verificando o SHA-256 de cada arquivo. Pacotes grandes podem demorar.",
+    "saved": "Pacote criado: {{fileName}}",
+    "verified": "Todos os tamanhos e hashes SHA-256 correspondem ao manifesto. Isso verifica a consistência, não a autenticidade do fabricante.",
+    "readOnly": "Pacote inspecionado. Nenhum arquivo foi extraído, executado ou importado para a Biblioteca."
   }
 }

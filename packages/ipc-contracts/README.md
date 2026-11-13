@@ -16,3 +16,5 @@ Do not edit generated artifacts. Update Rust DTOs, regenerate, update runtime va
 `ImplementedCommand` and the client expose `app_info`, `database_info`, `library_select_sources`, `library_import`, `library_list`, `library_item_files`, `tasks_list`, `task_get`, `library_export_manifest`, `library_save_backup`, `library_prepare_restore`, and `library_restore_backup`. Runtime decoders validate all active responses. `library_verify` starts an idempotent background recheck and `library_integrity` reads latest copy observations. `task_cancel` and `DRAFT_TASK_UPDATED_EVENT` remain drafts; they do not cancel tasks or emit events.
 
 See [the protocol specification](../../docs/ipc-contracts.md) for versioning, types, command mapping, semantic validation, and future prerequisites.
+
+`library_export_package` creates a .g4 from an item and returns its filename/cancellation. `package_open` verifies the entire selected package and returns a validated summary/cancellation. Both use native pickers; the client never supplies arbitrary filesystem paths.

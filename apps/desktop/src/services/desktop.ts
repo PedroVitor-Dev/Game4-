@@ -25,3 +25,5 @@ export const {
 export const getItemFiles = client.getItemFiles;
 
 export const { verifyItem, getIntegrity } = client;
+
+export const { exportPackage, openPackage } = client;

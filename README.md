@@ -93,7 +93,7 @@ Files will move directly between participants when connectivity allows, without 
 
 ## 📦 Game4∞ formats
 
-The project proposes open, documented formats for preservation and sharing. These are conceptual and not stable specifications. See [preservation and formats](docs/preservation.md).
+The project defines open, documented formats for preservation and sharing. `.g4` v1 is implemented with a public specification; `.g4t` and `.g4lib` remain proposals. See [preservation and formats](docs/preservation.md).
 
 ### `.g4` — Game4 Package
 
@@ -101,15 +101,15 @@ A portable preservation package that may contain original files, a preservation 
 
 ```text
 example.g4
+├── game4.json
 ├── manifest.json
-├── game/
-│   └── original-file.bin
-├── artwork/
-├── docs/
-└── checksums.sha256
+└── data/
+    ├── game/original-file.bin
+    ├── artwork/cover.png
+    └── docs/manual.txt
 ```
 
-The format must preserve original file integrity and have a public specification.
+Implemented v1 uses stored ZIP/ZIP64, manifest v1 and full SHA-256 validation. Create packages from Library items or open them for verification. See the [public specification](packages/g4-format/spec-v1.md) and [offline CLI](packages/g4-format/README.md). No automatic extraction, execution or sharing occurs.
 
 ### `.g4t` — Game4 Torrent
 
@@ -178,7 +178,8 @@ See the [estimated schedule and acceptance criteria](docs/roadmap.md). Custom fo
 - [x] Initialize SQLite storage and versioned migrations.
 - [ ] Build the local library and SHA-256 hashing.
 - [ ] Create manifests and support offline catalog reconstruction.
-- [ ] Specify and evaluate initial `.g4` and `.g4t` formats.
+- [x] Specify and implement initial `.g4` v1 creation and full reading/verification.
+- [ ] Specify and evaluate `.g4t`.
 - [ ] Integrate and validate a BitTorrent engine.
 - [ ] Support torrents, magnet links, DHT, and P2P uploads/downloads.
 - [ ] Provide peer information, transfer persistence, and integrity checks.

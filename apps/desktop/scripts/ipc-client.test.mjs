@@ -392,3 +392,68 @@ test("manual verification uses advertised commands and validates copy observatio
     code("IPC_UNAVAILABLE"),
   );
 });
+
+test("g4 export and reading are capability gated and validate verified package summaries", async () => {
+  const summary = {
+    fileName: "fixture.g4",
+    packageVersion: 1,
+    collectionId: "12345678-1234-4234-9234-123456789abc",
+    title: "Synthetic fixture",
+    fileCount: 3,
+    totalBytes: "40",
+    verified: true,
+  };
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "library_export_package")
+      return { cancelled: false, fileName: "fixture.g4" };
+    return { cancelled: false, package: summary };
+  });
+  assert.deepEqual(await client.exportPackage({ itemId: "1" }), {
+    cancelled: false,
+    fileName: "fixture.g4",
+  });
+  assert.deepEqual(calls[1], [
+    "library_export_package",
+    { request: { itemId: "1" } },
+  ]);
+  assert.deepEqual(await client.openPackage(), {
+    cancelled: false,
+    package: summary,
+  });
+  assert.deepEqual(calls[2], ["package_open", undefined]);
+  for (const bad of [
+    { ...summary, verified: false },
+    { ...summary, fileCount: 100001 },
+    { ...summary, totalBytes: "1099511627777" },
+    { ...summary, packageVersion: 2 },
+    { ...summary, fileName: "../bad.g4" },
+    { ...summary, collectionId: "not-a-uuid" },
+  ]) {
+    const invalid = make(async (command) =>
+      command === "app_info"
+        ? examples.appInfo
+        : { cancelled: false, package: bad },
+    );
+    await assert.rejects(invalid.openPackage(), code("INVALID_RESPONSE"));
+  }
+  const cancelled = make(async (command) =>
+    command === "app_info"
+      ? examples.appInfo
+      : { cancelled: true, package: null },
+  );
+  assert.deepEqual(await cancelled.openPackage(), {
+    cancelled: true,
+    package: null,
+  });
+  const old = make(async () => ({ ...examples.appInfo, capabilities: [] }));
+  await assert.rejects(old.openPackage(), code("CAPABILITY_UNAVAILABLE"));
+  await assert.rejects(
+    make(async () => assert.fail("native call"), false).exportPackage({
+      itemId: "1",
+    }),
+    code("IPC_UNAVAILABLE"),
+  );
+});

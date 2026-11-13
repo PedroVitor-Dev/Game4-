@@ -26,6 +26,11 @@ const keys = {
   LIBRARY_BUSY: "libraryBusy",
   RESTORE_STALE: "restoreStale",
   RESTORE_FAILED: "restoreFailed",
+  PACKAGE_INVALID: "packageInvalid",
+  PACKAGE_VERSION_UNSUPPORTED: "packageVersionUnsupported",
+  PACKAGE_WRITE_FAILED: "packageWriteFailed",
+  PACKAGE_INTEGRITY_FAILED: "packageIntegrityFailed",
+  PACKAGE_LIMIT_EXCEEDED: "packageLimitExceeded",
 } as const satisfies Record<ErrorCode, keyof typeof en.errors>;
 
 export function getIpcErrorKey(error: unknown) {

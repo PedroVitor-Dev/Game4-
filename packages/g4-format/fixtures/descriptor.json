@@ -1,0 +1,7 @@
+{
+  "$schema": "urn:game4:package:1",
+  "format": "game4-package",
+  "packageVersion": 1,
+  "manifest": "manifest.json",
+  "payloadPrefix": "data/"
+}

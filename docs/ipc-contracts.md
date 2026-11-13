@@ -195,3 +195,9 @@ Current backup writes are v2/schema v4; the original v1/schema v3 remains readab
 ## Manual integrity commands
 
 `library_verify(StartVerifyRequest)` resolves `TaskAccepted`; `library_integrity(ExportManifestRequest)` resolves `LibraryIntegrity`. Both are capability-gated active commands. Counts are nonnegative u32 values; `lastCheckedAt` is nullable UTC. See [scope, idempotency and result interpretation](library-integrity.md). Contract major remains 1; schema remains 4.
+
+## Game4 package commands
+
+`library_export_package(ExportManifestRequest)` returns `ExportManifestResult` (filename or cancellation), with a native .g4 save picker and idle-library guard. `package_open()` takes no arguments, opens a native picker and returns `PackageOpenResult`: cancellation with `package:null`, or a verified `PackageSummary` containing `fileName`, `packageVersion:1`, collection UUID/title, file count, decimal-string total bytes and `verified:true`. Summary success requires full content verification. No absolute paths or payload bytes cross IPC. Both commands are active capability-gated additions within contract v1.
+
+Package errors: `PACKAGE_INVALID`, `PACKAGE_VERSION_UNSUPPORTED`, `PACKAGE_WRITE_FAILED`, `PACKAGE_INTEGRITY_FAILED`, `PACKAGE_LIMIT_EXCEEDED`; shared source, manifest, busy and database errors remain applicable. See [public limits and semantics](../packages/g4-format/spec-v1.md).

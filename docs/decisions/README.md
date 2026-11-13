@@ -30,3 +30,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0011](0011-file-identification.md) | Accepted initial detector | Content signatures, filename hints, exact sizes, and compatibility |
 
 | [0012](0012-manual-integrity.md) | Accepted | Background manual integrity checks and atomic copy observations |
+
+| [0013](0013-g4-package.md) | Accepted initial format | Public stored ZIP/ZIP64 .g4 packages, creation and full read validation |

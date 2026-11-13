@@ -41,3 +41,5 @@ See [save and restore the local library](library-backup.md) for private full-cat
 See [platform, format, and size identification](file-identification.md) for detector scope, evidence, file details, and compatibility.
 
 - [Manual library integrity](library-integrity.md): registered-copy rechecks, task outcomes and historical observations.
+
+- [Public .g4 package specification](../packages/g4-format/spec-v1.md): ZIP64, layout, limits, integrity and offline tooling.

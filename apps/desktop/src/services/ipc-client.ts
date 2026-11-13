@@ -8,6 +8,7 @@ import {
   parseTaskAccepted,
   parseLibraryPage,
   parseLibraryIntegrity,
+  parsePackageOpenResult,
   parseTaskPage,
   parseTaskSnapshot,
   parseExportManifestResult,
@@ -49,6 +50,8 @@ const decoders = {
   tasks_list: parseTaskPage,
   task_get: parseTaskSnapshot,
   library_export_manifest: parseExportManifestResult,
+  library_export_package: parseExportManifestResult,
+  package_open: parsePackageOpenResult,
   library_save_backup: parseLibraryBackupResult,
   library_prepare_restore: parseLibraryPrepareRestoreResult,
   library_restore_backup: parseLibraryRestoreResult,
@@ -104,6 +107,9 @@ export function createIpcClient(transport: IpcTransport) {
       capable("library_verify", request),
     getIntegrity: (request: ExportManifestRequest) =>
       capable("library_integrity", request),
+    exportPackage: (request: ExportManifestRequest) =>
+      capable("library_export_package", request),
+    openPackage: () => capable("package_open", undefined),
     getAppInfo,
     getDatabaseInfo,
     saveLibraryBackup: () => capable("library_save_backup", undefined),

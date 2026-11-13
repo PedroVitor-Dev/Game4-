@@ -40,3 +40,5 @@ Runtime data is outside the repository. See [SQLite storage](database.md) for it
 The `packages/manifest-schema` folder now contains the public v1 schema, synthetic example, shared rejection corpus, and offline schema tests. Rust manifest tests exercise the same data. This format folder is not an npm application workspace.
 
 The Rust `backups` module owns full-catalog JSON snapshots, validation, preview tokens, and transactional restoration. `LibraryBackup.tsx` provides the bilingual Settings workflow. See [library backup](library-backup.md).
+
+`packages/g4-format/` contains the public package specification, descriptor schema and synthetic interoperability fixtures. The Rust package reader/writer is in `apps/desktop/src-tauri/src/packages/`; `examples/g4.rs` supplies the offline CLI.

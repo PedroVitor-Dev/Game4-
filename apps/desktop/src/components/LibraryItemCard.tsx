@@ -18,11 +18,13 @@ export function LibraryItemCard({
   busy,
   onExport,
   onVerify,
+  onPackage,
 }: {
   item: LibraryItemSummary;
   busy: boolean;
   onExport: (id: string) => void;
   onVerify: (id: string) => void;
+  onPackage: (id: string) => void;
 }) {
   const { t, i18n } = useTranslation();
   const [health, setHealth] = useState<LibraryIntegrity>();
@@ -193,6 +195,13 @@ export function LibraryItemCard({
       </section>
       <span className="local-badge">{t("library.localItem")}</span>
       <div className="manifest-action actions">
+        <button
+          disabled={busy || !isTauri()}
+          onClick={() => onPackage(item.id)}
+          aria-label={t("packages.exportLabel", { title: item.title })}
+        >
+          {t("packages.export")}
+        </button>
         <button
           disabled={busy || !isTauri()}
           onClick={() => onVerify(item.id)}

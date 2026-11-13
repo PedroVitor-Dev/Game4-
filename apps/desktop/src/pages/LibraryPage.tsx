@@ -16,7 +16,9 @@ import {
   isTauri,
   exportManifest,
   verifyItem,
+  exportPackage,
 } from "../services/desktop";
+import { PackageReader } from "../components/PackageReader";
 import { LibraryItemCard } from "../components/LibraryItemCard";
 import { getIpcErrorKey } from "../services/errors";
 
@@ -26,6 +28,8 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
   const [tasks, setTasks] = useState<TaskSnapshot[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [packaging, setPackaging] = useState(false);
+  const [packageSaved, setPackageSaved] = useState<string>();
   const [exported, setExported] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>();
@@ -152,6 +156,24 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
       if (mounted.current) setBusy(false);
     }
   }
+  async function savePackage(itemId: string) {
+    setBusy(true);
+    setPackaging(true);
+    setError(undefined);
+    setPackageSaved(undefined);
+    try {
+      const result = await exportPackage({ itemId });
+      if (mounted.current && !result.cancelled && result.fileName)
+        setPackageSaved(result.fileName);
+    } catch (e) {
+      if (mounted.current) setError(e);
+    } finally {
+      if (mounted.current) {
+        setBusy(false);
+        setPackaging(false);
+      }
+    }
+  }
   async function saveManifest(itemId: string) {
     setBusy(true);
     setError(undefined);
@@ -225,6 +247,11 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
           )}
         </section>
       )}
+      {!tasksOnly && <PackageReader disabled={busy || active} />}
+      {packaging && <p role="status">{t("packages.creating")}</p>}
+      {packageSaved && (
+        <p role="status">{t("packages.saved", { fileName: packageSaved })}</p>
+      )}
       {error !== undefined && (
         <div className="error-message" role="alert">
           {t(getIpcErrorKey(error))}{" "}
@@ -263,6 +290,7 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
                 item={item}
                 busy={busy || active}
                 onVerify={(id) => void verify(id)}
+                onPackage={(id) => void savePackage(id)}
                 onExport={(id) => void saveManifest(id)}
               />
             ))}

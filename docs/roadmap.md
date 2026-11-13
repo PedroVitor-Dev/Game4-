@@ -27,7 +27,7 @@ The isolated librqbit 9.1.0 probe passed loopback transfer, session/process resu
 - M0 requires available Windows tools and SDKs. Localization is part of M0; review its effect on estimates when implementation starts.
 - M1 defines the model used by M2. M3 may affect integration, but the catalog must remain independent of the engine.
 - M3 is a decision gate: if no engine meets requirements, release a local-library version first and replan P2P.
-- `.g4` and `.g4t` require specifications and fixtures before implementation. They do not block the P2P prototype; use `.torrent` files and JSON manifests first.
+- `.g4` v1 has a public specification, descriptor schema, fixtures and create/read implementation. `.g4t` still requires specification and fixtures. Neither blocks the P2P prototype; use `.torrent` files and JSON manifests first.
 - Alpha does not imply stable formats. Document migrations and limitations.
 
 ## Later horizon without committed dates
@@ -48,3 +48,5 @@ Plan one small increment at a time. On completion, validate it, update the log, 
 Manifest v1, public JSON Schema, offline parser/validation, and per-item Library JSON export are implemented and locally tested. Export records stored catalog hashes rather than performing a new disk check. Manifest import/catalog reconstruction and the offline survival test remain open, so M2 is not complete. See [the format](manifest-v1.md).
 
 Manual registered-copy SHA-256 verification is implemented (November 13). See [behavior and limits](library-integrity.md). M2 remains open for catalog reconstruction and offline survival validation.
+
+The .g4 v1 increment (November 13) adds public layout/limits/schema, synthetic ZIP32/ZIP64 fixtures, background desktop export/open and an offline create/read CLI. Extraction, catalog reconstruction and the full offline survival milestone remain open.

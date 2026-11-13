@@ -17,3 +17,7 @@ apps/desktop/src-tauri/gen/
 # Private library exports; custom backup names must also stay out of Git.
 *.game4-library.json
 game4-library-backup*.json
+
+# Game payload packages are private unless explicitly provided as public fixtures.
+*.g4
+!packages/g4-format/fixtures/*.g4

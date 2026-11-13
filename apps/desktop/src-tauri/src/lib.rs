@@ -5,6 +5,7 @@ pub mod database;
 pub mod identification;
 pub mod library;
 pub mod manifests;
+pub mod packages;
 pub mod tasks;
 pub mod verification;
 
@@ -35,6 +36,8 @@ pub fn run() {
             commands::library::tasks_list,
             commands::library::task_get,
             commands::manifests::library_export_manifest,
+            commands::packages::library_export_package,
+            commands::packages::package_open,
             commands::backups::library_save_backup,
             commands::backups::library_prepare_restore,
             commands::backups::library_restore_backup

@@ -104,10 +104,15 @@
     "backupInvalid": "This file is not a valid Game4 library backup, violates catalog constraints, or exceeds the 64 MiB / 500,000-record limit.",
     "backupVersionUnsupported": "This backup or database schema version is unsupported. Use a compatible Game4 build.",
     "backupWriteFailed": "The backup could not be written. Choose an unused .json filename in a writable folder; restoration also requires space for a recovery copy.",
-    "libraryBusy": "Wait for all imports to finish before saving or restoring the library.",
+    "libraryBusy": "Wait for imports, integrity checks and package exports to finish, then try again.",
     "restoreStale": "The restore preview expired or the catalog changed. Select the backup again to review it.",
     "restoreFailed": "Restoration could not finish. The current catalog was preserved; any recovery file remains available.",
-    "verificationLimitExceeded": "This item exceeds the verification limit of 500,000 registered copies."
+    "verificationLimitExceeded": "This item exceeds the verification limit of 500,000 registered copies.",
+    "packageInvalid": "This is not a valid Game4∞ v1 package.",
+    "packageVersionUnsupported": "This package version is not supported. Update Game4∞ to read it.",
+    "packageWriteFailed": "The package could not be saved. Choose a new .g4 filename and check permissions and free space.",
+    "packageIntegrityFailed": "A file is missing, unreadable or does not match its reference hash/size. Verify the sources or choose another package.",
+    "packageLimitExceeded": "This package exceeds supported limits (100,000 files, 1 TiB of payload, or metadata limits)."
   },
   "backup": {
     "title": "Save and restore your library",
@@ -152,5 +157,17 @@
     "verifyLabel": "Verify integrity of {{title}}",
     "progress": "{{processed}} / {{total}} registered copies checked",
     "completed": "Check completed. Review integrity observations in the Library for matching, changed, missing or inaccessible copies."
+  },
+  "packages": {
+    "title": "Game4∞ packages",
+    "description": "Create a portable .g4 from a Library item, or open one to verify every included file.",
+    "export": "Create .g4",
+    "exportLabel": "Create .g4 package from {{title}}",
+    "open": "Open .g4",
+    "creating": "Creating .g4: reading and checking original files. Large collections can take a while. Keep the app open.",
+    "reading": "Reading package and verifying SHA-256 for every file. Large packages can take a while.",
+    "saved": "Package created: {{fileName}}",
+    "verified": "All included file sizes and SHA-256 hashes match the manifest. This checks consistency, not publisher authenticity.",
+    "readOnly": "Package inspected. No files were extracted, executed or imported into the Library."
   }
 }

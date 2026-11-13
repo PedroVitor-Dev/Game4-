@@ -3,7 +3,7 @@
 ## Status on November 13, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; manual integrity rechecks implemented; P2P integration remains pending.
+- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; manual integrity rechecks and .g4 v1 package creation/reading implemented; P2P integration remains pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
@@ -196,3 +196,11 @@ Commit: add hash when known; Git history is the definitive reference.
 Added per-item background SHA-256 rechecks of all registered content copies, atomic copy-health observations, persistent task progress, request replay protection, and English/Portuguese Library counts. Reference hashes and original bytes are preserved. Existing schema v4 and backup v2 remain compatible. See [behavior and limits](library-integrity.md) and [ADR 0012](decisions/0012-manual-integrity.md).
 
 Validation: 42 Rust tests, 14 frontend/IPC tests, and 3 public-schema tests passed (59 total). TypeScript, 128-key locale parity, Prettier, Rust formatting, Clippy with warnings denied, contract drift checks, frontend production build, and native Tauri debug build without bundling passed. No manual GUI smoke test was performed for this increment; user catalog files were not used as test fixtures. No push.
+
+### November 13, 2026 — Public .g4 package format and implementation
+
+Defined the [public .g4 v1 specification](../packages/g4-format/spec-v1.md), descriptor JSON Schema, fixed layout/limits, original-byte SHA-256 rules and ZIP/ZIP64 interoperability. Added streaming Rust creation/full reading, an offline CLI, and English/Portuguese Library actions to create packages or inspect and verify them. Original hashes and files remain intact; no extraction, execution or automatic catalog import occurs. No SQLite or backup format change is needed. See [ADR 0013](decisions/0013-g4-package.md).
+
+Synthetic ZIP32 and ZIP64 fixtures created independently with Python are accepted by Rust. A package created by the Rust CLI was independently opened with Python zipfile: exact three-entry payload, 40 bytes, valid ZIP CRC and matching SHA-256, including Unicode paths and empty content. Rust CLI readback also succeeded. No personal library was used. Physical multi-gigabyte ZIP64 performance, manual GUI smoke testing, extraction and immutable package progress/cancellation remain outside this increment.
+
+Validation: 56 Rust tests (14 package tests), 15 frontend/IPC tests and 5 schema tests passed (76 total), plus TypeScript, 143-key locale parity, Prettier, Rust formatting, Clippy with warnings denied, generated-contract drift checks and native Tauri debug build without bundling. Final CLI creation/readback with relative paths passed, and Python independently verified its bytes. Fixture generator reproduced both public binary fixtures exactly. No push.

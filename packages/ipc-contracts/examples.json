@@ -12,6 +12,8 @@
       "tasks_list",
       "task_get",
       "library_export_manifest",
+      "library_export_package",
+      "package_open",
       "library_save_backup",
       "library_prepare_restore",
       "library_restore_backup"

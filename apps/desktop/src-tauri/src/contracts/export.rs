@@ -43,6 +43,8 @@ pub fn typescript() -> String {
         StartImportRequest::decl(&config),
         StartVerifyRequest::decl(&config),
         LibraryIntegrity::decl(&config),
+        PackageSummary::decl(&config),
+        PackageOpenResult::decl(&config),
         TaskIdRequest::decl(&config),
         TaskAccepted::decl(&config),
         TaskSnapshot::decl(&config),
