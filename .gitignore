@@ -21,3 +21,9 @@ game4-library-backup*.json
 # Game payload packages are private unless explicitly provided as public fixtures.
 *.g4
 !packages/g4-format/fixtures/*.g4
+
+# Discovery exports and torrent references may expose private sharing metadata.
+*.g4e
+*.torrent
+!packages/g4e-format/examples/*.g4e
+!packages/g4e-format/examples/*.torrent

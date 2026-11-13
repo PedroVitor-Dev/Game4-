@@ -43,3 +43,6 @@ See [platform, format, and size identification](file-identification.md) for dete
 - [Manual library integrity](library-integrity.md): registered-copy rechecks, task outcomes and historical observations.
 
 - [Public .g4 package specification](../packages/g4-format/spec-v1.md): ZIP64, layout, limits, integrity and offline tooling.
+
+- [Original preservation contract](original-preservation.md): read-only originals and evidence across local workflows.
+- [Public .g4e specification](../packages/g4e-format/spec-v1.md): Game4 Ever Manifest discovery/P2P references and offline validation.

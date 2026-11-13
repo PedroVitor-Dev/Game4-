@@ -12,11 +12,11 @@ See [manifest v1](manifest-v1.md) for version compatibility, validation limits, 
 
 ## Proposed formats
 
-| Format   | Purpose                                        | Status                                                         |
-| -------- | ---------------------------------------------- | -------------------------------------------------------------- |
-| `.g4`    | Portable package containing manifest and files | Implemented v1: stored ZIP/ZIP64, manifest and checked payload |
-| `.g4t`   | Sharing references and metadata                | Conceptual; justify benefits over `.torrent` + JSON            |
-| `.g4lib` | Catalog and reference export                   | Future; does not imply game files are included                 |
+| Format   | Purpose                                        | Status                                                                              |
+| -------- | ---------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `.g4`    | Portable package containing manifest and files | Implemented v1: stored ZIP/ZIP64, manifest and checked payload                      |
+| `.g4e`   | Discovery and P2P references without payload   | Public v1 specification, schema and offline validation; desktop integration pending |
+| `.g4lib` | Catalog and reference export                   | Future; does not imply game files are included                                      |
 
 Do not treat extensions as stable formats before specifying security, compatibility, and migrations. Avoid mandatory recompression that impedes random access, resume, and torrent interoperability.
 
@@ -35,3 +35,7 @@ Export a test collection with manifest, schema, instructions, and hashes. Recons
 ## Implemented .g4 package v1
 
 The [public specification](../packages/g4-format/spec-v1.md) defines stored ZIP/ZIP64 with a descriptor, manifest v1 and original payload. Desktop Library exports items and reads packages with full hash/size checks; the offline CLI can create and read without a catalog or server. Reading does not extract, execute or import content.
+
+## Original preservation and optional packaging
+
+The [original preservation contract](original-preservation.md) covers import, hashing, package creation/reading and backup/restore. Native originals remain byte-for-byte intact, at their existing names and locations. SHA-256 checksums live in manifest file entries. `.g4` creation is optional; future P2P sharing must read native files directly without conversion or a staging duplicate. [`.g4e` v1](../packages/g4e-format/spec-v1.md) describes originals or an explicitly created package using separate, precisely defined hashes and magnet references. Neither format requires encryption, DRM or a central service.

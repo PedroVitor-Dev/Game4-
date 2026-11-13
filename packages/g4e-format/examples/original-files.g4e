@@ -1,0 +1,51 @@
+{
+  "$schema": "urn:game4:ever-manifest:1",
+  "format": "game4-ever-manifest",
+  "schemaVersion": 1,
+  "id": "22345678-1234-4234-9234-123456789abc",
+  "representation": "original_files",
+  "manifest": {
+    "$schema": "urn:game4:manifest:1",
+    "format": "game4-manifest",
+    "schemaVersion": 1,
+    "collection": {
+      "id": "12345678-1234-4234-9234-123456789abc",
+      "title": "Game4∞ synthetic fixture",
+      "platform": null,
+      "edition": null,
+      "language": null,
+      "declaredSource": "Synthetic test bytes",
+      "declaredLicense": "CC0-1.0"
+    },
+    "files": [
+      {
+        "path": "docs/日本語.txt",
+        "sizeBytes": "18",
+        "sha256": "a300185e569697637f6dca1577f12856d979fb8da84b52cf7f09ff437e979a81"
+      },
+      {
+        "path": "empty.bin",
+        "sizeBytes": "0",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "game/hello.txt",
+        "sizeBytes": "22",
+        "sha256": "f2112dd2952d0187c17119de149196f92b5ac62a1658a373ca89d7fdd4acf05a"
+      }
+    ],
+    "extensions": {}
+  },
+  "torrents": [
+    {
+      "infoHashV1": "a19f5bc286cedca2a75a693eb8fba05a70bd6c07",
+      "magnet": "magnet:?xt=urn:btih:a19f5bc286cedca2a75a693eb8fba05a70bd6c07",
+      "metainfoFile": {
+        "path": "original-files.torrent",
+        "sizeBytes": "221",
+        "sha256": "7c15c698372a34d756a6136467763702a60d9b5e90e98a342dab209406eda0c0"
+      }
+    }
+  ],
+  "extensions": {}
+}

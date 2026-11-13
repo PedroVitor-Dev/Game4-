@@ -3,7 +3,7 @@
 ## Status on November 13, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; manual integrity rechecks and .g4 v1 package creation/reading implemented; P2P integration remains pending.
+- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; manual integrity rechecks and .g4 v1 package creation/reading implemented; .g4e v1 specified with offline validation; P2P integration remains pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
@@ -204,3 +204,13 @@ Defined the [public .g4 v1 specification](../packages/g4-format/spec-v1.md), des
 Synthetic ZIP32 and ZIP64 fixtures created independently with Python are accepted by Rust. A package created by the Rust CLI was independently opened with Python zipfile: exact three-entry payload, 40 bytes, valid ZIP CRC and matching SHA-256, including Unicode paths and empty content. Rust CLI readback also succeeded. No personal library was used. Physical multi-gigabyte ZIP64 performance, manual GUI smoke testing, extraction and immutable package progress/cancellation remain outside this increment.
 
 Validation: 56 Rust tests (14 package tests), 15 frontend/IPC tests and 5 schema tests passed (76 total), plus TypeScript, 143-key locale parity, Prettier, Rust formatting, Clippy with warnings denied, generated-contract drift checks and native Tauri debug build without bundling. Final CLI creation/readback with relative paths passed, and Python independently verified its bytes. Fixture generator reproduced both public binary fixtures exactly. No push.
+
+### November 13, 2026 — Original-file contract and Game4 Ever Manifest
+
+The owner clarified that .g4 is the optional open lossless preservation package; .g4e means Game4 Ever Manifest, a separate P2P discovery/sharing descriptor. Originals must be shareable directly without conversion or mandatory staging copies. Encryption, DRM and central servers are not prerequisites. The earlier conceptual .g4t name is superseded.
+
+Added the [original preservation contract](original-preservation.md), a complete local-workflow regression checking source-tree bytes/names/mtime/attributes, and the [public .g4e v1 specification](../packages/g4e-format/spec-v1.md), JSON Schema, offline Node reference validator, original/package examples with independent trackerless torrent companions and a shared malformed corpus. The .g4 v1 bytes/layout and the SQLite/backup/IPC versions remain unchanged. See [ADR 0014](decisions/0014-ever-manifest-and-originals.md).
+
+The validator checks descriptor structure and magnet/info-hash consistency without reading referenced payloads/companions or using the network. It does not certify external content or availability. Production direct sharing, desktop .g4e handling, source mappings, acquired-metainfo binding and explicit network controls remain open P2P implementation gates. The v1 descriptor profile references v1 swarms; v2/hybrid/padding need a later profile and fixtures.
+
+Validation: 57 Rust tests, 15 frontend/IPC tests, 5 existing format/schema tests and 7 .g4e conformance tests passed (84 total), including 21 shared malformed descriptors. TypeScript, 143-key locale parity, Prettier, Rust formatting, Clippy with warnings denied and contract drift checks passed. Both .g4e CLI examples validated offline. Python regenerated all four public examples byte-for-byte and independently decoded the companion torrents to confirm exact manifest path/size sets. No production runtime/UI code changed, no network transfer was initiated, and no personal originals were used. No push.

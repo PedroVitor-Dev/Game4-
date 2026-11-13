@@ -27,7 +27,7 @@ The isolated librqbit 9.1.0 probe passed loopback transfer, session/process resu
 - M0 requires available Windows tools and SDKs. Localization is part of M0; review its effect on estimates when implementation starts.
 - M1 defines the model used by M2. M3 may affect integration, but the catalog must remain independent of the engine.
 - M3 is a decision gate: if no engine meets requirements, release a local-library version first and replan P2P.
-- `.g4` v1 has a public specification, descriptor schema, fixtures and create/read implementation. `.g4t` still requires specification and fixtures. Neither blocks the P2P prototype; use `.torrent` files and JSON manifests first.
+- `.g4` v1 has a public specification, descriptor schema, fixtures and create/read implementation. `.g4e` v1 has a public specification, schema, examples and offline validator; desktop integration remains pending. Original-file sharing must not require packaging or staging copies. Neither format blocks the P2P prototype; use `.torrent` files and JSON manifests first.
 - Alpha does not imply stable formats. Document migrations and limitations.
 
 ## Later horizon without committed dates
@@ -50,3 +50,5 @@ Manifest v1, public JSON Schema, offline parser/validation, and per-item Library
 Manual registered-copy SHA-256 verification is implemented (November 13). See [behavior and limits](library-integrity.md). M2 remains open for catalog reconstruction and offline survival validation.
 
 The .g4 v1 increment (November 13) adds public layout/limits/schema, synthetic ZIP32/ZIP64 fixtures, background desktop export/open and an offline create/read CLI. Extraction, catalog reconstruction and the full offline survival milestone remain open.
+
+The .g4e v1 specification increment (November 13) defines original-files/package representations, BitTorrent v1/magnet identity binding, limits, examples and offline validation. Before P2P delivery, implement read-only native source mapping without mandatory staging copies, acquired-metainfo validation, explicit sharing controls and real transfer verification. Format validation is not completion of that milestone.

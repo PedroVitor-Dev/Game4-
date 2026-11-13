@@ -46,3 +46,7 @@ A native token, NFTs, financial custody, automatic seeding rewards, a marketplac
 ## Quality indicators
 
 Measure restoration success, corruption detection, import failures, resume reliability, and memory usage on test collections. Record collection size, hardware, and tool versions for comparison. Define numerical performance targets after initial measurements. No personal telemetry by default.
+
+## Direct-sharing acceptance constraint — November 13, 2026
+
+The P2P alpha must share originals from their current locations without conversion, mandatory payload duplication or creating .g4 packages. Source mappings remain private and read-only. .g4 creation is optional; .g4e (Game4 Ever Manifest) describes discovery/sharing references for either representation. No mandatory encryption, DRM, account or central service may gate core preservation/sharing. The public .g4e specification and offline validator are available; production desktop integration remains an open P2P gate.

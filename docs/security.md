@@ -26,3 +26,7 @@ Metadata may contain personal information; export and publication must be delibe
 ## Vulnerability reporting
 
 A private channel is not defined yet. Before public distribution, create `SECURITY.md` with a verified contact and response process. Do not invent a support address or ask for secrets in public issues.
+
+## Original-file write boundary
+
+The [implemented local preservation contract](original-preservation.md) denies writes, moves, patches and automatic repairs of original inputs. Network references in the public [.g4e specification](../packages/g4e-format/spec-v1.md) are inert data during offline validation. Future P2P integration must request a deliberate network action, validate metainfo/payload binding and preserve original seeding files read-only. No required encryption, DRM or central authorization service is part of either format.

@@ -67,3 +67,7 @@ The `backups` Rust module implements bounded private catalog snapshots, independ
 ## Portable package boundary
 
 `packages/g4-format/` owns the public .g4 v1 specification, descriptor schema and independent fixtures. Rust `packages` handles streaming ZIP/ZIP64 creation and complete read validation; native package commands only provide pickers, idle-library coordination and DTO summaries. ZIP compression/encryption features are disabled. No package operation executes content, extracts payload or imports it automatically.
+
+## Discovery descriptor boundary
+
+`packages/g4e-format/` specifies .g4e v1, with schema, synthetic examples/companions and a Node offline reference validator. It does not add native transfer commands. Future integration maps original source files privately into torrent metadata, supports optional .g4 payloads and separates descriptor validation from metadata acquisition and content verification. No central service or mandatory staging copy is a prerequisite.

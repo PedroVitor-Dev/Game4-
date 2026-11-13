@@ -93,7 +93,7 @@ Files will move directly between participants when connectivity allows, without 
 
 ## 📦 Game4∞ formats
 
-The project defines open, documented formats for preservation and sharing. `.g4` v1 is implemented with a public specification; `.g4t` and `.g4lib` remain proposals. See [preservation and formats](docs/preservation.md).
+The project defines open, documented formats for preservation and sharing. `.g4` v1 is implemented; `.g4e` v1 has a public specification and offline validator; `.g4lib` remains a proposal. See [preservation and formats](docs/preservation.md).
 
 ### `.g4` — Game4 Package
 
@@ -111,9 +111,11 @@ example.g4
 
 Implemented v1 uses stored ZIP/ZIP64, manifest v1 and full SHA-256 validation. Create packages from Library items or open them for verification. See the [public specification](packages/g4-format/spec-v1.md) and [offline CLI](packages/g4-format/README.md). No automatic extraction, execution or sharing occurs.
 
-### `.g4t` — Game4 Torrent
+### `.g4e` — Game4 Ever Manifest
 
-A proposed discovery and P2P sharing manifest containing content identifiers, hashes, metadata, BitTorrent references, magnet links, and version information. It does not need to contain the game itself. Its benefits over standard `.torrent` files plus JSON must be validated.
+A separate JSON descriptor for discovery and P2P references: preservation metadata, raw-file SHA-256, BitTorrent v1 info-hashes and matching magnet links. The [public v1 specification](packages/g4e-format/spec-v1.md), schema, examples and offline validator are available. Production desktop transfer integration remains pending. This replaces the earlier conceptual `.g4t` name.
+
+Sharing originals directly must remain available without creating a `.g4`, converting files or staging a mandatory duplicate. Package creation is optional. See the [original preservation contract](docs/original-preservation.md). Neither format requires password encryption, DRM or a central server.
 
 ### `.g4lib` — Game4 Library
 
@@ -179,7 +181,8 @@ See the [estimated schedule and acceptance criteria](docs/roadmap.md). Custom fo
 - [ ] Build the local library and SHA-256 hashing.
 - [ ] Create manifests and support offline catalog reconstruction.
 - [x] Specify and implement initial `.g4` v1 creation and full reading/verification.
-- [ ] Specify and evaluate `.g4t`.
+- [x] Specify `.g4e` v1 with schema, examples and offline validation.
+- [ ] Integrate direct original-file P2P sharing and `.g4e` in the desktop app.
 - [ ] Integrate and validate a BitTorrent engine.
 - [ ] Support torrents, magnet links, DHT, and P2P uploads/downloads.
 - [ ] Provide peer information, transfer persistence, and integrity checks.

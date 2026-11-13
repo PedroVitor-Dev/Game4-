@@ -371,3 +371,89 @@ fn manual_verification_survives_backup_and_restored_copies_require_recheck() {
     crate::verification::run(&db, &task.task_id, "1").unwrap();
     assert_eq!(crate::verification::summary(&db, "1").unwrap().changed, 1);
 }
+
+#[test]
+fn full_local_workflow_preserves_original_tree_bytes_names_mtime_and_attributes() {
+    use std::{collections::BTreeMap, fs, time::SystemTime};
+    type Snapshot = BTreeMap<std::path::PathBuf, (bool, u64, SystemTime, bool, Vec<u8>)>;
+    fn snapshot(root: &Path) -> Snapshot {
+        fn visit(root: &Path, path: &Path, entries: &mut Snapshot) {
+            let metadata = fs::symlink_metadata(path).unwrap();
+            assert!(metadata.is_file() || metadata.is_dir());
+            entries.insert(
+                path.strip_prefix(root).unwrap().to_path_buf(),
+                (
+                    metadata.is_dir(),
+                    metadata.len(),
+                    metadata.modified().unwrap(),
+                    metadata.permissions().readonly(),
+                    if metadata.is_file() {
+                        fs::read(path).unwrap()
+                    } else {
+                        Vec::new()
+                    },
+                ),
+            );
+            if metadata.is_dir() {
+                for entry in fs::read_dir(path).unwrap() {
+                    visit(root, &entry.unwrap().path(), entries);
+                }
+            }
+        }
+        let mut entries = BTreeMap::new();
+        visit(root, root, &mut entries);
+        entries
+    }
+    let (d, db, imports) = setup();
+    let root = d.path().join("Originals ∞");
+    fs::create_dir_all(root.join("nested")).unwrap();
+    fs::write(root.join("nested/日本語.bin"), [0u8, 255, 13, 10, 0, 127]).unwrap();
+    fs::write(root.join("empty.bin"), b"").unwrap();
+    let before = snapshot(&root);
+    import(&db, &root);
+    assert_eq!(snapshot(&root), before, "import modified originals");
+    let manifest = crate::manifests::from_catalog(&db, "1").unwrap();
+    crate::manifests::write_new(
+        &d.path().join("manifest.json"),
+        &crate::manifests::serialize(&manifest).unwrap(),
+    )
+    .unwrap();
+    assert_eq!(
+        snapshot(&root),
+        before,
+        "manifest export modified originals"
+    );
+    let (package_manifest, paths) = crate::packages::from_catalog(&db, "1").unwrap();
+    let package = d.path().join("originals.g4");
+    crate::packages::create(&package, &package_manifest, &paths).unwrap();
+    crate::packages::read(&package).unwrap();
+    assert_eq!(
+        snapshot(&root),
+        before,
+        "package roundtrip modified originals"
+    );
+    let (task, _) = crate::verification::accept(
+        &db,
+        &StartVerifyRequest {
+            request_id: Uuid::new_v4().to_string(),
+            item_id: "1".into(),
+        },
+    )
+    .unwrap();
+    crate::verification::run(&db, &task.task_id, "1").unwrap();
+    assert_eq!(snapshot(&root), before, "verification modified originals");
+    let backup = d.path().join("catalog.json");
+    save(&db, &imports, &backup).unwrap();
+    let state = BackupState::default();
+    let preview = state.prepare(&db, &imports, &backup).unwrap();
+    state
+        .restore(&db, &imports, &preview.restore_token)
+        .unwrap();
+    assert_eq!(snapshot(&root), before, "backup/restore modified originals");
+    assert!(crate::packages::create(&package, &package_manifest, &paths).is_err());
+    let mut incorrect = package_manifest.clone();
+    incorrect.files[0].sha256 = "a".repeat(64);
+    assert!(crate::packages::create(&d.path().join("invalid.g4"), &incorrect, &paths).is_err());
+    assert_eq!(snapshot(&root), before, "failed exports modified originals");
+    assert!(!d.path().join("invalid.g4").exists());
+}

@@ -32,3 +32,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0012](0012-manual-integrity.md) | Accepted | Background manual integrity checks and atomic copy observations |
 
 | [0013](0013-g4-package.md) | Accepted initial format | Public stored ZIP/ZIP64 .g4 packages, creation and full read validation |
+
+| [0014](0014-ever-manifest-and-originals.md) | Accepted initial specification | Original-file preservation and public .g4e Game4 Ever Manifest |

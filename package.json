@@ -16,7 +16,7 @@
     "desktop:dev": "npm run tauri --workspace @game4/desktop -- dev",
     "desktop:build": "npm run tauri --workspace @game4/desktop -- build",
     "build": "npm run build --workspace @game4/desktop",
-    "check": "npm run typecheck --workspace @game4/desktop && npm run test --workspace @game4/desktop && npm run manifests:test && npm run g4:test && npm run format:check",
+    "check": "npm run typecheck --workspace @game4/desktop && npm run test --workspace @game4/desktop && npm run manifests:test && npm run g4:test && npm run g4e:test && npm run format:check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "rust:check": "cargo check --locked --manifest-path apps/desktop/src-tauri/Cargo.toml",
@@ -31,7 +31,9 @@
     "manifests:test": "node --test packages/manifest-schema/test.mjs",
     "manifests:validate": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example validate_manifest --",
     "g4": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example g4 --",
-    "g4:test": "node --test packages/g4-format/test.mjs"
+    "g4:test": "node --test packages/g4-format/test.mjs",
+    "g4e:test": "node --test packages/g4e-format/test.mjs",
+    "g4e:validate": "node packages/g4e-format/validate.mjs"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

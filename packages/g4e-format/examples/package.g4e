@@ -1,0 +1,41 @@
+{
+  "$schema": "urn:game4:ever-manifest:1",
+  "format": "game4-ever-manifest",
+  "schemaVersion": 1,
+  "id": "32345678-1234-4234-9234-123456789abc",
+  "representation": "g4_package",
+  "manifest": {
+    "$schema": "urn:game4:manifest:1",
+    "format": "game4-manifest",
+    "schemaVersion": 1,
+    "collection": {
+      "id": "12345678-1234-4234-9234-123456789abc",
+      "title": "Game4∞ synthetic fixture",
+      "platform": null,
+      "edition": null,
+      "language": null,
+      "declaredSource": "Synthetic test bytes",
+      "declaredLicense": "CC0-1.0"
+    },
+    "files": [
+      {
+        "path": "synthetic-collection.g4",
+        "sizeBytes": "1596",
+        "sha256": "e6c5dbd60d2ca2c7767712f10d780db67c8ededf4d2be50d63d723b2126a4059"
+      }
+    ],
+    "extensions": {}
+  },
+  "torrents": [
+    {
+      "infoHashV1": "3f1efee339f930a01288c23c34ce381b433a29bb",
+      "magnet": "magnet:?xt=urn:btih:3f1efee339f930a01288c23c34ce381b433a29bb",
+      "metainfoFile": {
+        "path": "package.torrent",
+        "sizeBytes": "109",
+        "sha256": "dccaf75fdd8968def8c3ee95d98eba76d37f197ad103c88f797259c2289057f6"
+      }
+    }
+  ],
+  "extensions": {}
+}

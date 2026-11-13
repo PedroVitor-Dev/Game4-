@@ -92,3 +92,7 @@ Unknown package versions, invalid structure, limit violations, content mismatche
 Fixtures contain synthetic text and empty bytes only, marked CC0-1.0. They do not contain game assets. Their 40-byte payload covers Unicode paths and empty files. See [fixture generator](generate-fixtures.py). ZIP64 fixture checks exercise record compatibility without allocating a 4 GiB file; very large physical archives have not been tested in this increment.
 
 Payload extraction, catalog reconstruction, signatures, compression, password protection, multipart packages and `.g4t`/`.g4lib` are outside version 1. New incompatible capabilities need a versioned specification before implementation.
+
+## 8. Optional packaging and discovery sidecars
+
+Package creation is optional. Game4∞ sharing must also support original files directly, without conversion, renaming or mandatory payload staging copies. [Game4 Ever Manifest (.g4e)](../g4e-format/spec-v1.md) is a separate JSON discovery/P2P descriptor that can refer to originals or to an explicitly created .g4. It is not encryption or an execution profile. The .g4 v1 container, manifest and authoritative per-file SHA-256 checksums remain unchanged; no mandatory password, DRM or central service is introduced.

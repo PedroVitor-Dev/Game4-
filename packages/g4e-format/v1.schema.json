@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:game4:ever-manifest:1",
+  "title": "Game4 Ever Manifest v1",
+  "description": "Public P2P reference descriptor. Schema and semantic rules in spec-v1.md are both required.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "format",
+    "schemaVersion",
+    "id",
+    "representation",
+    "manifest",
+    "torrents",
+    "extensions"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "urn:game4:ever-manifest:1"
+    },
+    "format": {
+      "const": "game4-ever-manifest"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "$ref": "urn:game4:manifest:1#/properties/collection/properties/id"
+    },
+    "representation": {
+      "enum": ["original_files", "g4_package"]
+    },
+    "manifest": {
+      "$ref": "urn:game4:manifest:1"
+    },
+    "torrents": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["infoHashV1", "magnet", "metainfoFile"],
+        "properties": {
+          "infoHashV1": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "magnet": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16384,
+            "pattern": "^magnet:\\?"
+          },
+          "metainfoFile": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["path", "sizeBytes", "sha256"],
+                "properties": {
+                  "path": {
+                    "$ref": "urn:game4:manifest:1#/properties/files/items/properties/path"
+                  },
+                  "sizeBytes": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,19}$"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "extensions": {
+      "$ref": "urn:game4:manifest:1#/properties/extensions"
+    }
+  }
+}
