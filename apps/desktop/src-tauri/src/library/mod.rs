@@ -116,16 +116,16 @@ pub fn existing(db: &Database, request: &StartImportRequest) -> Result<Option<Ta
         .connection
         .lock()
         .map_err(|_| err(ErrorCode::DatabaseUnavailable))?;
-    let row: Option<(i64, String, String)> = c
+    let row: Option<(i64, String, String, String)> = c
         .query_row(
-            "SELECT id, status, selection_token FROM tasks WHERE request_id = ?1",
+            "SELECT id, status, selection_token, kind FROM tasks WHERE request_id = ?1",
             [&request.request_id],
-            |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
+            |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?, r.get(3)?)),
         )
         .optional()
         .map_err(db_err)?;
-    row.map(|(id, status, token)| {
-        if token != request.selection_token {
+    row.map(|(id, status, token, kind)| {
+        if kind != "import" || token != request.selection_token {
             return Err(invalid(ErrorField::RequestId));
         }
         Ok(TaskAccepted {
@@ -150,7 +150,7 @@ pub fn create_task(db: &Database, request: &StartImportRequest) -> Result<TaskAc
         status: TaskStatus::Queued,
     })
 }
-fn update(
+pub(crate) fn update(
     db: &Database,
     id: &str,
     status: &str,
@@ -321,7 +321,7 @@ fn hash_file(path: &Path) -> Result<(i64, String, Option<crate::identification::
     hash_file_with_buffer(path, &mut vec![0u8; 1024 * 1024], &mut || {})
 }
 
-fn hash_file_with_buffer(
+pub(crate) fn hash_file_with_buffer(
     path: &Path,
     buffer: &mut [u8],
     after_chunk: &mut impl FnMut(),

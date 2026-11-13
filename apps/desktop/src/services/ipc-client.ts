@@ -7,6 +7,7 @@ import {
   parseSourceSelection,
   parseTaskAccepted,
   parseLibraryPage,
+  parseLibraryIntegrity,
   parseTaskPage,
   parseTaskSnapshot,
   parseExportManifestResult,
@@ -20,6 +21,7 @@ import type {
   ImplementedCommand,
   SelectSourcesRequest,
   StartImportRequest,
+  StartVerifyRequest,
   LibraryListRequest,
   PageRequest,
   TaskIdRequest,
@@ -40,6 +42,8 @@ const decoders = {
   database_info: parseDatabaseInfo,
   library_select_sources: parseSourceSelection,
   library_import: parseTaskAccepted,
+  library_verify: parseTaskAccepted,
+  library_integrity: parseLibraryIntegrity,
   library_list: parseLibraryPage,
   library_item_files: parseLibraryItemFilesPage,
   tasks_list: parseTaskPage,
@@ -96,6 +100,10 @@ export function createIpcClient(transport: IpcTransport) {
     return call(command, request);
   }
   return {
+    verifyItem: (request: StartVerifyRequest) =>
+      capable("library_verify", request),
+    getIntegrity: (request: ExportManifestRequest) =>
+      capable("library_integrity", request),
     getAppInfo,
     getDatabaseInfo,
     saveLibraryBackup: () => capable("library_save_backup", undefined),

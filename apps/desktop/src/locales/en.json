@@ -106,7 +106,8 @@
     "backupWriteFailed": "The backup could not be written. Choose an unused .json filename in a writable folder; restoration also requires space for a recovery copy.",
     "libraryBusy": "Wait for all imports to finish before saving or restoring the library.",
     "restoreStale": "The restore preview expired or the catalog changed. Select the backup again to review it.",
-    "restoreFailed": "Restoration could not finish. The current catalog was preserved; any recovery file remains available."
+    "restoreFailed": "Restoration could not finish. The current catalog was preserved; any recovery file remains available.",
+    "verificationLimitExceeded": "This item exceeds the verification limit of 500,000 registered copies."
   },
   "backup": {
     "title": "Save and restore your library",
@@ -134,5 +135,22 @@
     "unknown": "Unknown",
     "rawBinary": "Binary data (.bin)",
     "rawRom": "Raw ROM (.rom)"
+  },
+  "integrity": {
+    "title": "Integrity observations",
+    "scope": "Checks all registered copies of this item’s content, including copies in other items. Does not scan for new files.",
+    "issues": "Problems found. Review the counts below.",
+    "verified": "Matching copies",
+    "changed": "Changed copies",
+    "missing": "Missing copies",
+    "inaccessible": "Inaccessible copies",
+    "unverified": "Unchecked copies",
+    "unlocated": "Content without a registered copy",
+    "lastChecked": "Latest observation: {{date}}. Files may have changed since.",
+    "neverChecked": "No integrity observation recorded.",
+    "verify": "Verify integrity",
+    "verifyLabel": "Verify integrity of {{title}}",
+    "progress": "{{processed}} / {{total}} registered copies checked",
+    "completed": "Check completed. Review integrity observations in the Library for matching, changed, missing or inaccessible copies."
   }
 }

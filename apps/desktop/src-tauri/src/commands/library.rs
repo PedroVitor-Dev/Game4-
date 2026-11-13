@@ -105,3 +105,43 @@ pub async fn library_item_files(
     .await
     .map_err(|_| IpcError::new(ErrorCode::DatabaseTaskFailed))?
 }
+
+#[tauri::command]
+pub async fn library_verify(
+    database: tauri::State<'_, Arc<Database>>,
+    state: tauri::State<'_, Arc<ImportState>>,
+    request: StartVerifyRequest,
+) -> Result<TaskAccepted, IpcError> {
+    let db = Arc::clone(database.inner());
+    let state = Arc::clone(state.inner());
+    tauri::async_runtime::spawn_blocking(move || {
+        let _admission = state
+            .gate
+            .lock()
+            .map_err(|_| IpcError::new(ErrorCode::UnexpectedError))?;
+        let (task, created) = crate::verification::accept(&db, &request)?;
+        if created {
+            let id = task.task_id.clone();
+            let worker = Arc::clone(&state);
+            tauri::async_runtime::spawn_blocking(move || {
+                let _worker = worker.worker.lock().unwrap_or_else(|e| e.into_inner());
+                let _ = crate::verification::run(&db, &id, &request.item_id);
+            });
+        }
+        Ok(task)
+    })
+    .await
+    .map_err(|_| IpcError::new(ErrorCode::DatabaseTaskFailed))?
+}
+#[tauri::command]
+pub async fn library_integrity(
+    database: tauri::State<'_, Arc<Database>>,
+    request: ExportManifestRequest,
+) -> Result<LibraryIntegrity, IpcError> {
+    let db = Arc::clone(database.inner());
+    tauri::async_runtime::spawn_blocking(move || {
+        crate::verification::summary(&db, &request.item_id)
+    })
+    .await
+    .map_err(|_| IpcError::new(ErrorCode::DatabaseTaskFailed))?
+}

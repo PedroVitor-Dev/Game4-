@@ -28,3 +28,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0010](0010-library-backup-restore.md) | Accepted | Validated private library backups and transactional restoration |
 
 | [0011](0011-file-identification.md) | Accepted initial detector | Content signatures, filename hints, exact sizes, and compatibility |
+
+| [0012](0012-manual-integrity.md) | Accepted | Background manual integrity checks and atomic copy observations |

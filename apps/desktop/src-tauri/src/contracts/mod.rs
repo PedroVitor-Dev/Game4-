@@ -12,6 +12,8 @@ pub enum ImplementedCommand {
     DatabaseInfo,
     LibrarySelectSources,
     LibraryImport,
+    LibraryVerify,
+    LibraryIntegrity,
     LibraryList,
     LibraryItemFiles,
     TasksList,
@@ -22,11 +24,13 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 12] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 14] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
     ImplementedCommand::LibraryImport,
+    ImplementedCommand::LibraryVerify,
+    ImplementedCommand::LibraryIntegrity,
     ImplementedCommand::LibraryList,
     ImplementedCommand::LibraryItemFiles,
     ImplementedCommand::TasksList,
@@ -40,11 +44,9 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 12] = [
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
 #[serde(rename_all = "snake_case")]
 pub enum DraftCommand {
-    LibraryVerify,
     TaskCancel,
 }
-pub const DRAFT_COMMANDS: [DraftCommand; 2] =
-    [DraftCommand::LibraryVerify, DraftCommand::TaskCancel];
+pub const DRAFT_COMMANDS: [DraftCommand; 1] = [DraftCommand::TaskCancel];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
@@ -62,6 +64,7 @@ pub enum ErrorCode {
     SourceUnavailable,
     SourceChanged,
     ImportLimitExceeded,
+    VerificationLimitExceeded,
     ManifestInvalid,
     ManifestVersionUnsupported,
     ManifestWriteFailed,
@@ -73,7 +76,7 @@ pub enum ErrorCode {
     RestoreFailed,
 }
 
-pub const ERROR_CODES: [ErrorCode; 22] = [
+pub const ERROR_CODES: [ErrorCode; 23] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -87,6 +90,7 @@ pub const ERROR_CODES: [ErrorCode; 22] = [
     ErrorCode::SourceUnavailable,
     ErrorCode::SourceChanged,
     ErrorCode::ImportLimitExceeded,
+    ErrorCode::VerificationLimitExceeded,
     ErrorCode::ManifestInvalid,
     ErrorCode::ManifestVersionUnsupported,
     ErrorCode::ManifestWriteFailed,
@@ -188,7 +192,7 @@ pub enum VerificationStatus {
     Inaccessible,
 }
 
-// Shared library/task DTOs. Verification, cancellation and events remain drafts.
+// Shared library/task DTOs. Cancellation and events remain drafts.
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct PageRequest {
@@ -465,4 +469,17 @@ pub struct LibraryItemFilesRequest {
 pub struct LibraryItemFilesPage {
     pub files: Vec<LibraryFileInfo>,
     pub next_cursor: Option<String>,
+}
+
+/// Latest stored observations, not a guarantee about current filesystem state.
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct LibraryIntegrity {
+    pub verified: u32,
+    pub changed: u32,
+    pub missing: u32,
+    pub inaccessible: u32,
+    pub unverified: u32,
+    pub unlocated: u32,
+    pub last_checked_at: Option<String>,
 }

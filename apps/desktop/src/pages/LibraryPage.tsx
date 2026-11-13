@@ -5,6 +5,7 @@ import type {
   SourceKind,
   SourceSelection,
   StartImportRequest,
+  StartVerifyRequest,
   TaskSnapshot,
 } from "@game4/ipc-contracts";
 import {
@@ -14,6 +15,7 @@ import {
   listTasks,
   isTauri,
   exportManifest,
+  verifyItem,
 } from "../services/desktop";
 import { LibraryItemCard } from "../components/LibraryItemCard";
 import { getIpcErrorKey } from "../services/errors";
@@ -31,6 +33,7 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
   const libraryLoaded = useRef(false);
   const completed = useRef("");
   const pending = useRef<StartImportRequest | null>(null);
+  const pendingVerify = useRef<StartVerifyRequest | null>(null);
   const alive = useRef(true);
   const mounted = useRef(false);
   const refresh = useCallback(async () => {
@@ -128,6 +131,21 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
       if (!mounted.current) return;
       setItems((v) => [...v, ...page.items]);
       setCursor(page.nextCursor);
+    } catch (e) {
+      if (mounted.current) setError(e);
+    } finally {
+      if (mounted.current) setBusy(false);
+    }
+  }
+  async function verify(itemId: string) {
+    setBusy(true);
+    setError(undefined);
+    if (pendingVerify.current?.itemId !== itemId)
+      pendingVerify.current = { requestId: crypto.randomUUID(), itemId };
+    try {
+      await verifyItem(pendingVerify.current);
+      pendingVerify.current = null;
+      if (mounted.current) await refresh();
     } catch (e) {
       if (mounted.current) setError(e);
     } finally {
@@ -243,7 +261,8 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
               <LibraryItemCard
                 key={item.id}
                 item={item}
-                busy={busy}
+                busy={busy || active}
+                onVerify={(id) => void verify(id)}
                 onExport={(id) => void saveManifest(id)}
               />
             ))}
@@ -271,15 +290,24 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
                 </span>
               </div>
               <p>
-                {t("tasks.progress", {
-                  processed: number(job.processedCount),
-                  total: job.totalCount === null ? "…" : number(job.totalCount),
-                })}
+                {t(
+                  job.kind === "verify"
+                    ? "integrity.progress"
+                    : "tasks.progress",
+                  {
+                    processed: number(job.processedCount),
+                    total:
+                      job.totalCount === null ? "…" : number(job.totalCount),
+                  },
+                )}
               </p>
+              {job.kind === "verify" && job.status === "succeeded" && (
+                <p>{t("integrity.completed")}</p>
+              )}
               {job.error && <p role="alert">{t(getIpcErrorKey(job.error))}</p>}
               {job.status === "running" && (
                 <progress
-                  aria-label={t("tasks.kind.import")}
+                  aria-label={t(`tasks.kind.${job.kind}`)}
                   {...(job.totalCount !== null && BigInt(job.totalCount) > 0n
                     ? {
                         max: 100,

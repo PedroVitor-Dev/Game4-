@@ -5,6 +5,8 @@
       "database_info",
       "library_select_sources",
       "library_import",
+      "library_verify",
+      "library_integrity",
       "library_list",
       "library_item_files",
       "tasks_list",

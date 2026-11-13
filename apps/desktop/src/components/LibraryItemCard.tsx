@@ -4,24 +4,29 @@ import type {
   FileFormat,
   LibraryFileInfo,
   LibraryItemSummary,
+  LibraryIntegrity,
 } from "@game4/ipc-contracts";
 import {
   formatBytes,
   formatLabels,
   platformLabels,
 } from "../services/file-identification";
-import { getItemFiles, isTauri } from "../services/desktop";
+import { getItemFiles, getIntegrity, isTauri } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 export function LibraryItemCard({
   item,
   busy,
   onExport,
+  onVerify,
 }: {
   item: LibraryItemSummary;
   busy: boolean;
   onExport: (id: string) => void;
+  onVerify: (id: string) => void;
 }) {
   const { t, i18n } = useTranslation();
+  const [health, setHealth] = useState<LibraryIntegrity>();
+  const [healthError, setHealthError] = useState<unknown>();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<LibraryFileInfo[]>([]);
@@ -43,6 +48,23 @@ export function LibraryItemCard({
     setCursor(null);
     setLoading(false);
     setError(undefined);
+  }, [item]);
+  useEffect(() => {
+    let stopped = false;
+    setHealth(undefined);
+    setHealthError(undefined);
+    if (isTauri())
+      void getIntegrity({ itemId: item.id }).then(
+        (result) => {
+          if (!stopped) setHealth(result);
+        },
+        (e: unknown) => {
+          if (!stopped) setHealthError(e);
+        },
+      );
+    return () => {
+      stopped = true;
+    };
   }, [item]);
   async function load(append = false) {
     const requestGeneration = ++generation.current;
@@ -127,8 +149,57 @@ export function LibraryItemCard({
           </span>
         )}
       </div>
+      <section className="integrity-summary" aria-label={t("integrity.title")}>
+        <h3>{t("integrity.title")}</h3>
+        <p>{t("integrity.scope")}</p>
+        {health && (
+          <>
+            {health.changed +
+              health.missing +
+              health.inaccessible +
+              health.unlocated >
+              0 && <p role="status">{t("integrity.issues")}</p>}
+            <dl>
+              {(
+                [
+                  "verified",
+                  "changed",
+                  "missing",
+                  "inaccessible",
+                  "unverified",
+                  "unlocated",
+                ] as const
+              ).map((status) => (
+                <div key={status}>
+                  <dt>{t(`integrity.${status}`)}</dt>
+                  <dd>{health[status].toLocaleString(i18n.language)}</dd>
+                </div>
+              ))}
+            </dl>
+            <p>
+              {health.lastCheckedAt
+                ? t("integrity.lastChecked", {
+                    date: new Date(health.lastCheckedAt).toLocaleString(
+                      i18n.language,
+                    ),
+                  })
+                : t("integrity.neverChecked")}
+            </p>
+          </>
+        )}
+        {healthError !== undefined && (
+          <p role="alert">{t(getIpcErrorKey(healthError))}</p>
+        )}
+      </section>
       <span className="local-badge">{t("library.localItem")}</span>
       <div className="manifest-action actions">
+        <button
+          disabled={busy || !isTauri()}
+          onClick={() => onVerify(item.id)}
+          aria-label={t("integrity.verifyLabel", { title: item.title })}
+        >
+          {t("integrity.verify")}
+        </button>
         <button
           disabled={busy || !isTauri()}
           aria-label={t("library.exportManifestLabel", { title: item.title })}

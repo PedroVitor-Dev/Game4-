@@ -6,6 +6,7 @@ pub mod identification;
 pub mod library;
 pub mod manifests;
 pub mod tasks;
+pub mod verification;
 
 use std::sync::Arc;
 use tauri::Manager;
@@ -27,6 +28,8 @@ pub fn run() {
             commands::database::database_info,
             commands::library::library_select_sources,
             commands::library::library_import,
+            commands::library::library_verify,
+            commands::library::library_integrity,
             commands::library::library_list,
             commands::library::library_item_files,
             commands::library::tasks_list,

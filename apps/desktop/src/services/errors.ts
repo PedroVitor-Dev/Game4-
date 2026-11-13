@@ -16,6 +16,7 @@ const keys = {
   SOURCE_UNAVAILABLE: "sourceUnavailable",
   SOURCE_CHANGED: "sourceChanged",
   IMPORT_LIMIT_EXCEEDED: "importLimitExceeded",
+  VERIFICATION_LIMIT_EXCEEDED: "verificationLimitExceeded",
   MANIFEST_INVALID: "manifestInvalid",
   MANIFEST_VERSION_UNSUPPORTED: "manifestVersionUnsupported",
   MANIFEST_WRITE_FAILED: "manifestWriteFailed",

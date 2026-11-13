@@ -343,3 +343,52 @@ test("file identification responses validate vocabulary, evidence and precise si
     file.sizeBytes,
   );
 });
+
+test("manual verification uses advertised commands and validates copy observations", async () => {
+  const request = {
+    requestId: "12345678-1234-4234-9234-123456789abc",
+    itemId: "1",
+  };
+  const health = {
+    verified: 2,
+    changed: 1,
+    missing: 1,
+    inaccessible: 0,
+    unverified: 0,
+    unlocated: 1,
+    lastCheckedAt: "2026-11-13T12:00:00.000Z",
+  };
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "library_verify") return { taskId: "8", status: "queued" };
+    return health;
+  });
+  assert.deepEqual(await client.verifyItem(request), {
+    taskId: "8",
+    status: "queued",
+  });
+  assert.deepEqual(calls[1], ["library_verify", { request }]);
+  assert.deepEqual(await client.getIntegrity({ itemId: "1" }), health);
+  for (const bad of [
+    { ...health, changed: -1 },
+    { ...health, verified: "2" },
+    { ...health, lastCheckedAt: "invalid" },
+    { ...health, unlocated: undefined },
+  ]) {
+    const invalid = make(async (command) =>
+      command === "app_info" ? examples.appInfo : bad,
+    );
+    await assert.rejects(
+      invalid.getIntegrity({ itemId: "1" }),
+      code("INVALID_RESPONSE"),
+    );
+  }
+  const old = make(async () => ({ ...examples.appInfo, capabilities: [] }));
+  await assert.rejects(old.verifyItem(request), code("CAPABILITY_UNAVAILABLE"));
+  await assert.rejects(
+    make(async () => assert.fail("native call"), false).verifyItem(request),
+    code("IPC_UNAVAILABLE"),
+  );
+});

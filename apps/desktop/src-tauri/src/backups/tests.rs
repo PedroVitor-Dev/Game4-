@@ -331,3 +331,43 @@ fn schema3_backup_v1_restores_without_signature_claims() {
     ));
     assert!(files[0].detector_version.is_none());
 }
+
+#[test]
+fn manual_verification_survives_backup_and_restored_copies_require_recheck() {
+    let (d, db, imports) = setup();
+    let original = source(d.path(), "verify.bin");
+    import(&db, &original);
+    std::fs::write(&original, b"xyz").unwrap();
+    let request = StartVerifyRequest {
+        request_id: Uuid::new_v4().to_string(),
+        item_id: "1".into(),
+    };
+    let (task, _) = crate::verification::accept(&db, &request).unwrap();
+    crate::verification::run(&db, &task.task_id, "1").unwrap();
+    assert_eq!(crate::verification::summary(&db, "1").unwrap().changed, 1);
+    let path = d.path().join("verified-backup.json");
+    save(&db, &imports, &path).unwrap();
+    let state = BackupState::default();
+    let preview = state.prepare(&db, &imports, &path).unwrap();
+    state
+        .restore(&db, &imports, &preview.restore_token)
+        .unwrap();
+    assert_eq!(
+        crate::verification::summary(&db, "1").unwrap().unverified,
+        1
+    );
+    assert!(
+        crate::verification::summary(&db, "1")
+            .unwrap()
+            .last_checked_at
+            .is_none()
+    );
+    assert!(!crate::verification::accept(&db, &request).unwrap().1);
+    let next = StartVerifyRequest {
+        request_id: Uuid::new_v4().to_string(),
+        item_id: "1".into(),
+    };
+    let (task, _) = crate::verification::accept(&db, &next).unwrap();
+    crate::verification::run(&db, &task.task_id, "1").unwrap();
+    assert_eq!(crate::verification::summary(&db, "1").unwrap().changed, 1);
+}

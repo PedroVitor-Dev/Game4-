@@ -1,6 +1,6 @@
 # SQLite storage
 
-Status: schema v4, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Editorial editing, cancellation, and standalone integrity rechecks remain future work. Full-catalog backup/restore is implemented separately.
+Status: schema v4, migrations, local import/hashing, task progress/recovery, and library listing are implemented. Manual integrity rechecks are implemented. Editorial editing and cancellation remain future work. Full-catalog backup/restore is implemented separately.
 
 ## Location and lifecycle
 
@@ -61,3 +61,5 @@ The backup feature reads known tables under a transaction rather than copying a 
 ## Schema version 4
 
 Migration 0004 adds `file_identifications`, keyed by content ID with constrained header format/platform observations and detector version 1. Old rows are not scanned or relabeled as signature matches. Declared collection metadata is untouched; filename hints are derived per relative entry. Backups now include the eighth table and write v2/schema v4, while v1/schema v3 remains readable. See [identification](file-identification.md).
+
+Manual verification uses the existing location observation columns and verify task kind, with no schema change. Findings and completion commit atomically. See [manual integrity](library-integrity.md).

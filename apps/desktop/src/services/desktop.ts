@@ -23,3 +23,5 @@ export const {
 } = client;
 
 export const getItemFiles = client.getItemFiles;
+
+export const { verifyItem, getIntegrity } = client;

@@ -42,6 +42,7 @@ pub fn typescript() -> String {
         SourceSelection::decl(&config),
         StartImportRequest::decl(&config),
         StartVerifyRequest::decl(&config),
+        LibraryIntegrity::decl(&config),
         TaskIdRequest::decl(&config),
         TaskAccepted::decl(&config),
         TaskSnapshot::decl(&config),

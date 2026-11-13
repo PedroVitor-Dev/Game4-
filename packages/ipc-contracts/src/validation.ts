@@ -29,6 +29,7 @@ import type {
   TaskSnapshot,
   TaskPage,
   LibraryPage,
+  LibraryIntegrity,
 } from "./generated.ts";
 
 export class IpcFailure extends Error {
@@ -362,4 +363,24 @@ export function parseLibraryItemFilesPage(v: unknown): LibraryItemFilesPage {
   if (files.length > 100 || (nextCursor !== null && files.length === 0))
     throw failure("INVALID_RESPONSE");
   return { files, nextCursor };
+}
+
+export function parseLibraryIntegrity(v: unknown): LibraryIntegrity {
+  const o = object(v);
+  const lastCheckedAt = nullableText(o.lastCheckedAt);
+  if (
+    lastCheckedAt !== null &&
+    (!/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?Z$/.test(lastCheckedAt) ||
+      !Number.isFinite(Date.parse(lastCheckedAt)))
+  )
+    throw failure("INVALID_RESPONSE");
+  return {
+    verified: safeCount(o.verified, 0, 4294967295),
+    changed: safeCount(o.changed, 0, 4294967295),
+    missing: safeCount(o.missing, 0, 4294967295),
+    inaccessible: safeCount(o.inaccessible, 0, 4294967295),
+    unverified: safeCount(o.unverified, 0, 4294967295),
+    unlocated: safeCount(o.unlocated, 0, 4294967295),
+    lastCheckedAt,
+  };
 }

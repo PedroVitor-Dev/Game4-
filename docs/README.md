@@ -39,3 +39,5 @@ See [manifest v1](manifest-v1.md) for the public JSON format, schema, compatibil
 See [save and restore the local library](library-backup.md) for private full-catalog backups and recovery.
 
 See [platform, format, and size identification](file-identification.md) for detector scope, evidence, file details, and compatibility.
+
+- [Manual library integrity](library-integrity.md): registered-copy rechecks, task outcomes and historical observations.

@@ -1,15 +1,15 @@
 # Project management and records
 
-## Status on November 4, 2026
+## Status on November 13, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; independent integrity rechecks and P2P integration remain pending.
+- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; manual integrity rechecks implemented; P2P integration remains pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
 - Languages: English repository content; implemented English and Brazilian Portuguese interface.
 - Workflow: relevant Conventional Commits; no agent push.
-- Next delivery: task cancellation and explicit integrity rechecks; import/hashing and browsing are implemented. M0 clean-machine verification and the first hosted CI run remain outstanding.
+- Next delivery: task cancellation; import/hashing and browsing are implemented. M0 clean-machine verification and the first hosted CI run remain outstanding.
 
 ## Immediate backlog
 
@@ -190,3 +190,9 @@ Related decisions:
 Next step:
 Commit: add hash when known; Git history is the definitive reference.
 ```
+
+### November 13, 2026 — Manual integrity verification
+
+Added per-item background SHA-256 rechecks of all registered content copies, atomic copy-health observations, persistent task progress, request replay protection, and English/Portuguese Library counts. Reference hashes and original bytes are preserved. Existing schema v4 and backup v2 remain compatible. See [behavior and limits](library-integrity.md) and [ADR 0012](decisions/0012-manual-integrity.md).
+
+Validation: 42 Rust tests, 14 frontend/IPC tests, and 3 public-schema tests passed (59 total). TypeScript, 128-key locale parity, Prettier, Rust formatting, Clippy with warnings denied, contract drift checks, frontend production build, and native Tauri debug build without bundling passed. No manual GUI smoke test was performed for this increment; user catalog files were not used as test fixtures. No push.

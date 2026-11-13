@@ -1,6 +1,6 @@
 # Frontend–backend IPC contract v1
 
-Status: v1 implements app/database information, source selection, import, library/task listing, task lookup, manifest export, and private library backup/restore. Verification, cancellation, and task events remain drafts. See [local import](library-import.md) for implemented behavior and limits.
+Status: v1 implements app/database information, source selection, import, library/task listing, task lookup, manifest export, and private library backup/restore. Manual integrity verification and copy-health observations are implemented. Cancellation and task events remain drafts. See [local import](library-import.md) for implemented behavior and limits.
 
 ## Ownership and boundary
 
@@ -30,6 +30,8 @@ Canonical application response:
     "database_info",
     "library_select_sources",
     "library_import",
+    "library_verify",
+    "library_integrity",
     "library_list",
     "library_item_files",
     "tasks_list",
@@ -113,7 +115,7 @@ Every argument-bearing handler uses one top-level `request` object, for example 
 | `task_get`               | `TaskIdRequest`        | `TaskSnapshot`       |
 | `task_cancel`            | `TaskIdRequest`        | `CancelTaskResponse` |
 
-The table includes both active and draft contracts. `library_verify` and `task_cancel` are drafts; all other rows are active. `DraftCommand` and `DRAFT_COMMANDS` are separate from the implemented registry. There are no executable stubs that report success. A draft becomes callable only after adding a real handler, input/business validation, tests, capability advertisement, runtime response decoder, and typed client method.
+The table includes both active and draft contracts. `task_cancel` is a draft; all other rows are active. `DraftCommand` and `DRAFT_COMMANDS` are separate from the implemented registry. There are no executable stubs that report success. A draft becomes callable only after adding a real handler, input/business validation, tests, capability advertisement, runtime response decoder, and typed client method.
 
 ### Selection and start requests
 
@@ -131,7 +133,7 @@ The immediate response identifies an accepted task; it does not mean work has co
 
 `PageRequest` has explicit `cursor: string | null` and `limit: number` (1–100; UI default 50). `LibraryListRequest.query` is null or trimmed text up to 200 characters. Cursors are opaque, bound to the command/filter/sort, and validated by Rust; `nextCursor: null` means the end. Initial ordering is library ID ascending and task ID descending. Do not expose SQL offsets or construct queries from cursors.
 
-Handlers must validate IDs, bounds, token expiry, semantic field combinations, and authorization before side effects. Generated TypeScript and Rust deserialization are not substitutes for these business rules. Active commands validate these rules. Verification/cancellation DTOs still describe shapes only.
+Handlers must validate IDs, bounds, token expiry, semantic field combinations, and authorization before side effects. Generated TypeScript and Rust deserialization are not substitutes for these business rules. Active commands validate these rules. Cancellation DTOs still describe shapes only.
 
 ## Task lifecycle and draft events
 
@@ -189,3 +191,7 @@ Additional stable errors: `BACKUP_INVALID`, `BACKUP_VERSION_UNSUPPORTED`, `BACKU
 Library summaries now include `formats` and `detectedPlatforms` groups while preserving declared `platform`. Missing groups from an older backend decode to empty arrays. `library_item_files` accepts `LibraryItemFilesRequest` (item ID and page) and returns `LibraryItemFilesPage` (relative paths, precise sizes, hashes, format/platform evidence, detector version, cursor). The native capability, Rust enums, generated TypeScript vocabulary, and runtime decoders are implemented. No physical filesystem path is accepted or returned. See [the identification contract](file-identification.md).
 
 Current backup writes are v2/schema v4; the original v1/schema v3 remains readable. SQLite schema version is now 4; manifest/IPC major versions remain 1.
+
+## Manual integrity commands
+
+`library_verify(StartVerifyRequest)` resolves `TaskAccepted`; `library_integrity(ExportManifestRequest)` resolves `LibraryIntegrity`. Both are capability-gated active commands. Counts are nonnegative u32 values; `lastCheckedAt` is nullable UTC. See [scope, idempotency and result interpretation](library-integrity.md). Contract major remains 1; schema remains 4.

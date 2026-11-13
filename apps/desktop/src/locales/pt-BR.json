@@ -106,7 +106,8 @@
     "backupWriteFailed": "Não foi possível gravar o backup. Escolha um novo nome .json em uma pasta com permissão de escrita; a restauração também precisa de espaço para a cópia de recuperação.",
     "libraryBusy": "Aguarde todas as importações terminarem antes de salvar ou restaurar a Biblioteca.",
     "restoreStale": "A prévia de restauração expirou ou o catálogo mudou. Selecione o backup novamente para revisá-lo.",
-    "restoreFailed": "Não foi possível concluir a restauração. O catálogo atual foi preservado; eventuais arquivos de recuperação continuam disponíveis."
+    "restoreFailed": "Não foi possível concluir a restauração. O catálogo atual foi preservado; eventuais arquivos de recuperação continuam disponíveis.",
+    "verificationLimitExceeded": "Este item excede o limite de verificação de 500.000 cópias cadastradas."
   },
   "backup": {
     "title": "Salvar e restaurar sua Biblioteca",
@@ -134,5 +135,22 @@
     "unknown": "Desconhecido",
     "rawBinary": "Dados binários (.bin)",
     "rawRom": "ROM bruta (.rom)"
+  },
+  "integrity": {
+    "title": "Observações de integridade",
+    "scope": "Confere todas as cópias cadastradas do conteúdo deste item, incluindo cópias em outros itens. Não procura arquivos novos.",
+    "issues": "Problemas encontrados. Confira as contagens abaixo.",
+    "verified": "Cópias correspondentes",
+    "changed": "Cópias alteradas",
+    "missing": "Cópias ausentes",
+    "inaccessible": "Cópias inacessíveis",
+    "unverified": "Cópias não verificadas",
+    "unlocated": "Conteúdo sem cópia cadastrada",
+    "lastChecked": "Observação mais recente: {{date}}. Os arquivos podem ter mudado desde então.",
+    "neverChecked": "Nenhuma observação de integridade registrada.",
+    "verify": "Verificar integridade",
+    "verifyLabel": "Verificar integridade de {{title}}",
+    "progress": "{{processed}} / {{total}} cópias cadastradas verificadas",
+    "completed": "Verificação concluída. Consulte na Biblioteca as cópias correspondentes, alteradas, ausentes ou inacessíveis."
   }
 }

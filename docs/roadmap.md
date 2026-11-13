@@ -45,4 +45,6 @@ Plan one small increment at a time. On completion, validate it, update the log, 
 
 ## M2 manifest increment — November 4, 2026
 
-Manifest v1, public JSON Schema, offline parser/validation, and per-item Library JSON export are implemented and locally tested. Export records stored catalog hashes rather than performing a new disk check. Manifest import/catalog reconstruction, independent integrity verification, and the offline survival test remain open, so M2 is not complete. See [the format](manifest-v1.md).
+Manifest v1, public JSON Schema, offline parser/validation, and per-item Library JSON export are implemented and locally tested. Export records stored catalog hashes rather than performing a new disk check. Manifest import/catalog reconstruction and the offline survival test remain open, so M2 is not complete. See [the format](manifest-v1.md).
+
+Manual registered-copy SHA-256 verification is implemented (November 13). See [behavior and limits](library-integrity.md). M2 remains open for catalog reconstruction and offline survival validation.

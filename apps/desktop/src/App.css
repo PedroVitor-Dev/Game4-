@@ -503,3 +503,24 @@ input:focus-visible {
   color: #8e99ae;
   overflow-wrap: anywhere;
 }
+
+.integrity-summary {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+.integrity-summary p {
+  color: var(--text-muted, #a9a6b9);
+}
+.integrity-summary dl {
+  display: grid;
+  gap: 0.3rem;
+}
+.integrity-summary dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.integrity-summary dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
