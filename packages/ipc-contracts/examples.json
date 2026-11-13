@@ -14,6 +14,8 @@
       "library_export_manifest",
       "library_export_package",
       "package_open",
+      "library_export_ever",
+      "ever_open",
       "library_save_backup",
       "library_prepare_restore",
       "library_restore_backup"
@@ -45,5 +47,26 @@
     "code": "DATABASE_UNAVAILABLE",
     "field": null,
     "retryable": false
+  },
+  "everExport": {
+    "cancelled": false,
+    "fileName": "original-files.g4e",
+    "magnet": "magnet:?xt=urn:btih:a19f5bc286cedca2a75a693eb8fba05a70bd6c07",
+    "torrentFileName": "original-files.torrent"
+  },
+  "everOpen": {
+    "cancelled": false,
+    "manifest": {
+      "contentVerified": false,
+      "fileCount": 3,
+      "fileName": "original-files.g4e",
+      "magnets": [
+        "magnet:?xt=urn:btih:a19f5bc286cedca2a75a693eb8fba05a70bd6c07"
+      ],
+      "representation": "original_files",
+      "schemaVersion": 1,
+      "title": "Game4∞ synthetic fixture",
+      "totalBytes": "40"
+    }
   }
 }

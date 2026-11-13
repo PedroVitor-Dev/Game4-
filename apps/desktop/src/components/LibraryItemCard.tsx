@@ -19,12 +19,14 @@ export function LibraryItemCard({
   onExport,
   onVerify,
   onPackage,
+  onEver,
 }: {
   item: LibraryItemSummary;
   busy: boolean;
   onExport: (id: string) => void;
   onVerify: (id: string) => void;
   onPackage: (id: string) => void;
+  onEver: (id: string) => void;
 }) {
   const { t, i18n } = useTranslation();
   const [health, setHealth] = useState<LibraryIntegrity>();
@@ -195,6 +197,13 @@ export function LibraryItemCard({
       </section>
       <span className="local-badge">{t("library.localItem")}</span>
       <div className="manifest-action actions">
+        <button
+          disabled={busy || !isTauri()}
+          onClick={() => onEver(item.id)}
+          aria-label={t("ever.exportLabel", { title: item.title })}
+        >
+          {t("ever.export")}
+        </button>
         <button
           disabled={busy || !isTauri()}
           onClick={() => onPackage(item.id)}

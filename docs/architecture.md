@@ -71,3 +71,7 @@ The `backups` Rust module implements bounded private catalog snapshots, independ
 ## Discovery descriptor boundary
 
 `packages/g4e-format/` specifies .g4e v1, with schema, synthetic examples/companions and a Node offline reference validator. It does not add native transfer commands. Future integration maps original source files privately into torrent metadata, supports optional .g4 payloads and separates descriptor validation from metadata acquisition and content verification. No central service or mandatory staging copy is a prerequisite.
+
+## .g4e implementation boundary
+
+Rust `ever` owns strict parsing/serialization, direct-original torrent generation and explicit metainfo/payload verification. Native commands expose export/open only and run off the UI thread. The Node public validator remains an independent implementation. A standalone librqbit example checks torrent parse compatibility without starting a session. No network engine is linked or adopted into desktop runtime by these commands.

@@ -27,7 +27,7 @@ The isolated librqbit 9.1.0 probe passed loopback transfer, session/process resu
 - M0 requires available Windows tools and SDKs. Localization is part of M0; review its effect on estimates when implementation starts.
 - M1 defines the model used by M2. M3 may affect integration, but the catalog must remain independent of the engine.
 - M3 is a decision gate: if no engine meets requirements, release a local-library version first and replan P2P.
-- `.g4` v1 has a public specification, descriptor schema, fixtures and create/read implementation. `.g4e` v1 has a public specification, schema, examples and offline validator; desktop integration remains pending. Original-file sharing must not require packaging or staging copies. Neither format blocks the P2P prototype; use `.torrent` files and JSON manifests first.
+- `.g4` v1 has a public specification, descriptor schema, fixtures and create/read implementation. `.g4e` v1 has native create/read, direct-original torrent references, a public specification, schema, examples and offline verification; in-app sessions/discovery remain pending. Original-file sharing must not require packaging or staging copies. Neither format blocks the P2P prototype; use `.torrent` files and JSON manifests first.
 - Alpha does not imply stable formats. Document migrations and limitations.
 
 ## Later horizon without committed dates
@@ -52,3 +52,5 @@ Manual registered-copy SHA-256 verification is implemented (November 13). See [b
 The .g4 v1 increment (November 13) adds public layout/limits/schema, synthetic ZIP32/ZIP64 fixtures, background desktop export/open and an offline create/read CLI. Extraction, catalog reconstruction and the full offline survival milestone remain open.
 
 The .g4e v1 specification increment (November 13) defines original-files/package representations, BitTorrent v1/magnet identity binding, limits, examples and offline validation. Before P2P delivery, implement read-only native source mapping without mandatory staging copies, acquired-metainfo validation, explicit sharing controls and real transfer verification. Format validation is not completion of that milestone.
+
+The .g4e creation/reading increment (November 13) implements native actions and an offline CLI, checks original SHA-256 while generating standard torrent references without .g4/staging copies, and adds full explicit local descriptor/torrent/source verification. Format compatibility tests now span Node, Rust, independent Python fixtures and librqbit parsing. In-app seeding/download sessions and real transfer validation remain open.

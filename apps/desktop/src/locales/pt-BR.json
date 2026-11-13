@@ -112,7 +112,12 @@
     "packageVersionUnsupported": "Esta versão de pacote não é suportada. Atualize o Game4∞ para lê-la.",
     "packageWriteFailed": "Não foi possível salvar o pacote. Escolha um novo nome .g4 e confira as permissões e o espaço livre.",
     "packageIntegrityFailed": "Um arquivo está ausente, inacessível ou não corresponde ao hash/tamanho de referência. Verifique as origens ou escolha outro pacote.",
-    "packageLimitExceeded": "Este pacote excede os limites suportados (100.000 arquivos, 1 TiB de conteúdo ou limites de metadados)."
+    "packageLimitExceeded": "Este pacote excede os limites suportados (100.000 arquivos, 1 TiB de conteúdo ou limites de metadados).",
+    "g4eInvalid": "Este descritor .g4e ou referência de torrent não é válido ou suportado.",
+    "g4eUnsupportedVersion": "Esta versão .g4e não é suportada.",
+    "g4eLimitExceeded": "O descritor, torrent ou coleção de origem excede os limites suportados.",
+    "g4eIntegrityFailed": "Os originais ou o torrent selecionado não correspondem às identidades de referência. Nenhum original foi reparado ou modificado.",
+    "g4eWriteFailed": "Não foi possível salvar as referências. Escolha um novo nome .g4e e confira permissões e espaço livre. Um novo torrent auxiliar pode permanecer após uma falha tardia de gravação."
   },
   "backup": {
     "title": "Salvar e restaurar sua Biblioteca",
@@ -169,5 +174,20 @@
     "saved": "Pacote criado: {{fileName}}",
     "verified": "Todos os tamanhos e hashes SHA-256 correspondem ao manifesto. Isso verifica a consistência, não a autenticidade do fabricante.",
     "readOnly": "Pacote inspecionado. Nenhum arquivo foi extraído, executado ou importado para a Biblioteca."
+  },
+  "ever": {
+    "title": "Manifestos Game4 Ever",
+    "description": "Crie referências de compartilhamento a partir dos originais de um item ou inspecione um .g4e offline. Criar um pacote .g4 é opcional.",
+    "export": "Exportar .g4e dos originais",
+    "exportLabel": "Exportar referências de {{title}} sem converter os originais",
+    "open": "Abrir .g4e",
+    "creating": "Conferindo SHA-256 dos originais e calculando peças do torrent. Os originais permanecem no lugar; nenhum conteúdo é copiado e nenhum .g4 é criado.",
+    "reading": "Lendo e validando .g4e offline…",
+    "saved": "Referências criadas: {{fileName}} e {{torrentFileName}}",
+    "shareHint": "Compartilhe os dois arquivos de referência ou o magnet. Um cliente BitTorrent semeando ainda é necessário para disponibilizar os bytes originais. Nenhuma transmissão foi iniciada no Game4∞.",
+    "magnet": "Link magnet",
+    "descriptorOnly": "Descritor válido. Os metadados do torrent, a disponibilidade das origens e o conteúdo não foram verificados nesta abertura. Nenhuma conexão de rede foi feita.",
+    "original_files": "Arquivos originais",
+    "g4_package": "Pacote .g4 existente"
   }
 }

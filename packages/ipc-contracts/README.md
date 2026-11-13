@@ -18,3 +18,5 @@ Do not edit generated artifacts. Update Rust DTOs, regenerate, update runtime va
 See [the protocol specification](../../docs/ipc-contracts.md) for versioning, types, command mapping, semantic validation, and future prerequisites.
 
 `library_export_package` creates a .g4 from an item and returns its filename/cancellation. `package_open` verifies the entire selected package and returns a validated summary/cancellation. Both use native pickers; the client never supplies arbitrary filesystem paths.
+
+`library_export_ever` creates checked original-file .g4e/.torrent references and returns filenames/magnet; `ever_open` reads a descriptor without dereferencing it and returns `contentVerified:false`. Rust-serialized examples and runtime decoders cover cancellation, capability gates and reference-only semantics.

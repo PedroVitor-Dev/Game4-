@@ -31,6 +31,8 @@ import type {
   LibraryPage,
   LibraryIntegrity,
   PackageOpenResult,
+  EverOpenResult,
+  EverExportResult,
 } from "./generated.ts";
 
 export class IpcFailure extends Error {
@@ -418,6 +420,97 @@ export function parsePackageOpenResult(v: unknown): PackageOpenResult {
       totalBytes,
       fileCount: safeCount(p.fileCount, 1, 100000),
       verified: true,
+    },
+  };
+}
+
+function everMagnet(v: unknown): string {
+  const s = text(v);
+  if (s.length > 16384 || !/^magnet:\?[^\s\u0080-\uffff]*$/.test(s))
+    throw failure("INVALID_RESPONSE");
+  let u: URL;
+  try {
+    u = new URL(s);
+  } catch {
+    throw failure("INVALID_RESPONSE");
+  }
+  const xt = u.searchParams.getAll("xt");
+  if (
+    u.host ||
+    u.pathname ||
+    u.hash ||
+    xt.length !== 1 ||
+    !/^urn:btih:[0-9a-f]{40}$/.test(xt[0])
+  )
+    throw failure("INVALID_RESPONSE");
+  return s;
+}
+export function parseEverExportResult(v: unknown): EverExportResult {
+  const o = object(v);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  if (o.cancelled) {
+    if (o.fileName !== null || o.torrentFileName !== null || o.magnet !== null)
+      throw failure("INVALID_RESPONSE");
+    return {
+      cancelled: true,
+      fileName: null,
+      torrentFileName: null,
+      magnet: null,
+    };
+  }
+  const fileName = filename(o.fileName);
+  const torrentFileName = filename(o.torrentFileName);
+  if (!/\.g4e$/i.test(fileName) || !/\.torrent$/i.test(torrentFileName))
+    throw failure("INVALID_RESPONSE");
+  return {
+    cancelled: false,
+    fileName,
+    torrentFileName,
+    magnet: everMagnet(o.magnet),
+  };
+}
+export function parseEverOpenResult(v: unknown): EverOpenResult {
+  const o = object(v);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  if (o.cancelled) {
+    if (o.manifest !== null) throw failure("INVALID_RESPONSE");
+    return { cancelled: true, manifest: null };
+  }
+  const m = object(o.manifest);
+  const magnets = values(m.magnets).map(everMagnet);
+  const title = text(m.title);
+  if (
+    m.schemaVersion !== 1 ||
+    m.contentVerified !== false ||
+    !["original_files", "g4_package"].includes(text(m.representation)) ||
+    !title.trim() ||
+    title.length > 1024 ||
+    magnets.length < 1 ||
+    magnets.length > 16
+  )
+    throw failure("INVALID_RESPONSE");
+  const totalBytes = decimal(m.totalBytes);
+  if (BigInt(totalBytes) > 18446744073709551615n)
+    throw failure("INVALID_RESPONSE");
+  const fileName = filename(m.fileName);
+  const fileCount = safeCount(m.fileCount, 1, 100000);
+  if (
+    !/\.g4e$/i.test(fileName) ||
+    (m.representation === "g4_package" &&
+      (fileCount !== 1 || BigInt(totalBytes) > 1100048498688n))
+  )
+    throw failure("INVALID_RESPONSE");
+  return {
+    cancelled: false,
+    manifest: {
+      fileName,
+      schemaVersion: 1,
+      representation: m.representation as "original_files" | "g4_package",
+      title,
+      fileCount,
+      totalBytes,
+      magnets,
+      contentVerified: false,
     },
   };
 }

@@ -1,6 +1,6 @@
 # Game4 Ever Manifest (.g4e), version 1
 
-Status: initial public specification, November 13, 2026. The schema, offline reference validator, examples and conformance checks are implemented. Desktop discovery, torrent generation from library items and transfer-manager integration remain future work. **MUST**, **MUST NOT**, **SHOULD** and **MAY** express normative requirements. This is a metadata format, not a new transport protocol.
+Status: initial public specification, November 13, 2026. The schema, Node/Rust validators, native create/read actions, offline CLI, examples and conformance checks are implemented. Desktop discovery and transfer-manager integration remain future work. See [implemented workflows](../../docs/ever-manifests.md). **MUST**, **MUST NOT**, **SHOULD** and **MAY** express normative requirements. This is a metadata format, not a new transport protocol.
 
 ## 1. Purpose and relationship to .g4
 
@@ -109,7 +109,7 @@ Limit input and depth before general parsing. Preserve exact sizes with arbitrar
 
 ## 7. Reference validation and public examples
 
-The [offline Node validator](validation.mjs) implements schema/JSON/path/identity consistency and resource rules. It reads only the supplied descriptor and bundled schemas. Success means **descriptor validity**, not verified companion files, verified torrent metadata, a reachable swarm, verified payloads or production P2P readiness. No desktop IPC command or transfer engine capability is added by this specification increment.
+The [offline Node validator](validation.mjs) implements schema/JSON/path/identity consistency and resource rules. It reads only the supplied descriptor and bundled schemas. Success means **descriptor validity**, not verified companion files, verified torrent metadata, a reachable swarm, verified payloads or production P2P readiness. Native create/read commands are implemented separately; opening a descriptor never starts a transfer session. Explicit Rust CLI verification can bind a selected torrent and local originals; see [the implementation guide](../../docs/ever-manifests.md).
 
 ```powershell
 npm.cmd run g4e:validate -- packages/g4e-format/examples/original-files.g4e

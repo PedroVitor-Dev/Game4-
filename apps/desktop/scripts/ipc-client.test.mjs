@@ -457,3 +457,62 @@ test("g4 export and reading are capability gated and validate verified package s
     code("IPC_UNAVAILABLE"),
   );
 });
+
+test("ever export and read use Rust DTOs, validate reference-only summaries and require capabilities", async () => {
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    return command === "app_info"
+      ? examples.appInfo
+      : command === "ever_open"
+        ? examples.everOpen
+        : examples.everExport;
+  });
+  assert.deepEqual(
+    await client.exportEver({ itemId: "1" }),
+    examples.everExport,
+  );
+  assert.deepEqual(calls[1], [
+    "library_export_ever",
+    { request: { itemId: "1" } },
+  ]);
+  assert.deepEqual(await client.openEver(), examples.everOpen);
+  assert.deepEqual(calls[2], ["ever_open", undefined]);
+  for (const field of [
+    { contentVerified: true },
+    { schemaVersion: 2 },
+    { magnets: ["javascript:alert(1)"] },
+    { fileCount: 0 },
+    { representation: "executable" },
+    { totalBytes: "18446744073709551616" },
+  ]) {
+    const bad = {
+      ...examples.everOpen,
+      manifest: { ...examples.everOpen.manifest, ...field },
+    };
+    await assert.rejects(
+      make(async (command) =>
+        command === "app_info" ? examples.appInfo : bad,
+      ).openEver(),
+      code("INVALID_RESPONSE"),
+    );
+  }
+  const cancelled = make(async (command) =>
+    command === "app_info"
+      ? examples.appInfo
+      : { cancelled: true, manifest: null },
+  );
+  assert.deepEqual(await cancelled.openEver(), {
+    cancelled: true,
+    manifest: null,
+  });
+  const old = make(async () => ({ ...examples.appInfo, capabilities: [] }));
+  await assert.rejects(
+    old.exportEver({ itemId: "1" }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    make(async () => assert.fail("native invocation"), false).openEver(),
+    code("IPC_UNAVAILABLE"),
+  );
+});

@@ -3,7 +3,7 @@
 ## Status on November 13, 2026
 
 - Name: Game4∞.
-- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; manual integrity rechecks and .g4 v1 package creation/reading implemented; .g4e v1 specified with offline validation; P2P integration remains pending.
+- Stage: desktop foundation, SQLite v4, platform/format identification and exact-size browsing, versioned manifest export, full-library backup/restore, local import/hashing, task progress/recovery, and library browsing implemented; manual integrity rechecks and .g4 v1 package creation/reading implemented; .g4e v1 native create/read and explicit offline integrity verification implemented; P2P integration remains pending.
 - Initial platform: Windows.
 - Technical direction: Tauri 2, Rust, React, TypeScript, Tailwind CSS, and SQLite.
 - Planned initial transport: BitTorrent; isolated librqbit transport and corrected Game4 metainfo creation verified locally. Two physical Windows PCs on different networks passed transfer/resume/magnet over Tailscale DERP relay. Production adoption and native-network gates remain open.
@@ -214,3 +214,13 @@ Added the [original preservation contract](original-preservation.md), a complete
 The validator checks descriptor structure and magnet/info-hash consistency without reading referenced payloads/companions or using the network. It does not certify external content or availability. Production direct sharing, desktop .g4e handling, source mappings, acquired-metainfo binding and explicit network controls remain open P2P implementation gates. The v1 descriptor profile references v1 swarms; v2/hybrid/padding need a later profile and fixtures.
 
 Validation: 57 Rust tests, 15 frontend/IPC tests, 5 existing format/schema tests and 7 .g4e conformance tests passed (84 total), including 21 shared malformed descriptors. TypeScript, 143-key locale parity, Prettier, Rust formatting, Clippy with warnings denied and contract drift checks passed. Both .g4e CLI examples validated offline. Python regenerated all four public examples byte-for-byte and independently decoded the companion torrents to confirm exact manifest path/size sets. No production runtime/UI code changed, no network transfer was initiated, and no personal originals were used. No push.
+
+### November 13, 2026 — Native .g4e creation/reading and direct-original references
+
+Implemented native Library export/open and the Rust offline `g4e` CLI. Export checks existing original files and generates a trackerless .torrent/.g4e plus magnet without making .g4 or staging payload copies. Open validates and displays reference-only summaries; explicit CLI verification binds selected metainfo, complete paths/sizes, SHA-1 pieces and raw-file SHA-256. Existing-package references additionally check embedded .g4 integrity and collection UUID. Public format v1, SQLite v4 and backup v2 remain unchanged. See [workflow and limits](ever-manifests.md) and [ADR 0015](decisions/0015-ever-create-read.md).
+
+Native smoke used a fresh isolated app identifier/catalog: imported 3 synthetic originals (40 bytes), exported both reference files through the native dialog, reopened the resulting .g4e, and confirmed the magnet, counts and reference-only validation message. English and Brazilian Portuguese rendering were observed. Closed the test app and restored the normal executable configuration. Python checked CLI/GUI companion hashes, exact original SHA-256/lengths, no absolute source-path leakage and no .g4/staging payload creation. The independent Node validator accepted both exported descriptors; librqbit's separate parser accepted the generated torrent and produced the same magnet without starting a session.
+
+In-app seeding/download sessions, discovery and real transfer validation remain open. Reference export must not be presented as an active upload or as proof of source availability. No personal catalog or originals were used.
+
+Validation: 67 Rust tests (10 .g4e tests), 16 frontend/IPC tests, 5 existing format/schema tests and 7 public .g4e tests passed (95 total). The final targeted .g4e checks also passed after adding the companion-digest and trailing-empty cases. TypeScript, 161-key locale parity, formatting, Clippy with warnings denied for desktop/probe, generated-contract checks and normal Tauri debug build without bundling passed. No push.

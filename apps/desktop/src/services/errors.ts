@@ -31,6 +31,11 @@ const keys = {
   PACKAGE_WRITE_FAILED: "packageWriteFailed",
   PACKAGE_INTEGRITY_FAILED: "packageIntegrityFailed",
   PACKAGE_LIMIT_EXCEEDED: "packageLimitExceeded",
+  G4E_INVALID: "g4eInvalid",
+  G4E_UNSUPPORTED_VERSION: "g4eUnsupportedVersion",
+  G4E_LIMIT_EXCEEDED: "g4eLimitExceeded",
+  G4E_INTEGRITY_FAILED: "g4eIntegrityFailed",
+  G4E_WRITE_FAILED: "g4eWriteFailed",
 } as const satisfies Record<ErrorCode, keyof typeof en.errors>;
 
 export function getIpcErrorKey(error: unknown) {

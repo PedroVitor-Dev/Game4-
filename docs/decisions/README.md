@@ -34,3 +34,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0013](0013-g4-package.md) | Accepted initial format | Public stored ZIP/ZIP64 .g4 packages, creation and full read validation |
 
 | [0014](0014-ever-manifest-and-originals.md) | Accepted initial specification | Original-file preservation and public .g4e Game4 Ever Manifest |
+
+| [0015](0015-ever-create-read.md) | Accepted reference implementation | Native .g4e create/read, original-file torrents and explicit verification |

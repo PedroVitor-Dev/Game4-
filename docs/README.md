@@ -46,3 +46,5 @@ See [platform, format, and size identification](file-identification.md) for dete
 
 - [Original preservation contract](original-preservation.md): read-only originals and evidence across local workflows.
 - [Public .g4e specification](../packages/g4e-format/spec-v1.md): Game4 Ever Manifest discovery/P2P references and offline validation.
+
+- [Creating and reading .g4e](ever-manifests.md): native original-file torrent references, offline CLI and explicit integrity checks.

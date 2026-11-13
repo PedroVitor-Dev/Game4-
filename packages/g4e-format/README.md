@@ -13,6 +13,6 @@ npm.cmd run g4e:validate -- "path/to/collection.g4e"
 npm.cmd run g4e:test
 ```
 
-Validation is offline: it checks the descriptor and magnet/reference consistency without reading any referenced torrent or game file and without opening a network connection. A valid descriptor does not prove source availability or payload integrity. BitTorrent v1 identity uses SHA-1 of exact info-dictionary bytes; original-file integrity uses separate SHA-256 hashes. Desktop discovery, sharing and transfer-manager integration are not implemented by this increment.
+Validation is offline: it checks the descriptor and magnet/reference consistency without reading any referenced torrent or game file and without opening a network connection. A valid descriptor does not prove source availability or payload integrity. BitTorrent v1 identity uses SHA-1 of exact info-dictionary bytes; original-file integrity uses separate SHA-256 hashes. Native creation/reading and explicit offline byte verification are implemented; in-app network sessions/discovery remain pending. See [the workflow and CLI guide](../../docs/ever-manifests.md).
 
 The former conceptual `.g4t` name is superseded by `.g4e`, not treated as an extension alias. `.g4` remains the optional ZIP/ZIP64 payload container. No existing package version or SQLite/backup schema changes.

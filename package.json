@@ -33,7 +33,8 @@
     "g4": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example g4 --",
     "g4:test": "node --test packages/g4-format/test.mjs",
     "g4e:test": "node --test packages/g4e-format/test.mjs",
-    "g4e:validate": "node packages/g4e-format/validate.mjs"
+    "g4e:validate": "node packages/g4e-format/validate.mjs",
+    "g4e": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example ever --"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

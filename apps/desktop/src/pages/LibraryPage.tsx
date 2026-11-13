@@ -7,6 +7,7 @@ import type {
   StartImportRequest,
   StartVerifyRequest,
   TaskSnapshot,
+  EverExportResult,
 } from "@game4/ipc-contracts";
 import {
   selectSources,
@@ -17,7 +18,9 @@ import {
   exportManifest,
   verifyItem,
   exportPackage,
+  exportEver,
 } from "../services/desktop";
+import { EverReader } from "../components/EverReader";
 import { PackageReader } from "../components/PackageReader";
 import { LibraryItemCard } from "../components/LibraryItemCard";
 import { getIpcErrorKey } from "../services/errors";
@@ -28,6 +31,8 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
   const [tasks, setTasks] = useState<TaskSnapshot[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [everWorking, setEverWorking] = useState(false);
+  const [everSaved, setEverSaved] = useState<EverExportResult>();
   const [packaging, setPackaging] = useState(false);
   const [packageSaved, setPackageSaved] = useState<string>();
   const [exported, setExported] = useState<string>();
@@ -156,6 +161,23 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
       if (mounted.current) setBusy(false);
     }
   }
+  async function saveEver(itemId: string) {
+    setBusy(true);
+    setEverWorking(true);
+    setEverSaved(undefined);
+    setError(undefined);
+    try {
+      const result = await exportEver({ itemId });
+      if (mounted.current && !result.cancelled) setEverSaved(result);
+    } catch (e) {
+      if (mounted.current) setError(e);
+    } finally {
+      if (mounted.current) {
+        setBusy(false);
+        setEverWorking(false);
+      }
+    }
+  }
   async function savePackage(itemId: string) {
     setBusy(true);
     setPackaging(true);
@@ -248,6 +270,24 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
         </section>
       )}
       {!tasksOnly && <PackageReader disabled={busy || active} />}
+      {!tasksOnly && <EverReader disabled={busy || active} />}
+      {everWorking && <p role="status">{t("ever.creating")}</p>}
+      {everSaved && (
+        <section className="content-card ever-export-result" role="status">
+          <p>
+            {t("ever.saved", {
+              fileName: everSaved.fileName,
+              torrentFileName: everSaved.torrentFileName,
+            })}
+          </p>
+          <p>{t("ever.shareHint")}</p>
+          <textarea
+            readOnly
+            aria-label={t("ever.magnet")}
+            value={everSaved.magnet ?? ""}
+          />
+        </section>
+      )}
       {packaging && <p role="status">{t("packages.creating")}</p>}
       {packageSaved && (
         <p role="status">{t("packages.saved", { fileName: packageSaved })}</p>
@@ -291,6 +331,7 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
                 busy={busy || active}
                 onVerify={(id) => void verify(id)}
                 onPackage={(id) => void savePackage(id)}
+                onEver={(id) => void saveEver(id)}
                 onExport={(id) => void saveManifest(id)}
               />
             ))}

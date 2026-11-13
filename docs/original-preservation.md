@@ -25,3 +25,5 @@ The contract concerns application writes and byte preservation. The operating sy
 Synthetic regression tests compare the complete source tree before and after import, manifest export, `.g4` creation/readback, manual integrity verification, backup save/restore and rejected exports. They check original relative names, directory entries, bytes, sizes, modification times and read-only attributes. Other tests cover source changes, locks, junctions and unchanged reference hashes. No personal collection is used.
 
 See [manual integrity](library-integrity.md), [.g4 v1](../packages/g4-format/spec-v1.md), and [backup semantics](library-backup.md) for individual workflows.
+
+The .g4e creator and explicit verifier also open originals read-only, verify SHA-256 and stream piece hashes without making payload copies. Exported reference files are separate user-chosen outputs; failed source checks do not repair originals or refresh reference identities. See [the .g4e workflow](ever-manifests.md).

@@ -2,6 +2,7 @@ pub mod backups;
 pub mod commands;
 pub mod contracts;
 pub mod database;
+pub mod ever;
 pub mod identification;
 pub mod library;
 pub mod manifests;
@@ -38,6 +39,8 @@ pub fn run() {
             commands::manifests::library_export_manifest,
             commands::packages::library_export_package,
             commands::packages::package_open,
+            commands::ever::library_export_ever,
+            commands::ever::ever_open,
             commands::backups::library_save_backup,
             commands::backups::library_prepare_restore,
             commands::backups::library_restore_backup

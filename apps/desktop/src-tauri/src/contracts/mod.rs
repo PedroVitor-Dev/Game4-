@@ -21,12 +21,14 @@ pub enum ImplementedCommand {
     LibraryExportManifest,
     LibraryExportPackage,
     PackageOpen,
+    LibraryExportEver,
+    EverOpen,
     LibrarySaveBackup,
     LibraryPrepareRestore,
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 16] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 18] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -40,6 +42,8 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 16] = [
     ImplementedCommand::LibraryExportManifest,
     ImplementedCommand::LibraryExportPackage,
     ImplementedCommand::PackageOpen,
+    ImplementedCommand::LibraryExportEver,
+    ImplementedCommand::EverOpen,
     ImplementedCommand::LibrarySaveBackup,
     ImplementedCommand::LibraryPrepareRestore,
     ImplementedCommand::LibraryRestoreBackup,
@@ -83,9 +87,14 @@ pub enum ErrorCode {
     PackageWriteFailed,
     PackageIntegrityFailed,
     PackageLimitExceeded,
+    G4eInvalid,
+    G4eUnsupportedVersion,
+    G4eLimitExceeded,
+    G4eIntegrityFailed,
+    G4eWriteFailed,
 }
 
-pub const ERROR_CODES: [ErrorCode; 28] = [
+pub const ERROR_CODES: [ErrorCode; 33] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -114,6 +123,11 @@ pub const ERROR_CODES: [ErrorCode; 28] = [
     ErrorCode::PackageWriteFailed,
     ErrorCode::PackageIntegrityFailed,
     ErrorCode::PackageLimitExceeded,
+    ErrorCode::G4eInvalid,
+    ErrorCode::G4eUnsupportedVersion,
+    ErrorCode::G4eLimitExceeded,
+    ErrorCode::G4eIntegrityFailed,
+    ErrorCode::G4eWriteFailed,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -514,4 +528,37 @@ pub struct PackageSummary {
 pub struct PackageOpenResult {
     pub cancelled: bool,
     pub package: Option<PackageSummary>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "snake_case")]
+pub enum EverRepresentation {
+    OriginalFiles,
+    G4Package,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct EverSummary {
+    pub file_name: String,
+    pub schema_version: u32,
+    pub representation: EverRepresentation,
+    pub title: String,
+    pub file_count: u32,
+    pub total_bytes: String,
+    pub magnets: Vec<String>,
+    pub content_verified: bool,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct EverOpenResult {
+    pub cancelled: bool,
+    pub manifest: Option<EverSummary>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct EverExportResult {
+    pub cancelled: bool,
+    pub file_name: Option<String>,
+    pub torrent_file_name: Option<String>,
+    pub magnet: Option<String>,
 }

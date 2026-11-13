@@ -44,3 +44,5 @@ The Rust `backups` module owns full-catalog JSON snapshots, validation, preview 
 `packages/g4-format/` contains the public package specification, descriptor schema and synthetic interoperability fixtures. The Rust package reader/writer is in `apps/desktop/src-tauri/src/packages/`; `examples/g4.rs` supplies the offline CLI.
 
 `packages/g4e-format/` contains the public Game4 Ever Manifest specification/schema, offline semantic validator, examples and conformance tests. `docs/original-preservation.md` defines the cross-workflow read-only input contract.
+
+Rust `apps/desktop/src-tauri/src/ever/` implements .g4e and torrent binding. `examples/ever.rs` supplies the offline CLI. `tools/torrent-probe/examples/inspect_metainfo.rs` is a parser-only independent compatibility check, not a seeding service.

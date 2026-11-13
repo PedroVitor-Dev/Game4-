@@ -45,6 +45,10 @@ pub fn typescript() -> String {
         LibraryIntegrity::decl(&config),
         PackageSummary::decl(&config),
         PackageOpenResult::decl(&config),
+        EverRepresentation::decl(&config),
+        EverSummary::decl(&config),
+        EverOpenResult::decl(&config),
+        EverExportResult::decl(&config),
         TaskIdRequest::decl(&config),
         TaskAccepted::decl(&config),
         TaskSnapshot::decl(&config),
@@ -68,7 +72,7 @@ pub fn typescript() -> String {
     ));
     output.push_str(&format!(
         "export const ERROR_CODES = {} as const;\n",
-        serde_json::to_string(&ERROR_CODES).unwrap()
+        serde_json::to_string(ERROR_CODES.as_slice()).unwrap()
     ));
     output.push_str(&format!(
         "export const ERROR_FIELDS = {} as const;\n",
@@ -133,7 +137,31 @@ pub fn examples() -> String {
             error: None,
         },
     };
-    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event})).unwrap())
+    let descriptor = crate::ever::parse(include_bytes!(
+        "../../../../../packages/g4e-format/examples/original-files.g4e"
+    ))
+    .unwrap();
+    let magnet = descriptor.torrents[0].magnet.clone();
+    let ever_open = EverOpenResult {
+        cancelled: false,
+        manifest: Some(EverSummary {
+            file_name: "original-files.g4e".into(),
+            schema_version: 1,
+            representation: EverRepresentation::OriginalFiles,
+            title: descriptor.manifest.collection.title,
+            file_count: 3,
+            total_bytes: "40".into(),
+            magnets: vec![magnet.clone()],
+            content_verified: false,
+        }),
+    };
+    let ever_export = EverExportResult {
+        cancelled: false,
+        file_name: Some("original-files.g4e".into()),
+        torrent_file_name: Some("original-files.torrent".into()),
+        magnet: Some(magnet),
+    };
+    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export})).unwrap())
 }
 
 #[cfg(test)]

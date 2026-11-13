@@ -524,3 +524,21 @@ input:focus-visible {
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
+
+.library-workspace textarea {
+  width: 100%;
+  min-height: 5rem;
+  padding: 0.65rem;
+  border: 1px solid #494157;
+  border-radius: 0.5rem;
+  background: #17131f;
+  color: #e9e4f5;
+  resize: vertical;
+  font-family: monospace;
+  overflow-wrap: anywhere;
+}
+
+.ever-reader,
+.ever-export-result {
+  padding: 1.5rem;
+}

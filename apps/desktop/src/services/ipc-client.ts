@@ -9,6 +9,8 @@ import {
   parseLibraryPage,
   parseLibraryIntegrity,
   parsePackageOpenResult,
+  parseEverOpenResult,
+  parseEverExportResult,
   parseTaskPage,
   parseTaskSnapshot,
   parseExportManifestResult,
@@ -52,6 +54,8 @@ const decoders = {
   library_export_manifest: parseExportManifestResult,
   library_export_package: parseExportManifestResult,
   package_open: parsePackageOpenResult,
+  library_export_ever: parseEverExportResult,
+  ever_open: parseEverOpenResult,
   library_save_backup: parseLibraryBackupResult,
   library_prepare_restore: parseLibraryPrepareRestoreResult,
   library_restore_backup: parseLibraryRestoreResult,
@@ -110,6 +114,9 @@ export function createIpcClient(transport: IpcTransport) {
     exportPackage: (request: ExportManifestRequest) =>
       capable("library_export_package", request),
     openPackage: () => capable("package_open", undefined),
+    exportEver: (request: ExportManifestRequest) =>
+      capable("library_export_ever", request),
+    openEver: () => capable("ever_open", undefined),
     getAppInfo,
     getDatabaseInfo,
     saveLibraryBackup: () => capable("library_save_backup", undefined),

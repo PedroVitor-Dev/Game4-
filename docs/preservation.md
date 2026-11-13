@@ -12,11 +12,11 @@ See [manifest v1](manifest-v1.md) for version compatibility, validation limits, 
 
 ## Proposed formats
 
-| Format   | Purpose                                        | Status                                                                              |
-| -------- | ---------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `.g4`    | Portable package containing manifest and files | Implemented v1: stored ZIP/ZIP64, manifest and checked payload                      |
-| `.g4e`   | Discovery and P2P references without payload   | Public v1 specification, schema and offline validation; desktop integration pending |
-| `.g4lib` | Catalog and reference export                   | Future; does not imply game files are included                                      |
+| Format   | Purpose                                        | Status                                                                                    |
+| -------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `.g4`    | Portable package containing manifest and files | Implemented v1: stored ZIP/ZIP64, manifest and checked payload                            |
+| `.g4e`   | Discovery and P2P references without payload   | Implemented native create/read, direct-original torrent references and offline validation |
+| `.g4lib` | Catalog and reference export                   | Future; does not imply game files are included                                            |
 
 Do not treat extensions as stable formats before specifying security, compatibility, and migrations. Avoid mandatory recompression that impedes random access, resume, and torrent interoperability.
 

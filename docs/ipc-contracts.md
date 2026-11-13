@@ -201,3 +201,9 @@ Current backup writes are v2/schema v4; the original v1/schema v3 remains readab
 `library_export_package(ExportManifestRequest)` returns `ExportManifestResult` (filename or cancellation), with a native .g4 save picker and idle-library guard. `package_open()` takes no arguments, opens a native picker and returns `PackageOpenResult`: cancellation with `package:null`, or a verified `PackageSummary` containing `fileName`, `packageVersion:1`, collection UUID/title, file count, decimal-string total bytes and `verified:true`. Summary success requires full content verification. No absolute paths or payload bytes cross IPC. Both commands are active capability-gated additions within contract v1.
 
 Package errors: `PACKAGE_INVALID`, `PACKAGE_VERSION_UNSUPPORTED`, `PACKAGE_WRITE_FAILED`, `PACKAGE_INTEGRITY_FAILED`, `PACKAGE_LIMIT_EXCEEDED`; shared source, manifest, busy and database errors remain applicable. See [public limits and semantics](../packages/g4-format/spec-v1.md).
+
+## Native Game4 Ever Manifest commands
+
+`library_export_ever(ExportManifestRequest)` returns `EverExportResult`: cancellation with all nullable fields null, or `.g4e` filename, torrent companion filename and magnet. Native pickers and the idle gate protect filesystem access; hashes are streamed in a blocking worker without holding the DB mutex. `ever_open()` returns cancellation or `EverSummary` (filename, schema version, representation, title, file count, exact total bytes, 1–16 magnets, `contentVerified:false`). Parsing references does not verify or acquire payloads. Only filenames/portable metadata cross IPC, not absolute source paths. Both are active capability-gated additions within contract v1.
+
+New stable errors are `G4E_INVALID`, `G4E_UNSUPPORTED_VERSION`, `G4E_LIMIT_EXCEEDED`, `G4E_INTEGRITY_FAILED`, `G4E_WRITE_FAILED`, with both locale mappings. Public .g4e/.g4 versions and SQLite/backup versions are unchanged. See [the workflow](ever-manifests.md).
