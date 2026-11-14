@@ -8,3 +8,5 @@ pub mod packages;
 pub mod ever;
 
 pub mod torrents;
+
+pub mod storage;

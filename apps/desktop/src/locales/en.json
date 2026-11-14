@@ -149,7 +149,8 @@
     "torrentInvalid": "This torrent is malformed or uses unsupported metadata. This preview accepts regular public BitTorrent v1 files without padding.",
     "transferLimitExceeded": "Transfer limits reached (4 active sessions, 64 session records, 1,024 files or 1 TiB per torrent).",
     "transferFailed": "The transfer could not be started or continued. Check sources, free space, port availability and peer connectivity. Any new partial download folder is kept.",
-    "transferUnavailable": "Transfers or their saved state are unavailable. Local Library operations remain available."
+    "transferUnavailable": "Transfers or their saved state are unavailable. Local Library operations remain available.",
+    "storageUnavailable": "A storage folder or its saved settings are unavailable. Check Storage folders in Settings; reconnect the drive or choose another folder."
   },
   "backup": {
     "title": "Save and restore your library",
@@ -419,5 +420,26 @@
     "communityTitle": "Build it together",
     "communityText": "Community catalogs and collaboration are part of our next chapters.",
     "communityAction": "See the community plan"
+  },
+  "storage": {
+    "title": "Storage folders",
+    "description": "Choose where download and save dialogs open. You can still choose another destination each time.",
+    "downloads": "Downloads",
+    "downloadsHint": "Initial folder when you confirm where to save a new download. Each download gets its own subfolder.",
+    "exports": "Preservation files",
+    "exportsHint": "Initial folder for .g4 packages, .g4e sharing references, torrents and file lists.",
+    "backups": "Library backups",
+    "backupsHint": "Initial folder for saving a catalog backup. Game files are not included in that backup.",
+    "notSet": "No default selected · choose each time",
+    "missing": "Folder unavailable. Reconnect the drive, choose another folder or clear this default.",
+    "choose": "Choose folder",
+    "change": "Change folder",
+    "reset": "Clear default",
+    "resetDone": "Default cleared. Files and folders were kept.",
+    "saved": "Folder preference saved.",
+    "loading": "Loading storage folders…",
+    "internal": "Where Game4∞ keeps its internal data",
+    "internalHint": "The catalog, transfer history and preferences stay here. Game4∞ manages this location; changing the folders above does not move it.",
+    "existingHint": "Existing files, library originals and ongoing downloads stay in their current locations. No sharing starts when you choose a folder."
   }
 }

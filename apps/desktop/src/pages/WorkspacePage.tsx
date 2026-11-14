@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { TransfersPage } from "./TransfersPage";
 import { LibraryPage } from "./LibraryPage";
 import { LibraryBackup } from "../components/LibraryBackup";
+import { StorageSettings } from "../components/StorageSettings";
 import { LanguageSelect } from "../components/LanguageSelect";
 
 import { DashboardPage } from "./DashboardPage";
@@ -50,6 +51,7 @@ export function WorkspacePage({
         </div>
         <LanguageSelect />
       </section>
+      <StorageSettings />
       <LibraryBackup />
     </>
   );

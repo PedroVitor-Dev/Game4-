@@ -5,13 +5,15 @@ use std::sync::Arc;
 #[tauri::command]
 pub async fn library_save_backup(
     window: tauri::WebviewWindow,
+    storage: tauri::State<'_, Arc<crate::storage_settings::StorageSettings>>,
     database: tauri::State<'_, Arc<Database>>,
     imports: tauri::State<'_, Arc<ImportState>>,
 ) -> Result<LibraryBackupResult, IpcError> {
+    let storage = Arc::clone(storage.inner());
     let db = Arc::clone(database.inner());
     let imports = Arc::clone(imports.inner());
     tauri::async_runtime::spawn_blocking(move || {
-        let path = rfd::FileDialog::new()
+        let path = crate::storage_settings::dialog(&storage, StorageDirectoryKind::Backups)?
             .set_parent(&window)
             .add_filter("Game4 library JSON", &["json"])
             .set_file_name("game4-library-backup-v2.json")

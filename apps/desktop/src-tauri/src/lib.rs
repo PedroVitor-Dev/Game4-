@@ -7,6 +7,7 @@ pub mod identification;
 pub mod library;
 pub mod manifests;
 pub mod packages;
+pub mod storage_settings;
 pub mod tasks;
 pub mod torrents;
 pub mod verification;
@@ -23,6 +24,9 @@ pub fn run() {
                 .join("database/game4.sqlite3");
             app.manage(Arc::new(database::Database::open(&path)?));
             app.manage(Arc::new(library::ImportState::default()));
+            app.manage(Arc::new(storage_settings::StorageSettings::new(
+                app.path().app_local_data_dir()?,
+            )));
             app.manage(Arc::new(backups::BackupState::default()));
             let transfers_path = app
                 .path()
@@ -36,6 +40,9 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             commands::application::app_info,
+            commands::storage::storage_settings_get,
+            commands::storage::storage_directory_choose,
+            commands::storage::storage_directory_reset,
             commands::database::database_info,
             commands::library::library_select_sources,
             commands::library::library_import,

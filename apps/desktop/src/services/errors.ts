@@ -40,6 +40,7 @@ const keys = {
   TRANSFER_LIMIT_EXCEEDED: "transferLimitExceeded",
   TRANSFER_FAILED: "transferFailed",
   TRANSFER_UNAVAILABLE: "transferUnavailable",
+  STORAGE_UNAVAILABLE: "storageUnavailable",
 } as const satisfies Record<ErrorCode, keyof typeof en.errors>;
 
 export function getIpcErrorKey(error: unknown) {

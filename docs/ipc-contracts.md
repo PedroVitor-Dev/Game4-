@@ -231,3 +231,7 @@ Pause, reverified Resume and private transfer persistence are now implemented in
 ## Bandwidth limits — November 14, 2026
 
 Per-transfer upload/download limits are now applied before unpausing, can be updated live and are persisted in the private recipe/snapshot. Older records default to unlimited; public contract v1, catalog v4 and backup v2 remain unchanged. The additive `transfer_set_limits` capability prevents silently ignoring a requested cap on older backends. See [bandwidth operations](bittorrent.md#per-transfer-bandwidth-limits--november-14-2026) for units, bounds, burst behavior and validation.
+
+## Storage folder preferences — November 14, 2026
+
+Independent defaults for download, preservation-file and backup dialogs are implemented. They do not move existing sources, transfer payloads, internal databases or recovery files, and are excluded from catalog backup v2. Every save/download destination remains explicitly confirmed. See [storage folders](storage-folders.md) for controls, private settings and failure behavior.

@@ -47,3 +47,9 @@ export const {
   resumeTransfer,
   forgetTransfer,
 } = client;
+
+export const {
+  getStorageSettings,
+  chooseStorageDirectory,
+  resetStorageDirectory,
+} = client;

@@ -1847,3 +1847,80 @@ summary:focus-visible {
 .download-link button {
   margin-top: 10px;
 }
+
+.storage-settings {
+  padding: 28px;
+  margin-top: 24px;
+}
+.storage-settings > p {
+  max-width: 750px;
+}
+.storage-directories {
+  display: grid;
+  gap: 0;
+  margin-bottom: 22px;
+}
+.storage-directories article {
+  border-top: 1px solid #35424b;
+  padding: 22px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+}
+.storage-directories h3 {
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+.storage-directories p {
+  margin: 0 0 10px;
+  max-width: 700px;
+}
+.storage-settings code {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  color: #c0d8c9;
+  line-height: 1.8;
+}
+.storage-settings button {
+  border: 1px solid #526b5d;
+  background: #253b30;
+  color: #d5e9de;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.storage-settings button:hover {
+  background: #314e3e;
+}
+.storage-settings button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.storage-settings .storage-missing {
+  color: #f0c794;
+  margin-top: 10px;
+}
+.storage-internals {
+  border-top: 1px solid #35424b;
+  padding: 18px 0;
+  color: #b8cfc1;
+  font-size: 12px;
+}
+.storage-internals p {
+  margin-top: 16px;
+}
+.storage-settings .storage-retention {
+  margin: 15px 0 0;
+  font-size: 11px;
+}
+.storage-settings .error-message button {
+  margin: 10px;
+}
+@media (max-width: 900px) {
+  .storage-directories article {
+    grid-template-columns: 1fr;
+  }
+}

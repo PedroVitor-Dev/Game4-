@@ -67,6 +67,11 @@ pub fn typescript() -> String {
         TransferTelemetry::decl(&config),
         TransferMetricsInfo::decl(&config),
         TransferForgetResult::decl(&config),
+        StorageDirectoryKind::decl(&config),
+        StorageDirectoryRequest::decl(&config),
+        StorageDirectoryInfo::decl(&config),
+        StorageSettingsInfo::decl(&config),
+        StorageDirectoryChoice::decl(&config),
         BandwidthLimits::decl(&config),
         TransferLimitsRequest::decl(&config),
         TransferSnapshot::decl(&config),
@@ -235,7 +240,16 @@ pub fn examples() -> String {
         magnet: format!("magnet:?xt=urn:btih:{}", transfer.info_hash),
         info_hash: transfer.info_hash.clone(),
     };
-    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export,"torrentImport":torrent_import,"transfer":transfer,"activeTransfer":active_transfer,"magnetLink":magnet_link})).unwrap())
+    let storage_settings = StorageSettingsInfo {
+        downloads: Some(StorageDirectoryInfo {
+            path: "C:\\Game4\\Downloads".into(),
+            available: true,
+        }),
+        exports: None,
+        backups: None,
+        app_data_directory: "C:\\Example\\Game4".into(),
+    };
+    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"storageSettings":storage_settings,"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export,"torrentImport":torrent_import,"transfer":transfer,"activeTransfer":active_transfer,"magnetLink":magnet_link})).unwrap())
 }
 
 #[cfg(test)]

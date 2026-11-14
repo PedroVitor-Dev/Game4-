@@ -3,6 +3,8 @@ import {
   IpcFailure,
   normalizeIpcError,
   parseAppInfo,
+  parseStorageSettingsInfo,
+  parseStorageDirectoryChoice,
   parseDatabaseInfo,
   parseSourceSelection,
   parseTaskAccepted,
@@ -50,6 +52,7 @@ import type {
   TransferIdRequest,
   TransferLimitsRequest,
   BandwidthLimits,
+  StorageDirectoryRequest,
 } from "@game4/ipc-contracts";
 
 export type IpcTransport = {
@@ -61,6 +64,9 @@ export type IpcTransport = {
 };
 const decoders = {
   app_info: parseAppInfo,
+  storage_settings_get: parseStorageSettingsInfo,
+  storage_directory_choose: parseStorageDirectoryChoice,
+  storage_directory_reset: parseStorageSettingsInfo,
   database_info: parseDatabaseInfo,
   library_select_sources: parseSourceSelection,
   library_import: parseTaskAccepted,
@@ -170,6 +176,15 @@ export function createIpcClient(transport: IpcTransport) {
     )
       throw failure("CAPABILITY_UNAVAILABLE");
   }
+  function storageRequest(request: StorageDirectoryRequest) {
+    if (
+      !request ||
+      !["downloads", "exports", "backups"].includes(request.kind) ||
+      Object.keys(request).some((key) => key !== "kind")
+    )
+      throw failure("INVALID_ARGUMENT");
+    return request;
+  }
   return {
     verifyItem: (request: StartVerifyRequest) =>
       capable("library_verify", request),
@@ -230,6 +245,11 @@ export function createIpcClient(transport: IpcTransport) {
     stopTransfer: (request: TransferIdRequest) =>
       capable("transfer_stop", request),
     getAppInfo,
+    getStorageSettings: () => capable("storage_settings_get", undefined),
+    chooseStorageDirectory: async (request: StorageDirectoryRequest) =>
+      capable("storage_directory_choose", storageRequest(request)),
+    resetStorageDirectory: async (request: StorageDirectoryRequest) =>
+      capable("storage_directory_reset", storageRequest(request)),
     getDatabaseInfo,
     saveLibraryBackup: () => capable("library_save_backup", undefined),
     prepareLibraryRestore: () => capable("library_prepare_restore", undefined),

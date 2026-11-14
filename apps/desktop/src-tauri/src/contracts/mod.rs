@@ -38,12 +38,15 @@ pub enum ImplementedCommand {
     TransferResume,
     TransferForget,
     TransferSetLimits,
+    StorageSettingsGet,
+    StorageDirectoryChoose,
+    StorageDirectoryReset,
     LibrarySaveBackup,
     LibraryPrepareRestore,
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 33] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 36] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -74,6 +77,9 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 33] = [
     ImplementedCommand::TransferResume,
     ImplementedCommand::TransferForget,
     ImplementedCommand::TransferSetLimits,
+    ImplementedCommand::StorageSettingsGet,
+    ImplementedCommand::StorageDirectoryChoose,
+    ImplementedCommand::StorageDirectoryReset,
     ImplementedCommand::LibrarySaveBackup,
     ImplementedCommand::LibraryPrepareRestore,
     ImplementedCommand::LibraryRestoreBackup,
@@ -126,9 +132,10 @@ pub enum ErrorCode {
     TransferLimitExceeded,
     TransferFailed,
     TransferUnavailable,
+    StorageUnavailable,
 }
 
-pub const ERROR_CODES: [ErrorCode; 37] = [
+pub const ERROR_CODES: [ErrorCode; 38] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -166,6 +173,7 @@ pub const ERROR_CODES: [ErrorCode; 37] = [
     ErrorCode::TransferLimitExceeded,
     ErrorCode::TransferFailed,
     ErrorCode::TransferUnavailable,
+    ErrorCode::StorageUnavailable,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -788,4 +796,37 @@ pub struct BandwidthLimits {
 pub struct TransferLimitsRequest {
     pub transfer_id: String,
     pub limits: BandwidthLimits,
+}
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
+#[serde(rename_all = "snake_case")]
+pub enum StorageDirectoryKind {
+    Downloads,
+    Exports,
+    Backups,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct StorageDirectoryRequest {
+    pub kind: StorageDirectoryKind,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct StorageDirectoryInfo {
+    pub path: String,
+    pub available: bool,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct StorageSettingsInfo {
+    pub downloads: Option<StorageDirectoryInfo>,
+    pub exports: Option<StorageDirectoryInfo>,
+    pub backups: Option<StorageDirectoryInfo>,
+    pub app_data_directory: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct StorageDirectoryChoice {
+    pub cancelled: bool,
+    pub settings: StorageSettingsInfo,
 }

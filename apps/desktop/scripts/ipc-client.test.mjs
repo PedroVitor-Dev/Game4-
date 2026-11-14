@@ -1089,3 +1089,76 @@ test("sharing keeps the selected collection even outside the first source page",
   ]);
   assert.deepEqual(sourceChoices([first]), [first]);
 });
+
+const { parseStorageSettingsInfo, parseStorageDirectoryChoice } =
+  await import("@game4/ipc-contracts");
+test("storage settings decode private path observations and reject malformed responses", () => {
+  const settings = examples.storageSettings;
+  assert.deepEqual(parseStorageSettingsInfo(settings), settings);
+  assert.deepEqual(parseStorageDirectoryChoice({ cancelled: true, settings }), {
+    cancelled: true,
+    settings,
+  });
+  for (const downloads of [
+    undefined,
+    { path: "", available: true },
+    { path: "bad\u0000path", available: true },
+    { path: "C:\\Games", available: "yes" },
+  ])
+    assert.throws(
+      () => parseStorageSettingsInfo({ ...settings, downloads }),
+      code("INVALID_RESPONSE"),
+    );
+  assert.throws(
+    () => parseStorageDirectoryChoice({ cancelled: "true", settings }),
+    code("INVALID_RESPONSE"),
+  );
+});
+test("storage operations are capability gated and accept directory kinds rather than writable paths", async () => {
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push(command);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "storage_settings_get") return examples.storageSettings;
+    assert.deepEqual(args, { request: { kind: "downloads" } });
+    return command === "storage_directory_choose"
+      ? { cancelled: true, settings: examples.storageSettings }
+      : { ...examples.storageSettings, downloads: null };
+  });
+  await client.getStorageSettings();
+  assert.equal(
+    (await client.chooseStorageDirectory({ kind: "downloads" })).cancelled,
+    true,
+  );
+  assert.equal(
+    (await client.resetStorageDirectory({ kind: "downloads" })).downloads,
+    null,
+  );
+  const count = calls.length;
+  await assert.rejects(
+    client.chooseStorageDirectory({ kind: "arbitrary" }),
+    code("INVALID_ARGUMENT"),
+  );
+  await assert.rejects(
+    client.chooseStorageDirectory({ kind: "downloads", path: "C:\\Elsewhere" }),
+    code("INVALID_ARGUMENT"),
+  );
+  assert.equal(calls.length, count);
+  const old = make(async (command) => {
+    assert.equal(command, "app_info");
+    return {
+      ...examples.appInfo,
+      capabilities: examples.appInfo.capabilities.filter(
+        (c) => !c.startsWith("storage_"),
+      ),
+    };
+  });
+  await assert.rejects(
+    old.getStorageSettings(),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    old.chooseStorageDirectory({ kind: "downloads" }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+});

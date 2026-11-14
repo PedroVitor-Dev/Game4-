@@ -44,6 +44,8 @@ import type {
   TransferSnapshot,
   TransferStartResult,
   TransferPage,
+  StorageSettingsInfo,
+  StorageDirectoryChoice,
 } from "./generated.ts";
 
 export class IpcFailure extends Error {
@@ -805,4 +807,36 @@ export function parseTransferForgetResult(v: unknown): TransferForgetResult {
   const o = object(v);
   if (typeof o.forgotten !== "boolean") throw failure("INVALID_RESPONSE");
   return { forgotten: o.forgotten };
+}
+
+function storagePath(value: unknown): string {
+  const path = text(value);
+  if (!path.length || path.length > 32768 || /[\u0000-\u001f]/.test(path))
+    throw failure("INVALID_RESPONSE");
+  return path;
+}
+export function parseStorageSettingsInfo(value: unknown): StorageSettingsInfo {
+  const o = object(value);
+  const directory = (value: unknown) => {
+    if (value === null) return null;
+    const d = object(value);
+    if (typeof d.available !== "boolean") throw failure("INVALID_RESPONSE");
+    return { path: storagePath(d.path), available: d.available };
+  };
+  return {
+    downloads: directory(o.downloads),
+    exports: directory(o.exports),
+    backups: directory(o.backups),
+    appDataDirectory: storagePath(o.appDataDirectory),
+  };
+}
+export function parseStorageDirectoryChoice(
+  value: unknown,
+): StorageDirectoryChoice {
+  const o = object(value);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  return {
+    cancelled: o.cancelled,
+    settings: parseStorageSettingsInfo(o.settings),
+  };
 }

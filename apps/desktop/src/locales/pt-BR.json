@@ -149,7 +149,8 @@
     "torrentInvalid": "Este torrent está malformado ou usa metadados não suportados. Esta prévia aceita arquivos regulares BitTorrent v1 públicos, sem padding.",
     "transferLimitExceeded": "Limite de transferências atingido (4 sessões ativas, 64 registros, 1.024 arquivos ou 1 TiB por torrent).",
     "transferFailed": "Não foi possível iniciar ou continuar a transferência. Confira as origens, espaço livre, porta disponível e conexão com o peer. Uma nova pasta parcial de download será mantida.",
-    "transferUnavailable": "As transferências ou seu estado salvo estão indisponíveis. A Biblioteca local continua disponível."
+    "transferUnavailable": "As transferências ou seu estado salvo estão indisponíveis. A Biblioteca local continua disponível.",
+    "storageUnavailable": "Uma pasta de armazenamento ou suas preferências estão indisponíveis. Confira Pastas de armazenamento nas Configurações; reconecte o disco ou escolha outra pasta."
   },
   "backup": {
     "title": "Salvar e restaurar sua Biblioteca",
@@ -419,5 +420,26 @@
     "communityTitle": "Construir juntos",
     "communityText": "Catálogos comunitários e colaboração fazem parte dos nossos próximos capítulos.",
     "communityAction": "Conhecer a proposta"
+  },
+  "storage": {
+    "title": "Pastas de armazenamento",
+    "description": "Escolha onde as janelas de download e salvamento abrem. Você ainda pode escolher outro destino a cada vez.",
+    "downloads": "Downloads",
+    "downloadsHint": "Pasta inicial ao confirmar onde salvar um novo download. Cada download tem sua própria subpasta.",
+    "exports": "Arquivos de preservação",
+    "exportsHint": "Pasta inicial para pacotes .g4, referências .g4e, torrents e listas de arquivos.",
+    "backups": "Backups da biblioteca",
+    "backupsHint": "Pasta inicial para salvar um backup do catálogo. Os arquivos dos jogos não fazem parte desse backup.",
+    "notSet": "Sem pasta padrão · escolher a cada vez",
+    "missing": "Pasta indisponível. Reconecte o disco, escolha outra pasta ou limpe este padrão.",
+    "choose": "Escolher pasta",
+    "change": "Alterar pasta",
+    "reset": "Limpar padrão",
+    "resetDone": "Padrão removido. Os arquivos e as pastas foram mantidos.",
+    "saved": "Preferência de pasta salva.",
+    "loading": "Carregando pastas de armazenamento…",
+    "internal": "Onde o Game4∞ guarda os dados internos",
+    "internalHint": "O catálogo, histórico de transferências e preferências ficam aqui. O Game4∞ gerencia este local; alterar as pastas acima não o move.",
+    "existingHint": "Arquivos existentes, originais da biblioteca e downloads em andamento continuam nos locais atuais. Escolher uma pasta não inicia compartilhamento."
   }
 }

@@ -9,16 +9,18 @@ use std::sync::Arc;
 #[tauri::command]
 pub async fn torrent_create(
     window: tauri::WebviewWindow,
+    storage: tauri::State<'_, Arc<crate::storage_settings::StorageSettings>>,
     database: tauri::State<'_, Arc<Database>>,
     state: tauri::State<'_, Arc<ImportState>>,
     request: TorrentReferenceRequest,
 ) -> Result<TorrentCreateResult, IpcError> {
     crate::manifests::item_id(&request.item_id)?;
+    let storage = Arc::clone(storage.inner());
     let trackers = torrents::trackers::normalize(&request.trackers)?;
     let db = Arc::clone(database.inner());
     let state = Arc::clone(state.inner());
     tokio::task::spawn_blocking(move || {
-        let path = rfd::FileDialog::new()
+        let path = crate::storage_settings::dialog(&storage, StorageDirectoryKind::Exports)?
             .set_parent(&window)
             .add_filter("BitTorrent metainfo", &["torrent"])
             .set_file_name(format!("game4-item-{}.torrent", request.item_id))
@@ -109,18 +111,24 @@ pub async fn torrent_seed(
 #[tauri::command]
 pub async fn torrent_download(
     window: tauri::WebviewWindow,
+    storage: tauri::State<'_, Arc<crate::storage_settings::StorageSettings>>,
     transfers: tauri::State<'_, Arc<Transfers>>,
     request: StartDownloadRequest,
 ) -> Result<TransferStartResult, IpcError> {
+    let storage = Arc::clone(storage.inner());
     let trackers = torrents::trackers::normalize(&request.trackers)?;
     if !request.peer.trim().is_empty() || (!request.dht && trackers.is_empty()) {
         torrents::peer(&request.peer)?;
     }
     let parent = tokio::task::spawn_blocking(move || {
-        rfd::FileDialog::new().set_parent(&window).pick_folder()
+        Ok::<_, IpcError>(
+            crate::storage_settings::dialog(&storage, StorageDirectoryKind::Downloads)?
+                .set_parent(&window)
+                .pick_folder(),
+        )
     })
     .await
-    .map_err(|_| IpcError::new(ErrorCode::UnexpectedError))?;
+    .map_err(|_| IpcError::new(ErrorCode::UnexpectedError))??;
     let Some(parent) = parent else {
         return Ok(TransferStartResult {
             cancelled: true,

@@ -60,6 +60,9 @@
       "transfer_resume",
       "transfer_forget",
       "transfer_set_limits",
+      "storage_settings_get",
+      "storage_directory_choose",
+      "storage_directory_reset",
       "library_save_backup",
       "library_prepare_restore",
       "library_restore_backup"
@@ -116,6 +119,15 @@
   "magnetLink": {
     "infoHash": "f0d6cd560e79272cf3acd08e0ee78e193b535c04",
     "magnet": "magnet:?xt=urn:btih:f0d6cd560e79272cf3acd08e0ee78e193b535c04"
+  },
+  "storageSettings": {
+    "appDataDirectory": "C:\\Example\\Game4",
+    "backups": null,
+    "downloads": {
+      "available": true,
+      "path": "C:\\Game4\\Downloads"
+    },
+    "exports": null
   },
   "torrentImport": {
     "cancelled": false,

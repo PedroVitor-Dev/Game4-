@@ -3,15 +3,17 @@ use std::sync::Arc;
 #[tauri::command]
 pub async fn library_export_ever(
     window: tauri::WebviewWindow,
+    storage: tauri::State<'_, Arc<crate::storage_settings::StorageSettings>>,
     database: tauri::State<'_, Arc<Database>>,
     state: tauri::State<'_, Arc<ImportState>>,
     request: ExportManifestRequest,
 ) -> Result<EverExportResult, IpcError> {
     manifests::item_id(&request.item_id)?;
+    let storage = Arc::clone(storage.inner());
     let db = Arc::clone(database.inner());
     let state = Arc::clone(state.inner());
     tauri::async_runtime::spawn_blocking(move || {
-        let path = rfd::FileDialog::new()
+        let path = crate::storage_settings::dialog(&storage, StorageDirectoryKind::Exports)?
             .set_parent(&window)
             .add_filter("Game4 Ever Manifest", &["g4e"])
             .set_file_name(format!("game4-item-{}.g4e", request.item_id))
