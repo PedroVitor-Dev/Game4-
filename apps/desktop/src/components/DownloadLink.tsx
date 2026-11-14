@@ -1,7 +1,9 @@
 import { useId, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNotifications } from "./Notifications";
 export function DownloadLink({ value }: { value: string }) {
   const { t } = useTranslation();
+  const { notify } = useNotifications();
   const input = useRef<HTMLTextAreaElement>(null);
   const [message, setMessage] = useState("");
   const id = useId();
@@ -9,6 +11,7 @@ export function DownloadLink({ value }: { value: string }) {
     try {
       await navigator.clipboard.writeText(value);
       setMessage("transfers.linkCopied");
+      notify({ key: "transfers.linkCopied", kind: "success" });
     } catch {
       input.current?.focus();
       input.current?.select();

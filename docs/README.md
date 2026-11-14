@@ -74,3 +74,5 @@ Pause, reverified Resume and private transfer persistence are now implemented in
 See [storage folders](storage-folders.md) for configurable download/export/backup dialog defaults and the fixed internal app-data location.
 
 See [Windows file associations](windows-file-associations.md) for .g4/.g4e installer registration and safe read-only opening in a single desktop instance.
+
+See [feedback and in-app notifications](feedback-and-notifications.md) for loading/empty/error states, safe retries and recent activity messages.

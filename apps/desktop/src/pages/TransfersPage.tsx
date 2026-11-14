@@ -24,6 +24,8 @@ import {
   forgetTransfer,
 } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
+import { ErrorNotice, EmptyState } from "../components/Feedback";
+import { useNotifications } from "../components/Notifications";
 import { formatBytes } from "../services/file-identification";
 import { TransferMetrics } from "../components/TransferMetrics";
 import {
@@ -46,6 +48,11 @@ export function TransfersPage({
   onNavigate: Navigate;
 }) {
   const { t, i18n } = useTranslation();
+  const { notify, watchTransfer } = useNotifications();
+  const [loadError, setLoadError] = useState<unknown>();
+  const [sourceError, setSourceError] = useState<unknown>();
+  const [sourceLoaded, setSourceLoaded] = useState(false);
+  const [sourceLoading, setSourceLoading] = useState(isTauri());
   const [downloadLimit, setDownloadLimit] = useState("0");
   const [uploadLimit, setUploadLimit] = useState("0");
   const downloadBps = parseBandwidthInput(downloadLimit);
@@ -105,10 +112,11 @@ export function TransfersPage({
         setTransfers(result.items);
         setFresh(true);
         setLoaded(true);
+        setLoadError(undefined);
       }
     } catch (e) {
       if (alive.current) {
-        setError(e);
+        setLoadError(e);
         setFresh(false);
       }
     }
@@ -122,22 +130,7 @@ export function TransfersPage({
       if (!ended) timer = setTimeout(poll, 1000);
     };
     void poll();
-    if (isTauri())
-      void listLibrary({
-        page: { cursor: null, limit: 100 },
-        query: null,
-      }).then(
-        (p) => {
-          if (alive.current) {
-            setItems(sourceChoices(p.items, source));
-            setCursor(p.nextCursor);
-            setItemId(source?.id ?? p.items[0]?.id ?? "");
-          }
-        },
-        (e) => {
-          if (alive.current) setError(e);
-        },
-      );
+    if (isTauri()) void loadSources();
     return () => {
       alive.current = false;
       ended = true;
@@ -146,6 +139,31 @@ export function TransfersPage({
       clearTimeout(timer);
     };
   }, []);
+  async function loadSources() {
+    setSourceLoading(true);
+    try {
+      const p = await listLibrary({
+        page: { cursor: null, limit: 100 },
+        query: null,
+      });
+      if (alive.current) {
+        setItems((old) =>
+          sourceChoices(
+            sourceChoices(p.items, source),
+            old.find((item) => item.id === itemId),
+          ),
+        );
+        setCursor(p.nextCursor);
+        setItemId((old) => old || source?.id || p.items[0]?.id || "");
+        setSourceLoaded(true);
+        setSourceError(undefined);
+      }
+    } catch (e) {
+      if (alive.current) setSourceError(e);
+    } finally {
+      if (alive.current) setSourceLoading(false);
+    }
+  }
   async function act(operation: () => Promise<void>) {
     setBusy(true);
     setError(undefined);
@@ -166,9 +184,30 @@ export function TransfersPage({
   ) {
     setStopping((v) => new Set(v).add(id));
     try {
-      if (action === "pause") await pauseTransfer({ transferId: id });
-      else if (action === "forget") await forgetTransfer({ transferId: id });
-      else await stopTransfer({ transferId: id });
+      if (action === "forget") {
+        const result = await forgetTransfer({ transferId: id });
+        if (result.forgotten)
+          notify({
+            key: "notifications.transferForgotten",
+            kind: "success",
+            target: "transfers",
+          });
+      } else {
+        const result =
+          action === "pause"
+            ? await pauseTransfer({ transferId: id })
+            : await stopTransfer({ transferId: id });
+        notify({
+          key:
+            result.status === "paused"
+              ? "notifications.transferPaused"
+              : result.status === "stopped"
+                ? "notifications.transferStopped"
+                : "notifications.transferUpdated",
+          kind: "info",
+          target: "transfers",
+        });
+      }
     } catch (e) {
       if (alive.current) setError(e);
     } finally {
@@ -185,7 +224,16 @@ export function TransfersPage({
   async function resume(id: string) {
     setResuming((v) => new Set(v).add(id));
     try {
-      await resumeTransfer({ transferId: id });
+      const result = await resumeTransfer({ transferId: id });
+      watchTransfer(result);
+      notify({
+        key:
+          result.status === "active"
+            ? "notifications.transferResumed"
+            : "notifications.transferUpdated",
+        kind: "info",
+        target: "transfers",
+      });
     } catch (e) {
       if (alive.current) setError(e);
     } finally {
@@ -222,6 +270,15 @@ export function TransfersPage({
           trackers,
         };
       const result = await seedTorrent(seedPending.current);
+      watchTransfer(result);
+      notify({
+        key:
+          result.status === "active"
+            ? "notifications.sharingStarted"
+            : "notifications.transferUpdated",
+        kind: "success",
+        target: "transfers",
+      });
       if (alive.current) {
         setStarted(true);
         setGeneratedMagnet(
@@ -255,6 +312,14 @@ export function TransfersPage({
         };
       const result = await downloadTorrent(downloadPending.current);
       if (!result.cancelled) {
+        if (result.transfer) {
+          watchTransfer(result.transfer);
+          notify({
+            key: "notifications.downloadStarted",
+            kind: "info",
+            target: "transfers",
+          });
+        }
         downloadPending.current = null;
         if (alive.current) {
           setPreview(undefined);
@@ -297,9 +362,29 @@ export function TransfersPage({
         ))}
       </div>
       {error !== undefined && (
-        <p role="alert" className="error-message">
-          {t(getIpcErrorKey(error))}
-        </p>
+        <ErrorNotice error={error} onDismiss={() => setError(undefined)} />
+      )}
+      {!isTauri() && (
+        <EmptyState
+          title="feedback.previewTitle"
+          description="feedback.previewText"
+          icon="∞"
+        />
+      )}
+      {loadError !== undefined && (
+        <ErrorNotice
+          error={loadError}
+          title="feedback.transfersLoadError"
+          onRetry={() => void refresh()}
+        />
+      )}
+      {view === "seed" && sourceError !== undefined && (
+        <ErrorNotice
+          error={sourceError}
+          title="feedback.libraryLoadError"
+          busy={sourceLoading}
+          onRetry={() => void loadSources()}
+        />
       )}
       {busy && (
         <p role="status">
@@ -331,8 +416,10 @@ export function TransfersPage({
         {!isTauri() ? (
           <p role="status">{t("errors.ipcUnavailable")}</p>
         ) : !loaded ? (
-          <p role="status">{t("transfers.loading")}</p>
-        ) : !transfers.length ? (
+          loadError === undefined ? (
+            <p role="status">{t("transfers.loading")}</p>
+          ) : null
+        ) : !transfers.length && loadError === undefined ? (
           <div className="session-empty">
             <span aria-hidden="true">⇄</span>
             <h3>{t("transfers.emptyTitle")}</h3>
@@ -343,7 +430,15 @@ export function TransfersPage({
           transfers.length > 0 &&
           !transfers.some(
             (job) => sessionFilter === "all" || job.status === sessionFilter,
-          ) && <p>{t("transfers.noMatches")}</p>}
+          ) && (
+            <EmptyState
+              title="transfers.noMatches"
+              description="feedback.transferFilterHint"
+              action="library.clearFilters"
+              onAction={() => setSessionFilter("all")}
+              icon="⇄"
+            />
+          )}
         {transfers
           .filter(
             (job) => sessionFilter === "all" || job.status === sessionFilter,
@@ -451,7 +546,7 @@ export function TransfersPage({
           {t("transfers.source")}
           <select
             value={itemId}
-            disabled={busy}
+            disabled={busy || sourceLoading || sourceError !== undefined}
             onChange={(e) => {
               setItemId(e.target.value);
               setGeneratedMagnet("");
@@ -466,14 +561,19 @@ export function TransfersPage({
             ))}
           </select>
         </label>
-        {!items.length && (
-          <div className="source-empty">
-            <p>{t("transfers.noSource")}</p>
-            <button onClick={() => onNavigate("library")}>
-              {t("library.addToLibrary")}
-            </button>
-          </div>
-        )}
+        {sourceLoading && <p role="status">{t("library.loading")}</p>}
+        {isTauri() &&
+          sourceLoaded &&
+          !sourceLoading &&
+          sourceError === undefined &&
+          !items.length && (
+            <div className="source-empty">
+              <p>{t("transfers.noSource")}</p>
+              <button onClick={() => onNavigate("library")}>
+                {t("library.addToLibrary")}
+              </button>
+            </div>
+          )}
         {cursor && (
           <button
             disabled={busy}
@@ -503,7 +603,14 @@ export function TransfersPage({
         <div className="actions">
           <button
             className="primary"
-            disabled={busy || !itemId || !isTauri() || !validLimits}
+            disabled={
+              busy ||
+              sourceLoading ||
+              sourceError !== undefined ||
+              !itemId ||
+              !isTauri() ||
+              !validLimits
+            }
             onClick={seed}
           >
             {t("transfers.startSeed")}
@@ -518,7 +625,10 @@ export function TransfersPage({
               onClick={() =>
                 void act(async () => {
                   const result = await generateMagnet({ itemId, trackers });
-                  if (alive.current) setGeneratedMagnet(result.magnet);
+                  if (alive.current) {
+                    setGeneratedMagnet(result.magnet);
+                    notify({ key: "notifications.linkReady", kind: "success" });
+                  }
                 })
               }
             >
@@ -534,8 +644,13 @@ export function TransfersPage({
                     !result.cancelled &&
                     result.fileName &&
                     result.magnet
-                  )
+                  ) {
                     setSaved({ name: result.fileName, magnet: result.magnet });
+                    notify({
+                      key: "notifications.torrentSaved",
+                      kind: "success",
+                    });
+                  }
                 })
               }
             >

@@ -4,8 +4,10 @@ import type { PackageSummary } from "@game4/ipc-contracts";
 import { isTauri, openPackage } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 import { formatBytes } from "../services/file-identification";
+import { useNotifications } from "./Notifications";
 export function PackageReader({ disabled }: { disabled: boolean }) {
   const { t, i18n } = useTranslation();
+  const { notify } = useNotifications();
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<PackageSummary>();
   const [error, setError] = useState<unknown>();
@@ -22,7 +24,10 @@ export function PackageReader({ disabled }: { disabled: boolean }) {
     setResult(undefined);
     try {
       const value = await openPackage();
-      if (mounted.current && value.package) setResult(value.package);
+      if (mounted.current && value.package) {
+        setResult(value.package);
+        notify({ key: "notifications.packageChecked", kind: "success" });
+      }
     } catch (e) {
       if (mounted.current) setError(e);
     } finally {

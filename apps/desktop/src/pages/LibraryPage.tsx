@@ -25,15 +25,23 @@ import { PackageReader } from "../components/PackageReader";
 import { LibraryItemCard } from "../components/LibraryItemCard";
 import { formatBytes, platformLabels } from "../services/file-identification";
 import { getIpcErrorKey } from "../services/errors";
+import { ErrorNotice, EmptyState } from "../components/Feedback";
+import { useNotifications } from "../components/Notifications";
 
 export function LibraryPage({
   tasksOnly = false,
   onShare,
+  onOpenLibrary,
 }: {
   tasksOnly?: boolean;
   onShare: (item: LibraryItemSummary) => void;
+  onOpenLibrary?: () => void;
 }) {
   const { t, i18n } = useTranslation();
+  const { notify, watchTask } = useNotifications();
+  const [libraryError, setLibraryError] = useState<unknown>();
+  const [tasksError, setTasksError] = useState<unknown>();
+  const [tasksLoaded, setTasksLoaded] = useState(false);
   const [search, setSearch] = useState("");
   const [platform, setPlatform] = useState("");
   const [layout, setLayout] = useState<"grid" | "list">("grid");
@@ -60,33 +68,42 @@ export function LibraryPage({
       setLoading(false);
       return;
     }
+    let signature: string | null = null;
     try {
       const jobs = await listTasks({ cursor: null, limit: 50 });
-      const signature = jobs.items
+      if (!alive.current) return;
+      signature = jobs.items
         .filter((j) => j.status === "succeeded")
         .map((j) => j.id + ":" + j.revision)
         .join(",");
-      const library =
-        !tasksOnly &&
-        (!libraryLoaded.current || completed.current !== signature)
-          ? await listLibrary({
-              page: { cursor: null, limit: 50 },
-              query: null,
-            })
-          : null;
-      if (!alive.current) return;
-      if (library) {
+      setTasks(jobs.items);
+      setTasksLoaded(true);
+      setTasksError(undefined);
+    } catch (e) {
+      if (alive.current) setTasksError(e);
+    }
+    if (!alive.current) return;
+    if (
+      !tasksOnly &&
+      (!libraryLoaded.current ||
+        (signature !== null && completed.current !== signature))
+    ) {
+      try {
+        const library = await listLibrary({
+          page: { cursor: null, limit: 50 },
+          query: null,
+        });
+        if (!alive.current) return;
         setItems(library.items);
         setCursor(library.nextCursor);
         libraryLoaded.current = true;
-        completed.current = signature;
+        if (signature !== null) completed.current = signature;
+        setLibraryError(undefined);
+      } catch (e) {
+        if (alive.current) setLibraryError(e);
       }
-      setTasks(jobs.items);
-    } catch (e) {
-      if (alive.current) setError(e);
-    } finally {
-      if (alive.current) setLoading(false);
     }
+    if (alive.current) setLoading(false);
   }, [tasksOnly]);
   useEffect(() => {
     alive.current = true;
@@ -128,7 +145,13 @@ export function LibraryPage({
       selectionToken: selection.selectionToken,
     };
     try {
-      await importSources(pending.current);
+      const accepted = await importSources(pending.current);
+      watchTask(accepted.taskId, "import");
+      notify({
+        key: "notifications.importStarted",
+        kind: "info",
+        target: "tasks",
+      });
       if (!mounted.current) return;
       pending.current = null;
       setSelection(undefined);
@@ -162,7 +185,13 @@ export function LibraryPage({
     if (pendingVerify.current?.itemId !== itemId)
       pendingVerify.current = { requestId: crypto.randomUUID(), itemId };
     try {
-      await verifyItem(pendingVerify.current);
+      const accepted = await verifyItem(pendingVerify.current);
+      watchTask(accepted.taskId, "verify");
+      notify({
+        key: "notifications.checkStarted",
+        kind: "info",
+        target: "tasks",
+      });
       pendingVerify.current = null;
       if (mounted.current) await refresh();
     } catch (e) {
@@ -178,7 +207,10 @@ export function LibraryPage({
     setError(undefined);
     try {
       const result = await exportEver({ itemId });
-      if (mounted.current && !result.cancelled) setEverSaved(result);
+      if (mounted.current && !result.cancelled) {
+        setEverSaved(result);
+        notify({ key: "notifications.referencesSaved", kind: "success" });
+      }
     } catch (e) {
       if (mounted.current) setError(e);
     } finally {
@@ -195,8 +227,10 @@ export function LibraryPage({
     setPackageSaved(undefined);
     try {
       const result = await exportPackage({ itemId });
-      if (mounted.current && !result.cancelled && result.fileName)
+      if (mounted.current && !result.cancelled && result.fileName) {
         setPackageSaved(result.fileName);
+        notify({ key: "notifications.packageSaved", kind: "success" });
+      }
     } catch (e) {
       if (mounted.current) setError(e);
     } finally {
@@ -212,8 +246,10 @@ export function LibraryPage({
     setExported(undefined);
     try {
       const result = await exportManifest({ itemId });
-      if (mounted.current && !result.cancelled && result.fileName)
+      if (mounted.current && !result.cancelled && result.fileName) {
         setExported(result.fileName);
+        notify({ key: "notifications.fileListSaved", kind: "success" });
+      }
     } catch (e) {
       if (mounted.current) setError(e);
     } finally {
@@ -261,22 +297,35 @@ export function LibraryPage({
           <div className="workspace-metrics">
             <article>
               <span>{t("library.loadedItems")}</span>
-              <strong>{items.length.toLocaleString(i18n.language)}</strong>
+              <strong>
+                {libraryLoaded.current
+                  ? items.length.toLocaleString(i18n.language)
+                  : "—"}
+              </strong>
             </article>
             <article>
               <span>{t("library.loadedSize")}</span>
               <strong>
-                {formatBytes(
-                  items
-                    .reduce((sum, item) => sum + BigInt(item.totalBytes), 0n)
-                    .toString(),
-                  i18n.language,
-                )}
+                {libraryLoaded.current || items.length > 0
+                  ? formatBytes(
+                      items
+                        .reduce(
+                          (sum, item) => sum + BigInt(item.totalBytes),
+                          0n,
+                        )
+                        .toString(),
+                      i18n.language,
+                    )
+                  : "—"}
               </strong>
             </article>
             <article>
               <span>{t("library.platforms")}</span>
-              <strong>{platforms.length.toLocaleString(i18n.language)}</strong>
+              <strong>
+                {libraryLoaded.current || items.length > 0
+                  ? platforms.length.toLocaleString(i18n.language)
+                  : "—"}
+              </strong>
             </article>
           </div>
           <p className="dashboard-footnote">{t("library.loadedScope")}</p>
@@ -364,18 +413,33 @@ export function LibraryPage({
         <p role="status">{t("packages.saved", { fileName: packageSaved })}</p>
       )}
       {error !== undefined && (
-        <div className="error-message" role="alert">
-          {t(getIpcErrorKey(error))}{" "}
-          <button
-            onClick={() => {
-              setError(undefined);
-              libraryLoaded.current = false;
-              void refresh();
-            }}
-          >
-            {t("library.refresh")}
-          </button>
-        </div>
+        <ErrorNotice error={error} onDismiss={() => setError(undefined)} />
+      )}
+      {!tasksOnly && libraryError !== undefined && (
+        <ErrorNotice
+          error={libraryError}
+          title="feedback.libraryLoadError"
+          busy={busy}
+          onRetry={() => {
+            libraryLoaded.current = false;
+            setLoading(true);
+            void refresh();
+          }}
+        />
+      )}
+      {tasksError !== undefined && (
+        <ErrorNotice
+          error={tasksError}
+          title="feedback.activityLoadError"
+          onRetry={() => void refresh()}
+        />
+      )}
+      {!isTauri() && (
+        <EmptyState
+          title="feedback.previewTitle"
+          description="feedback.previewText"
+          icon="∞"
+        />
       )}
       {exported && (
         <p role="status">
@@ -451,15 +515,18 @@ export function LibraryPage({
       )}
       {loading && <p role="status">{t("library.loading")}</p>}
       {!tasksOnly &&
-        !loading &&
+        isTauri() &&
+        (libraryLoaded.current || items.length > 0) &&
+        (!loading || items.length > 0) &&
+        (items.length > 0 || libraryError === undefined) &&
         (items.length === 0 ? (
-          <section className="content-card empty-state">
-            <div className="empty-icon" aria-hidden="true">
-              ▤
-            </div>
-            <h2>{t("library.emptyTitle")}</h2>
-            <p>{t("library.emptyDescription")}</p>
-          </section>
+          <EmptyState
+            title="library.emptyTitle"
+            description="library.emptyDescription"
+            action="library.addFiles"
+            onAction={() => void choose("files")}
+            disabled={busy || active}
+          />
         ) : (
           <section aria-label={t("nav.library")} className="library-grid">
             {filtered.map((item) => (
@@ -484,9 +551,19 @@ export function LibraryPage({
       {(tasksOnly || tasks.length > 0) && (
         <section className="content-card task-panel">
           <h2>{t("tasks.recent")}</h2>
-          {tasks.length === 0 && !loading && (
-            <p>{t("tasks.emptyDescription")}</p>
-          )}
+          {isTauri() &&
+            tasksLoaded &&
+            tasksError === undefined &&
+            tasks.length === 0 &&
+            !loading && (
+              <EmptyState
+                title="tasks.emptyTitle"
+                description="tasks.emptyDescription"
+                action="library.addToLibrary"
+                onAction={onOpenLibrary}
+                icon="✓"
+              />
+            )}
           {tasks.map((job) => (
             <article key={job.id} className="task-row">
               <div>

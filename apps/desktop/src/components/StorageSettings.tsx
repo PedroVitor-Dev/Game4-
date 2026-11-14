@@ -12,8 +12,10 @@ import {
 } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 
+import { useNotifications } from "./Notifications";
 export function StorageSettings() {
   const { t } = useTranslation();
+  const { notify } = useNotifications();
   const [settings, setSettings] = useState<StorageSettingsInfo>();
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(isTauri());
@@ -50,12 +52,24 @@ export function StorageSettings() {
         if (alive.current) {
           setSettings(value);
           setNotice("storage.resetDone");
+          notify({
+            key: "storage.resetDone",
+            kind: "success",
+            target: "settings",
+          });
         }
       } else {
         const result = await chooseStorageDirectory({ kind });
         if (alive.current) {
           setSettings(result.settings);
-          if (!result.cancelled) setNotice("storage.saved");
+          if (!result.cancelled) {
+            setNotice("storage.saved");
+            notify({
+              key: "storage.saved",
+              kind: "success",
+              target: "settings",
+            });
+          }
         }
       }
     } catch (e) {

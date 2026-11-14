@@ -446,5 +446,53 @@
     "opened": "File opened from Windows",
     "close": "Close preview",
     "readOnly": "Read-only preview. Nothing was extracted, executed, imported, downloaded or shared."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "emptyTitle": "You’re all caught up.",
+    "emptyText": "Completed actions and activity updates will appear here.",
+    "scope": "Up to 30 notifications from this app session. Kept on this screen only, without system alerts or sound.",
+    "dismiss": "Dismiss notification",
+    "close": "Close notifications",
+    "view": {
+      "tasks": "View activity",
+      "transfers": "View transfers",
+      "settings": "View settings"
+    },
+    "importStarted": "Adding your files. You can follow progress in Activity.",
+    "importComplete": "Files added to your library. Nothing was shared.",
+    "checkStarted": "Checking your files. You can keep using the app.",
+    "filesChecked": "File check finished. Review the results in your library.",
+    "taskFailed": "An activity could not finish. Open Activity to see what happened.",
+    "taskCancelled": "Activity cancelled.",
+    "sharingStarted": "Sharing started. Keep the app open to make your files available.",
+    "downloadStarted": "Download started. Follow it in Transfers.",
+    "downloadComplete": "Download complete: {{name}}. Files have not been executed or imported.",
+    "transferFailed": "Transfer needs attention: {{name}}. Open Transfers for details.",
+    "transferPaused": "Transfer paused. Received files were kept.",
+    "transferStopped": "Transfer stopped. Received files were kept.",
+    "transferForgotten": "Transfer removed from the list. Files were kept.",
+    "transferResumed": "Transfer resumed.",
+    "transferUpdated": "Transfer updated. Check its current status.",
+    "referencesSaved": "Sharing references saved. This does not start sharing.",
+    "packageSaved": "Preservation package saved.",
+    "fileListSaved": "File list saved.",
+    "linkReady": "Download link ready. Sharing starts only when you choose it.",
+    "torrentSaved": "Torrent file saved. This does not start sharing.",
+    "backupSaved": "Library backup saved.",
+    "libraryRestored": "Library restored. Review your files before sharing.",
+    "packageChecked": "Package inspected and included file hashes verified.",
+    "referencesChecked": "Sharing references inspected. No download was started."
+  },
+  "feedback": {
+    "errorTitle": "Something needs your attention",
+    "retry": "Try again",
+    "dismiss": "Dismiss message",
+    "libraryLoadError": "Couldn’t update your library",
+    "activityLoadError": "Couldn’t update activity",
+    "transfersLoadError": "Couldn’t update transfers",
+    "previewTitle": "Preview mode",
+    "previewText": "Open the Game4∞ desktop app to load your collection and use local files.",
+    "transferFilterHint": "Choose another status or clear the filter to see all saved transfers."
   }
 }

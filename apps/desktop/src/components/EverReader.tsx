@@ -4,6 +4,7 @@ import type { EverSummary } from "@game4/ipc-contracts";
 import { openEver, isTauri } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 import { formatBytes } from "../services/file-identification";
+import { useNotifications } from "./Notifications";
 export function EverReader({
   disabled,
   onUseMagnet,
@@ -12,6 +13,7 @@ export function EverReader({
   onUseMagnet?: (magnet: string) => void;
 }) {
   const { t, i18n } = useTranslation();
+  const { notify } = useNotifications();
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<EverSummary>();
   const [error, setError] = useState<unknown>();
@@ -28,7 +30,10 @@ export function EverReader({
     setError(undefined);
     try {
       const value = await openEver();
-      if (mounted.current && value.manifest) setResult(value.manifest);
+      if (mounted.current && value.manifest) {
+        setResult(value.manifest);
+        notify({ key: "notifications.referencesChecked", kind: "success" });
+      }
     } catch (e) {
       if (mounted.current) setError(e);
     } finally {

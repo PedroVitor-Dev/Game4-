@@ -5,6 +5,7 @@ import { setTransferLimits } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 import { parseBandwidthInput } from "../services/transfer-metrics";
 
+import { useNotifications } from "./Notifications";
 export function BandwidthInputs({
   download,
   upload,
@@ -58,6 +59,7 @@ export function TransferLimitsControl({
   onSaved: () => Promise<void>;
 }) {
   const { t } = useTranslation();
+  const { notify } = useNotifications();
   const [download, setDownload] = useState(
     String(transfer.limits.downloadBps / 1024),
   );
@@ -87,6 +89,11 @@ export function TransferLimitsControl({
         limits: { downloadBps, uploadBps },
       });
       setSaved(true);
+      notify({
+        key: "transfers.limitsSaved",
+        kind: "success",
+        target: "transfers",
+      });
       await onSaved();
     } catch (e) {
       setError(e);

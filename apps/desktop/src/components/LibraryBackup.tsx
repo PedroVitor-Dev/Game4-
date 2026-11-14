@@ -9,8 +9,10 @@ import {
 } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 
+import { useNotifications } from "./Notifications";
 export function LibraryBackup() {
   const { t } = useTranslation();
+  const { notify } = useNotifications();
   const [busy, setBusy] = useState(false);
   const [preview, setPreview] = useState<LibraryRestorePreview>();
   const [error, setError] = useState<unknown>();
@@ -29,8 +31,14 @@ export function LibraryBackup() {
     setMessage("");
     try {
       const result = await saveLibraryBackup();
-      if (mounted.current && !result.cancelled)
+      if (mounted.current && !result.cancelled) {
         setMessage(t("backup.saved", { fileName: result.fileName }));
+        notify({
+          key: "notifications.backupSaved",
+          kind: "success",
+          target: "settings",
+        });
+      }
     } catch (e) {
       if (mounted.current) setError(e);
     } finally {
@@ -63,6 +71,11 @@ export function LibraryBackup() {
       if (mounted.current) {
         setPreview(undefined);
         setConfirmed(false);
+        notify({
+          key: "notifications.libraryRestored",
+          kind: "success",
+          target: "settings",
+        });
         setMessage(
           t("backup.restored", {
             count: result.itemCount,

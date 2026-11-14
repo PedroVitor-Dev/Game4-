@@ -1257,3 +1257,89 @@ test("associated file inspection is capability gated and forwards only an opaque
     code("CAPABILITY_UNAVAILABLE"),
   );
 });
+
+const { addNotice, observeTasks, observeTransfers } =
+  await import("../src/services/notifications.ts");
+test("notification history is bounded, deduplicates event identities and keeps explicit actions", () => {
+  let items = [];
+  for (let id = 1; id <= 40; id++)
+    items = addNotice(items, { key: "notifications.transferPaused" }, id);
+  assert.equal(items.length, 30);
+  assert.equal(items[0].id, 11);
+  items = addNotice(
+    items,
+    { key: "notifications.importComplete", dedupeKey: "job:1" },
+    41,
+  );
+  assert.equal(
+    addNotice(
+      items,
+      { key: "notifications.importComplete", dedupeKey: "job:1" },
+      42,
+    ),
+    items,
+  );
+  assert.equal(items.at(-1).unread, true);
+});
+test("activity notifications ignore old history and progress ticks but report watched terminal transitions once", () => {
+  const previous = new Map();
+  const old = { id: "old", kind: "import", status: "succeeded" };
+  assert.deepEqual(observeTasks(previous, [old]), []);
+  const running = { id: "new", kind: "verify", status: "running" };
+  assert.deepEqual(observeTasks(previous, [old, running]), []);
+  assert.deepEqual(
+    observeTasks(previous, [old, { ...running, processedCount: "9" }]),
+    [],
+  );
+  const updates = observeTasks(previous, [
+    old,
+    { ...running, status: "succeeded" },
+  ]);
+  assert.equal(updates.length, 1);
+  assert.equal(updates[0].key, "notifications.filesChecked");
+  assert.equal(
+    observeTasks(previous, [old, { ...running, status: "succeeded" }]).length,
+    0,
+  );
+  previous.set("failed", { kind: "import", status: "queued" });
+  assert.equal(
+    observeTasks(previous, [
+      { id: "failed", kind: "import", status: "failed" },
+    ])[0].kind,
+    "error",
+  );
+});
+test("transfer notices distinguish completed downloads, continued sharing, errors and historical rows", () => {
+  const previous = new Map();
+  const row = {
+    id: "a",
+    name: "Fixture",
+    mode: "download",
+    status: "completed",
+    isSeeding: false,
+  };
+  assert.deepEqual(observeTransfers(previous, [row]), []);
+  previous.set("a", { status: "active", isSeeding: false });
+  assert.equal(
+    observeTransfers(previous, [row])[0].key,
+    "notifications.downloadComplete",
+  );
+  assert.deepEqual(observeTransfers(previous, [row]), []);
+  previous.set("a", { status: "active", isSeeding: false });
+  const seed = { ...row, status: "active", isSeeding: true };
+  assert.equal(
+    observeTransfers(previous, [seed])[0].key,
+    "notifications.downloadComplete",
+  );
+  assert.deepEqual(observeTransfers(previous, [row]), []);
+  previous.set("a", { status: "active", isSeeding: false });
+  assert.deepEqual(observeTransfers(previous, [{ ...seed, mode: "seed" }]), []);
+  assert.equal(
+    observeTransfers(previous, [
+      { ...seed, status: "failed", isSeeding: false },
+    ])[0].key,
+    "notifications.transferFailed",
+  );
+  assert.deepEqual(observeTransfers(previous, []), []);
+  assert.equal(previous.size, 0);
+});

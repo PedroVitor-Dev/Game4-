@@ -43,6 +43,7 @@ export function WorkspacePage({
         key={page}
         tasksOnly={page === "tasks"}
         onShare={(item) => onNavigate("share", item)}
+        onOpenLibrary={() => onNavigate("library")}
       />
     );
   return (

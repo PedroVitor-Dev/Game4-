@@ -446,5 +446,53 @@
     "opened": "Arquivo aberto pelo Windows",
     "close": "Fechar prévia",
     "readOnly": "Prévia somente para leitura. Nada foi extraído, executado, importado, baixado ou compartilhado."
+  },
+  "notifications": {
+    "title": "Notificações",
+    "emptyTitle": "Tudo em dia por aqui.",
+    "emptyText": "As ações concluídas e atualizações das atividades aparecerão aqui.",
+    "scope": "Até 30 notificações desta sessão do app. Apenas nesta interface, sem alertas do sistema ou sons.",
+    "dismiss": "Dispensar notificação",
+    "close": "Fechar notificações",
+    "view": {
+      "tasks": "Ver atividade",
+      "transfers": "Ver transferências",
+      "settings": "Ver configurações"
+    },
+    "importStarted": "Adicionando seus arquivos. Acompanhe o progresso em Atividade.",
+    "importComplete": "Arquivos adicionados à biblioteca. Nada foi compartilhado.",
+    "checkStarted": "Verificando seus arquivos. Você pode continuar usando o app.",
+    "filesChecked": "Verificação concluída. Confira os resultados na biblioteca.",
+    "taskFailed": "Uma atividade não pôde ser concluída. Abra Atividade para ver o que aconteceu.",
+    "taskCancelled": "Atividade cancelada.",
+    "sharingStarted": "Compartilhamento iniciado. Mantenha o app aberto para disponibilizar seus arquivos.",
+    "downloadStarted": "Download iniciado. Acompanhe em Transferências.",
+    "downloadComplete": "Download concluído: {{name}}. Os arquivos não foram executados nem importados.",
+    "transferFailed": "A transferência precisa de atenção: {{name}}. Veja os detalhes em Transferências.",
+    "transferPaused": "Transferência pausada. Os arquivos recebidos foram mantidos.",
+    "transferStopped": "Transferência parada. Os arquivos recebidos foram mantidos.",
+    "transferForgotten": "Transferência removida da lista. Os arquivos foram mantidos.",
+    "transferResumed": "Transferência retomada.",
+    "transferUpdated": "Transferência atualizada. Confira o estado atual.",
+    "referencesSaved": "Referências salvas. Isso não inicia o compartilhamento.",
+    "packageSaved": "Pacote de preservação salvo.",
+    "fileListSaved": "Lista de arquivos salva.",
+    "linkReady": "Link de download pronto. O compartilhamento só começa quando você escolher.",
+    "torrentSaved": "Arquivo torrent salvo. Isso não inicia o compartilhamento.",
+    "backupSaved": "Backup da biblioteca salvo.",
+    "libraryRestored": "Biblioteca restaurada. Confira os arquivos antes de compartilhar.",
+    "packageChecked": "Pacote inspecionado e hashes dos arquivos incluídos verificados.",
+    "referencesChecked": "Referências inspecionadas. Nenhum download foi iniciado."
+  },
+  "feedback": {
+    "errorTitle": "Algo precisa da sua atenção",
+    "retry": "Tentar novamente",
+    "dismiss": "Dispensar mensagem",
+    "libraryLoadError": "Não foi possível atualizar a biblioteca",
+    "activityLoadError": "Não foi possível atualizar a atividade",
+    "transfersLoadError": "Não foi possível atualizar as transferências",
+    "previewTitle": "Modo de prévia",
+    "previewText": "Abra o aplicativo Game4∞ para carregar sua coleção e usar os arquivos locais.",
+    "transferFilterHint": "Escolha outro estado ou limpe o filtro para ver todas as transferências salvas."
   }
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { NotificationCenter } from "./components/Notifications";
 import { AssociatedFiles } from "./components/AssociatedFiles";
 import { LanguageSelect } from "./components/LanguageSelect";
 import { useAppInfo } from "./hooks/useAppInfo";
@@ -72,7 +73,10 @@ export default function App() {
       <main id="main" className="main-content">
         <header className="topbar">
           <span className="stage-badge">{t("app.stage")}</span>
-          <LanguageSelect />
+          <div className="topbar-controls">
+            <NotificationCenter onNavigate={navigate} />
+            <LanguageSelect />
+          </div>
         </header>
         <section className="page-heading">
           <p className="eyebrow">{t("app.eyebrow")}</p>
