@@ -1343,3 +1343,91 @@ test("transfer notices distinguish completed downloads, continued sharing, error
   assert.deepEqual(observeTransfers(previous, []), []);
   assert.equal(previous.size, 0);
 });
+
+import { parseArchiveResponse } from "@game4/ipc-contracts";
+test("archive responses validate discriminants, shape, raster bytes and pagination bounds", () => {
+  assert.deepEqual(
+    parseArchiveResponse({ kind: "done", id: null, cancelled: true }),
+    { kind: "done", id: null, cancelled: true },
+  );
+  assert.deepEqual(
+    parseArchiveResponse({ kind: "games", items: [], total: 0, offset: 0 })
+      .items,
+    [],
+  );
+  for (const value of [
+    null,
+    { kind: "executeSql" },
+    { kind: "games", items: [], total: -1, offset: 0 },
+    { kind: "done", id: 1, cancelled: false },
+    { kind: "asset", bytes: [256], mime: "image/png" },
+    { kind: "asset", bytes: [0], mime: "image/svg+xml" },
+  ])
+    assert.throws(() => parseArchiveResponse(value), code("INVALID_RESPONSE"));
+});
+test("archive artwork CSP permits only local blobs, not arbitrary network image sources", async () => {
+  const config = JSON.parse(
+    await readFile(
+      new URL("../src-tauri/tauri.conf.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  for (const csp of [config.app.security.csp, config.app.security.devCsp]) {
+    const directive = csp
+      .split(";")
+      .find((s) => s.trim().startsWith("img-src"));
+    assert.match(directive, /blob:/);
+    assert.doesNotMatch(directive, /https:|\*/);
+  }
+});
+
+import { matchingArchiveTransfers } from "../src/services/archive-metrics.ts";
+test("archive telemetry matches only explicit info hashes and does not imply network availability", () => {
+  const hash = "0123456789012345678901234567890123456789";
+  const transfer = { id: "matching", infoHash: hash };
+  assert.deepEqual(
+    matchingArchiveTransfers(
+      [{ magnet: `magnet:?xt=urn:btih:${hash}` }],
+      [transfer, { id: "other", infoHash: "a".repeat(40) }],
+    ),
+    [transfer],
+  );
+  for (const magnet of [
+    "https://example.test/",
+    `magnet:?xt=urn:btih:${hash}&xt=urn:btih:${"a".repeat(40)}`,
+    "not a magnet",
+  ])
+    assert.deepEqual(matchingArchiveTransfers([{ magnet }], [transfer]), []);
+});
+
+test("archive static action messages resolve to user-facing translations", async () => {
+  const english = JSON.parse(
+    await readFile(new URL("../src/locales/en.json", import.meta.url), "utf8"),
+  );
+  const files = [
+    "../src/pages/ArchivePage.tsx",
+    "../src/components/archive/ArchiveCards.tsx",
+    "../src/components/archive/ArchiveEditor.tsx",
+    "../src/components/archive/ArchiveLiveTransfers.tsx",
+  ];
+  for (const file of files) {
+    const code = await readFile(new URL(file, import.meta.url), "utf8");
+    for (const match of code.matchAll(
+      /"((?:archive|notifications)\.[a-zA-Z]+(?:\.[a-zA-Z]+)*)"/g,
+    )) {
+      const translatedKey =
+        match[1].split(".").reduce((obj, key) => obj?.[key], english) ===
+        undefined
+          ? match[1] + "_other"
+          : match[1];
+      const value = translatedKey
+        .split(".")
+        .reduce((obj, key) => obj?.[key], english);
+      assert.equal(
+        typeof value,
+        "string",
+        `Missing user-facing string: ${match[1]}`,
+      );
+    }
+  }
+});

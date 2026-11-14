@@ -7,7 +7,7 @@ import { LanguageSelect } from "../components/LanguageSelect";
 
 import { DashboardPage } from "./DashboardPage";
 
-import { CommunityPage } from "./CommunityPage";
+import { ArchivePage } from "./ArchivePage";
 import type { LibraryItemSummary } from "@game4/ipc-contracts";
 import { transferView, type Navigate, type Page } from "../services/navigation";
 export type { Page } from "../services/navigation";
@@ -25,7 +25,14 @@ export function WorkspacePage({
 }) {
   const { t } = useTranslation();
   if (page === "dashboard") return <DashboardPage onNavigate={onNavigate} />;
-  if (page === "community") return <CommunityPage onNavigate={onNavigate} />;
+  if (
+    page === "archive" ||
+    page === "platforms" ||
+    page === "collections" ||
+    page === "preservation" ||
+    page === "community"
+  )
+    return <ArchivePage key={page} view={page} onNavigate={onNavigate} />;
   const view = transferView(page);
   if (view)
     return (

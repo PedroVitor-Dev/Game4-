@@ -12,12 +12,12 @@ A participant should be able to keep a local collection, choose what to share, o
 
 | User goal               | Current support                                                                                                                     | Boundary                                                                                                          |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Keep my games           | Import files/folders, background SHA-256, platform/format hints, local browsing, checking registered copies, catalog backup/restore | Downloads are not automatically imported; catalog metadata editing and historical pages remain future work        |
-| Download a shared game  | Review a .torrent or magnet, use a link found in a .g4e, choose a destination and explicitly start                                  | There is no searchable public/community catalog or one-click download from a community yet                        |
+| Keep my games           | Import files/folders, background SHA-256, platform/format hints, local browsing, checking registered copies, catalog backup/restore | Downloads are not automatically imported; historical records and imported originals remain separate entities      |
+| Download a shared game  | Review a .torrent or magnet, use a link found in a .g4e, choose a destination and explicitly start                                  | Imported .g4lib snapshots are searchable offline; download still requires explicit source/destination review      |
 | Share my collection     | Select originals from the Library, start read-only sharing, create/copy a magnet, optionally save .torrent/.g4e references          | No community publication is performed; reference files alone do not make payload available                        |
 | Control participation   | Pause, reverified resume, private saved state, optional DHT/selected trackers and per-transfer bandwidth limits                     | Restart opens interrupted transfers paused; no global bandwidth quota or automatic background Guardian allocation |
 | Open preservation files | Public .g4 and .g4e v1 with creation/inspection and integrity/compatibility tests                                                   | Inspection does not execute, extract or import a package                                                          |
-| Join a community        | Read the clearly marked future-community overview                                                                                   | No login, joining, publication, moderation or .g4lib implementation is claimed                                    |
+| Join a community        | Import/browse independent .g4lib snapshots, record attribution and keep personal collections                                        | No online joining/publication/moderation, remote subscription or signature verification is claimed                |
 
 The real transfer engine and local integrity/compatibility checks are implemented. Public-network/NAT acceptance and independent-client interoperability still need their own evidence; passing local tests does not certify all network conditions.
 
@@ -25,7 +25,7 @@ The real transfer engine and local integrity/compatibility checks are implemente
 
 1. **Download games**: use a link or torrent supplied by someone else, choose an explicit discovery/direct route, review the file list and choose a folder. Opening a .g4e is offline; selecting its link populates the form without starting a lookup. Network discovery stays opt-in.
 2. **Share my collection**: add a local collection if needed, choose it and start sharing. Library cards carry the exact selected collection into this flow even when it is outside the first source-selection page. A download link appears after successful sharing. Preparing references is optional and distinct from starting upload.
-3. **Community**: explain the planned collaborative ecosystem without a fake Join button or empty public game catalog. Current users can return to their Library or download a supplied link.
+3. **Community and Game Archive**: browse reviewed local .g4lib snapshots, explore platforms and game details, create historical records independently from files and attach permitted P2P references. No fake Join button or automatic publication is presented.
 4. **My transfers**: monitor progress, connected participants, received/uploaded totals and rates; pause, resume, change limits or remove a record while keeping files.
 
 Home presents these journeys ahead of statistics. My Library, Activity and Settings remain available. Logo navigation returns Home. Configuration screens and route changes do not themselves start sharing.
@@ -42,10 +42,10 @@ Home presents these journeys ahead of statistics. My Library, Activity and Setti
 
 ## Next chapters
 
-1. Improve metadata capture/editing: title, platform, release year, developers/publishers, region/version/languages, historical notes, authorized images and distribution permission.
-2. Specify and validate open .g4lib community catalogs, including identity/version rules, signatures, history, import/export and moderation boundaries.
+1. Extend the delivered historical archive with richer media/documentation, editorial merging and multi-base compatibility; keep the existing metadata/file distinction.
+2. Extend the delivered .g4lib v1 snapshot format with a reviewed design for signatures, subscriptions and publisher identity; current unsigned import/export does not certify provenance.
 3. Implement community discovery and reviewed publication of .g4e references, independent community catalogs and explicit participation. No mandatory central account should gate local preservation or direct P2P exchange.
-4. Build historical game pages and permitted thematic collections. A participant can follow more than one community.
+4. Extend the delivered historical game pages and personal collections with permitted community thematic collections and explicit multi-community participation.
 5. Add availability history and carefully scoped estimates, then Games at Risk and voluntary Guardians with storage/bandwidth quotas and verifiable contributions. Do not infer a global copy count from connected-peer observations.
 6. Research complementary IPFS/CIDs, offline recovery and optional OpenTimestamps/Bitcoin proofs. Bitcoin is not game storage; IPFS does not guarantee persistence without participants maintaining data.
 7. Evaluate optional Lightning donations and contribution recognition only after verification and operational needs are understood. No native token, mandatory wallet, DRM or cryptocurrency payment is required.

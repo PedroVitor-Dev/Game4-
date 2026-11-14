@@ -24,7 +24,7 @@
 
 See the [documentation index](docs/README.md) for the product plan, estimated schedule, architecture, preservation strategy, security, risks, decisions, and progress records.
 
-The desktop currently supports a bilingual local Library, file integrity checks, .g4/.g4e preservation formats, explicit BitTorrent downloads/sharing, paused restart recovery and per-transfer upload/download limits. Home provides direct Download and Share journeys; community participation/catalogs are still planned.
+The desktop currently supports a bilingual local Library, file integrity checks, .g4/.g4e preservation formats, explicit BitTorrent downloads/sharing, paused restart recovery and per-transfer upload/download limits. Home provides direct Download and Share journeys. The [Game Archive](docs/game-archive.md) now adds editable historical game/platform pages, separate versions/updates/DLCs, attributed local artwork, personal collections and reviewed offline .g4lib catalog import/export. Live community joining/publication, signed catalogs and remote subscriptions remain planned.
 
 Read the [current vision and experience baseline](docs/vision-and-experience.md) for what works today, what remains planned and how the app follows the preservation mission. Features described below outside that implemented scope are plans; the [project log](docs/project-log.md) records validation.
 

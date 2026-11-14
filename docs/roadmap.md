@@ -1,6 +1,6 @@
 # Schedule and milestones
 
-Current product/experience baseline (November 14, 2026): [vision and user experience](vision-and-experience.md). It reconciles the renewed community preservation plan with implemented local Library, direct P2P, recovery and speed controls; older dated scope notes below are historical. Community catalog/discovery and .g4lib remain planned.
+Current product/experience baseline (November 14, 2026): [vision and user experience](vision-and-experience.md). It reconciles the renewed community preservation plan with implemented local Library, direct P2P, recovery and speed controls; older dated scope notes below are historical. Historical metadata editing, visual game/platform exploration and reviewed offline .g4lib snapshots are now implemented; see [Game Archive](game-archive.md). Signed catalogs, subscriptions and live community participation/discovery remain planned.
 
 Baseline: November 3, 2026. Initial estimate: 16 active weeks for a P2P alpha, followed by a 4-week contingency. Assumes one main developer with regular availability and project-owner review. The estimate has not been validated against historical delivery velocity.
 
@@ -76,3 +76,9 @@ Transfers can explicitly continue seeding a completed download and now displays 
 ## Transfer recovery — November 14, 2026
 
 Pause, reverified Resume and private transfer persistence are now implemented in a separate SQLite v1 store; catalog SQLite v4 and backup v2 remain unchanged. Interrupted work reopens Paused without networking. Owned downloads are repaired without duplication or truncation, while original seeding sources remain read-only. Inactive records can be forgotten without deleting content. See [transfer persistence](transfer-persistence.md) and [ADR 0020](decisions/0020-private-transfer-recovery.md) for storage, credentials, sidecars, limits and process-restart evidence.
+
+## Visual historical archive — November 14, 2026
+
+SQLite schema 5 and private backup v3 now include historical records independent of physical originals. Game Archive, Platforms, game detail tabs, metadata/artwork administration, exact base-revision compatibility, original-file association, favorites/collections/recent views and reviewed offline .g4lib v1 snapshot import/export are implemented. Matching local torrent sessions supply existing live metrics without background discovery. See [implementation and limits](game-archive.md) and [the public format](../packages/g4lib-format/spec-v1.md).
+
+Validation includes migration/backup integrity, catalog interoperability, dependency constraints, paginated queries over 10,000 synthetic games and isolated native UI acceptance. Signed publisher identities, live subscriptions, merge conflict workflows, authorized video/document attachments, global availability histories and the complete offline survival milestone remain open. No schedule milestone is declared complete solely from this increment.

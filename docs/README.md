@@ -76,3 +76,6 @@ See [storage folders](storage-folders.md) for configurable download/export/backu
 See [Windows file associations](windows-file-associations.md) for .g4/.g4e installer registration and safe read-only opening in a single desktop instance.
 
 See [feedback and in-app notifications](feedback-and-notifications.md) for loading/empty/error states, safe retries and recent activity messages.
+
+- [Game Archive architecture and delivery](game-archive.md)
+- [.g4lib public catalog specification](../packages/g4lib-format/spec-v1.md)

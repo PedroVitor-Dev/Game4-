@@ -113,9 +113,6 @@ export function DashboardPage({ onNavigate }: { onNavigate: Navigate }) {
             <span className="journey-index" aria-hidden="true">
               0{index + 1}
             </span>
-            {action === "community" && (
-              <span className="planned-label">{t("community.soon")}</span>
-            )}
             <h2>{t(`journeys.${action}Title`)}</h2>
             <p>{t(`journeys.${action}Text`)}</p>
             <button

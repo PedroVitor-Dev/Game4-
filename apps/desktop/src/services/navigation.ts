@@ -1,5 +1,9 @@
 import type { LibraryItemSummary } from "@game4/ipc-contracts";
 export type Page =
+  | "archive"
+  | "platforms"
+  | "collections"
+  | "preservation"
   | "dashboard"
   | "library"
   | "download"

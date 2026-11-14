@@ -1,5 +1,6 @@
 import {
   failure,
+  parseArchiveResponse,
   IpcFailure,
   normalizeIpcError,
   parseAppInfo,
@@ -66,6 +67,7 @@ export type IpcTransport = {
   ) => Promise<unknown>;
 };
 const decoders = {
+  archive_request: parseArchiveResponse,
   app_info: parseAppInfo,
   associated_file_next: parseAssociatedFile,
   associated_file_read: parseAssociatedFileResult,

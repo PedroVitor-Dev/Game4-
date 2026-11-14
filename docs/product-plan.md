@@ -1,6 +1,6 @@
 # Product plan
 
-Current product/experience baseline (November 14, 2026): [vision and user experience](vision-and-experience.md). It reconciles the renewed community preservation plan with implemented local Library, direct P2P, recovery and speed controls; older dated scope notes below are historical. Community catalog/discovery and .g4lib remain planned.
+Current product/experience baseline (November 14, 2026): [vision and user experience](vision-and-experience.md). It reconciles the renewed community preservation plan with implemented local Library, direct P2P, recovery and speed controls; older dated scope notes below are historical. Historical metadata editing, visual game/platform exploration and reviewed offline .g4lib snapshots are now implemented; see [Game Archive](game-archive.md). Signed catalogs, subscriptions and live community participation/discovery remain planned.
 
 ## Vision and audiences
 

@@ -2172,3 +2172,15 @@ summary:focus-visible {
     scroll-behavior: auto;
   }
 }
+
+.nav-number svg {
+  display: block;
+}
+.nav-item.active {
+  background: #20314b;
+  color: #f2f6ff;
+  border-color: #3c6da8;
+}
+.nav-item:hover {
+  border-color: #4b6a92;
+}
