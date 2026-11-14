@@ -46,3 +46,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0019](0019-transfer-observations-and-seeding.md) | Accepted experimental integration | Connected peer observations, sampled transfer rates and continued download seeding |
 
 | [0020](0020-private-transfer-recovery.md) | Accepted experimental integration | Private SQLite transfer intent, paused startup and reverified resume |
+
+| [0021](0021-g4ep-private-mvp.md) | Accepted architecture only | Isolated G4EP service ports, private enrollment and bounded recovery planning |

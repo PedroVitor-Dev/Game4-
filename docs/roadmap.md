@@ -82,3 +82,7 @@ Pause, reverified Resume and private transfer persistence are now implemented in
 SQLite schema 5 and private backup v3 now include historical records independent of physical originals. Game Archive, Platforms, game detail tabs, metadata/artwork administration, exact base-revision compatibility, original-file association, favorites/collections/recent views and reviewed offline .g4lib v1 snapshot import/export are implemented. Matching local torrent sessions supply existing live metrics without background discovery. See [implementation and limits](game-archive.md) and [the public format](../packages/g4lib-format/spec-v1.md).
 
 Validation includes migration/backup integrity, catalog interoperability, dependency constraints, paginated queries over 10,000 synthetic games and isolated native UI acceptance. Signed publisher identities, live subscriptions, merge conflict workflows, authorized video/document attachments, global availability histories and the complete offline survival milestone remain open. No schedule milestone is declared complete solely from this increment.
+
+## G4EP architecture — November 14, 2026
+
+Step 1 prepares isolated internal service ports and checked planning values for arbitrary-file fragmentation, integrity, reconstruction and repair in a private network. No codec, storage node, network service or 700 MB result is claimed yet. See [G4EP architecture and acceptance gates](g4ep/architecture.md). Existing product formats and databases remain unchanged.

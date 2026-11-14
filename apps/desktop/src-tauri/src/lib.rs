@@ -5,6 +5,7 @@ pub mod contracts;
 pub mod database;
 pub mod ever;
 pub mod file_associations;
+pub mod g4ep;
 pub mod identification;
 pub mod library;
 pub mod manifests;
