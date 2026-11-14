@@ -1,4 +1,29 @@
 {
+  "activeTransfer": {
+    "dht": false,
+    "error": null,
+    "id": "7b22b2eb-a47e-43e2-975b-8c01b541db17",
+    "infoHash": "f0d6cd560e79272cf3acd08e0ee78e193b535c04",
+    "isSeeding": false,
+    "listenPort": 42420,
+    "mode": "download",
+    "name": "originals",
+    "outputName": "game4-download-example",
+    "receivedBytes": "12",
+    "seedAfterDownload": true,
+    "status": "active",
+    "telemetry": {
+      "connectedPeers": 3,
+      "downloadBps": "1024",
+      "leechers": 2,
+      "seeders": 1,
+      "uploadBps": "512"
+    },
+    "totalBytes": "40",
+    "trackerCount": 0,
+    "uploadedBytes": "0",
+    "verifiedBytes": "10"
+  },
   "appInfo": {
     "capabilities": [
       "app_info",
@@ -16,6 +41,7 @@
       "package_open",
       "library_export_ever",
       "ever_open",
+      "transfer_metrics_info",
       "trackers_validate",
       "magnet_generate",
       "magnet_resolve",
@@ -104,11 +130,15 @@
     "error": null,
     "id": "7b22b2eb-a47e-43e2-975b-8c01b541db17",
     "infoHash": "f0d6cd560e79272cf3acd08e0ee78e193b535c04",
+    "isSeeding": false,
     "listenPort": null,
     "mode": "download",
     "name": "originals",
     "outputName": "game4-download-example",
+    "receivedBytes": "40",
+    "seedAfterDownload": false,
     "status": "completed",
+    "telemetry": null,
     "totalBytes": "40",
     "trackerCount": 0,
     "uploadedBytes": "0",

@@ -64,6 +64,8 @@ pub fn typescript() -> String {
         TransferIdRequest::decl(&config),
         TransferMode::decl(&config),
         TransferStatus::decl(&config),
+        TransferTelemetry::decl(&config),
+        TransferMetricsInfo::decl(&config),
         TransferSnapshot::decl(&config),
         TransferStartResult::decl(&config),
         TransferPage::decl(&config),
@@ -191,9 +193,26 @@ pub fn examples() -> String {
         listen_port: None,
         dht: false,
         tracker_count: 0,
+        received_bytes: "40".into(),
+        seed_after_download: false,
+        is_seeding: false,
+        telemetry: None,
         output_name: Some("game4-download-example".into()),
         error: None,
     };
+    let mut active_transfer = transfer.clone();
+    active_transfer.status = TransferStatus::Active;
+    active_transfer.verified_bytes = "10".into();
+    active_transfer.received_bytes = "12".into();
+    active_transfer.seed_after_download = true;
+    active_transfer.listen_port = Some(42420);
+    active_transfer.telemetry = Some(TransferTelemetry {
+        connected_peers: 3,
+        seeders: 1,
+        leechers: 2,
+        download_bps: "1024".into(),
+        upload_bps: "512".into(),
+    });
     let torrent_import = TorrentImportResult {
         cancelled: false,
         preview: Some(TorrentPreview {
@@ -212,7 +231,7 @@ pub fn examples() -> String {
         magnet: format!("magnet:?xt=urn:btih:{}", transfer.info_hash),
         info_hash: transfer.info_hash.clone(),
     };
-    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export,"torrentImport":torrent_import,"transfer":transfer,"magnetLink":magnet_link})).unwrap())
+    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export,"torrentImport":torrent_import,"transfer":transfer,"activeTransfer":active_transfer,"magnetLink":magnet_link})).unwrap())
 }
 
 #[cfg(test)]

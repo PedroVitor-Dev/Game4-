@@ -30,6 +30,7 @@ export function TransfersPage() {
   const [port, setPort] = useState("0");
   const [peer, setPeer] = useState("");
   const [dht, setDht] = useState(false);
+  const [seedAfterDownload, setSeedAfterDownload] = useState(false);
   const [useTrackers, setUseTrackers] = useState(false);
   const [trackerText, setTrackerText] = useState("");
   const trackers = useTrackers
@@ -47,6 +48,7 @@ export function TransfersPage() {
   const [allFiles, setAllFiles] = useState(false);
   const [transfers, setTransfers] = useState<TransferSnapshot[]>([]);
   const [busy, setBusy] = useState(false);
+  const [stopping, setStopping] = useState<Set<string>>(new Set());
   const [error, setError] = useState<unknown>();
   const [saved, setSaved] = useState<{ name: string; magnet: string }>();
   const alive = useRef(true);
@@ -108,6 +110,23 @@ export function TransfersPage() {
       }
     }
   }
+  async function stop(id: string) {
+    setStopping((v) => new Set(v).add(id));
+    try {
+      await stopTransfer({ transferId: id });
+    } catch (e) {
+      if (alive.current) setError(e);
+    } finally {
+      if (alive.current) {
+        setStopping((v) => {
+          const next = new Set(v);
+          next.delete(id);
+          return next;
+        });
+        await refresh();
+      }
+    }
+  }
   function seed() {
     const listenPort = Number(port);
     if (!Number.isInteger(listenPort) || listenPort < 0 || listenPort > 65535)
@@ -138,12 +157,14 @@ export function TransfersPage() {
         downloadPending.current?.token !== preview.token ||
         downloadPending.current.peer !== peer.trim() ||
         downloadPending.current.dht !== dht ||
+        downloadPending.current.seedAfterDownload !== seedAfterDownload ||
         JSON.stringify(downloadPending.current.trackers) !==
           JSON.stringify(trackers)
       )
         downloadPending.current = {
           requestId: crypto.randomUUID(),
           token: preview.token,
+          seedAfterDownload,
           peer: peer.trim(),
           dht,
           trackers,
@@ -429,6 +450,16 @@ export function TransfersPage() {
               </button>
             )}
             <p>{t("transfers.outputHint")}</p>
+            <label className="dht-choice">
+              <input
+                type="checkbox"
+                checked={seedAfterDownload}
+                disabled={busy}
+                onChange={(e) => setSeedAfterDownload(e.target.checked)}
+              />
+              {t("transfers.keepSeeding")}
+            </label>
+            <p>{t("transfers.keepSeedingHint")}</p>
             <button
               className="primary"
               disabled={busy || (!discovery && !peer.trim())}
@@ -446,8 +477,12 @@ export function TransfersPage() {
           <article className="transfer-row" key={job.id}>
             <h3>{job.name}</h3>
             <p>
-              {t(`transfers.mode.${job.mode}`)} ·{" "}
-              {t(`transfers.status.${job.status}`)}
+              {t(
+                job.isSeeding
+                  ? "transfers.seedingNow"
+                  : `transfers.mode.${job.mode}`,
+              )}{" "}
+              · {t(`transfers.status.${job.status}`)}
             </p>
             <p>{t(job.dht ? "transfers.dhtOn" : "transfers.dhtOff")}</p>
             <p>{t("transfers.trackerCount", { count: job.trackerCount })}</p>
@@ -465,6 +500,37 @@ export function TransfersPage() {
                 uploaded: bytes(job.uploadedBytes),
               })}
             </p>
+            <p>
+              {t("transfers.received", { bytes: bytes(job.receivedBytes) })}
+            </p>
+            {job.telemetry ? (
+              <div>
+                <p>
+                  {t("transfers.speeds", {
+                    down: bytes(job.telemetry.downloadBps),
+                    up: bytes(job.telemetry.uploadBps),
+                  })}
+                </p>
+                <p>
+                  {t("transfers.connected", {
+                    peers: job.telemetry.connectedPeers,
+                    seeders: job.telemetry.seeders,
+                    leechers: job.telemetry.leechers,
+                  })}
+                </p>
+                <p>
+                  {t(
+                    job.telemetry.seeders > 0
+                      ? "transfers.availabilityFull"
+                      : "transfers.availabilityUnknown",
+                    { count: job.telemetry.seeders },
+                  )}
+                </p>
+                <p>{t("transfers.peerScope")}</p>
+              </div>
+            ) : (
+              <p>{t("transfers.metricsUnavailable")}</p>
+            )}
             <progress
               max="100"
               value={Number(
@@ -483,12 +549,8 @@ export function TransfersPage() {
             {job.error && <p role="alert">{t(getIpcErrorKey(job.error))}</p>}
             {job.status === "active" && (
               <button
-                disabled={busy}
-                onClick={() =>
-                  void act(async () => {
-                    await stopTransfer({ transferId: job.id });
-                  })
-                }
+                disabled={stopping.has(job.id)}
+                onClick={() => void stop(job.id)}
               >
                 {t("transfers.stop")}
               </button>

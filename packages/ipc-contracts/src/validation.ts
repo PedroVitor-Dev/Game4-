@@ -38,6 +38,8 @@ import type {
   CancelMagnetResult,
   TorrentCreateResult,
   TorrentImportResult,
+  TransferTelemetry,
+  TransferMetricsInfo,
   TransferSnapshot,
   TransferStartResult,
   TransferPage,
@@ -592,6 +594,33 @@ export function parseTorrentImportResult(v: unknown): TorrentImportResult {
     },
   };
 }
+export function parseTransferMetricsInfo(v: unknown): TransferMetricsInfo {
+  const o = object(v);
+  if (
+    typeof o.connectedPeerMetrics !== "boolean" ||
+    typeof o.seedAfterDownload !== "boolean"
+  )
+    throw failure("INVALID_RESPONSE");
+  return {
+    connectedPeerMetrics: o.connectedPeerMetrics,
+    seedAfterDownload: o.seedAfterDownload,
+  };
+}
+function transferTelemetry(v: unknown): TransferTelemetry {
+  const o = object(v);
+  const connectedPeers = safeCount(o.connectedPeers, 0, 4294967295),
+    seeders = safeCount(o.seeders, 0, 4294967295),
+    leechers = safeCount(o.leechers, 0, 4294967295);
+  const downloadBps = decimal(o.downloadBps),
+    uploadBps = decimal(o.uploadBps);
+  if (
+    seeders + leechers !== connectedPeers ||
+    BigInt(downloadBps) > 18446744073709551615n ||
+    BigInt(uploadBps) > 18446744073709551615n
+  )
+    throw failure("INVALID_RESPONSE");
+  return { connectedPeers, seeders, leechers, downloadBps, uploadBps };
+}
 export function parseTransferSnapshot(v: unknown): TransferSnapshot {
   const o = object(v);
   const totalBytes = decimal(o.totalBytes, true);
@@ -629,6 +658,27 @@ export function parseTransferSnapshot(v: unknown): TransferSnapshot {
     (o.mode === "download" && outputName === null)
   )
     throw failure("INVALID_RESPONSE");
+  const receivedBytes =
+    o.receivedBytes === undefined ? "0" : decimal(o.receivedBytes);
+  const seedAfterDownload =
+    o.seedAfterDownload === undefined ? false : o.seedAfterDownload;
+  const isSeeding = o.isSeeding === undefined ? false : o.isSeeding;
+  const telemetry =
+    o.telemetry === undefined || o.telemetry === null
+      ? null
+      : transferTelemetry(o.telemetry);
+  if (
+    typeof seedAfterDownload !== "boolean" ||
+    typeof isSeeding !== "boolean" ||
+    BigInt(receivedBytes) > 18446744073709551615n ||
+    (isSeeding &&
+      (o.status !== "active" ||
+        verifiedBytes !== totalBytes ||
+        (o.mode !== "seed" && !seedAfterDownload))) ||
+    (telemetry !== null && o.status !== "active") ||
+    (o.mode === "seed" && seedAfterDownload)
+  )
+    throw failure("INVALID_RESPONSE");
   return {
     id: uuid(o.id),
     name: text(o.name),
@@ -638,6 +688,10 @@ export function parseTransferSnapshot(v: unknown): TransferSnapshot {
     totalBytes,
     verifiedBytes,
     uploadedBytes,
+    receivedBytes,
+    seedAfterDownload,
+    isSeeding,
+    telemetry,
     listenPort,
     dht:
       o.dht === undefined

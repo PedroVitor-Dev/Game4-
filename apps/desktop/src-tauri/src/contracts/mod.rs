@@ -23,6 +23,7 @@ pub enum ImplementedCommand {
     PackageOpen,
     LibraryExportEver,
     EverOpen,
+    TransferMetricsInfo,
     TrackersValidate,
     MagnetGenerate,
     MagnetResolve,
@@ -38,7 +39,7 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 28] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 29] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -54,6 +55,7 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 28] = [
     ImplementedCommand::PackageOpen,
     ImplementedCommand::LibraryExportEver,
     ImplementedCommand::EverOpen,
+    ImplementedCommand::TransferMetricsInfo,
     ImplementedCommand::TrackersValidate,
     ImplementedCommand::MagnetGenerate,
     ImplementedCommand::MagnetResolve,
@@ -641,6 +643,8 @@ pub struct StartDownloadRequest {
     pub dht: bool,
     #[serde(default)]
     pub trackers: Vec<String>,
+    #[serde(default)]
+    pub seed_after_download: bool,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -704,6 +708,10 @@ pub struct TransferSnapshot {
     pub output_name: Option<String>,
     pub error: Option<IpcError>,
     pub tracker_count: u32,
+    pub received_bytes: String,
+    pub seed_after_download: bool,
+    pub is_seeding: bool,
+    pub telemetry: Option<TransferTelemetry>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -728,4 +736,20 @@ pub struct TorrentReferenceRequest {
     pub item_id: String,
     #[serde(default)]
     pub trackers: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TransferTelemetry {
+    pub connected_peers: u32,
+    pub seeders: u32,
+    pub leechers: u32,
+    pub download_bps: String,
+    pub upload_bps: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TransferMetricsInfo {
+    pub connected_peer_metrics: bool,
+    pub seed_after_download: bool,
 }

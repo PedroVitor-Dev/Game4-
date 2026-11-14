@@ -246,3 +246,11 @@ Implemented opt-in HTTP/HTTPS/UDP tracker routing for seed, download and sequent
 Real local HTTP and BEP 15 UDP tracker tests observe seed announces, resolve metadata and complete SHA-256-matched multi-file transfers without DHT or a manual peer. A separate unselected tracker embedded in imported metainfo receives no traffic. Endpoint/identity/IPC tests cover export stability and capability guards. HTTPS uses the pinned Rust TLS transport; public HTTPS tracker/WAN acceptance remains open. No push is performed.
 
 Validation: 78 Rust tests and 32 JavaScript IPC/format tests passed; 215 translation keys match across both locales. HTTP and UDP network tests use only local synthetic trackers and content.
+
+## 2026-11-14 — Transfer lifecycle, upload and local peer observations
+
+Added explicit continued seeding after download while retaining default stop-on-completion. Complete downloads are flushed/synced off-thread and their shared storage adapter is sealed against writes before being marked as seeding. Stop is independently available during other long operations, preserves byte totals and clears live observations. Added received bytes, sampled upload/download rates and local connected seeder/other-peer observations with conservative availability wording, never substituting swarm-wide totals or a fabricated piece ratio. Added an additive capability and backward-compatible IPC validators, both locales, operational documentation and ADR 0019.
+
+The real loopback handoff test observes live peer classes and positive rates under source throttling, verifies storage refuses writes after completion, stops the original source and downloads from the new seed to a third client with matching SHA-256. The original content is unchanged. Per-peer addresses are not exposed by these aggregate DTOs. No push is performed.
+
+Validation: 79 Rust tests and 33 JavaScript IPC/format tests passed, including the three-session upload handoff and old default stop-on-completion coverage. Connected availability remains explicitly scoped to observed peers.

@@ -83,6 +83,7 @@ async fn real_loopback_transfer_preserves_sources_and_completes_with_matching_sh
     let parent = d.path().join("received");
     fs::create_dir(&parent).unwrap();
     let request = StartDownloadRequest {
+        seed_after_download: false,
         request_id: Uuid::new_v4().to_string(),
         token: preview.token,
         dht: false,
@@ -154,6 +155,7 @@ async fn invalid_requests_and_cancelled_shutdown_never_start_new_network_work() 
         assert!(peer(addr).is_err());
     }
     let req = StartDownloadRequest {
+        seed_after_download: false,
         request_id: Uuid::new_v4().to_string(),
         token: Uuid::new_v4().to_string(),
         dht: false,
@@ -175,6 +177,7 @@ async fn stopping_partial_download_preserves_files_and_rejects_conflicting_repla
     // Hold a local port without accepting BitTorrent, so the transfer remains incomplete.
     let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
     let request = StartDownloadRequest {
+        seed_after_download: false,
         request_id: Uuid::new_v4().to_string(),
         token: preview.token,
         dht: false,
@@ -225,6 +228,7 @@ async fn expired_preview_fails_before_creating_output() {
     assert!(
         m.download(
             StartDownloadRequest {
+                seed_after_download: false,
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
                 dht: false,
@@ -464,6 +468,7 @@ async fn isolated_dht_discovers_seed_and_resolves_magnet_without_an_initial_peer
     let transfer = download
         .download(
             StartDownloadRequest {
+                seed_after_download: false,
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
                 peer: String::new(),
@@ -719,6 +724,7 @@ async fn tracker_roundtrip(udp: bool) {
     let job = download
         .download(
             StartDownloadRequest {
+                seed_after_download: false,
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
                 peer: String::new(),
@@ -769,4 +775,159 @@ async fn http_tracker_discovers_metadata_and_payload_without_dht_or_manual_peer(
 #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
 async fn udp_tracker_discovers_metadata_and_payload_without_dht_or_manual_peer() {
     tracker_roundtrip(true).await;
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn upload_peer_observations_and_download_to_seeding_handoff_work_end_to_end() {
+    let (d, db, imports, _, original) = setup();
+    let source = manager();
+    let receiver = manager();
+    let next = manager();
+    let raw = ever::from_catalog(&db, "1").unwrap().torrent;
+    let seeded = source.seed(db, imports, seed_request()).await.unwrap();
+    {
+        let entries = source.entries.lock().unwrap();
+        let runtime = entries[&seeded.id].runtime.lock().unwrap();
+        runtime
+            .as_ref()
+            .unwrap()
+            .session
+            .ratelimits
+            .set_upload_bps(std::num::NonZeroU32::new(262144));
+    }
+    let preview = receiver.import(raw.clone()).unwrap();
+    let request = StartDownloadRequest {
+        request_id: Uuid::new_v4().to_string(),
+        token: preview.token,
+        peer: format!("127.0.0.1:{}", seeded.listen_port.unwrap()),
+        dht: false,
+        trackers: vec![],
+        seed_after_download: true,
+    };
+    let started = receiver
+        .download(request.clone(), d.path().into())
+        .await
+        .unwrap();
+    let mut seeder_seen = false;
+    let mut leecher_seen = false;
+    let mut down_speed_seen = false;
+    let mut up_speed_seen = false;
+    let complete = tokio::time::timeout(Duration::from_secs(35), async {
+        loop {
+            let received = receiver
+                .list()
+                .items
+                .into_iter()
+                .find(|v| v.id == started.id)
+                .unwrap();
+            let sending = source
+                .list()
+                .items
+                .into_iter()
+                .find(|v| v.id == seeded.id)
+                .unwrap();
+            if let Some(t) = &received.telemetry {
+                seeder_seen |= t.seeders > 0;
+                down_speed_seen |= t.download_bps.parse::<u64>().unwrap() > 0;
+                assert_eq!(t.seeders + t.leechers, t.connected_peers);
+            }
+            if let Some(t) = &sending.telemetry {
+                leecher_seen |= t.leechers > 0;
+                up_speed_seen |= t.upload_bps.parse::<u64>().unwrap() > 0;
+            }
+            assert_ne!(received.status, TransferStatus::Failed);
+            if received.is_seeding {
+                break received;
+            }
+            tokio::time::sleep(Duration::from_millis(50)).await;
+        }
+    })
+    .await
+    .unwrap();
+    assert!(
+        seeder_seen && leecher_seen && down_speed_seen && up_speed_seen,
+        "real peer classes and transfer rates must be observed"
+    );
+    assert_eq!(complete.status, TransferStatus::Active);
+    assert_eq!(complete.verified_bytes, original.len().to_string());
+    assert!(complete.received_bytes.parse::<u64>().unwrap() >= original.len() as u64);
+    {
+        let entries = receiver.entries.lock().unwrap();
+        let runtime = entries[&started.id].runtime.lock().unwrap();
+        assert!(
+            runtime
+                .as_ref()
+                .unwrap()
+                .io
+                .pwrite_all(0, 0, b"bad")
+                .is_err(),
+            "completed download storage must be sealed"
+        );
+    }
+    let mut conflicting = request;
+    conflicting.seed_after_download = false;
+    assert!(
+        receiver
+            .download(conflicting, d.path().into())
+            .await
+            .is_err()
+    );
+    source.stop(&seeded.id).await.unwrap();
+    // The original source is now offline. A third session must download solely
+    // from the completed download that explicitly stayed online as a seed.
+    let preview = next.import(raw).unwrap();
+    let next_job = next
+        .download(
+            StartDownloadRequest {
+                request_id: Uuid::new_v4().to_string(),
+                token: preview.token,
+                peer: format!("127.0.0.1:{}", complete.listen_port.unwrap()),
+                dht: false,
+                trackers: vec![],
+                seed_after_download: false,
+            },
+            d.path().into(),
+        )
+        .await
+        .unwrap();
+    let next_done = tokio::time::timeout(Duration::from_secs(25), async {
+        loop {
+            let row = next
+                .list()
+                .items
+                .into_iter()
+                .find(|v| v.id == next_job.id)
+                .unwrap();
+            if row.status == TransferStatus::Completed {
+                break row;
+            }
+            assert_ne!(row.status, TransferStatus::Failed);
+            tokio::time::sleep(Duration::from_millis(50)).await;
+        }
+    })
+    .await
+    .unwrap();
+    let root = d.path().join(next_done.output_name.unwrap());
+    let received = [
+        fs::read(root.join("a.bin")).unwrap(),
+        fs::read(root.join("nested/β.bin")).unwrap(),
+    ]
+    .concat();
+    assert_eq!(Sha256::digest(&received), Sha256::digest(&original));
+    let uploading = receiver
+        .list()
+        .items
+        .into_iter()
+        .find(|v| v.id == started.id)
+        .unwrap();
+    assert!(uploading.uploaded_bytes.parse::<u64>().unwrap() > 0);
+    let stopped = receiver.stop(&started.id).await.unwrap();
+    assert!(!stopped.is_seeding);
+    assert!(stopped.telemetry.is_none());
+    assert!(stopped.listen_port.is_none());
+    assert_eq!(stopped.uploaded_bytes, uploading.uploaded_bytes);
+    assert!(next_done.telemetry.is_none());
+    receiver.shutdown().await;
+    next.shutdown().await;
+    source.shutdown().await;
 }

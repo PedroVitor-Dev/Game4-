@@ -31,6 +31,7 @@ export const { exportPackage, openPackage } = client;
 export const { exportEver, openEver } = client;
 
 export const {
+  getTransferMetricsInfo,
   validateTrackers,
   generateMagnet,
   resolveMagnet,

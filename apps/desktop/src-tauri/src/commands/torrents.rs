@@ -207,3 +207,11 @@ pub fn trackers_validate(request: TrackerList) -> Result<TrackerList, IpcError> 
         trackers: torrents::trackers::normalize(&request.trackers)?,
     })
 }
+
+#[tauri::command]
+pub fn transfer_metrics_info() -> TransferMetricsInfo {
+    TransferMetricsInfo {
+        connected_peer_metrics: true,
+        seed_after_download: true,
+    }
+}

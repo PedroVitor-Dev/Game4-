@@ -219,3 +219,7 @@ Transfers now generates magnets without a metainfo export, imports them through 
 ## Selected trackers — November 14, 2026
 
 Transfers supports explicitly selected HTTP/HTTPS/UDP trackers for magnet metadata, payload discovery and generated torrent/magnet references. Imported endpoints are suggestions with opt-in off; only selected routes reach the engine. Exact torrent info bytes and read-only originals are preserved. Local HTTP/UDP tests transfer successfully without DHT or a manual peer and leave unselected trackers untouched. See [tracker operations](bittorrent.md) and [ADR 0018](decisions/0018-selected-trackers.md). Public tracker/WAN and independent-client acceptance remain open.
+
+## Upload, seeding and peer observations — November 14, 2026
+
+Transfers can explicitly continue seeding a completed download and now displays received/uploaded bytes, sampled rates, connected seeders/other peers and a conservative remote availability indicator. Inactive observations are unavailable; global swarm populations and exact combined-piece coverage are not invented. A real three-session handoff test proves the completed download uploads correctly after the original source goes offline. See [the current guide](bittorrent.md) and [ADR 0019](decisions/0019-transfer-observations-and-seeding.md).

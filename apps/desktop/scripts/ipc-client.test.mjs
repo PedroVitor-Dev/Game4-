@@ -814,3 +814,81 @@ test("tracker controls validate endpoints, gate older backends and preserve opti
     0,
   );
 });
+
+test("live transfer observations validate peer counts, rates and explicit continued seeding", async () => {
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "transfer_metrics_info")
+      return { connectedPeerMetrics: true, seedAfterDownload: true };
+    if (command === "torrent_download")
+      return { cancelled: false, transfer: examples.activeTransfer };
+    return { items: [examples.activeTransfer] };
+  });
+  assert.deepEqual(
+    (await client.listTransfers()).items[0].telemetry,
+    examples.activeTransfer.telemetry,
+  );
+  const request = {
+    requestId: examples.transfer.id,
+    token: examples.transfer.id,
+    peer: "127.0.0.1:42420",
+    dht: false,
+    trackers: [],
+    seedAfterDownload: true,
+  };
+  assert.equal(
+    (await client.downloadTorrent(request)).transfer.seedAfterDownload,
+    true,
+  );
+  assert.deepEqual(calls[2], ["transfer_metrics_info", undefined]);
+  assert.deepEqual(calls[3], ["torrent_download", { request }]);
+  const base = examples.activeTransfer;
+  for (const change of [
+    { telemetry: { ...base.telemetry, seeders: 4 } },
+    { telemetry: { ...base.telemetry, connectedPeers: -1 } },
+    { telemetry: { ...base.telemetry, downloadBps: "NaN" } },
+    { telemetry: { ...base.telemetry, uploadBps: "18446744073709551616" } },
+    { status: "stopped" },
+    { isSeeding: true },
+    { seedAfterDownload: "true" },
+    { receivedBytes: "-1" },
+  ])
+    await assert.rejects(
+      make(async (c) =>
+        c === "app_info"
+          ? examples.appInfo
+          : { items: [{ ...base, ...change }] },
+      ).listTransfers(),
+      code("INVALID_RESPONSE"),
+    );
+  const seeding = { ...base, verifiedBytes: base.totalBytes, isSeeding: true };
+  assert.equal(
+    (
+      await make(async (c) =>
+        c === "app_info" ? examples.appInfo : { items: [seeding] },
+      ).listTransfers()
+    ).items[0].isSeeding,
+    true,
+  );
+  const { telemetry, receivedBytes, seedAfterDownload, isSeeding, ...legacy } =
+    examples.transfer;
+  const oldResult = (
+    await make(async (c) =>
+      c === "app_info" ? examples.appInfo : { items: [legacy] },
+    ).listTransfers()
+  ).items[0];
+  assert.equal(oldResult.telemetry, null);
+  assert.equal(oldResult.isSeeding, false);
+  const old = make(async () => ({
+    ...examples.appInfo,
+    capabilities: examples.appInfo.capabilities.filter(
+      (c) => c !== "transfer_metrics_info",
+    ),
+  }));
+  await assert.rejects(
+    old.downloadTorrent(request),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+});

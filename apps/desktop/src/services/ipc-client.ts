@@ -11,6 +11,7 @@ import {
   parsePackageOpenResult,
   parseEverOpenResult,
   parseEverExportResult,
+  parseTransferMetricsInfo,
   parseTrackerList,
   parseMagnetLink,
   parseCancelMagnetResult,
@@ -71,6 +72,7 @@ const decoders = {
   package_open: parsePackageOpenResult,
   library_export_ever: parseEverExportResult,
   ever_open: parseEverOpenResult,
+  transfer_metrics_info: parseTransferMetricsInfo,
   trackers_validate: parseTrackerList,
   magnet_generate: parseMagnetLink,
   magnet_resolve: parseTorrentImportResult,
@@ -154,6 +156,7 @@ export function createIpcClient(transport: IpcTransport) {
     exportEver: (request: ExportManifestRequest) =>
       capable("library_export_ever", request),
     openEver: () => capable("ever_open", undefined),
+    getTransferMetricsInfo: () => capable("transfer_metrics_info", undefined),
     validateTrackers: (request: TrackerList) =>
       capable("trackers_validate", request),
     generateMagnet: async (request: TorrentReferenceRequest) => {
@@ -177,6 +180,11 @@ export function createIpcClient(transport: IpcTransport) {
       return capable("torrent_seed", request);
     },
     downloadTorrent: async (request: StartDownloadRequest) => {
+      if (
+        request.seedAfterDownload &&
+        !(await capable("transfer_metrics_info", undefined)).seedAfterDownload
+      )
+        throw failure("CAPABILITY_UNAVAILABLE");
       await requireDht(request.dht);
       await requireTrackers(request.trackers);
       return capable("torrent_download", request);

@@ -42,3 +42,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0017](0017-magnets-and-dht.md) | Accepted experimental integration | Magnet generation/acquisition, bounded cancellation and optional ephemeral DHT |
 
 | [0018](0018-selected-trackers.md) | Accepted experimental integration | Explicit HTTP/HTTPS/UDP routing, reference export and metadata discovery |
+
+| [0019](0019-transfer-observations-and-seeding.md) | Accepted experimental integration | Connected peer observations, sampled transfer rates and continued download seeding |

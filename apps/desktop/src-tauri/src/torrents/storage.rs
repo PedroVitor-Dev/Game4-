@@ -18,17 +18,22 @@ pub(super) struct Slot {
 #[derive(Clone)]
 pub(super) struct Handles {
     slots: Arc<Vec<Slot>>,
-    read_only: bool,
+    read_only: Arc<AtomicBool>,
 }
 impl Handles {
     pub fn flush(&self) -> Result<()> {
-        if !self.read_only {
+        if !self.read_only.load(Ordering::Acquire) {
             for slot in self.slots.iter() {
                 let f = slot.file.lock().map_err(|_| anyhow::anyhow!("file lock"))?;
                 ensure!(f.metadata()?.len() == slot.len, "incomplete file");
                 f.sync_all()?;
             }
         }
+        Ok(())
+    }
+    pub fn seal(&self) -> Result<()> {
+        self.flush()?;
+        self.read_only.store(true, Ordering::Release);
         Ok(())
     }
     pub fn seed(root: &Path, meta: &Layout) -> Result<Self> {
@@ -54,7 +59,7 @@ impl Handles {
         }
         Ok(Self {
             slots: Arc::new(slots),
-            read_only: true,
+            read_only: Arc::new(AtomicBool::new(true)),
         })
     }
     pub fn download(root: &Path, meta: &Layout) -> Result<Self> {
@@ -82,7 +87,7 @@ impl Handles {
         }
         Ok(Self {
             slots: Arc::new(slots),
-            read_only: false,
+            read_only: Arc::new(AtomicBool::new(false)),
         })
     }
     fn slot(&self, id: usize, offset: u64, length: usize) -> Result<&Slot> {
@@ -130,7 +135,10 @@ impl TorrentStorage for Handles {
         Ok(())
     }
     fn pwrite_all(&self, id: usize, offset: u64, buf: &[u8]) -> Result<()> {
-        ensure!(!self.read_only, "original is read-only");
+        ensure!(
+            !self.read_only.load(Ordering::Acquire),
+            "original is read-only"
+        );
         let s = self.slot(id, offset, buf.len())?;
         let mut f = s.file.lock().map_err(|_| anyhow::anyhow!("file lock"))?;
         f.seek(SeekFrom::Start(offset))?;
@@ -140,7 +148,7 @@ impl TorrentStorage for Handles {
     fn ensure_file_length(&self, id: usize, len: u64) -> Result<()> {
         let s = self.slot(id, 0, 0)?;
         ensure!(s.len == len, "length mismatch");
-        if self.read_only {
+        if self.read_only.load(Ordering::Acquire) {
             ensure!(
                 s.file
                     .lock()

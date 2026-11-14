@@ -126,6 +126,67 @@ struct Runtime {
     session: Arc<Session>,
     handle: Arc<ManagedTorrent>,
     io: Handles,
+    sample: Mutex<RateSample>,
+}
+struct RateSample {
+    at: Instant,
+    received: u64,
+    uploaded: u64,
+    down: u64,
+    up: u64,
+}
+impl Default for RateSample {
+    fn default() -> Self {
+        Self {
+            at: Instant::now(),
+            received: 0,
+            uploaded: 0,
+            down: 0,
+            up: 0,
+        }
+    }
+}
+impl Runtime {
+    fn observe(&self, snapshot: &mut TransferSnapshot) {
+        let stats = self.handle.stats();
+        snapshot.verified_bytes = stats
+            .progress_bytes
+            .min(snapshot.total_bytes.parse().unwrap_or(0))
+            .to_string();
+        snapshot.uploaded_bytes = stats
+            .uploaded_bytes
+            .max(snapshot.uploaded_bytes.parse().unwrap_or(0))
+            .to_string();
+        snapshot.is_seeding &= stats.finished && stats.live.is_some();
+        snapshot.telemetry = stats.live.map(|live| {
+            let received = live.snapshot.fetched_bytes;
+            snapshot.received_bytes = received
+                .max(snapshot.received_bytes.parse().unwrap_or(0))
+                .to_string();
+            let mut rate = self.sample.lock().unwrap_or_else(|e| e.into_inner());
+            let elapsed = rate.at.elapsed();
+            if elapsed >= Duration::from_millis(250) {
+                let bps = |now: u64, before: u64| {
+                    ((u128::from(now.saturating_sub(before)) * 1_000_000_000) / elapsed.as_nanos())
+                        .min(u128::from(u64::MAX)) as u64
+                };
+                rate.down = bps(received, rate.received);
+                rate.up = bps(stats.uploaded_bytes, rate.uploaded);
+                rate.received = received;
+                rate.uploaded = stats.uploaded_bytes;
+                rate.at = Instant::now();
+            }
+            let peers = live.snapshot.peer_stats;
+            let seeders = peers.live_seeders.min(peers.live);
+            TransferTelemetry {
+                connected_peers: peers.live,
+                seeders,
+                leechers: peers.live.saturating_sub(seeders),
+                download_bps: rate.down.to_string(),
+                upload_bps: rate.up.to_string(),
+            }
+        });
+    }
 }
 struct Transfer {
     finish_gate: tokio::sync::Mutex<()>,
@@ -137,14 +198,37 @@ impl Transfer {
         let runtime = self.runtime.lock().unwrap_or_else(|e| e.into_inner());
         let mut snapshot = self.snapshot.lock().unwrap_or_else(|e| e.into_inner());
         if let Some(rt) = runtime.as_ref() {
-            let stats = rt.handle.stats();
-            snapshot.verified_bytes = stats
-                .progress_bytes
-                .min(snapshot.total_bytes.parse().unwrap_or(0))
-                .to_string();
-            snapshot.uploaded_bytes = stats.uploaded_bytes.to_string();
+            rt.observe(&mut snapshot);
         }
         snapshot.clone()
+    }
+    async fn continue_seeding(&self) -> bool {
+        let _finish = self.finish_gate.lock().await;
+        let io = {
+            let runtime = self.runtime.lock().unwrap_or_else(|e| e.into_inner());
+            let Some(rt) = runtime.as_ref() else {
+                return true;
+            };
+            if self
+                .snapshot
+                .lock()
+                .unwrap_or_else(|e| e.into_inner())
+                .is_seeding
+            {
+                return true;
+            }
+            rt.io.clone()
+        };
+        if !tokio::task::spawn_blocking(move || io.seal())
+            .await
+            .is_ok_and(|r| r.is_ok())
+        {
+            return false;
+        }
+        let mut s = self.snapshot.lock().unwrap_or_else(|e| e.into_inner());
+        s.is_seeding = true;
+        s.verified_bytes = s.total_bytes.clone();
+        true
     }
     async fn finish(&self, mut status: TransferStatus) {
         let _finish = self.finish_gate.lock().await;
@@ -152,13 +236,10 @@ impl Transfer {
             let mut runtime = self.runtime.lock().unwrap_or_else(|e| e.into_inner());
             let rt = runtime.take();
             if let Some(ref rt) = rt {
-                let stats = rt.handle.stats();
                 let mut s = self.snapshot.lock().unwrap_or_else(|e| e.into_inner());
-                s.verified_bytes = stats
-                    .progress_bytes
-                    .min(s.total_bytes.parse().unwrap_or(0))
-                    .to_string();
-                s.uploaded_bytes = stats.uploaded_bytes.to_string();
+                rt.observe(&mut s);
+                s.telemetry = None;
+                s.is_seeding = false;
                 s.status = TransferStatus::Stopping;
             }
             rt
@@ -194,6 +275,7 @@ struct StartSession {
     port: u16,
     dht: bool,
     trackers: Vec<String>,
+    seed_after_download: bool,
     initial_peer: Option<SocketAddr>,
     output: Option<String>,
 }
@@ -327,6 +409,7 @@ impl Transfers {
             port,
             dht,
             trackers,
+            seed_after_download,
             initial_peer,
             output,
         } = input;
@@ -410,6 +493,10 @@ impl Transfers {
             total_bytes,
             verified_bytes: handle.stats().progress_bytes.to_string(),
             uploaded_bytes: "0".into(),
+            received_bytes: "0".into(),
+            seed_after_download,
+            is_seeding: mode == TransferMode::Seed,
+            telemetry: None,
             listen_port: session.listen_addr().map(|a| a.port()),
             dht,
             tracker_count: trackers.len() as u32,
@@ -423,6 +510,7 @@ impl Transfers {
                 session,
                 handle,
                 io: handles,
+                sample: Mutex::new(RateSample::default()),
             })),
         });
         self.entries
@@ -457,8 +545,15 @@ impl Transfers {
                         return;
                     }
                     Some((true, _)) if mode == TransferMode::Download => {
-                        entry.finish(TransferStatus::Completed).await;
-                        return;
+                        if seed_after_download {
+                            if !entry.continue_seeding().await {
+                                entry.finish(TransferStatus::Failed).await;
+                                return;
+                            }
+                        } else {
+                            entry.finish(TransferStatus::Completed).await;
+                            return;
+                        }
                     }
                     _ => {}
                 }
@@ -533,6 +628,7 @@ impl Transfers {
             port: request.listen_port,
             dht: request.dht,
             trackers,
+            seed_after_download: false,
             initial_peer: None,
             output: None,
         })
@@ -547,8 +643,8 @@ impl Transfers {
         let trackers = trackers::normalize(&request.trackers)?;
         let addr = magnets::initial_peer(&request.peer, request.dht || !trackers.is_empty())?;
         let fingerprint = format!(
-            "download:{}:{addr:?}:{}:{trackers:?}",
-            request.token, request.dht
+            "download:{}:{addr:?}:{}:{trackers:?}:{}",
+            request.token, request.dht, request.seed_after_download
         );
         if let Some(old) = self.replay(&request.request_id, &fingerprint)? {
             return Ok(old);
@@ -587,6 +683,7 @@ impl Transfers {
                 port: 0,
                 dht: request.dht,
                 trackers,
+                seed_after_download: request.seed_after_download,
                 initial_peer: addr,
                 output: Some(output_name),
             })
