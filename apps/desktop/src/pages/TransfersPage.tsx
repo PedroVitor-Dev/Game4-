@@ -30,6 +30,15 @@ export function TransfersPage() {
   const [port, setPort] = useState("0");
   const [peer, setPeer] = useState("");
   const [dht, setDht] = useState(false);
+  const [useTrackers, setUseTrackers] = useState(false);
+  const [trackerText, setTrackerText] = useState("");
+  const trackers = useTrackers
+    ? trackerText
+        .split(/\r?\n/)
+        .map((v) => v.trim())
+        .filter(Boolean)
+    : [];
+  const discovery = dht || trackers.length > 0;
   const [magnet, setMagnet] = useState("");
   const [generatedMagnet, setGeneratedMagnet] = useState("");
   const [resolving, setResolving] = useState<string | null>(null);
@@ -107,13 +116,16 @@ export function TransfersPage() {
       if (
         seedPending.current?.itemId !== itemId ||
         seedPending.current.listenPort !== listenPort ||
-        seedPending.current.dht !== dht
+        seedPending.current.dht !== dht ||
+        JSON.stringify(seedPending.current.trackers) !==
+          JSON.stringify(trackers)
       )
         seedPending.current = {
           requestId: crypto.randomUUID(),
           itemId,
           listenPort,
           dht,
+          trackers,
         };
       await seedTorrent(seedPending.current);
       seedPending.current = null;
@@ -125,13 +137,16 @@ export function TransfersPage() {
       if (
         downloadPending.current?.token !== preview.token ||
         downloadPending.current.peer !== peer.trim() ||
-        downloadPending.current.dht !== dht
+        downloadPending.current.dht !== dht ||
+        JSON.stringify(downloadPending.current.trackers) !==
+          JSON.stringify(trackers)
       )
         downloadPending.current = {
           requestId: crypto.randomUUID(),
           token: preview.token,
           peer: peer.trim(),
           dht,
+          trackers,
         };
       const result = await downloadTorrent(downloadPending.current);
       if (!result.cancelled) {
@@ -157,6 +172,26 @@ export function TransfersPage() {
           {t("transfers.dht")}
         </label>
         <p>{t("transfers.dhtHint")}</p>
+        <label className="dht-choice">
+          <input
+            type="checkbox"
+            checked={useTrackers}
+            disabled={busy}
+            onChange={(e) => setUseTrackers(e.target.checked)}
+          />
+          {t("transfers.useTrackers")}
+        </label>
+        <label>
+          {t("transfers.trackerList")}
+          <textarea
+            maxLength={8192}
+            value={trackerText}
+            disabled={busy}
+            onChange={(e) => setTrackerText(e.target.value)}
+            placeholder="https://tracker.example/announce"
+          />
+        </label>
+        <p>{t("transfers.trackerHint")}</p>
         {!isTauri() && <p>{t("errors.ipcUnavailable")}</p>}
       </section>
       {error !== undefined && (
@@ -226,7 +261,7 @@ export function TransfersPage() {
             disabled={busy || !itemId || !isTauri()}
             onClick={() =>
               void act(async () => {
-                const result = await generateMagnet({ itemId });
+                const result = await generateMagnet({ itemId, trackers });
                 if (alive.current) setGeneratedMagnet(result.magnet);
               })
             }
@@ -237,7 +272,7 @@ export function TransfersPage() {
             disabled={busy || !itemId || !isTauri()}
             onClick={() =>
               void act(async () => {
-                const result = await createTorrent({ itemId });
+                const result = await createTorrent({ itemId, trackers });
                 if (
                   alive.current &&
                   !result.cancelled &&
@@ -285,6 +320,8 @@ export function TransfersPage() {
               const result = await importTorrent();
               if (alive.current && result.preview) {
                 setPreview(result.preview);
+                setTrackerText(result.preview.trackers.join("\n"));
+                setUseTrackers(false);
                 setAllFiles(false);
                 downloadPending.current = null;
               }
@@ -297,9 +334,22 @@ export function TransfersPage() {
           {t("ever.magnet")}
           <textarea
             value={magnet}
-            maxLength={4096}
+            maxLength={16384}
             disabled={busy}
-            onChange={(e) => setMagnet(e.target.value)}
+            onChange={(e) => {
+              setMagnet(e.target.value);
+              try {
+                const tr = new URL(e.target.value.trim()).searchParams.getAll(
+                  "tr",
+                );
+                if (tr.length) {
+                  setTrackerText(tr.join("\n"));
+                  setUseTrackers(false);
+                }
+              } catch {
+                /* Native parser validates on lookup. */
+              }
+            }}
             placeholder="magnet:?xt=urn:btih:…"
           />
         </label>
@@ -315,7 +365,7 @@ export function TransfersPage() {
         <p>{t("transfers.magnetHint")}</p>
         <button
           disabled={
-            busy || !isTauri() || !magnet.trim() || (!dht && !peer.trim())
+            busy || !isTauri() || !magnet.trim() || (!discovery && !peer.trim())
           }
           onClick={() =>
             void act(async () => {
@@ -329,6 +379,7 @@ export function TransfersPage() {
                   magnet: magnet.trim(),
                   peer: peer.trim(),
                   dht,
+                  trackers,
                 });
                 if (alive.current && result.preview) {
                   setPreview(result.preview);
@@ -380,7 +431,7 @@ export function TransfersPage() {
             <p>{t("transfers.outputHint")}</p>
             <button
               className="primary"
-              disabled={busy || (!dht && !peer.trim())}
+              disabled={busy || (!discovery && !peer.trim())}
               onClick={download}
             >
               {t("transfers.startDownload")}
@@ -399,6 +450,7 @@ export function TransfersPage() {
               {t(`transfers.status.${job.status}`)}
             </p>
             <p>{t(job.dht ? "transfers.dhtOn" : "transfers.dhtOff")}</p>
+            <p>{t("transfers.trackerCount", { count: job.trackerCount })}</p>
             <label>
               {t("ever.magnet")}
               <textarea

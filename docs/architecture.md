@@ -83,3 +83,7 @@ The desktop now embeds real experimental BitTorrent sessions, creates and import
 ## Magnets and DHT — November 14, 2026
 
 Transfers now generates magnets without a metainfo export, imports them through cancellable metadata-only acquisition, and optionally discovers/announces peers over ephemeral UDP DHT. DHT is off by default; enabled actions can omit the initial peer. Strict v1/hash/path validation and explicit destination review remain in place. Real isolated-DHT discovery and transfer tests pass; public-WAN/NAT acceptance, persistence and resume remain open. See [desktop transfers](bittorrent.md) and [ADR 0017](decisions/0017-magnets-and-dht.md).
+
+## Selected trackers — November 14, 2026
+
+Transfers supports explicitly selected HTTP/HTTPS/UDP trackers for magnet metadata, payload discovery and generated torrent/magnet references. Imported endpoints are suggestions with opt-in off; only selected routes reach the engine. Exact torrent info bytes and read-only originals are preserved. Local HTTP/UDP tests transfer successfully without DHT or a manual peer and leave unselected trackers untouched. See [tracker operations](bittorrent.md) and [ADR 0018](decisions/0018-selected-trackers.md). Public tracker/WAN and independent-client acceptance remain open.

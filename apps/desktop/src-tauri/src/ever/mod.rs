@@ -615,7 +615,7 @@ mod tests;
 
 mod metainfo;
 pub use metainfo::verify;
-pub(crate) use metainfo::{Layout, inspect};
+pub(crate) use metainfo::{Layout, inspect, route};
 pub fn create_package(path: &Path) -> Result<Created> {
     let path = absolute(path)?;
     let before = std::fs::metadata(&path).map_err(|_| integrity())?;

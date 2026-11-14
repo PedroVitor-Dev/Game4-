@@ -11,9 +11,10 @@ pub async fn torrent_create(
     window: tauri::WebviewWindow,
     database: tauri::State<'_, Arc<Database>>,
     state: tauri::State<'_, Arc<ImportState>>,
-    request: ExportManifestRequest,
+    request: TorrentReferenceRequest,
 ) -> Result<TorrentCreateResult, IpcError> {
     crate::manifests::item_id(&request.item_id)?;
+    let trackers = torrents::trackers::normalize(&request.trackers)?;
     let db = Arc::clone(database.inner());
     let state = Arc::clone(state.inner());
     tokio::task::spawn_blocking(move || {
@@ -51,11 +52,14 @@ pub async fn torrent_create(
             return Err(IpcError::new(ErrorCode::LibraryBusy));
         }
         let created = ever::from_catalog(&db, &request.item_id)?;
-        torrents::write_new(&path, &created.torrent)?;
+        torrents::write_new(&path, &ever::route(&created.torrent, &trackers)?)?;
         Ok(TorrentCreateResult {
             cancelled: false,
             file_name: path.file_name().map(|n| n.to_string_lossy().into_owned()),
-            magnet: Some(created.document.torrents[0].magnet.clone()),
+            magnet: Some(torrents::trackers::magnet(
+                &created.document.torrents[0].info_hash_v1,
+                &trackers,
+            )),
         })
     })
     .await
@@ -108,7 +112,8 @@ pub async fn torrent_download(
     transfers: tauri::State<'_, Arc<Transfers>>,
     request: StartDownloadRequest,
 ) -> Result<TransferStartResult, IpcError> {
-    if !request.peer.trim().is_empty() || !request.dht {
+    let trackers = torrents::trackers::normalize(&request.trackers)?;
+    if !request.peer.trim().is_empty() || (!request.dht && trackers.is_empty()) {
         torrents::peer(&request.peer)?;
     }
     let parent = tokio::task::spawn_blocking(move || {
@@ -145,9 +150,10 @@ pub async fn transfer_stop(
 pub async fn magnet_generate(
     database: tauri::State<'_, Arc<Database>>,
     state: tauri::State<'_, Arc<ImportState>>,
-    request: ExportManifestRequest,
+    request: TorrentReferenceRequest,
 ) -> Result<MagnetLink, IpcError> {
     crate::manifests::item_id(&request.item_id)?;
+    let trackers = torrents::trackers::normalize(&request.trackers)?;
     let db = Arc::clone(database.inner());
     let state = Arc::clone(state.inner());
     tokio::task::spawn_blocking(move || {
@@ -173,7 +179,9 @@ pub async fn magnet_generate(
             return Err(IpcError::new(ErrorCode::LibraryBusy));
         }
         let created = ever::from_catalog(&db, &request.item_id)?;
-        torrents::normalize_magnet(&created.document.torrents[0].magnet)
+        let mut link = torrents::normalize_magnet(&created.document.torrents[0].magnet)?;
+        link.magnet = torrents::trackers::magnet(&link.info_hash, &trackers);
+        Ok(link)
     })
     .await
     .map_err(|_| IpcError::new(ErrorCode::UnexpectedError))?
@@ -191,4 +199,11 @@ pub async fn magnet_cancel(
     request: CancelMagnetRequest,
 ) -> Result<CancelMagnetResult, IpcError> {
     transfers.cancel_magnet(request)
+}
+
+#[tauri::command]
+pub fn trackers_validate(request: TrackerList) -> Result<TrackerList, IpcError> {
+    Ok(TrackerList {
+        trackers: torrents::trackers::normalize(&request.trackers)?,
+    })
 }

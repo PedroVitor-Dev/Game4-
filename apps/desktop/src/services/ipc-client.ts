@@ -11,6 +11,7 @@ import {
   parsePackageOpenResult,
   parseEverOpenResult,
   parseEverExportResult,
+  parseTrackerList,
   parseMagnetLink,
   parseCancelMagnetResult,
   parseTorrentCreateResult,
@@ -38,6 +39,8 @@ import type {
   ExportManifestRequest,
   LibraryRestoreRequest,
   LibraryItemFilesRequest,
+  TrackerList,
+  TorrentReferenceRequest,
   ResolveMagnetRequest,
   CancelMagnetRequest,
   StartSeedRequest,
@@ -68,6 +71,7 @@ const decoders = {
   package_open: parsePackageOpenResult,
   library_export_ever: parseEverExportResult,
   ever_open: parseEverOpenResult,
+  trackers_validate: parseTrackerList,
   magnet_generate: parseMagnetLink,
   magnet_resolve: parseTorrentImportResult,
   magnet_cancel: parseCancelMagnetResult,
@@ -136,6 +140,9 @@ export function createIpcClient(transport: IpcTransport) {
     )
       throw failure("CAPABILITY_UNAVAILABLE");
   }
+  async function requireTrackers(trackers: string[] | undefined) {
+    if (trackers?.length) await capable("trackers_validate", { trackers });
+  }
   return {
     verifyItem: (request: StartVerifyRequest) =>
       capable("library_verify", request),
@@ -147,21 +154,31 @@ export function createIpcClient(transport: IpcTransport) {
     exportEver: (request: ExportManifestRequest) =>
       capable("library_export_ever", request),
     openEver: () => capable("ever_open", undefined),
-    generateMagnet: (request: ExportManifestRequest) =>
-      capable("magnet_generate", request),
-    resolveMagnet: (request: ResolveMagnetRequest) =>
-      capable("magnet_resolve", request),
+    validateTrackers: (request: TrackerList) =>
+      capable("trackers_validate", request),
+    generateMagnet: async (request: TorrentReferenceRequest) => {
+      await requireTrackers(request.trackers);
+      return capable("magnet_generate", request);
+    },
+    resolveMagnet: async (request: ResolveMagnetRequest) => {
+      await requireTrackers(request.trackers);
+      return capable("magnet_resolve", request);
+    },
     cancelMagnet: (request: CancelMagnetRequest) =>
       capable("magnet_cancel", request),
-    createTorrent: (request: ExportManifestRequest) =>
-      capable("torrent_create", request),
+    createTorrent: async (request: TorrentReferenceRequest) => {
+      await requireTrackers(request.trackers);
+      return capable("torrent_create", request);
+    },
     importTorrent: () => capable("torrent_import", undefined),
     seedTorrent: async (request: StartSeedRequest) => {
       await requireDht(request.dht);
+      await requireTrackers(request.trackers);
       return capable("torrent_seed", request);
     },
     downloadTorrent: async (request: StartDownloadRequest) => {
       await requireDht(request.dht);
+      await requireTrackers(request.trackers);
       return capable("torrent_download", request);
     },
     listTransfers: () => capable("transfers_list", undefined),

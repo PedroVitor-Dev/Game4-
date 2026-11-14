@@ -135,6 +135,7 @@ pub(crate) struct Layout {
     pub files: Vec<(String, u64)>,
     pub piece_length: usize,
     pub pieces: Vec<u8>,
+    pub trackers: Vec<String>,
 }
 pub(crate) fn inspect(raw: &[u8]) -> Result<Layout> {
     if raw.len() > MAX_METAINFO {
@@ -151,7 +152,31 @@ pub(crate) fn inspect(raw: &[u8]) -> Result<Layout> {
     }
     let (start, end) = decoder.info.ok_or_else(invalid)?;
     let hash = format!("{:x}", Sha1::digest(&raw[start..end]));
-    let info = map(get(map(&top)?, b"info")?)?;
+    let mut trackers = Vec::new();
+    let top_map = map(&top)?;
+    if let Some(v) = top_map.get(b"announce".as_slice()) {
+        let value = text(v)?;
+        if !value.is_empty() {
+            trackers.push(value.to_owned());
+        }
+    }
+    if let Some(B::List(tiers)) = top_map.get(b"announce-list".as_slice()) {
+        for tier in tiers {
+            let B::List(urls) = tier else {
+                return Err(invalid());
+            };
+            for v in urls {
+                if trackers.len() >= 64 {
+                    return Err(limit());
+                }
+                let value = text(v)?.to_owned();
+                if !value.is_empty() && !trackers.contains(&value) {
+                    trackers.push(value);
+                }
+            }
+        }
+    }
+    let info = map(get(top_map, b"info")?)?;
     regular(info)?;
     if info.contains_key(b"meta version".as_slice())
         || info
@@ -230,6 +255,7 @@ pub(crate) fn inspect(raw: &[u8]) -> Result<Layout> {
         files: metadata,
         piece_length,
         pieces,
+        trackers,
     })
 }
 pub(super) fn bind(doc: &EverManifest, raw: &[u8]) -> Result<Bound> {
@@ -292,4 +318,35 @@ pub fn verify(doc: &EverManifest, torrent: &[u8], root: &Path) -> Result<()> {
         }
     }
     Ok(())
+}
+
+/// Replace only outer routing metadata, preserving the exact v1 info bytes.
+pub(crate) fn route(raw: &[u8], trackers: &[String]) -> Result<Vec<u8>> {
+    if raw.len() > MAX_METAINFO {
+        return Err(limit());
+    }
+    let mut decoder = Decoder {
+        raw,
+        at: 0,
+        info: None,
+    };
+    decoder.value(0)?;
+    if decoder.at != raw.len() {
+        return Err(invalid());
+    }
+    let (a, b) = decoder.info.ok_or_else(invalid)?;
+    let mut out = vec![b'd'];
+    if let Some(first) = trackers.first() {
+        encode(&string("announce"), &mut out);
+        encode(&string(first), &mut out);
+        encode(&string("announce-list"), &mut out);
+        encode(
+            &B::List(trackers.iter().map(|t| B::List(vec![string(t)])).collect()),
+            &mut out,
+        );
+    }
+    out.extend_from_slice(b"4:info");
+    out.extend_from_slice(&raw[a..b]);
+    out.push(b'e');
+    Ok(out)
 }

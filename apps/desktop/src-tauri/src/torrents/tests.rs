@@ -38,6 +38,7 @@ fn seed_request() -> StartSeedRequest {
         item_id: "1".into(),
         listen_port: 0,
         dht: false,
+        trackers: vec![],
     }
 }
 #[test]
@@ -85,6 +86,7 @@ async fn real_loopback_transfer_preserves_sources_and_completes_with_matching_sh
         request_id: Uuid::new_v4().to_string(),
         token: preview.token,
         dht: false,
+        trackers: vec![],
         peer: format!("127.0.0.1:{}", seed_snapshot.listen_port.unwrap()),
     };
     let started = download
@@ -155,6 +157,7 @@ async fn invalid_requests_and_cancelled_shutdown_never_start_new_network_work() 
         request_id: Uuid::new_v4().to_string(),
         token: Uuid::new_v4().to_string(),
         dht: false,
+        trackers: vec![],
         peer: "127.0.0.1:4444".into(),
     };
     assert!(m.download(req, d.path().into()).await.is_err());
@@ -175,6 +178,7 @@ async fn stopping_partial_download_preserves_files_and_rejects_conflicting_repla
         request_id: Uuid::new_v4().to_string(),
         token: preview.token,
         dht: false,
+        trackers: vec![],
         peer: listener.local_addr().unwrap().to_string(),
     };
     let started = m.download(request.clone(), d.path().into()).await.unwrap();
@@ -224,6 +228,7 @@ async fn expired_preview_fails_before_creating_output() {
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
                 dht: false,
+                trackers: vec![],
                 peer: "127.0.0.1:42420".into()
             },
             d.path().into()
@@ -262,7 +267,7 @@ fn magnet_parser_normalizes_hashes_and_rejects_ambiguous_or_remote_sources() {
             .info_hash,
         "0123456789abcdef0123456789abcdef01234567"
     );
-    assert!(normalize_magnet(&"x".repeat(4097)).is_err());
+    assert!(normalize_magnet(&"x".repeat(16385)).is_err());
     assert!(magnets::initial_peer("", false).is_err());
     assert!(magnets::initial_peer("", true).unwrap().is_none());
 }
@@ -283,6 +288,7 @@ async fn real_magnet_metadata_resolution_is_preview_only_and_cancellable() {
             magnet: format!("magnet:?xt=urn:btih:{}", started.info_hash),
             peer: format!("127.0.0.1:{}", started.listen_port.unwrap()),
             dht: false,
+            trackers: vec![],
         })
         .await
         .unwrap();
@@ -303,6 +309,7 @@ async fn real_magnet_metadata_resolution_is_preview_only_and_cancellable() {
                 magnet: format!("magnet:?xt=urn:btih:{}", started.info_hash),
                 peer: listener.local_addr().unwrap().to_string(),
                 dht: false,
+                trackers: vec![],
             })
             .await
         }
@@ -447,6 +454,7 @@ async fn isolated_dht_discovers_seed_and_resolves_magnet_without_an_initial_peer
             magnet: format!("magnet:?xt=urn:btih:{hash}"),
             peer: String::new(),
             dht: true,
+            trackers: vec![],
         })
         .await
         .unwrap()
@@ -460,6 +468,7 @@ async fn isolated_dht_discovers_seed_and_resolves_magnet_without_an_initial_peer
                 token: preview.token,
                 peer: String::new(),
                 dht: true,
+                trackers: vec![],
             },
             d.path().into(),
         )
@@ -493,4 +502,271 @@ async fn isolated_dht_discovers_seed_and_resolves_magnet_without_an_initial_peer
     seed.shutdown().await;
     bootstrap.cancellation_token().cancel();
     neighbor.cancellation_token().cancel();
+}
+
+#[test]
+fn tracker_policy_and_reference_rewriting_preserve_info_identity() {
+    let (_dir, db, _, _, _) = setup();
+    let raw = ever::from_catalog(&db, "1").unwrap().torrent;
+    let urls = trackers::normalize(&[
+        "https://TRACKER.example:443/announce?key=secret".into(),
+        "udp://tracker.example:6969/announce".into(),
+    ])
+    .unwrap();
+    assert_eq!(urls[0], "https://tracker.example/announce?key=secret");
+    let routed = ever::route(&raw, &urls).unwrap();
+    assert_eq!(inspect(&routed).unwrap().hash, inspect(&raw).unwrap().hash);
+    assert_eq!(inspect(&routed).unwrap().trackers, urls);
+    assert_eq!(
+        inspect(&ever::route(&routed, &[]).unwrap())
+            .unwrap()
+            .trackers
+            .len(),
+        0
+    );
+    let link = trackers::magnet(&inspect(&raw).unwrap().hash, &urls);
+    assert_eq!(
+        url::Url::parse(&link)
+            .unwrap()
+            .query_pairs()
+            .filter(|(k, _)| k == "tr")
+            .count(),
+        2
+    );
+    assert_eq!(
+        normalize_magnet(&link).unwrap().info_hash,
+        inspect(&raw).unwrap().hash
+    );
+    for bad in [
+        "file:///C:/test",
+        "ws://tracker.example/",
+        "https://user:password@tracker.example/",
+        "http://tracker.example/#fragment",
+        "udp://tracker.example/announce",
+        "udp://tracker.example:80/announce?passkey=unsupported",
+        "http://tracker.example:0/",
+        "http://tracker.example/a b",
+    ] {
+        assert!(
+            trackers::normalize(&[bad.into()]).is_err(),
+            "accepted {bad}"
+        );
+    }
+    assert!(trackers::normalize(&vec!["http://example.invalid/".into(); 17]).is_err());
+    assert_eq!(
+        trackers::normalize(&[urls[0].clone(), urls[0].clone()])
+            .unwrap()
+            .len(),
+        1
+    );
+}
+
+struct MockTracker {
+    url: String,
+    ports: Arc<Mutex<Vec<u16>>>,
+    calls: Arc<std::sync::atomic::AtomicUsize>,
+    task: tokio::task::JoinHandle<()>,
+}
+impl Drop for MockTracker {
+    fn drop(&mut self) {
+        self.task.abort();
+    }
+}
+async fn mock_tracker(udp: bool) -> MockTracker {
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+    let ports = Arc::new(Mutex::new(Vec::<u16>::new()));
+    let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let records = ports.clone();
+    let count = calls.clone();
+    if udp {
+        let socket = tokio::net::UdpSocket::bind("127.0.0.1:0").await.unwrap();
+        let url = format!("udp://{}/announce", socket.local_addr().unwrap());
+        let task = tokio::spawn(async move {
+            let mut buf = [0u8; 4096];
+            loop {
+                let (n, addr) = socket.recv_from(&mut buf).await.unwrap();
+                if n < 16 {
+                    continue;
+                }
+                let action = u32::from_be_bytes(buf[8..12].try_into().unwrap());
+                let mut response = action.to_be_bytes().to_vec();
+                response.extend_from_slice(&buf[12..16]);
+                if action == 0 {
+                    response.extend_from_slice(&42u64.to_be_bytes());
+                } else if action == 1 && n >= 98 {
+                    count.fetch_add(1, Ordering::SeqCst);
+                    let left = u64::from_be_bytes(buf[64..72].try_into().unwrap());
+                    let port = u16::from_be_bytes(buf[96..98].try_into().unwrap());
+                    if left == 0 && !records.lock().unwrap().contains(&port) {
+                        records.lock().unwrap().push(port);
+                    }
+                    response.extend_from_slice(&1u32.to_be_bytes());
+                    response.extend_from_slice(&1u32.to_be_bytes());
+                    response.extend_from_slice(&1u32.to_be_bytes());
+                    for p in records.lock().unwrap().iter() {
+                        response.extend_from_slice(&[127, 0, 0, 1]);
+                        response.extend_from_slice(&p.to_be_bytes());
+                    }
+                } else {
+                    continue;
+                }
+                socket.send_to(&response, addr).await.unwrap();
+            }
+        });
+        MockTracker {
+            url,
+            ports,
+            calls,
+            task,
+        }
+    } else {
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let url = format!("http://{}/announce", listener.local_addr().unwrap());
+        let task = tokio::spawn(async move {
+            loop {
+                let (mut socket, _) = listener.accept().await.unwrap();
+                let mut request = vec![0u8; 8192];
+                let mut n = 0;
+                while !request[..n].windows(4).any(|v| v == b"\r\n\r\n") {
+                    let read = socket.read(&mut request[n..]).await.unwrap();
+                    if read == 0 {
+                        break;
+                    }
+                    n += read;
+                }
+                let text = String::from_utf8_lossy(&request[..n]);
+                let Some(target) = text.split_whitespace().nth(1) else {
+                    continue;
+                };
+                let u = url::Url::parse(&format!("http://tracker.local{target}")).unwrap();
+                let fields: HashMap<_, _> = u
+                    .query_pairs()
+                    .map(|(k, v)| (k.into_owned(), v.into_owned()))
+                    .collect();
+                count.fetch_add(1, Ordering::SeqCst);
+                let port: u16 = fields["port"].parse().unwrap();
+                if fields["left"] == "0" && !records.lock().unwrap().contains(&port) {
+                    records.lock().unwrap().push(port);
+                }
+                let mut compact = Vec::new();
+                for p in records.lock().unwrap().iter() {
+                    compact.extend_from_slice(&[127, 0, 0, 1]);
+                    compact.extend_from_slice(&p.to_be_bytes());
+                }
+                let mut body = format!("d8:intervali1e5:peers{}:", compact.len()).into_bytes();
+                body.extend_from_slice(&compact);
+                body.push(b'e');
+                let header = format!(
+                    "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+                    body.len()
+                );
+                socket.write_all(header.as_bytes()).await.unwrap();
+                socket.write_all(&body).await.unwrap();
+            }
+        });
+        MockTracker {
+            url,
+            ports,
+            calls,
+            task,
+        }
+    }
+}
+async fn tracker_roundtrip(udp: bool) {
+    let (d, db, imports, root, original) = setup();
+    let tracker = mock_tracker(udp).await;
+    let unselected = mock_tracker(false).await;
+    let seed = manager();
+    let download = manager();
+    let reservation = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = reservation.local_addr().unwrap().port();
+    drop(reservation);
+    let mut req = seed_request();
+    req.listen_port = port;
+    req.trackers = vec![tracker.url.clone()];
+    let seeded = seed.seed(db.clone(), imports, req).await.unwrap();
+    assert_eq!(seeded.tracker_count, 1);
+    tokio::time::timeout(Duration::from_secs(15), async {
+        loop {
+            if tracker.ports.lock().unwrap().contains(&port) {
+                break;
+            }
+            tokio::time::sleep(Duration::from_millis(50)).await;
+        }
+    })
+    .await
+    .expect("tracker must receive seeding announce");
+    let metadata = download
+        .resolve_magnet(ResolveMagnetRequest {
+            request_id: Uuid::new_v4().to_string(),
+            magnet: trackers::magnet(&seeded.info_hash, std::slice::from_ref(&tracker.url)),
+            peer: String::new(),
+            dht: false,
+            trackers: vec![tracker.url.clone()],
+        })
+        .await
+        .unwrap()
+        .preview
+        .unwrap();
+    assert_eq!(metadata.trackers, vec![tracker.url.clone()]);
+    assert!(download.list().items.is_empty());
+    // Imported routing suggestions do not override the explicitly selected list.
+    let raw = ever::from_catalog(&db, "1").unwrap().torrent;
+    let preview = download
+        .import(ever::route(&raw, std::slice::from_ref(&unselected.url)).unwrap())
+        .unwrap();
+    assert_eq!(preview.trackers, vec![unselected.url.clone()]);
+    let job = download
+        .download(
+            StartDownloadRequest {
+                request_id: Uuid::new_v4().to_string(),
+                token: preview.token,
+                peer: String::new(),
+                dht: false,
+                trackers: vec![tracker.url.clone()],
+            },
+            d.path().into(),
+        )
+        .await
+        .unwrap();
+    let done = tokio::time::timeout(Duration::from_secs(35), async {
+        loop {
+            let row = download
+                .list()
+                .items
+                .into_iter()
+                .find(|t| t.id == job.id)
+                .unwrap();
+            if row.status == TransferStatus::Completed {
+                break row;
+            }
+            assert_ne!(row.status, TransferStatus::Failed);
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+    })
+    .await
+    .unwrap();
+    let output = d.path().join(done.output_name.unwrap());
+    let received = [
+        fs::read(output.join("a.bin")).unwrap(),
+        fs::read(output.join("nested/β.bin")).unwrap(),
+    ]
+    .concat();
+    assert_eq!(Sha256::digest(&received), Sha256::digest(&original));
+    assert_eq!(
+        fs::read(root.join("a.bin")).unwrap(),
+        original[..1024 * 1024 - 3]
+    );
+    assert_eq!(unselected.calls.load(Ordering::SeqCst), 0);
+    assert!(tracker.calls.load(Ordering::SeqCst) >= 3);
+    download.shutdown().await;
+    seed.shutdown().await;
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn http_tracker_discovers_metadata_and_payload_without_dht_or_manual_peer() {
+    tracker_roundtrip(false).await;
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn udp_tracker_discovers_metadata_and_payload_without_dht_or_manual_peer() {
+    tracker_roundtrip(true).await;
 }

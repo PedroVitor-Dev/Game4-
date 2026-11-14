@@ -40,3 +40,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0016](0016-desktop-bittorrent.md) | Accepted experimental integration | Real desktop BitTorrent, offline .torrent actions and original-safe storage |
 
 | [0017](0017-magnets-and-dht.md) | Accepted experimental integration | Magnet generation/acquisition, bounded cancellation and optional ephemeral DHT |
+
+| [0018](0018-selected-trackers.md) | Accepted experimental integration | Explicit HTTP/HTTPS/UDP routing, reference export and metadata discovery |

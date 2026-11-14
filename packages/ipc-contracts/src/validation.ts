@@ -33,6 +33,7 @@ import type {
   PackageOpenResult,
   EverOpenResult,
   EverExportResult,
+  TrackerList,
   MagnetLink,
   CancelMagnetResult,
   TorrentCreateResult,
@@ -579,6 +580,10 @@ export function parseTorrentImportResult(v: unknown): TorrentImportResult {
   return {
     cancelled: false,
     preview: {
+      trackers:
+        p.trackers === undefined
+          ? []
+          : parseTrackerList({ trackers: p.trackers }).trackers,
       token: uuid(p.token),
       name: text(p.name),
       infoHash,
@@ -642,6 +647,8 @@ export function parseTransferSnapshot(v: unknown): TransferSnapshot {
           : (() => {
               throw failure("INVALID_RESPONSE");
             })(),
+    trackerCount:
+      o.trackerCount === undefined ? 0 : safeCount(o.trackerCount, 0, 16),
     outputName,
     error,
   };
@@ -672,13 +679,51 @@ export function parseMagnetLink(v: unknown): MagnetLink {
   const infoHash = text(o.infoHash);
   if (
     !/^[0-9a-f]{40}$/.test(infoHash) ||
-    magnet !== `magnet:?xt=urn:btih:${infoHash}`
+    new URL(magnet).searchParams.get("xt") !== `urn:btih:${infoHash}`
   )
     throw failure("INVALID_RESPONSE");
+  const params = new URL(magnet).searchParams;
+  if ([...params.keys()].some((k) => !["xt", "tr"].includes(k)))
+    throw failure("INVALID_RESPONSE");
+  parseTrackerList({ trackers: params.getAll("tr") });
   return { magnet, infoHash };
 }
 export function parseCancelMagnetResult(v: unknown): CancelMagnetResult {
   const o = object(v);
   if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
   return { cancelled: o.cancelled };
+}
+
+export function parseTrackerList(v: unknown): TrackerList {
+  const o = object(v);
+  const trackers = values(o.trackers).map((v) => {
+    const s = text(v);
+    let u: URL;
+    try {
+      u = new URL(s);
+    } catch {
+      throw failure("INVALID_RESPONSE");
+    }
+    if (
+      !s ||
+      s.length > 2048 ||
+      /\s/.test(s) ||
+      !["http:", "https:", "udp:"].includes(u.protocol) ||
+      !u.hostname ||
+      u.username ||
+      u.password ||
+      u.hash ||
+      u.port === "0" ||
+      (u.protocol === "udp:" && (!u.port || !!u.search))
+    )
+      throw failure("INVALID_RESPONSE");
+    return s;
+  });
+  if (
+    trackers.length > 16 ||
+    trackers.reduce((s, t) => s + t.length, 0) > 4096 ||
+    new Set(trackers).size !== trackers.length
+  )
+    throw failure("INVALID_RESPONSE");
+  return { trackers };
 }

@@ -23,6 +23,7 @@ use std::{
 use uuid::Uuid;
 mod magnets;
 mod storage;
+pub mod trackers;
 pub use magnets::normalize_magnet;
 use storage::Handles;
 const MAX_TOTAL: u64 = 1024 * 1024 * 1024 * 1024;
@@ -63,7 +64,7 @@ pub fn peer(s: &str) -> Result<SocketAddr> {
     Ok(SocketAddr::V4(addr))
 }
 pub(crate) fn inspect(raw: &[u8]) -> Result<Layout> {
-    let layout = ever::inspect(raw).map_err(|e| {
+    let mut layout = ever::inspect(raw).map_err(|e| {
         if matches!(e.code, ErrorCode::G4eLimitExceeded) {
             limit()
         } else {
@@ -81,6 +82,7 @@ pub(crate) fn inspect(raw: &[u8]) -> Result<Layout> {
     if total == 0 {
         return Err(err(ErrorCode::TorrentInvalid));
     }
+    layout.trackers = trackers::normalize(&layout.trackers)?;
     librqbit::torrent_from_bytes(raw).map_err(|_| err(ErrorCode::TorrentInvalid))?;
     Ok(layout)
 }
@@ -191,6 +193,7 @@ struct StartSession {
     fingerprint: String,
     port: u16,
     dht: bool,
+    trackers: Vec<String>,
     initial_peer: Option<SocketAddr>,
     output: Option<String>,
 }
@@ -244,6 +247,7 @@ impl Transfers {
             token: token.clone(),
             name: meta.name.clone(),
             info_hash: meta.hash.clone(),
+            trackers: meta.trackers.clone(),
             total_bytes: total(&meta).to_string(),
             files: meta
                 .files
@@ -322,6 +326,7 @@ impl Transfers {
             fingerprint,
             port,
             dht,
+            trackers,
             initial_peer,
             output,
         } = input;
@@ -333,7 +338,7 @@ impl Transfers {
             SessionOptions {
                 cancellation_token: Some(self.cancel.child_token()),
                 dht: self.dht_config(dht),
-                disable_trackers: true,
+                disable_trackers: trackers.is_empty(),
                 disable_local_service_discovery: true,
                 persistence: None,
                 fastresume: false,
@@ -343,7 +348,9 @@ impl Transfers {
                     ipv4_only: true,
                     // The engine suppresses loopback announcements by default. Tests use
                     // an explicit bound port to exercise an isolated local DHT swarm.
-                    announce_port: (dht && self.listen_ip.is_loopback() && port != 0)
+                    announce_port: ((dht || !trackers.is_empty())
+                        && self.listen_ip.is_loopback()
+                        && port != 0)
                         .then_some(port),
                     enable_upnp_port_forwarding: false,
                     ..Default::default()
@@ -357,11 +364,11 @@ impl Transfers {
         let result = async {
             let handle = session
                 .add_torrent(
-                    AddTorrent::from_bytes(raw),
+                    AddTorrent::from_bytes(ever::route(&raw, &trackers)?),
                     Some(AddTorrentOptions {
                         paused: true,
                         overwrite: false,
-                        disable_trackers: true,
+                        disable_trackers: trackers.is_empty(),
                         storage_factory: Some(handles.clone().boxed()),
                         initial_peers: initial_peer.map(|p| vec![p]),
                         peer_limit: Some(8),
@@ -405,6 +412,7 @@ impl Transfers {
             uploaded_bytes: "0".into(),
             listen_port: session.listen_addr().map(|a| a.port()),
             dht,
+            tracker_count: trackers.len() as u32,
             output_name: output,
             error: None,
         };
@@ -465,8 +473,9 @@ impl Transfers {
         request: StartSeedRequest,
     ) -> Result<TransferSnapshot> {
         let _gate = self.gate.lock().await;
+        let trackers = trackers::normalize(&request.trackers)?;
         let fingerprint = format!(
-            "seed:{}:{}:{}",
+            "seed:{}:{}:{}:{trackers:?}",
             request.item_id, request.listen_port, request.dht
         );
         if let Some(old) = self.replay(&request.request_id, &fingerprint)? {
@@ -523,6 +532,7 @@ impl Transfers {
             fingerprint,
             port: request.listen_port,
             dht: request.dht,
+            trackers,
             initial_peer: None,
             output: None,
         })
@@ -534,8 +544,12 @@ impl Transfers {
         parent: PathBuf,
     ) -> Result<TransferSnapshot> {
         let _gate = self.gate.lock().await;
-        let addr = magnets::initial_peer(&request.peer, request.dht)?;
-        let fingerprint = format!("download:{}:{addr:?}:{}", request.token, request.dht);
+        let trackers = trackers::normalize(&request.trackers)?;
+        let addr = magnets::initial_peer(&request.peer, request.dht || !trackers.is_empty())?;
+        let fingerprint = format!(
+            "download:{}:{addr:?}:{}:{trackers:?}",
+            request.token, request.dht
+        );
         if let Some(old) = self.replay(&request.request_id, &fingerprint)? {
             return Ok(old);
         }
@@ -572,6 +586,7 @@ impl Transfers {
                 fingerprint,
                 port: 0,
                 dht: request.dht,
+                trackers,
                 initial_peer: addr,
                 output: Some(output_name),
             })

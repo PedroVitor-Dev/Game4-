@@ -199,7 +199,7 @@
     "title": "Transferências P2P",
     "description": "Crie torrents e magnets, semeie originais e descubra peers.",
     "connectionTitle": "Conexões BitTorrent",
-    "connectionDescription": "Conecte por TCP IPv4 com um peer inicial ou descoberta opcional por DHT. Trackers, descoberta local e abertura automática de portas no roteador continuam desativados.",
+    "connectionDescription": "Conecte por TCP IPv4 usando um peer inicial, DHT opcional ou trackers HTTP/HTTPS/UDP selecionados. Descoberta local e abertura automática de portas no roteador continuam desativadas.",
     "exposure": "Iniciar semeadura ou download abre uma sessão de rede e pode expor seu IP aos peers. Downloads também enviam peças recebidas; a sessão de download para automaticamente ao concluir.",
     "seedTitle": "Criar torrent ou semear originais",
     "sourceHint": "A origem já importada é conferida e aberta somente para leitura. Não é preciso converter para .g4 nem copiar o conteúdo. Criar o .torrent sozinho não inicia compartilhamento.",
@@ -214,7 +214,7 @@
     "import": "Importar .torrent",
     "infoHash": "Info hash",
     "showFiles": "Mostrar todos os arquivos",
-    "peer": "Peer inicial (IPv4:porta; opcional com DHT)",
+    "peer": "Peer inicial (IPv4:porta; opcional com descoberta)",
     "outputHint": "Escolha a pasta de destino a seguir. O Game4∞ cria uma subpasta nova e não sobrescreve arquivos existentes. Parar mantém os dados recebidos.",
     "startDownload": "Escolher pasta e baixar",
     "sessions": "Sessões desta execução do app",
@@ -240,10 +240,14 @@
     "dhtHint": "O DHT consulta a rede UDP pública e pode publicar seu info hash e IP. Ele depende de peers alcançáveis e não contorna NAT ou firewall. Sessões existentes mantêm a opção usada ao iniciar.",
     "generateMagnet": "Gerar magnet link",
     "resolveMagnet": "Buscar metadados do magnet",
-    "magnetHint": "Buscar metadados inicia conexões de rede por até 60 segundos, sem baixar os arquivos do conteúdo. Revise a lista antes de escolher o destino. Trackers e fontes web embutidos são ignorados ou rejeitados.",
+    "magnetHint": "Buscar metadados inicia conexões por até 60 segundos sem baixar o conteúdo. Use um peer inicial, DHT ou trackers revisados. Revise os arquivos antes de escolher o destino. Fontes web continuam sem suporte.",
     "resolving": "Buscando metadados do magnet… Os arquivos do conteúdo não estão sendo baixados.",
     "cancelResolve": "Cancelar busca de metadados",
     "dhtOn": "DHT ativado nesta sessão",
-    "dhtOff": "DHT desativado nesta sessão"
+    "dhtOff": "DHT desativado nesta sessão",
+    "useTrackers": "Usar os trackers listados na próxima ação",
+    "trackerList": "Trackers (uma URL por linha)",
+    "trackerHint": "Revise os endereços importados antes de ativar. Até 16 trackers, 2.048 caracteres por URL e 4.096 no total. Trackers ativados são consultados nas ações de rede e incluídos nos magnets/torrents gerados. Eles recebem seu IP, info hash e contadores; URLs podem conter passkeys privadas. Nenhum tracker público padrão é adicionado.",
+    "trackerCount": "Trackers selecionados: {{count}}"
   }
 }

@@ -43,6 +43,7 @@ pub fn run() {
             commands::packages::package_open,
             commands::ever::library_export_ever,
             commands::ever::ever_open,
+            commands::torrents::trackers_validate,
             commands::torrents::magnet_generate,
             commands::torrents::magnet_resolve,
             commands::torrents::magnet_cancel,

@@ -238,3 +238,11 @@ Added capability-gated native magnet generation without `.torrent` export, stric
 Validation includes actual direct-peer metadata acquisition without payload files, cancellation, hostile/ambiguous magnet rejection, compatibility guards, and a real isolated UDP DHT swarm that announces a seed, resolves metadata and transfers bytes without an initial peer, matching independent SHA-256. Isolated bootstrap routing must be populated reciprocally, and loopback announcement must be explicitly enabled for the test because upstream suppresses it by default. Public DHT/WAN acceptance remains open; no personal files were published to public DHT by these tests. No push is performed.
 
 Final validation: 75 Rust tests and 31 JavaScript contract/format tests passed; 211 translation keys match across English and Brazilian Portuguese. The DHT acceptance test waits for an independent BEP 5 UDP observation of the seed announcement before the receiving lookup, avoiding a race with upstream node requery timing. Normal Windows debug build and generated-contract checks passed.
+
+## 2026-11-14 — Explicit tracker support
+
+Implemented opt-in HTTP/HTTPS/UDP tracker routing for seed, download and sequential magnet metadata acquisition. Added reviewable imported tracker suggestions, bounded native URL validation/capability, selected-trackers torrent/magnet generation, exact-info-byte routing rewrites, per-session tracker counts and backward-compatible wire defaults. No default tracker or automatic imported endpoint contact is added. Updated both locales, current operational guide and ADR 0018.
+
+Real local HTTP and BEP 15 UDP tracker tests observe seed announces, resolve metadata and complete SHA-256-matched multi-file transfers without DHT or a manual peer. A separate unselected tracker embedded in imported metainfo receives no traffic. Endpoint/identity/IPC tests cover export stability and capability guards. HTTPS uses the pinned Rust TLS transport; public HTTPS tracker/WAN acceptance remains open. No push is performed.
+
+Validation: 78 Rust tests and 32 JavaScript IPC/format tests passed; 215 translation keys match across both locales. HTTP and UDP network tests use only local synthetic trackers and content.

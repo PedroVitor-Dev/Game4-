@@ -17,7 +17,7 @@ pub(super) fn initial_peer(value: &str, dht: bool) -> Result<Option<SocketAddr>>
 /// Public v1 magnets only. Strip advisory parameters and never follow embedded URLs/peers.
 pub fn normalize_magnet(value: &str) -> Result<MagnetLink> {
     let invalid = || err(ErrorCode::TorrentInvalid);
-    if value.len() > 4096 || value.chars().any(char::is_control) {
+    if value.len() > 16384 || value.chars().any(char::is_control) {
         return Err(invalid());
     }
     let url = url::Url::parse(value.trim()).map_err(|_| invalid())?;
@@ -91,7 +91,8 @@ impl Transfers {
     ) -> Result<TorrentImportResult> {
         valid_uuid(&request.request_id)?;
         let link = normalize_magnet(&request.magnet)?;
-        let addr = initial_peer(&request.peer, request.dht)?;
+        let trackers = trackers::normalize(&request.trackers)?;
+        let addr = initial_peer(&request.peer, request.dht || !trackers.is_empty())?;
         self.available()?;
         let cancel = self.cancel.child_token();
         {
@@ -104,7 +105,9 @@ impl Transfers {
                 cancel: cancel.clone(),
             });
         }
-        let result = self.resolve_metadata(link, addr, request.dht, cancel).await;
+        let result = self
+            .resolve_metadata(link, addr, request.dht, trackers, cancel)
+            .await;
         *self.resolution.lock().map_err(|_| failed())? = None;
         result
     }
@@ -113,6 +116,7 @@ impl Transfers {
         link: MagnetLink,
         addr: Option<SocketAddr>,
         dht: bool,
+        trackers: Vec<String>,
         cancel: CancellationToken,
     ) -> Result<TorrentImportResult> {
         let session = Session::new_with_opts(
@@ -145,7 +149,12 @@ impl Transfers {
                 persistence: None,
                 fastresume: false,
                 ipv4_only: true,
-                listen: None,
+                listen: (!trackers.is_empty()).then(|| ListenerOptions {
+                    listen_addr: SocketAddr::V4(SocketAddrV4::new(self.listen_ip, 0)),
+                    ipv4_only: true,
+                    enable_upnp_port_forwarding: false,
+                    ..Default::default()
+                }),
                 peer_limit: Some(1),
                 ..Default::default()
             },
@@ -165,7 +174,47 @@ impl Transfers {
                     .boxed()
             })
             .unwrap_or_else(|| stream::empty().boxed());
-        let mut peers = stream::select(stream::iter(addr), discover);
+        let tracker_lifetime = cancel.child_token();
+        let _tracker_guard = tracker_lifetime.clone().drop_guard();
+        let tracker_setup: Result<_> = async {
+            Ok(if trackers.is_empty() {
+                stream::empty().boxed()
+            } else {
+                let client = reqwest::Client::builder()
+                    .redirect(reqwest::redirect::Policy::none())
+                    .timeout(Duration::from_secs(10))
+                    .build()
+                    .map_err(|_| failed())?;
+                let udp =
+                    librqbit_tracker_comms::UdpTrackerClient::new(tracker_lifetime.clone(), None)
+                        .await
+                        .map_err(|_| failed())?;
+                librqbit_tracker_comms::TrackerComms::start(
+                    link.info_hash.parse().expect("validated hash"),
+                    uuid_peer_id(),
+                    trackers
+                        .iter()
+                        .map(|t| url::Url::parse(t).expect("validated tracker"))
+                        .collect(),
+                    Box::new(MetadataStats),
+                    None,
+                    metadata.listen_addr().expect("metadata listener").port(),
+                    client,
+                    udp,
+                )
+                .unwrap_or_else(|| stream::empty().boxed())
+            })
+        }
+        .await;
+        let tracker_rx = match tracker_setup {
+            Ok(rx) => rx,
+            Err(e) => {
+                metadata.stop().await;
+                session.stop().await;
+                return Err(e);
+            }
+        };
+        let mut peers = stream::select(stream::select(stream::iter(addr), discover), tracker_rx);
         let lookup = async {
             let mut seen = HashSet::new();
             while let Some(candidate) = peers.next().await {
@@ -202,6 +251,7 @@ impl Transfers {
             _ = cancel.cancelled() => Ok(None),
             result = tokio::time::timeout(Duration::from_secs(60), lookup) => result.unwrap_or_else(|_| Err(failed())),
         };
+        tracker_lifetime.cancel();
         metadata.stop().await;
         session.stop().await;
         let Some(raw) = response? else {
@@ -224,10 +274,27 @@ impl Transfers {
             }
             Ok(TorrentImportResult {
                 cancelled: false,
-                preview: Some(manager.import(raw)?),
+                preview: Some(manager.import(ever::route(&raw, &trackers)?)?),
             })
         })
         .await
         .map_err(|_| failed())?
     }
+}
+
+struct MetadataStats;
+impl librqbit_tracker_comms::TorrentStatsProvider for MetadataStats {
+    fn get(&self) -> librqbit_tracker_comms::TrackerCommsStats {
+        librqbit_tracker_comms::TrackerCommsStats {
+            total_bytes: 1,
+            torrent_state: librqbit_tracker_comms::TrackerCommsStatsState::Live,
+            ..Default::default()
+        }
+    }
+}
+fn uuid_peer_id() -> librqbit::dht::Id20 {
+    let mut id = [0u8; 20];
+    id[..4].copy_from_slice(b"G4MD");
+    id[4..].copy_from_slice(uuid::Uuid::new_v4().as_bytes());
+    librqbit::dht::Id20::new(id)
 }

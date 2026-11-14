@@ -16,6 +16,7 @@
       "package_open",
       "library_export_ever",
       "ever_open",
+      "trackers_validate",
       "magnet_generate",
       "magnet_resolve",
       "magnet_cancel",
@@ -94,7 +95,8 @@
       "infoHash": "f0d6cd560e79272cf3acd08e0ee78e193b535c04",
       "name": "originals",
       "token": "7b22b2eb-a47e-43e2-975b-8c01b541db17",
-      "totalBytes": "40"
+      "totalBytes": "40",
+      "trackers": []
     }
   },
   "transfer": {
@@ -108,6 +110,7 @@
     "outputName": "game4-download-example",
     "status": "completed",
     "totalBytes": "40",
+    "trackerCount": 0,
     "uploadedBytes": "0",
     "verifiedBytes": "40"
   }

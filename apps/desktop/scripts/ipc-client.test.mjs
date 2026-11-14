@@ -708,3 +708,109 @@ test("DHT requests cannot be silently ignored by an older v1 backend", async () 
     false,
   );
 });
+
+test("tracker controls validate endpoints, gate older backends and preserve optional v1 fields", async () => {
+  const trackers = [
+    "https://tracker.example/announce?key=private",
+    "udp://tracker.example:6969/announce",
+  ];
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "trackers_validate") return { trackers };
+    if (command === "magnet_generate")
+      return {
+        ...examples.magnetLink,
+        magnet:
+          examples.magnetLink.magnet +
+          "&tr=" +
+          encodeURIComponent(trackers[0]) +
+          "&tr=" +
+          encodeURIComponent(trackers[1]),
+      };
+    if (command === "torrent_import")
+      return {
+        ...examples.torrentImport,
+        preview: { ...examples.torrentImport.preview, trackers },
+      };
+    return { ...examples.transfer, trackerCount: 2 };
+  });
+  assert.deepEqual(await client.validateTrackers({ trackers }), { trackers });
+  const result = await client.generateMagnet({ itemId: "1", trackers });
+  assert.equal(new URL(result.magnet).searchParams.getAll("tr").length, 2);
+  assert.deepEqual(calls[2], ["trackers_validate", { request: { trackers } }]);
+  assert.deepEqual((await client.importTorrent()).preview.trackers, trackers);
+  assert.equal(
+    (
+      await client.seedTorrent({
+        requestId: examples.transfer.id,
+        itemId: "1",
+        listenPort: 0,
+        dht: false,
+        trackers,
+      })
+    ).trackerCount,
+    2,
+  );
+  for (const value of [
+    "file:///tmp/a",
+    "https://user:secret@tracker.example/",
+    "udp://tracker.example/announce",
+    "http://tracker.example/#x",
+    "ws://tracker.example/",
+    "http://tracker.example:0/",
+  ]) {
+    await assert.rejects(
+      make(async (command) =>
+        command === "app_info" ? examples.appInfo : { trackers: [value] },
+      ).validateTrackers({ trackers: [] }),
+      code("INVALID_RESPONSE"),
+    );
+  }
+  await assert.rejects(
+    make(async (command) =>
+      command === "app_info"
+        ? examples.appInfo
+        : { trackers: Array(17).fill(trackers[0]) },
+    ).validateTrackers({ trackers: [] }),
+    code("INVALID_RESPONSE"),
+  );
+  await assert.rejects(
+    make(async (command) =>
+      command === "app_info"
+        ? examples.appInfo
+        : { items: [{ ...examples.transfer, trackerCount: 17 }] },
+    ).listTransfers(),
+    code("INVALID_RESPONSE"),
+  );
+  const old = make(async () => ({
+    ...examples.appInfo,
+    capabilities: examples.appInfo.capabilities.filter(
+      (c) => c !== "trackers_validate",
+    ),
+  }));
+  await assert.rejects(
+    old.generateMagnet({ itemId: "1", trackers }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    old.downloadTorrent({
+      requestId: examples.transfer.id,
+      token: examples.transfer.id,
+      peer: "",
+      dht: false,
+      trackers,
+    }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  const { trackerCount, ...legacy } = examples.transfer;
+  assert.equal(
+    (
+      await make(async (command) =>
+        command === "app_info" ? examples.appInfo : { items: [legacy] },
+      ).listTransfers()
+    ).items[0].trackerCount,
+    0,
+  );
+});

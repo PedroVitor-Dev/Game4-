@@ -49,6 +49,8 @@ pub fn typescript() -> String {
         EverSummary::decl(&config),
         EverOpenResult::decl(&config),
         EverExportResult::decl(&config),
+        TrackerList::decl(&config),
+        TorrentReferenceRequest::decl(&config),
         MagnetLink::decl(&config),
         ResolveMagnetRequest::decl(&config),
         CancelMagnetRequest::decl(&config),
@@ -188,12 +190,14 @@ pub fn examples() -> String {
         uploaded_bytes: "0".into(),
         listen_port: None,
         dht: false,
+        tracker_count: 0,
         output_name: Some("game4-download-example".into()),
         error: None,
     };
     let torrent_import = TorrentImportResult {
         cancelled: false,
         preview: Some(TorrentPreview {
+            trackers: vec![],
             token: "7b22b2eb-a47e-43e2-975b-8c01b541db17".into(),
             name: "originals".into(),
             info_hash: transfer.info_hash.clone(),

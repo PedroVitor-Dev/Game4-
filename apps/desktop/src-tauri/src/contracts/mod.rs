@@ -23,6 +23,7 @@ pub enum ImplementedCommand {
     PackageOpen,
     LibraryExportEver,
     EverOpen,
+    TrackersValidate,
     MagnetGenerate,
     MagnetResolve,
     MagnetCancel,
@@ -37,7 +38,7 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 27] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 28] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -53,6 +54,7 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 27] = [
     ImplementedCommand::PackageOpen,
     ImplementedCommand::LibraryExportEver,
     ImplementedCommand::EverOpen,
+    ImplementedCommand::TrackersValidate,
     ImplementedCommand::MagnetGenerate,
     ImplementedCommand::MagnetResolve,
     ImplementedCommand::MagnetCancel,
@@ -603,6 +605,7 @@ pub struct TorrentPreview {
     pub info_hash: String,
     pub total_bytes: String,
     pub files: Vec<TorrentFileEntry>,
+    pub trackers: Vec<String>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -625,6 +628,8 @@ pub struct StartSeedRequest {
     pub listen_port: u16,
     #[serde(default)]
     pub dht: bool,
+    #[serde(default)]
+    pub trackers: Vec<String>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -634,6 +639,8 @@ pub struct StartDownloadRequest {
     pub peer: String,
     #[serde(default)]
     pub dht: bool,
+    #[serde(default)]
+    pub trackers: Vec<String>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -648,6 +655,8 @@ pub struct ResolveMagnetRequest {
     pub magnet: String,
     pub peer: String,
     pub dht: bool,
+    #[serde(default)]
+    pub trackers: Vec<String>,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -694,6 +703,7 @@ pub struct TransferSnapshot {
     pub dht: bool,
     pub output_name: Option<String>,
     pub error: Option<IpcError>,
+    pub tracker_count: u32,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -705,4 +715,17 @@ pub struct TransferStartResult {
 #[serde(rename_all = "camelCase")]
 pub struct TransferPage {
     pub items: Vec<TransferSnapshot>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TrackerList {
+    pub trackers: Vec<String>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TorrentReferenceRequest {
+    pub item_id: String,
+    #[serde(default)]
+    pub trackers: Vec<String>,
 }
