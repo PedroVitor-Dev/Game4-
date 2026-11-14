@@ -49,6 +49,18 @@ pub fn typescript() -> String {
         EverSummary::decl(&config),
         EverOpenResult::decl(&config),
         EverExportResult::decl(&config),
+        TorrentFileEntry::decl(&config),
+        TorrentPreview::decl(&config),
+        TorrentImportResult::decl(&config),
+        TorrentCreateResult::decl(&config),
+        StartSeedRequest::decl(&config),
+        StartDownloadRequest::decl(&config),
+        TransferIdRequest::decl(&config),
+        TransferMode::decl(&config),
+        TransferStatus::decl(&config),
+        TransferSnapshot::decl(&config),
+        TransferStartResult::decl(&config),
+        TransferPage::decl(&config),
         TaskIdRequest::decl(&config),
         TaskAccepted::decl(&config),
         TaskSnapshot::decl(&config),
@@ -161,7 +173,33 @@ pub fn examples() -> String {
         torrent_file_name: Some("original-files.torrent".into()),
         magnet: Some(magnet),
     };
-    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export})).unwrap())
+    let transfer = TransferSnapshot {
+        id: "7b22b2eb-a47e-43e2-975b-8c01b541db17".into(),
+        name: "originals".into(),
+        info_hash: "f0d6cd560e79272cf3acd08e0ee78e193b535c04".into(),
+        mode: TransferMode::Download,
+        status: TransferStatus::Completed,
+        total_bytes: "40".into(),
+        verified_bytes: "40".into(),
+        uploaded_bytes: "0".into(),
+        listen_port: None,
+        output_name: Some("game4-download-example".into()),
+        error: None,
+    };
+    let torrent_import = TorrentImportResult {
+        cancelled: false,
+        preview: Some(TorrentPreview {
+            token: "7b22b2eb-a47e-43e2-975b-8c01b541db17".into(),
+            name: "originals".into(),
+            info_hash: transfer.info_hash.clone(),
+            total_bytes: "40".into(),
+            files: vec![TorrentFileEntry {
+                path: "game.bin".into(),
+                size_bytes: "40".into(),
+            }],
+        }),
+    };
+    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export,"torrentImport":torrent_import,"transfer":transfer})).unwrap())
 }
 
 #[cfg(test)]

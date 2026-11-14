@@ -11,7 +11,8 @@
     "label": "Navegação principal",
     "library": "Biblioteca",
     "tasks": "Tarefas",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "transfers": "Transferências"
   },
   "language": {
     "label": "Idioma",
@@ -117,7 +118,11 @@
     "g4eUnsupportedVersion": "Esta versão .g4e não é suportada.",
     "g4eLimitExceeded": "O descritor, torrent ou coleção de origem excede os limites suportados.",
     "g4eIntegrityFailed": "Os originais ou o torrent selecionado não correspondem às identidades de referência. Nenhum original foi reparado ou modificado.",
-    "g4eWriteFailed": "Não foi possível salvar as referências. Escolha um novo nome .g4e e confira permissões e espaço livre. Um novo torrent auxiliar pode permanecer após uma falha tardia de gravação."
+    "g4eWriteFailed": "Não foi possível salvar as referências. Escolha um novo nome .g4e e confira permissões e espaço livre. Um novo torrent auxiliar pode permanecer após uma falha tardia de gravação.",
+    "torrentInvalid": "Este torrent está malformado ou usa metadados não suportados. Esta prévia aceita arquivos regulares BitTorrent v1 públicos, sem padding.",
+    "transferLimitExceeded": "Limite de transferências atingido (4 sessões ativas, 64 registros, 1.024 arquivos ou 1 TiB por torrent).",
+    "transferFailed": "Não foi possível iniciar ou continuar a transferência. Confira as origens, espaço livre, porta disponível e conexão com o peer. Uma nova pasta parcial de download será mantida.",
+    "transferUnavailable": "A engine de transferências está encerrando. Reabra o app para tentar novamente."
   },
   "backup": {
     "title": "Salvar e restaurar sua Biblioteca",
@@ -189,5 +194,47 @@
     "descriptorOnly": "Descritor válido. Os metadados do torrent, a disponibilidade das origens e o conteúdo não foram verificados nesta abertura. Nenhuma conexão de rede foi feita.",
     "original_files": "Arquivos originais",
     "g4_package": "Pacote .g4 existente"
+  },
+  "transfers": {
+    "title": "Transferências P2P",
+    "description": "Crie torrents, semeie originais e baixe de um peer informado.",
+    "connectionTitle": "Conexões BitTorrent",
+    "connectionDescription": "Esta prévia conecta por TCP IPv4 a partir de um peer inicial informado. Trackers, DHT, descoberta local e abertura automática de portas no roteador estão desativados.",
+    "exposure": "Iniciar semeadura ou download abre uma sessão de rede e pode expor seu IP aos peers. Downloads também enviam peças recebidas; a sessão de download para automaticamente ao concluir.",
+    "seedTitle": "Criar torrent ou semear originais",
+    "sourceHint": "A origem já importada é conferida e aberta somente para leitura. Não é preciso converter para .g4 nem copiar o conteúdo. Criar o .torrent sozinho não inicia compartilhamento.",
+    "source": "Origem na Biblioteca",
+    "noSource": "Importe arquivos ou uma pasta para a Biblioteca primeiro.",
+    "port": "Porta TCP de escuta (0 escolhe uma porta disponível)",
+    "create": "Criar .torrent",
+    "startSeed": "Iniciar semeadura",
+    "created": "Torrent criado: {{fileName}}",
+    "downloadTitle": "Importar e baixar um torrent",
+    "importHint": "A importação apenas valida os metadados e mostra os arquivos. Nenhuma sessão de rede é iniciada até você escolher Baixar.",
+    "import": "Importar .torrent",
+    "infoHash": "Info hash",
+    "showFiles": "Mostrar todos os arquivos",
+    "peer": "Peer inicial semeador (IPv4:porta)",
+    "outputHint": "Escolha a pasta de destino a seguir. O Game4∞ cria uma subpasta nova e não sobrescreve arquivos existentes. Parar mantém os dados recebidos.",
+    "startDownload": "Escolher pasta e baixar",
+    "sessions": "Sessões desta execução do app",
+    "empty": "Nenhuma sessão de transferência. Nada inicia automaticamente ao abrir o app.",
+    "preparing": "Preparando arquivos ou atualizando a sessão. A conferência de origens grandes pode demorar.",
+    "progress": "Peças verificadas: {{verified}} / {{total}} · Enviado: {{uploaded}}",
+    "pieces": "Peças verificadas do torrent",
+    "listening": "Porta de escuta: {{port}}. No outro PC, use um IP alcançável deste computador com esta porta.",
+    "output": "Pasta do download: {{name}}",
+    "stop": "Parar sessão",
+    "mode": {
+      "seed": "Semeando originais",
+      "download": "Baixando"
+    },
+    "status": {
+      "active": "Ativa",
+      "stopping": "Parando",
+      "stopped": "Parada",
+      "completed": "Concluída; sessão de rede encerrada",
+      "failed": "Falhou"
+    }
   }
 }

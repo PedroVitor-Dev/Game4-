@@ -128,8 +128,15 @@ pub(super) struct Bound {
     piece_length: usize,
     pieces: Vec<u8>,
 }
-pub(super) fn bind(doc: &EverManifest, raw: &[u8]) -> Result<Bound> {
-    let total = validate(doc)?;
+#[derive(Debug, Clone)]
+pub(crate) struct Layout {
+    pub name: String,
+    pub hash: String,
+    pub files: Vec<(String, u64)>,
+    pub piece_length: usize,
+    pub pieces: Vec<u8>,
+}
+pub(crate) fn inspect(raw: &[u8]) -> Result<Layout> {
     if raw.len() > MAX_METAINFO {
         return Err(limit());
     }
@@ -144,17 +151,6 @@ pub(super) fn bind(doc: &EverManifest, raw: &[u8]) -> Result<Bound> {
     }
     let (start, end) = decoder.info.ok_or_else(invalid)?;
     let hash = format!("{:x}", Sha1::digest(&raw[start..end]));
-    let reference = doc
-        .torrents
-        .iter()
-        .find(|t| t.info_hash_v1 == hash)
-        .ok_or_else(integrity)?;
-    if let Some(companion) = &reference.metainfo_file
-        && (companion.size_bytes != raw.len().to_string()
-            || companion.sha256 != format!("{:x}", Sha256::digest(raw)))
-    {
-        return Err(integrity());
-    }
     let info = map(get(map(&top)?, b"info")?)?;
     regular(info)?;
     if info.contains_key(b"meta version".as_slice())
@@ -175,9 +171,6 @@ pub(super) fn bind(doc: &EverManifest, raw: &[u8]) -> Result<Bound> {
         return Err(limit());
     }
     let pieces = bytes(get(info, b"pieces")?)?.to_vec();
-    if total.div_ceil(piece_length as u64).checked_mul(20) != Some(pieces.len() as u64) {
-        return Err(invalid());
-    }
     let mut metadata = Vec::new();
     match (
         info.get(b"files".as_slice()),
@@ -212,6 +205,50 @@ pub(super) fn bind(doc: &EverManifest, raw: &[u8]) -> Result<Bound> {
         (None, Some(n)) => metadata.push((name.to_owned(), number(n)?)),
         _ => return Err(invalid()),
     }
+
+    let mut paths = HashSet::new();
+    let mut total = 0u64;
+    for (p, n) in &metadata {
+        if !paths.insert(p.to_lowercase()) {
+            return Err(invalid());
+        }
+        total = total.checked_add(*n).ok_or_else(limit)?;
+    }
+    for p in &paths {
+        for (i, _) in p.match_indices('/') {
+            if paths.contains(&p[..i]) {
+                return Err(invalid());
+            }
+        }
+    }
+    if total.div_ceil(piece_length as u64).checked_mul(20) != Some(pieces.len() as u64) {
+        return Err(invalid());
+    }
+    Ok(Layout {
+        name: name.to_owned(),
+        hash,
+        files: metadata,
+        piece_length,
+        pieces,
+    })
+}
+pub(super) fn bind(doc: &EverManifest, raw: &[u8]) -> Result<Bound> {
+    validate(doc)?;
+    let layout = inspect(raw)?;
+    let reference = doc
+        .torrents
+        .iter()
+        .find(|t| t.info_hash_v1 == layout.hash)
+        .ok_or_else(integrity)?;
+    if let Some(companion) = &reference.metainfo_file
+        && (companion.size_bytes != raw.len().to_string()
+            || companion.sha256 != format!("{:x}", Sha256::digest(raw)))
+    {
+        return Err(integrity());
+    }
+    let metadata = layout.files;
+    let piece_length = layout.piece_length;
+    let pieces = layout.pieces;
     let expected: BTreeMap<_, _> = doc
         .manifest
         .files

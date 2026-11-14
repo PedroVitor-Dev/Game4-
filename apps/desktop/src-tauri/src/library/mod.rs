@@ -268,7 +268,7 @@ fn reject_link(path: &Path) -> Result<Metadata> {
     }
     Ok(m)
 }
-fn reject_ancestors(path: &Path) -> Result<()> {
+pub(crate) fn reject_ancestors(path: &Path) -> Result<()> {
     for ancestor in path.ancestors() {
         reject_link(ancestor)?;
     }

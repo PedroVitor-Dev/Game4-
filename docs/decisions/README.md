@@ -36,3 +36,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0014](0014-ever-manifest-and-originals.md) | Accepted initial specification | Original-file preservation and public .g4e Game4 Ever Manifest |
 
 | [0015](0015-ever-create-read.md) | Accepted reference implementation | Native .g4e create/read, original-file torrents and explicit verification |
+
+| [0016](0016-desktop-bittorrent.md) | Accepted experimental integration | Real desktop BitTorrent, offline .torrent actions and original-safe storage |

@@ -20,19 +20,21 @@ export default function App() {
         </a>
         <p className="sidebar-caption">{t("app.workspace")}</p>
         <nav aria-label={t("nav.label")}>
-          {(["library", "tasks", "settings"] as const).map((item, index) => (
-            <button
-              key={item}
-              className={`nav-item ${page === item ? "active" : ""}`}
-              aria-current={page === item ? "page" : undefined}
-              onClick={() => setPage(item)}
-            >
-              <span className="nav-number" aria-hidden="true">
-                0{index + 1}
-              </span>
-              {t(`nav.${item}`)}
-            </button>
-          ))}
+          {(["library", "transfers", "tasks", "settings"] as const).map(
+            (item, index) => (
+              <button
+                key={item}
+                className={`nav-item ${page === item ? "active" : ""}`}
+                aria-current={page === item ? "page" : undefined}
+                onClick={() => setPage(item)}
+              >
+                <span className="nav-number" aria-hidden="true">
+                  0{index + 1}
+                </span>
+                {t(`nav.${item}`)}
+              </button>
+            ),
+          )}
         </nav>
         <div className="sidebar-bottom">
           <span className="status-dot" />

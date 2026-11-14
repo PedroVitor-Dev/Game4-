@@ -78,3 +78,7 @@ The M3 physical transport experiment now has passing evidence for the tested ove
 - [libtorrent overview and license](https://libtorrent.org/)
 
 References checked on November 4, 2026; implementation was compiled against the downloaded pinned crate source.
+
+## Desktop BitTorrent increment — November 13, 2026
+
+The desktop now embeds real experimental BitTorrent sessions, creates and imports public v1 `.torrent` files, seeds original catalog files through read-only storage and downloads to new owned directories. Offline previews and explicit initial-peer actions are available in both locales. DHT/trackers/local discovery/UPnP are disabled; peer exchange remains enabled. Sessions are runtime-only, with Stop and completion cleanup; persistence, resume, discovery and production acceptance remain open. See [desktop transfers](bittorrent.md) and [ADR 0016](decisions/0016-desktop-bittorrent.md). Earlier dated experiment statements describe their original scope.

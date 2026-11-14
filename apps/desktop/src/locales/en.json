@@ -11,7 +11,8 @@
     "label": "Main navigation",
     "library": "Library",
     "tasks": "Tasks",
-    "settings": "Settings"
+    "settings": "Settings",
+    "transfers": "Transfers"
   },
   "language": {
     "label": "Language",
@@ -117,7 +118,11 @@
     "g4eUnsupportedVersion": "This .g4e version is not supported.",
     "g4eLimitExceeded": "The descriptor, torrent or source collection exceeds supported limits.",
     "g4eIntegrityFailed": "The original files or selected torrent do not match their reference identities. Originals were not repaired or modified.",
-    "g4eWriteFailed": "References could not be saved. Choose a new .g4e filename and check permissions and free space. A new torrent companion may remain after a late write failure."
+    "g4eWriteFailed": "References could not be saved. Choose a new .g4e filename and check permissions and free space. A new torrent companion may remain after a late write failure.",
+    "torrentInvalid": "This torrent is malformed or uses unsupported metadata. This preview accepts regular public BitTorrent v1 files without padding.",
+    "transferLimitExceeded": "Transfer limits reached (4 active sessions, 64 session records, 1,024 files or 1 TiB per torrent).",
+    "transferFailed": "The transfer could not be started or continued. Check sources, free space, port availability and peer connectivity. Any new partial download folder is kept.",
+    "transferUnavailable": "The transfer engine is shutting down. Reopen the app to try again."
   },
   "backup": {
     "title": "Save and restore your library",
@@ -189,5 +194,47 @@
     "descriptorOnly": "Descriptor valid. Referenced torrent metadata, source availability and content have not been verified by this open action. No network connection was made.",
     "original_files": "Original files",
     "g4_package": "Existing .g4 package"
+  },
+  "transfers": {
+    "title": "P2P transfers",
+    "description": "Create torrents, seed originals and download from an explicit peer.",
+    "connectionTitle": "BitTorrent connections",
+    "connectionDescription": "This preview connects over IPv4 TCP using an initial peer address. Automatic tracker, DHT, local discovery and router port mapping are off.",
+    "exposure": "Starting a seed or download opens a network session and can expose your IP to peers. Downloads also upload received pieces; the download session stops automatically when complete.",
+    "seedTitle": "Create a torrent or seed originals",
+    "sourceHint": "The existing imported source is checked and opened read-only. No .g4 conversion or payload copy is needed. Creating the .torrent alone does not start sharing.",
+    "source": "Library source",
+    "noSource": "Import files or a folder into the Library first.",
+    "port": "Listening TCP port (0 chooses an available port)",
+    "create": "Create .torrent",
+    "startSeed": "Start seeding",
+    "created": "Torrent created: {{fileName}}",
+    "downloadTitle": "Import and download a torrent",
+    "importHint": "Importing only checks metainfo and shows the file list. No network session starts until you choose Download.",
+    "import": "Import .torrent",
+    "infoHash": "Info hash",
+    "showFiles": "Show all files",
+    "peer": "Initial seeder peer (IPv4:port)",
+    "outputHint": "Choose a parent folder next. Game4∞ creates a new download subfolder and never overwrites existing files. Stopping keeps received data.",
+    "startDownload": "Choose folder and download",
+    "sessions": "Sessions in this app run",
+    "empty": "No transfer sessions. Nothing starts automatically on app launch.",
+    "preparing": "Preparing files or updating the session. Large source checks may take a while.",
+    "progress": "Verified pieces: {{verified}} / {{total}} · Uploaded: {{uploaded}}",
+    "pieces": "Verified torrent pieces",
+    "listening": "Listening port: {{port}}. Use this computer’s reachable IP plus this port on the other PC.",
+    "output": "Download folder: {{name}}",
+    "stop": "Stop session",
+    "mode": {
+      "seed": "Seeding originals",
+      "download": "Downloading"
+    },
+    "status": {
+      "active": "Active",
+      "stopping": "Stopping",
+      "stopped": "Stopped",
+      "completed": "Completed; network session closed",
+      "failed": "Failed"
+    }
   }
 }

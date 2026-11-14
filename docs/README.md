@@ -48,3 +48,7 @@ See [platform, format, and size identification](file-identification.md) for dete
 - [Public .g4e specification](../packages/g4e-format/spec-v1.md): Game4 Ever Manifest discovery/P2P references and offline validation.
 
 - [Creating and reading .g4e](ever-manifests.md): native original-file torrent references, offline CLI and explicit integrity checks.
+
+## Desktop BitTorrent increment — November 13, 2026
+
+The desktop now embeds real experimental BitTorrent sessions, creates and imports public v1 `.torrent` files, seeds original catalog files through read-only storage and downloads to new owned directories. Offline previews and explicit initial-peer actions are available in both locales. DHT/trackers/local discovery/UPnP are disabled; peer exchange remains enabled. Sessions are runtime-only, with Stop and completion cleanup; persistence, resume, discovery and production acceptance remain open. See [desktop transfers](bittorrent.md) and [ADR 0016](decisions/0016-desktop-bittorrent.md). Earlier dated experiment statements describe their original scope.

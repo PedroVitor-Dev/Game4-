@@ -1,3 +1,5 @@
 # Transfer adapter boundary
 
-The desktop adapter remains unimplemented. An isolated [librqbit experiment](../../../../../tools/torrent-probe/README.md) has passed local transport checks; its upstream creator defect is handled by a separately tested Game4 metainfo adapter. See [the evaluation](../../../../../docs/torrent-engine-evaluation.md). Transfer, restart, and magnet passed between two physical Windows PCs over Tailscale DERP relay; production selection and native-network acceptance remain pending. Keep transfer state separate from catalog content identity.
+The implemented experimental desktop adapter lives in [`../torrents/`](../torrents/). It embeds librqbit 9.1.0 behind explicit native commands and custom read-only source/new-file destination storage. Transfer state remains separate from catalog content identity. See [desktop transfers](../../../../../docs/bittorrent.md) for supported public-v1 metainfo, connectivity settings, limits and runtime-only lifecycle.
+
+The earlier [isolated probe](../../../../../tools/torrent-probe/README.md) remains a separate evaluation tool. Its two-PC Tailscale evidence does not close production selection or native-network acceptance for the desktop integration; see [the evaluation](../../../../../docs/torrent-engine-evaluation.md).

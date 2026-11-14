@@ -33,6 +33,11 @@ import type {
   PackageOpenResult,
   EverOpenResult,
   EverExportResult,
+  TorrentCreateResult,
+  TorrentImportResult,
+  TransferSnapshot,
+  TransferStartResult,
+  TransferPage,
 } from "./generated.ts";
 
 export class IpcFailure extends Error {
@@ -513,4 +518,140 @@ export function parseEverOpenResult(v: unknown): EverOpenResult {
       contentVerified: false,
     },
   };
+}
+
+function uuid(v: unknown): string {
+  const s = text(v);
+  if (
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+      s,
+    )
+  )
+    throw failure("INVALID_RESPONSE");
+  return s;
+}
+export function parseTorrentCreateResult(v: unknown): TorrentCreateResult {
+  const o = object(v);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  if (o.cancelled) {
+    if (o.fileName !== null || o.magnet !== null)
+      throw failure("INVALID_RESPONSE");
+    return { cancelled: true, fileName: null, magnet: null };
+  }
+  const fileName = filename(o.fileName);
+  if (!/\.torrent$/i.test(fileName)) throw failure("INVALID_RESPONSE");
+  return { cancelled: false, fileName, magnet: everMagnet(o.magnet) };
+}
+export function parseTorrentImportResult(v: unknown): TorrentImportResult {
+  const o = object(v);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  if (o.cancelled) {
+    if (o.preview !== null) throw failure("INVALID_RESPONSE");
+    return { cancelled: true, preview: null };
+  }
+  const p = object(o.preview);
+  const files = values(p.files).map((v) => {
+    const f = object(v);
+    const path = text(f.path);
+    if (
+      !path ||
+      path.startsWith("/") ||
+      path.split("/").some((c) => !c || c === "." || c === "..") ||
+      /[\\:\u0000-\u001f]/.test(path)
+    )
+      throw failure("INVALID_RESPONSE");
+    return { path, sizeBytes: decimal(f.sizeBytes) };
+  });
+  const infoHash = text(p.infoHash);
+  const totalBytes = decimal(p.totalBytes, true);
+  if (
+    !/^[0-9a-f]{40}$/.test(infoHash) ||
+    files.length < 1 ||
+    files.length > 1024 ||
+    BigInt(totalBytes) > 1099511627776n ||
+    files.reduce((s, f) => s + BigInt(f.sizeBytes), 0n) !==
+      BigInt(totalBytes) ||
+    new Set(files.map((f) => f.path.toLowerCase())).size !== files.length
+  )
+    throw failure("INVALID_RESPONSE");
+  return {
+    cancelled: false,
+    preview: {
+      token: uuid(p.token),
+      name: text(p.name),
+      infoHash,
+      totalBytes,
+      files,
+    },
+  };
+}
+export function parseTransferSnapshot(v: unknown): TransferSnapshot {
+  const o = object(v);
+  const totalBytes = decimal(o.totalBytes, true);
+  const verifiedBytes = decimal(o.verifiedBytes);
+  const uploadedBytes = decimal(o.uploadedBytes);
+  if (
+    !["seed", "download"].includes(text(o.mode)) ||
+    !["active", "stopping", "stopped", "completed", "failed"].includes(
+      text(o.status),
+    ) ||
+    BigInt(totalBytes) > 1099511627776n ||
+    BigInt(verifiedBytes) > BigInt(totalBytes) ||
+    !/^([0-9a-f]{40})$/.test(text(o.infoHash))
+  )
+    throw failure("INVALID_RESPONSE");
+  let error = null;
+  if (o.error !== null) {
+    const e = object(o.error);
+    if (
+      !ERROR_CODES.some((c) => c === e.code) ||
+      typeof e.retryable !== "boolean" ||
+      !(e.field === null || ERROR_FIELDS.some((f) => f === e.field))
+    )
+      throw failure("INVALID_RESPONSE");
+    error = normalizeIpcError(e);
+  }
+  const listenPort =
+    o.listenPort === null ? null : safeCount(o.listenPort, 1, 65535);
+  const outputName = o.outputName === null ? null : filename(o.outputName);
+  if (
+    (o.status === "failed") !== !!error ||
+    (o.status === "completed" &&
+      (o.mode !== "download" || verifiedBytes !== totalBytes)) ||
+    (o.mode === "seed" && outputName !== null) ||
+    (o.mode === "download" && outputName === null)
+  )
+    throw failure("INVALID_RESPONSE");
+  return {
+    id: uuid(o.id),
+    name: text(o.name),
+    infoHash: text(o.infoHash),
+    mode: o.mode as TransferSnapshot["mode"],
+    status: o.status as TransferSnapshot["status"],
+    totalBytes,
+    verifiedBytes,
+    uploadedBytes,
+    listenPort,
+    outputName,
+    error,
+  };
+}
+export function parseTransferStartResult(v: unknown): TransferStartResult {
+  const o = object(v);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  if (o.cancelled) {
+    if (o.transfer !== null) throw failure("INVALID_RESPONSE");
+    return { cancelled: true, transfer: null };
+  }
+  return { cancelled: false, transfer: parseTransferSnapshot(o.transfer) };
+}
+export function parseTransferPage(v: unknown): TransferPage {
+  const o = object(v);
+  const items = values(o.items).map(parseTransferSnapshot);
+  if (
+    items.length > 64 ||
+    new Set(items.map((t) => t.id)).size !== items.length
+  )
+    throw failure("INVALID_RESPONSE");
+  return { items };
 }

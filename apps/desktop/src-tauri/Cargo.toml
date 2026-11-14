@@ -29,6 +29,10 @@ tempfile = "3"
 zip = { version = "9.5.1", default-features = false }
 sha1 = "0.10"
 url = "2"
+librqbit = { version = "=9.1.0", default-features = false, features = ["rust-tls"] }
+anyhow = "1"
+tokio = { version = "1", features = ["sync", "time", "rt-multi-thread", "macros"] }
+tokio-util = { version = "0.7", features = ["rt"] }
 
 [profile.release]
 codegen-units = 1

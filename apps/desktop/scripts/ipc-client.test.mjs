@@ -516,3 +516,82 @@ test("ever export and read use Rust DTOs, validate reference-only summaries and 
     code("IPC_UNAVAILABLE"),
   );
 });
+
+test("torrent IPC validates previews, exact progress, cancellation and capabilities", async () => {
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "torrent_import") return examples.torrentImport;
+    if (command === "transfers_list") return { items: [examples.transfer] };
+    if (command === "torrent_download")
+      return { cancelled: false, transfer: examples.transfer };
+    return examples.transfer;
+  });
+  assert.deepEqual(await client.importTorrent(), examples.torrentImport);
+  const request = {
+    requestId: examples.transfer.id,
+    token: examples.torrentImport.preview.token,
+    peer: "127.0.0.1:42420",
+  };
+  assert.equal(
+    (await client.downloadTorrent(request)).transfer.id,
+    examples.transfer.id,
+  );
+  assert.deepEqual(calls[2], ["torrent_download", { request }]);
+  assert.equal((await client.listTransfers()).items.length, 1);
+  assert.deepEqual(
+    await client.stopTransfer({ transferId: examples.transfer.id }),
+    examples.transfer,
+  );
+  for (const change of [
+    { verifiedBytes: "41" },
+    { totalBytes: "0" },
+    { status: "running" },
+    { listenPort: 65536 },
+    { error: { code: "TRANSFER_FAILED", field: null } },
+    { outputName: null },
+  ]) {
+    await assert.rejects(
+      make(async (command) =>
+        command === "app_info"
+          ? examples.appInfo
+          : { items: [{ ...examples.transfer, ...change }] },
+      ).listTransfers(),
+      code("INVALID_RESPONSE"),
+    );
+  }
+  for (const path of ["../escape", "/absolute", "C:/escape"]) {
+    const preview = {
+      ...examples.torrentImport.preview,
+      files: [{ path, sizeBytes: "40" }],
+    };
+    await assert.rejects(
+      make(async (command) =>
+        command === "app_info"
+          ? examples.appInfo
+          : { cancelled: false, preview },
+      ).importTorrent(),
+      code("INVALID_RESPONSE"),
+    );
+  }
+  assert.deepEqual(
+    await make(async (command) =>
+      command === "app_info"
+        ? examples.appInfo
+        : { cancelled: true, transfer: null },
+    ).downloadTorrent(request),
+    { cancelled: true, transfer: null },
+  );
+  await assert.rejects(
+    make(async () => ({
+      ...examples.appInfo,
+      capabilities: [],
+    })).importTorrent(),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    make(async () => assert.fail("native invocation"), false).listTransfers(),
+    code("IPC_UNAVAILABLE"),
+  );
+});

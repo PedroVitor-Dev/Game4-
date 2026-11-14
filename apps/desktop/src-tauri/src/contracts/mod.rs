@@ -23,12 +23,18 @@ pub enum ImplementedCommand {
     PackageOpen,
     LibraryExportEver,
     EverOpen,
+    TorrentCreate,
+    TorrentImport,
+    TorrentSeed,
+    TorrentDownload,
+    TransfersList,
+    TransferStop,
     LibrarySaveBackup,
     LibraryPrepareRestore,
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 18] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 24] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -44,6 +50,12 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 18] = [
     ImplementedCommand::PackageOpen,
     ImplementedCommand::LibraryExportEver,
     ImplementedCommand::EverOpen,
+    ImplementedCommand::TorrentCreate,
+    ImplementedCommand::TorrentImport,
+    ImplementedCommand::TorrentSeed,
+    ImplementedCommand::TorrentDownload,
+    ImplementedCommand::TransfersList,
+    ImplementedCommand::TransferStop,
     ImplementedCommand::LibrarySaveBackup,
     ImplementedCommand::LibraryPrepareRestore,
     ImplementedCommand::LibraryRestoreBackup,
@@ -92,9 +104,13 @@ pub enum ErrorCode {
     G4eLimitExceeded,
     G4eIntegrityFailed,
     G4eWriteFailed,
+    TorrentInvalid,
+    TransferLimitExceeded,
+    TransferFailed,
+    TransferUnavailable,
 }
 
-pub const ERROR_CODES: [ErrorCode; 33] = [
+pub const ERROR_CODES: [ErrorCode; 37] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -128,6 +144,10 @@ pub const ERROR_CODES: [ErrorCode; 33] = [
     ErrorCode::G4eLimitExceeded,
     ErrorCode::G4eIntegrityFailed,
     ErrorCode::G4eWriteFailed,
+    ErrorCode::TorrentInvalid,
+    ErrorCode::TransferLimitExceeded,
+    ErrorCode::TransferFailed,
+    ErrorCode::TransferUnavailable,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -561,4 +581,93 @@ pub struct EverExportResult {
     pub file_name: Option<String>,
     pub torrent_file_name: Option<String>,
     pub magnet: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TorrentFileEntry {
+    pub path: String,
+    pub size_bytes: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TorrentPreview {
+    pub token: String,
+    pub name: String,
+    pub info_hash: String,
+    pub total_bytes: String,
+    pub files: Vec<TorrentFileEntry>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TorrentImportResult {
+    pub cancelled: bool,
+    pub preview: Option<TorrentPreview>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TorrentCreateResult {
+    pub cancelled: bool,
+    pub file_name: Option<String>,
+    pub magnet: Option<String>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct StartSeedRequest {
+    pub request_id: String,
+    pub item_id: String,
+    pub listen_port: u16,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct StartDownloadRequest {
+    pub request_id: String,
+    pub token: String,
+    pub peer: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TransferIdRequest {
+    pub transfer_id: String,
+}
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, TS, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum TransferMode {
+    Seed,
+    Download,
+}
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, TS, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum TransferStatus {
+    Active,
+    Stopping,
+    Stopped,
+    Completed,
+    Failed,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TransferSnapshot {
+    pub id: String,
+    pub name: String,
+    pub info_hash: String,
+    pub mode: TransferMode,
+    pub status: TransferStatus,
+    pub total_bytes: String,
+    pub verified_bytes: String,
+    pub uploaded_bytes: String,
+    pub listen_port: Option<u16>,
+    pub output_name: Option<String>,
+    pub error: Option<IpcError>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TransferStartResult {
+    pub cancelled: bool,
+    pub transfer: Option<TransferSnapshot>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TransferPage {
+    pub items: Vec<TransferSnapshot>,
 }

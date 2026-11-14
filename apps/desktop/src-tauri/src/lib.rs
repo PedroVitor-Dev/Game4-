@@ -8,6 +8,7 @@ pub mod library;
 pub mod manifests;
 pub mod packages;
 pub mod tasks;
+pub mod torrents;
 pub mod verification;
 
 use std::sync::Arc;
@@ -23,6 +24,7 @@ pub fn run() {
             app.manage(Arc::new(database::Database::open(&path)?));
             app.manage(Arc::new(library::ImportState::default()));
             app.manage(Arc::new(backups::BackupState::default()));
+            app.manage(Arc::new(torrents::Transfers::default()));
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -41,10 +43,21 @@ pub fn run() {
             commands::packages::package_open,
             commands::ever::library_export_ever,
             commands::ever::ever_open,
+            commands::torrents::torrent_create,
+            commands::torrents::torrent_import,
+            commands::torrents::torrent_seed,
+            commands::torrents::torrent_download,
+            commands::torrents::transfers_list,
+            commands::torrents::transfer_stop,
             commands::backups::library_save_backup,
             commands::backups::library_prepare_restore,
             commands::backups::library_restore_backup
         ])
-        .run(tauri::generate_context!())
-        .expect("failed to run Game4∞");
+        .build(tauri::generate_context!())
+        .expect("failed to build Game4∞")
+        .run(|app, event| {
+            if matches!(event, tauri::RunEvent::Exit) {
+                app.state::<Arc<torrents::Transfers>>().abort();
+            }
+        });
 }

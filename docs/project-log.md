@@ -224,3 +224,9 @@ Native smoke used a fresh isolated app identifier/catalog: imported 3 synthetic 
 In-app seeding/download sessions, discovery and real transfer validation remain open. Reference export must not be presented as an active upload or as proof of source availability. No personal catalog or originals were used.
 
 Validation: 67 Rust tests (10 .g4e tests), 16 frontend/IPC tests, 5 existing format/schema tests and 7 public .g4e tests passed (95 total). The final targeted .g4e checks also passed after adding the companion-digest and trailing-empty cases. TypeScript, 161-key locale parity, formatting, Clippy with warnings denied for desktop/probe, generated-contract checks and normal Tauri debug build without bundling passed. No push.
+
+## 2026-11-13 — Real desktop BitTorrent engine and metainfo
+
+Integrated pinned librqbit 9.1.0 with a dedicated handle-only storage adapter and explicit native network commands. Added offline public-v1 `.torrent` creation/import, bounded preview tokens, background source SHA-256 preparation, original-file seeding without staging, new-directory downloads, runtime progress and Stop. Extended IPC v1 capabilities/errors/DTOs and strict response decoders, with bilingual Transfers UI. Added loopback real-engine transfer and independent SHA-256 tests, read-only storage refusal/release checks and IPC boundary tests. Public guide and ADR 0016 record the experimental adoption scope and deferred persistence/discovery/WAN acceptance. No push is performed.
+
+Validation: native isolated-catalog smoke confirmed offline import of three synthetic files (Unicode path and empty file), full piece verification, active seeding and explicit Stop with listening port removed. Normal debug build restored after the isolated smoke. Automated loopback transfer independently matched SHA-256; frontend contracts and bilingual key checks passed, with Clippy warning-free. No personal catalog was used for network testing.

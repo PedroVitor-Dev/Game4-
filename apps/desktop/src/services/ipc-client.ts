@@ -11,6 +11,11 @@ import {
   parsePackageOpenResult,
   parseEverOpenResult,
   parseEverExportResult,
+  parseTorrentCreateResult,
+  parseTorrentImportResult,
+  parseTransferSnapshot,
+  parseTransferStartResult,
+  parseTransferPage,
   parseTaskPage,
   parseTaskSnapshot,
   parseExportManifestResult,
@@ -31,6 +36,9 @@ import type {
   ExportManifestRequest,
   LibraryRestoreRequest,
   LibraryItemFilesRequest,
+  StartSeedRequest,
+  StartDownloadRequest,
+  TransferIdRequest,
 } from "@game4/ipc-contracts";
 
 export type IpcTransport = {
@@ -56,6 +64,12 @@ const decoders = {
   package_open: parsePackageOpenResult,
   library_export_ever: parseEverExportResult,
   ever_open: parseEverOpenResult,
+  torrent_create: parseTorrentCreateResult,
+  torrent_import: parseTorrentImportResult,
+  torrent_seed: parseTransferSnapshot,
+  torrent_download: parseTransferStartResult,
+  transfers_list: parseTransferPage,
+  transfer_stop: parseTransferSnapshot,
   library_save_backup: parseLibraryBackupResult,
   library_prepare_restore: parseLibraryPrepareRestoreResult,
   library_restore_backup: parseLibraryRestoreResult,
@@ -117,6 +131,16 @@ export function createIpcClient(transport: IpcTransport) {
     exportEver: (request: ExportManifestRequest) =>
       capable("library_export_ever", request),
     openEver: () => capable("ever_open", undefined),
+    createTorrent: (request: ExportManifestRequest) =>
+      capable("torrent_create", request),
+    importTorrent: () => capable("torrent_import", undefined),
+    seedTorrent: (request: StartSeedRequest) =>
+      capable("torrent_seed", request),
+    downloadTorrent: (request: StartDownloadRequest) =>
+      capable("torrent_download", request),
+    listTransfers: () => capable("transfers_list", undefined),
+    stopTransfer: (request: TransferIdRequest) =>
+      capable("transfer_stop", request),
     getAppInfo,
     getDatabaseInfo,
     saveLibraryBackup: () => capable("library_save_backup", undefined),

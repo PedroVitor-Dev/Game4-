@@ -542,3 +542,33 @@ input:focus-visible {
 .ever-export-result {
   padding: 1.5rem;
 }
+
+.transfer-panel {
+  padding: 1.5rem;
+}
+.transfer-panel label {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.transfer-panel input,
+.transfer-panel select {
+  width: 100%;
+  padding: 0.7rem;
+  background: #17131f;
+  color: #e9e4f5;
+  border: 1px solid #494157;
+  border-radius: 0.5rem;
+}
+.transfer-panel code,
+.transfer-output,
+.transfer-panel li {
+  overflow-wrap: anywhere;
+}
+.transfer-row {
+  border-top: 1px solid #373141;
+  padding: 1rem 0;
+}
+.transfer-row progress {
+  width: 100%;
+}

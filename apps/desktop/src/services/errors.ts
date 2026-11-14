@@ -36,6 +36,10 @@ const keys = {
   G4E_LIMIT_EXCEEDED: "g4eLimitExceeded",
   G4E_INTEGRITY_FAILED: "g4eIntegrityFailed",
   G4E_WRITE_FAILED: "g4eWriteFailed",
+  TORRENT_INVALID: "torrentInvalid",
+  TRANSFER_LIMIT_EXCEEDED: "transferLimitExceeded",
+  TRANSFER_FAILED: "transferFailed",
+  TRANSFER_UNAVAILABLE: "transferUnavailable",
 } as const satisfies Record<ErrorCode, keyof typeof en.errors>;
 
 export function getIpcErrorKey(error: unknown) {

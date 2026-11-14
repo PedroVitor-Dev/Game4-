@@ -8,7 +8,7 @@ Status: the Tauri / React / Rust shell and localization are implemented. The ini
 | Application shell   | Tauri 2; explicitly exposed interface commands                 |
 | Local core          | Rust; import, hashes, formats, policies, and tasks             |
 | Persistence         | SQLite with versioned migrations                               |
-| Transfers           | BitTorrent adapter; engine not yet selected                    |
+| Transfers           | Experimental librqbit 9.1.0 adapter                            |
 | Future integrations | Independent IPFS and timestamp adapters                        |
 
 ## Boundaries
@@ -48,7 +48,7 @@ docs/decisions/            Architecture decisions
 tests/fixtures/            Synthetic or redistributable samples
 ```
 
-The [isolated engine evaluation](torrent-engine-evaluation.md) records local evidence and a creator defect; the desktop still has no BitTorrent engine dependency.
+The [isolated engine evaluation](torrent-engine-evaluation.md) records local evidence and a creator defect; the desktop now embeds pinned librqbit behind the experimental `torrents` adapter; production acceptance remains open.
 
 ## Engine selection
 
@@ -70,8 +70,12 @@ The `backups` Rust module implements bounded private catalog snapshots, independ
 
 ## Discovery descriptor boundary
 
-`packages/g4e-format/` specifies .g4e v1, with schema, synthetic examples/companions and a Node offline reference validator. It does not add native transfer commands. Future integration maps original source files privately into torrent metadata, supports optional .g4 payloads and separates descriptor validation from metadata acquisition and content verification. No central service or mandatory staging copy is a prerequisite.
+`packages/g4e-format/` specifies .g4e v1, with schema, synthetic examples/companions and a Node offline reference validator. The format package itself is offline. The native `torrents` adapter separately maps original source files through private read-only handles, while descriptor validation and content verification remain independent. No central service or mandatory staging copy is a prerequisite.
 
 ## .g4e implementation boundary
 
-Rust `ever` owns strict parsing/serialization, direct-original torrent generation and explicit metainfo/payload verification. Native commands expose export/open only and run off the UI thread. The Node public validator remains an independent implementation. A standalone librqbit example checks torrent parse compatibility without starting a session. No network engine is linked or adopted into desktop runtime by these commands.
+Rust `ever` owns strict parsing/serialization, direct-original torrent generation and explicit metainfo/payload verification. Native commands expose export/open only and run off the UI thread. The Node public validator remains an independent implementation. A standalone librqbit example checks torrent parse compatibility without starting a session. These offline format commands never start the separately integrated experimental network engine.
+
+## Desktop BitTorrent increment — November 13, 2026
+
+The desktop now embeds real experimental BitTorrent sessions, creates and imports public v1 `.torrent` files, seeds original catalog files through read-only storage and downloads to new owned directories. Offline previews and explicit initial-peer actions are available in both locales. DHT/trackers/local discovery/UPnP are disabled; peer exchange remains enabled. Sessions are runtime-only, with Stop and completion cleanup; persistence, resume, discovery and production acceptance remain open. See [desktop transfers](bittorrent.md) and [ADR 0016](decisions/0016-desktop-bittorrent.md). Earlier dated experiment statements describe their original scope.
