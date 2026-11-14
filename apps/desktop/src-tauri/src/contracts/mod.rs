@@ -587,6 +587,7 @@ pub struct PackageOpenResult {
 pub enum EverRepresentation {
     OriginalFiles,
     G4Package,
+    G4epFragments,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -599,6 +600,21 @@ pub struct EverSummary {
     pub total_bytes: String,
     pub magnets: Vec<String>,
     pub content_verified: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[ts(optional)]
+    pub g4ep: Option<G4epSummary>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct G4epSummary {
+    pub content_id: String,
+    pub protocol_version: u32,
+    pub codec_id: String,
+    pub group_count: u32,
+    pub fragment_count: u32,
+    pub payload_sha256: String,
+    pub signer_key_ids: Vec<String>,
+    pub publisher_trusted: bool,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]

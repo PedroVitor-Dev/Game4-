@@ -2184,3 +2184,25 @@ summary:focus-visible {
 .nav-item:hover {
   border-color: #4b6a92;
 }
+
+.g4ep-manifest-details {
+  padding: 18px;
+  border: 1px solid #384456;
+  border-radius: 10px;
+  margin: 16px 0;
+  background: #17202c;
+}
+.g4ep-manifest-details code {
+  overflow-wrap: anywhere;
+  font-size: 0.75rem;
+}
+.g4ep-manifest-details dd {
+  margin: 6px 0 14px;
+}
+.g4ep-manifest-details summary {
+  cursor: pointer;
+  color: #a9c6ed;
+}
+.g4ep-manifest-details p {
+  line-height: 1.6;
+}

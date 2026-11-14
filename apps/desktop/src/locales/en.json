@@ -226,7 +226,19 @@
     "descriptorOnly": "Descriptor valid. Referenced torrent metadata, source availability and content have not been verified by this open action. No network connection was made.",
     "original_files": "Original files",
     "g4_package": "Existing .g4 package",
-    "useLink": "Use this download link"
+    "useLink": "Use this download link",
+    "g4ep_fragments": "G4EP fragment descriptor",
+    "g4epTitle": "G4EP recovery information",
+    "g4epGeometry": "8 data + 4 parity per group · {{groups}} groups · {{fragments}} fragments",
+    "g4epReadOnly": "Reconstruction metadata inspected. No fragment was downloaded and the original file was not verified or reconstructed.",
+    "g4epSigned": "The included digital signatures are cryptographically valid.",
+    "g4epUnsigned": "This descriptor is unsigned.",
+    "g4epTrust": "Confirm the signer fingerprint through a trusted channel. A valid signature alone does not identify the expected publisher.",
+    "g4epTechnical": "Descriptor details",
+    "g4epContentId": "Content identity",
+    "g4epCodec": "Encoding profile",
+    "g4epMetadataHash": "Metadata SHA-256",
+    "g4epSigner": "Signer key fingerprint"
   },
   "transfers": {
     "title": "My transfers",

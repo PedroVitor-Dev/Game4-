@@ -71,6 +71,7 @@ pub fn typescript() -> String {
         PackageOpenResult::decl(&config),
         EverRepresentation::decl(&config),
         EverSummary::decl(&config),
+        G4epSummary::decl(&config),
         EverOpenResult::decl(&config),
         EverExportResult::decl(&config),
         TrackerList::decl(&config),
@@ -209,6 +210,7 @@ pub fn examples() -> String {
             total_bytes: "40".into(),
             magnets: vec![magnet.clone()],
             content_verified: false,
+            g4ep: None,
         }),
     };
     let ever_export = EverExportResult {

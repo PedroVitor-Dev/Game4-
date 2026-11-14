@@ -1431,3 +1431,53 @@ test("archive static action messages resolve to user-facing translations", async
     }
   }
 });
+
+import { parseEverOpenResult } from "@game4/ipc-contracts";
+test("G4EP summary inspection keeps fragment references out of original-download controls", async () => {
+  const doc = JSON.parse(
+    await readFile(
+      new URL(
+        "../../../packages/g4e-format/examples/g4ep-fragments-v2-signed.g4e",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  const summary = {
+    fileName: "synthetic.g4e",
+    schemaVersion: 2,
+    representation: "g4ep_fragments",
+    title: doc.manifest.collection.title,
+    fileCount: 1,
+    totalBytes: doc.manifest.files[0].sizeBytes,
+    magnets: [],
+    contentVerified: false,
+    g4ep: {
+      contentId: doc.contentId,
+      protocolVersion: 1,
+      codecId: doc.g4ep.coding.codecId,
+      groupCount: 1,
+      fragmentCount: 12,
+      payloadSha256: doc.authentication.payloadSha256,
+      signerKeyIds: doc.authentication.signatures.map((s) => s.keyId),
+      publisherTrusted: false,
+    },
+  };
+  const response = { cancelled: false, manifest: summary };
+  assert.deepEqual(parseEverOpenResult(response), response);
+  for (const mutate of [
+    (s) => s.magnets.push(doc.discovery[1].magnet),
+    (s) => (s.g4ep.publisherTrusted = true),
+    (s) => (s.g4ep.fragmentCount = 11),
+    (s) => (s.schemaVersion = 1),
+    (s) => (s.contentVerified = true),
+    (s) => s.g4ep.signerKeyIds.push(s.g4ep.signerKeyIds[0]),
+  ]) {
+    const bad = structuredClone(summary);
+    mutate(bad);
+    assert.throws(
+      () => parseEverOpenResult({ cancelled: false, manifest: bad }),
+      code("INVALID_RESPONSE"),
+    );
+  }
+});

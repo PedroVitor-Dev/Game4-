@@ -226,7 +226,19 @@
     "descriptorOnly": "Descritor válido. Os metadados do torrent, a disponibilidade das origens e o conteúdo não foram verificados nesta abertura. Nenhuma conexão de rede foi feita.",
     "original_files": "Arquivos originais",
     "g4_package": "Pacote .g4 existente",
-    "useLink": "Usar este link de download"
+    "useLink": "Usar este link de download",
+    "g4ep_fragments": "Manifesto de fragmentos G4EP",
+    "g4epTitle": "Informações de recuperação G4EP",
+    "g4epGeometry": "8 dados + 4 paridades por grupo · {{groups}} grupos · {{fragments}} fragmentos",
+    "g4epReadOnly": "Metadados de reconstrução inspecionados. Nenhum fragmento foi baixado e o original não foi verificado nem reconstruído.",
+    "g4epSigned": "As assinaturas digitais incluídas são criptograficamente válidas.",
+    "g4epUnsigned": "Este manifesto não está assinado.",
+    "g4epTrust": "Confirme a impressão digital do assinante por um canal confiável. Uma assinatura válida, sozinha, não identifica o autor esperado.",
+    "g4epTechnical": "Detalhes do manifesto",
+    "g4epContentId": "Identidade do conteúdo",
+    "g4epCodec": "Perfil de codificação",
+    "g4epMetadataHash": "SHA-256 dos metadados",
+    "g4epSigner": "Impressão digital da chave do assinante"
   },
   "transfers": {
     "title": "Minhas transferências",

@@ -1,3 +1,4 @@
+import { validateG4epDocument } from "./g4ep-validation.mjs";
 // Offline reference validator. Never opens companion torrents, payloads or URLs.
 import { readFileSync } from "node:fs";
 import Ajv2020 from "ajv/dist/2020.js";
@@ -18,6 +19,11 @@ const schema = JSON.parse(
 const ajv = new Ajv2020({ strict: true, allErrors: false });
 ajv.addSchema(manifestSchema);
 const structural = ajv.compile(schema);
+const structuralV2 = ajv.compile(
+  JSON.parse(
+    readFileSync(new URL("./v2.schema.json", import.meta.url), "utf8"),
+  ),
+);
 export class G4eValidationError extends Error {
   constructor(code, message) {
     super(message);
@@ -30,7 +36,7 @@ function fail(message, code = "G4E_INVALID") {
 }
 // Scan before JSON.parse to enforce depth and duplicate keys (including escaped
 // spellings). The built-in parser subsequently validates full JSON grammar.
-function scan(text) {
+function scan(text, canonicalIntegers = false) {
   let i = 0;
   let manifestRange;
   function ws() {
@@ -99,6 +105,13 @@ function scan(text) {
     const start = i;
     while (i < text.length && !/[ \t\r\n,}\]]/.test(text[i])) i++;
     if (start === i) fail("Expected a JSON value");
+    const token = text.slice(start, i);
+    if (
+      canonicalIntegers &&
+      !["true", "false", "null"].includes(token) &&
+      !/^(0|[1-9][0-9]*)$/.test(token)
+    )
+      fail("v2 numeric fields require unsigned decimal integer tokens");
   }
   value(0);
   ws();
@@ -196,6 +209,17 @@ export function parseG4e(input) {
       fail("Embedded manifest exceeds 32 MiB", "G4E_LIMIT_EXCEEDED");
     const doc = JSON.parse(text);
     unicode(doc);
+    if (doc?.schemaVersion === 2) {
+      scan(text, true);
+      if (
+        doc.g4ep &&
+        Number.isInteger(doc.g4ep.protocolVersion) &&
+        doc.g4ep.protocolVersion !== 1
+      )
+        fail("Unsupported G4EP version", "G4E_UNSUPPORTED_VERSION");
+      if (!structuralV2(doc)) fail("Descriptor does not match v2 schema");
+      return validateG4epDocument(doc, fail);
+    }
     if (doc && Number.isInteger(doc.schemaVersion) && doc.schemaVersion !== 1)
       fail("Unsupported .g4e version", "G4E_UNSUPPORTED_VERSION");
     if (!structural(doc)) fail("Descriptor does not match the public schema");

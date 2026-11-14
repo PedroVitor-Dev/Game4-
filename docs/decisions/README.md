@@ -50,3 +50,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0021](0021-g4ep-private-mvp.md) | Accepted architecture only | Isolated G4EP service ports, private enrollment and bounded recovery planning |
 
 | [0022](0022-g4ep-streaming-reed-solomon.md) | Accepted experimental implementation | Streaming RS(8,4), pinned GF(2^16) high-rate codec, local fragment verification |
+
+G4EP step 3: see the [public v2 reconstruction manifest specification](../../packages/g4e-format/spec-v2.md) and ADR 0023. Version 1 payload workflows remain unchanged.

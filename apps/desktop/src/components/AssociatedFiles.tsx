@@ -1,3 +1,4 @@
+import { G4epManifestDetails } from "./G4epManifestDetails";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type {
@@ -120,6 +121,9 @@ export function AssociatedFiles({
             )}
           </p>
           <p>{t("associations.readOnly")}</p>
+          {result?.manifest?.g4ep && (
+            <G4epManifestDetails summary={result.manifest.g4ep} />
+          )}
         </>
       )}
       {result?.manifest?.magnets.map((magnet, index) => (

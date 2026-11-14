@@ -90,3 +90,7 @@ Step 1 prepares isolated internal service ports and checked planning values for 
 ## G4EP streaming encoder — November 14, 2026
 
 Step 2 implements actual streaming RS(8,4) groups with SHA-256 per fragment/original, configurable shard sizes and a local encode/verify CLI. A real synthetic 700 MB run produced 1,008 independent fragments with bounded memory; codec tests cover all 495 sets of eight shards. Decoder application, authenticated nodes/transfers and repair remain later work. See [implementation and evidence](g4ep/encoding.md).
+
+## G4EP reconstruction manifests — November 14, 2026
+
+Step 3 implements `.g4e` v2 with exact codec geometry, original identity, fragment hashes, private discovery references, deterministic metadata authentication and optional Ed25519 signatures. Existing v1 workflows remain supported. Native/Node validators and local fragment verification passed on the retained 700 MB fixture. Automatic reconstruction, storage nodes and distributed repair remain open. See the [public format](../packages/g4e-format/spec-v2.md).

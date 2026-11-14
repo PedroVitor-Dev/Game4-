@@ -24,7 +24,7 @@ fn run() -> Result<(), String> {
         Ok(data)
     }
     if args.len() == 2 && args[0] == "read" {
-        let doc = ever::read(&PathBuf::from(&args[1])).map_err(fail)?;
+        let doc = ever::read_document(&PathBuf::from(&args[1])).map_err(fail)?;
         println!("{}", serde_json::to_string_pretty(&doc).unwrap());
         return Ok(());
     }

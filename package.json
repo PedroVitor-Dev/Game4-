@@ -32,7 +32,7 @@
     "manifests:validate": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example validate_manifest --",
     "g4": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example g4 --",
     "g4:test": "node --test packages/g4-format/test.mjs",
-    "g4e:test": "node --test packages/g4e-format/test.mjs",
+    "g4e:test": "node --test packages/g4e-format/test.mjs packages/g4e-format/g4ep.test.mjs",
     "g4e:validate": "node packages/g4e-format/validate.mjs",
     "g4e": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example ever --",
     "g4lib:test": "node --test packages/g4lib-format/test.mjs",

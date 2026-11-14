@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-14",
+  "schemaVersion": 2,
+  "g4epVersion": 1,
+  "originalBytes": "700000000",
+  "originalSha256": "1e44ac2640ad44bd24b64721b4e062d54696458b997e7e4020c0ef1637d753ec",
+  "groups": 84,
+  "fragments": 1008,
+  "manifestBytes": 204723,
+  "payloadSha256": "a6ae28440abd6a798c8ae023467bc8116ebbc1add0b68b4f2ac2ef728de0e8f8",
+  "nativeValidation": true,
+  "nodeValidation": true,
+  "allFragmentHashesVerified": true,
+  "originalReconstructed": false,
+  "networkStarted": false,
+  "signed": false,
+  "rustTestsPassed": 131,
+  "notes": "Retained synthetic authorized Step 2 fixture; export verifies encoded fragments before writing. Public signed fixture and malformed corpus are covered independently by Rust and Node tests."
+}

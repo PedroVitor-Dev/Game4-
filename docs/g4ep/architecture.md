@@ -96,3 +96,5 @@ The owner has supplied steps 1 and 2 of their ten-step plan; this sequence descr
 - [BEP 5: DHT protocol](https://www.bittorrent.org/beps/bep_0005.html) — peer-contact lookup and announcement semantics.
 - [Tauri: calling Rust from the frontend](https://v2.tauri.app/develop/calling-rust/) — command/runtime boundaries; preserve the existing worker pattern for heavy work.
 - Repository source and existing [BitTorrent guide](../bittorrent.md), [format .g4e v1](../../packages/g4e-format/spec-v1.md), [catalog architecture](../game-archive.md) and [transfer recovery](../transfer-persistence.md) are the inspected implementation baseline.
+
+G4EP step 3: see the [public v2 reconstruction manifest specification](../../packages/g4e-format/spec-v2.md) and ADR 0023. Version 1 payload workflows remain unchanged.

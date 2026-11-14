@@ -4,6 +4,7 @@
 //! See docs/g4ep/architecture.md for ownership, privacy, adapter and acceptance rules.
 pub mod encoder;
 pub mod local;
+pub mod manifest;
 pub mod ports;
 pub mod types;
 pub use types::{Error, Result};
@@ -12,3 +13,6 @@ mod tests;
 
 #[cfg(test)]
 mod encoder_tests;
+
+#[cfg(test)]
+mod manifest_tests;

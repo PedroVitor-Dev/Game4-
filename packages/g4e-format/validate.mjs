@@ -29,7 +29,20 @@ try {
       schemaVersion: doc.schemaVersion,
       representation: doc.representation,
       fileCount: doc.manifest.files.length,
-      torrentCount: doc.torrents.length,
+      ...(doc.schemaVersion === 2
+        ? {
+            g4epVersion: doc.g4ep.protocolVersion,
+            groupCount: doc.g4ep.groups.length,
+            contentId: doc.contentId,
+            signerKeyIds: doc.authentication.signatures.map((s) => s.keyId),
+            publisherTrusted: false,
+          }
+        : {}),
+      torrentCount:
+        doc.schemaVersion === 1
+          ? doc.torrents.length
+          : doc.discovery.filter((r) => r.kind === "bittorrent_fragment")
+              .length,
       networkAccess: false,
     }),
   );

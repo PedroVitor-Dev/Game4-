@@ -16,3 +16,7 @@ npm.cmd run g4e:test
 Validation is offline: it checks the descriptor and magnet/reference consistency without reading any referenced torrent or game file and without opening a network connection. A valid descriptor does not prove source availability or payload integrity. BitTorrent v1 identity uses SHA-1 of exact info-dictionary bytes; original-file integrity uses separate SHA-256 hashes. Native creation/reading and explicit offline byte verification are implemented; in-app network sessions/discovery remain pending. See [the workflow and CLI guide](../../docs/ever-manifests.md).
 
 The former conceptual `.g4t` name is superseded by `.g4e`, not treated as an extension alias. `.g4` remains the optional ZIP/ZIP64 payload container. No existing package version or SQLite/backup schema changes.
+
+## G4EP reconstruction manifests
+
+[Version 2 specification](spec-v2.md) and [schema](v2.schema.json) add complete fragment reconstruction metadata, private discovery references, deterministic hashing and optional Ed25519 signatures. Version 1 remains supported. Both validators run offline; a valid descriptor alone proves neither original integrity nor publisher identity.

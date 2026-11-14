@@ -83,3 +83,5 @@ See [feedback and in-app notifications](feedback-and-notifications.md) for loadi
 - [G4EP step 1: architecture, service ports and private-MVP acceptance](g4ep/architecture.md)
 
 - [G4EP step 2: streaming Reed–Solomon encoder and local CLI](g4ep/encoding.md)
+
+G4EP step 3: see the [public v2 reconstruction manifest specification](../packages/g4e-format/spec-v2.md) and ADR 0023. Version 1 payload workflows remain unchanged.

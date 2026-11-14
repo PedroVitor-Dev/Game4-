@@ -224,6 +224,12 @@ pub fn validate(doc: &EverManifest) -> Result<u64> {
     {
         return Err(invalid());
     }
+    if !matches!(
+        doc.representation,
+        EverRepresentation::OriginalFiles | EverRepresentation::G4Package
+    ) {
+        return Err(invalid());
+    }
     manifests::validate(&doc.manifest).map_err(|_| invalid())?;
     if doc.torrents.is_empty()
         || doc.torrents.len() > 16
@@ -291,7 +297,7 @@ pub fn validate(doc: &EverManifest) -> Result<u64> {
     }
     Ok(total)
 }
-pub fn parse(bytes: &[u8]) -> Result<EverManifest> {
+pub(crate) fn check_json(bytes: &[u8]) -> Result<()> {
     if bytes.len() > MAX_BYTES {
         return Err(limit());
     }
@@ -304,6 +310,10 @@ pub fn parse(bytes: &[u8]) -> Result<EverManifest> {
         }
     })?;
     de.end().map_err(|_| invalid())?;
+    Ok(())
+}
+pub fn parse(bytes: &[u8]) -> Result<EverManifest> {
+    check_json(bytes)?;
     // RawValue keeps the embedded JSON's own whitespace in its byte bound.
     #[derive(Deserialize)]
     struct Envelope<'a> {
@@ -344,6 +354,37 @@ pub fn read(p: &Path) -> Result<EverManifest> {
         .read_to_end(&mut bytes)
         .map_err(|_| invalid())?;
     parse(&bytes)
+}
+
+/// Explicit version dispatch for offline inspection. Legacy payload operations keep parse/read v1-only.
+#[derive(Debug, Clone, Serialize)]
+#[serde(untagged)]
+pub enum EverDocument {
+    V1(Box<EverManifest>),
+    G4ep(Box<crate::g4ep::manifest::G4epEverManifest>),
+}
+pub fn parse_document(bytes: &[u8]) -> Result<EverDocument> {
+    check_json(bytes)?;
+    #[derive(Deserialize)]
+    struct Version {
+        #[serde(rename = "schemaVersion")]
+        version: Option<u32>,
+    }
+    let header: Version = serde_json::from_slice(bytes).map_err(|_| invalid())?;
+    match header.version {
+        Some(1) => parse(bytes).map(|doc| EverDocument::V1(Box::new(doc))),
+        Some(2) => crate::g4ep::manifest::parse(bytes).map(|doc| EverDocument::G4ep(Box::new(doc))),
+        Some(_) => Err(err(ErrorCode::G4eUnsupportedVersion)),
+        None => Err(invalid()),
+    }
+}
+pub fn read_document(path: &Path) -> Result<EverDocument> {
+    let mut bytes = Vec::new();
+    library::open_source(&absolute(path)?)?
+        .take((MAX_BYTES + 1) as u64)
+        .read_to_end(&mut bytes)
+        .map_err(|_| invalid())?;
+    parse_document(&bytes)
 }
 
 // Minimal deterministic bencoder; bytes and dictionaries are kept distinct.

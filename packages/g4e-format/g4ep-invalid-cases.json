@@ -1,0 +1,4710 @@
+[
+  {
+    "name": "wrong-content-id",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "c5277127e82c71f6f26babda4d2284ac167d964facdab37b84530b49b9d9b31e",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "absolute-original-path",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "C:/private/game.rom",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "229b06b89d9b99fbf42a118d03e16cba48bc468cf67de69d198e3838496b1f19",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "nested-original-path",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "private/game.rom",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "8ed3ef95c576f55768b5ea33ab875d98d550a4cb79788d02bcaa1c43ba126cc2",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "source-size-offset-mismatch",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524289",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "8b07fb5283fa9621931b9a4311124a54e2284d02a3732107a88f1ff82e1ea314",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "wrong-parity-count",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 3,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "8c3cca1986fc96dc83bd5575d2e1112012006e710874a7e81e954596b04e738b",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "wrong-field",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^8)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "1d880d09a64d5d041f77626550741ceb4c84b2ff9daa5eb37870420633201088",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "wrong-rate",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "low",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "1da783833a7f2e29aaa253c26c47a242fc5b7684b0c6bbe8e0962d8e42a792d1",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "unbound-fragment-id",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:0000000000000000000000000000000000000000000000000000000000000000",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "2aa58f70a65573b8e0b154f069d7f4998a0b04b547509303cbf2dd8ba02be3b3",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "duplicate-index",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "282db2789b562484d7e157ea0d89f248c6446de28429f2190dd4727bf9b762e3",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "missing-fragment",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "6bbead905923056b24d91b3b848fdf73bef6fd8f9dd0cea09134ef6cd1c68527",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "wrong-group-id",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000001",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "8836d863b5d01c7d9834ad273c2791b6abe8011a573ca832fc74c9728225c437",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "noncontiguous-offset",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "1",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "daabfa3a6dc11e41ba639cf8dc30ad5f8c054632483bcb03abce3807403cf6fb",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "noncanonical-size",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "065536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "c87493d7149d063457786c2e66557bcb53b0b35024f20655493a1a6e6a9b276e",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "public-peer",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "8.8.8.8:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "4bbf05e9d1d6e11278c183c3c23377f0a92d9c141c10a0028ff6d6afa1f18398",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "peer-dns",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "example.test:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "c8f1919591a55346f252c334e8b5afbb471073a4ad86246005337a219021b65c",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "peer-port-zero",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:0"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "8c34b995fdc79d46aa5b6464ac2f57cf69f51c191a358535ba9af5a9ba7cfb81",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "torrent-points-at-unknown-fragment",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "1741edf40406bc2c91512b9cbcd7eadbc49190a1d02b0152f29e030c376357f3",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "public-tracker-not-in-private-profile",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789&tr=https://tracker.example.test/announce"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "1fc9a62d41e64b767eec8986d4d4b43e3e459f81a29c1f8d7bd70869929d845a",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "wrong-canonicalization",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "json.stringify",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "payload-tampering",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Changed title",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:21fe31dfa154a261626bf854046fd2271b7bed4b6abe45aa58877ef47f9721b9",
+            "publicKey": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+            "signature": "8b7a3e7d3475130aab2ae7fd14dffbdf26a8cfbdb5eaad286b9fa73d12a2aae42c8220670784532f1e31e115ef451d45595bec8d31bd60ec22bc70bc28f9c40c"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "bad-signature",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:21fe31dfa154a261626bf854046fd2271b7bed4b6abe45aa58877ef47f9721b9",
+            "publicKey": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+            "signature": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "signer-fingerprint-mismatch",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:0000000000000000000000000000000000000000000000000000000000000000",
+            "publicKey": "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a",
+            "signature": "8b7a3e7d3475130aab2ae7fd14dffbdf26a8cfbdb5eaad286b9fa73d12a2aae42c8220670784532f1e31e115ef451d45595bec8d31bd60ec22bc70bc28f9c40c"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "unknown-version",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 3,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0b5ef291e3d868f00b091200cd2924e3dbacb8a893c40cd4f9b0791dcb05a0f8",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "unknown-g4ep-version",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 2,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0405df438b061a3e7f9897c27aa9f1e8be967594adffc266017fb7394a551985",
+        "signatures": []
+      }
+    }
+  },
+  {
+    "name": "payload-embedded",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "d581856c80739ebf3168f8816e9d38a4bbad349c5b63c53ae8178be1e0d479d6",
+        "signatures": []
+      },
+      "romBytes": "not permitted"
+    }
+  },
+  {
+    "name": "weak-or-noncanonical-key-00000000",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925",
+            "publicKey": "0000000000000000000000000000000000000000000000000000000000000000",
+            "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "weak-or-noncanonical-key-01000000",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:01d0fabd251fcbbe2b93b4b927b26ad2a1a99077152e45ded1e678afa45dbec5",
+            "publicKey": "0100000000000000000000000000000000000000000000000000000000000000",
+            "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "weak-or-noncanonical-key-ecffffff",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:ffe1ea08f3af443b5a2d6497c9b7c5a74a25a2b60ac58b44a22b7b1dd2218bfc",
+            "publicKey": "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+            "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "weak-or-noncanonical-key-edffffff",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:bd6174a7c16e1af07272966a9c071c8a3cf16b2726c50d672a09f60636b08901",
+            "publicKey": "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+            "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "weak-or-noncanonical-key-26e8958f",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:0d34fd0d99957c53e4dc954ddaae5934077f594e73c3fda29f2fff1b232d549a",
+            "publicKey": "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05",
+            "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "weak-or-noncanonical-key-c7176a70",
+    "document": {
+      "$schema": "urn:game4:ever-manifest:2",
+      "format": "game4-ever-manifest",
+      "schemaVersion": 2,
+      "id": "11111111-2222-4333-8444-555555555555",
+      "representation": "g4ep_fragments",
+      "contentId": "urn:sha256:8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2",
+      "manifest": {
+        "$schema": "urn:game4:manifest:1",
+        "format": "game4-manifest",
+        "schemaVersion": 1,
+        "collection": {
+          "id": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+          "title": "Synthetic G4EP fixture Ω",
+          "platform": null,
+          "edition": null,
+          "language": null,
+          "declaredSource": "Deterministic synthetic codec vector; no game payload included.",
+          "declaredLicense": "CC0-1.0 synthetic metadata"
+        },
+        "files": [
+          {
+            "path": "synthetic-fixture.bin",
+            "sizeBytes": "524288",
+            "sha256": "8ccecce089ea8cbc80ea17c87af810638ebfc10e46b11546a7112d31554e77c2"
+          }
+        ],
+        "extensions": {}
+      },
+      "g4ep": {
+        "protocolVersion": 1,
+        "coding": {
+          "codecId": "g4ep-rs16-leopard-high-8-4-v1",
+          "algorithm": "reed-solomon",
+          "field": "gf(2^16)",
+          "fieldPolynomial": "0x1002d",
+          "rate": "high",
+          "symbolLayout": "leopard-64-byte-planes",
+          "dataShards": 8,
+          "parityShards": 4,
+          "shardBytes": 65536,
+          "padding": "zero",
+          "dataLayout": "contiguous-systematic",
+          "recoveryIndexOffset": 8
+        },
+        "groups": [
+          {
+            "id": "g000000000000",
+            "index": "0",
+            "originalOffset": "0",
+            "originalBytes": "524288",
+            "fragments": [
+              {
+                "id": "urn:sha256:a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33",
+                "index": 0,
+                "sizeBytes": "65536",
+                "sha256": "a38e12575592c9c7811e01f78456f1185d5f314f5543f1b9d122f81b6e6a2f33"
+              },
+              {
+                "id": "urn:sha256:4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb",
+                "index": 1,
+                "sizeBytes": "65536",
+                "sha256": "4ae12ef796386b25561a5aa31ff0fee018030187956513f7dcae2577630ad0cb"
+              },
+              {
+                "id": "urn:sha256:7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10",
+                "index": 2,
+                "sizeBytes": "65536",
+                "sha256": "7bd360566d47c6ae7b8a04790b46d5f4cee4a82faf1240e02f91d12eb1186a10"
+              },
+              {
+                "id": "urn:sha256:2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac",
+                "index": 3,
+                "sizeBytes": "65536",
+                "sha256": "2dc1c3fa7a5a8f7d53c9561a0ae4ff1f7800540deb36a31257cde0b3ed1173ac"
+              },
+              {
+                "id": "urn:sha256:a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0",
+                "index": 4,
+                "sizeBytes": "65536",
+                "sha256": "a80632fab31dc71d114e687e65e000916f6e69254e76590ab60b424714b5d4e0"
+              },
+              {
+                "id": "urn:sha256:82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31",
+                "index": 5,
+                "sizeBytes": "65536",
+                "sha256": "82547d90765e55bdf3c544dbbd0a0e13c55618e167a2def44531657025822d31"
+              },
+              {
+                "id": "urn:sha256:0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e",
+                "index": 6,
+                "sizeBytes": "65536",
+                "sha256": "0b89f71b2a56769326cbee01584104d686720bc6f6063b72e2216f708927b41e"
+              },
+              {
+                "id": "urn:sha256:fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f",
+                "index": 7,
+                "sizeBytes": "65536",
+                "sha256": "fb30f24a3bad211fd3316e3abf33c5630211f468b7ea4995fc38360264fda90f"
+              },
+              {
+                "id": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+                "index": 8,
+                "sizeBytes": "65536",
+                "sha256": "8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e"
+              },
+              {
+                "id": "urn:sha256:406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4",
+                "index": 9,
+                "sizeBytes": "65536",
+                "sha256": "406391bb0c3ba9415c25c97e868d8d3d201e13b512d8bb2ba7d87d4925968ec4"
+              },
+              {
+                "id": "urn:sha256:e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776",
+                "index": 10,
+                "sizeBytes": "65536",
+                "sha256": "e6bb4d1f1987186cfbe0b0e1c00f515af78e3596e8e5f9374f5c4578ab6f4776"
+              },
+              {
+                "id": "urn:sha256:0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038",
+                "index": 11,
+                "sizeBytes": "65536",
+                "sha256": "0b23eee5a3df3fecf76cd3334018d3b7ddcb0e22299db6b4c4c040099b0ea038"
+              }
+            ]
+          }
+        ]
+      },
+      "discovery": [
+        {
+          "kind": "private_peer",
+          "nodeId": "0101010101010101010101010101010101010101010101010101010101010101",
+          "endpoint": "100.64.0.2:42430"
+        },
+        {
+          "kind": "bittorrent_fragment",
+          "fragmentId": "urn:sha256:8644fb4b75e0585d363d29bbe9ec3359171eecb0cbd8445774a79238510d959e",
+          "infoHashV1": "0123456789012345678901234567890123456789",
+          "magnet": "magnet:?xt=urn:btih:0123456789012345678901234567890123456789"
+        }
+      ],
+      "authentication": {
+        "canonicalization": "game4-g4e-v2-canonical-json-v1",
+        "payloadSha256": "0da7e6664cdffc1d9b9cc000853764edd9197184bdae2a60f8f83375c05cbf0b",
+        "signatures": [
+          {
+            "algorithm": "ed25519",
+            "keyId": "urn:sha256:1381231a2021f331f1b9b69d2f5ff04a2cc77582d08b909ffc0ace9530351722",
+            "publicKey": "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a",
+            "signature": "01000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+          }
+        ]
+      }
+    }
+  }
+]

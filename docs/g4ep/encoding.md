@@ -71,3 +71,5 @@ No real two-PC transfer, public DHT, automatic reconstruction/repair, encryption
 - [Published crate/API 3.1.0](https://docs.rs/reed-solomon-simd/3.1.0/reed_solomon_simd/) and its pinned registry source, including `rate/rate_high.rs`, workspace handling and algorithm documentation.
 - [Upstream repository](https://github.com/AndersTrier/reed-solomon-simd) and distributed Cargo.toml/license notices.
 - [Encoder API](https://docs.rs/reed-solomon-simd/3.1.0/reed_solomon_simd/struct.ReedSolomonEncoder.html) and [decoder API](https://docs.rs/reed-solomon-simd/3.1.0/reed_solomon_simd/struct.ReedSolomonDecoder.html) for shard indexing and workspace lifetime.
+
+G4EP step 3: see the [public v2 reconstruction manifest specification](../../packages/g4e-format/spec-v2.md) and ADR 0023. Version 1 payload workflows remain unchanged.

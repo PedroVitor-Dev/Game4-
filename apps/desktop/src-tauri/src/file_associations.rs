@@ -110,7 +110,41 @@ pub(crate) fn inspect_package(path: &Path) -> Result<PackageSummary, IpcError> {
     })
 }
 pub(crate) fn inspect_ever(path: &Path) -> Result<EverSummary, IpcError> {
-    let doc = ever::read(path)?;
+    let doc = match ever::read_document(path)? {
+        ever::EverDocument::V1(doc) => *doc,
+        ever::EverDocument::G4ep(doc) => {
+            let m = crate::g4ep::manifest::validate(&doc)?;
+            return Ok(EverSummary {
+                file_name: path
+                    .file_name()
+                    .ok_or_else(|| IpcError::new(ErrorCode::G4eInvalid))?
+                    .to_string_lossy()
+                    .into_owned(),
+                schema_version: 2,
+                representation: EverRepresentation::G4epFragments,
+                title: doc.manifest.collection.title.clone(),
+                file_count: 1,
+                total_bytes: m.manifest().object.bytes.to_string(),
+                magnets: vec![],
+                content_verified: false,
+                g4ep: Some(crate::contracts::G4epSummary {
+                    content_id: doc.content_id.clone(),
+                    protocol_version: doc.g4ep.protocol_version,
+                    codec_id: doc.g4ep.coding.codec_id.clone(),
+                    group_count: doc.g4ep.groups.len() as u32,
+                    fragment_count: m.manifest().fragments.len() as u32,
+                    payload_sha256: doc.authentication.payload_sha256.clone(),
+                    signer_key_ids: doc
+                        .authentication
+                        .signatures
+                        .iter()
+                        .map(|s| s.key_id.clone())
+                        .collect(),
+                    publisher_trusted: false,
+                }),
+            });
+        }
+    };
     let total = ever::validate(&doc)?;
     Ok(EverSummary {
         file_name: path
@@ -125,6 +159,7 @@ pub(crate) fn inspect_ever(path: &Path) -> Result<EverSummary, IpcError> {
         total_bytes: total.to_string(),
         magnets: doc.torrents.into_iter().map(|t| t.magnet).collect(),
         content_verified: false,
+        g4ep: None,
     })
 }
 #[cfg(test)]

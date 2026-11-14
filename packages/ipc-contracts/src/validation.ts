@@ -494,8 +494,68 @@ export function parseEverOpenResult(v: unknown): EverOpenResult {
   const m = object(o.manifest);
   const magnets = values(m.magnets).map(everMagnet);
   const title = text(m.title);
+  if (m.schemaVersion === 2) {
+    const g = object(m.g4ep);
+    const title = text(m.title);
+    const totalBytes = decimal(m.totalBytes);
+    const groupCount = safeCount(g.groupCount, 0, 83333);
+    const fragmentCount = safeCount(g.fragmentCount, 0, 1000000);
+    const contentId = text(g.contentId),
+      codecId = text(g.codecId),
+      payloadSha256 = text(g.payloadSha256);
+    const signerKeyIds = values(g.signerKeyIds).map(text);
+    const fileName = filename(m.fileName);
+    if (
+      m.representation !== "g4ep_fragments" ||
+      m.contentVerified !== false ||
+      magnets.length !== 0 ||
+      m.fileCount !== 1 ||
+      !title.trim() ||
+      title.length > 1024 ||
+      !/\.g4e$/i.test(fileName) ||
+      BigInt(totalBytes) > 1099511627776n ||
+      g.protocolVersion !== 1 ||
+      codecId !== "g4ep-rs16-leopard-high-8-4-v1" ||
+      !/^urn:sha256:[0-9a-f]{64}$/.test(contentId) ||
+      !/^[0-9a-f]{64}$/.test(payloadSha256) ||
+      fragmentCount !== groupCount * 12 ||
+      (BigInt(totalBytes) === 0n) !== (groupCount === 0) ||
+      g.publisherTrusted !== false ||
+      signerKeyIds.length > 8 ||
+      signerKeyIds.some(
+        (key, index) =>
+          !/^urn:sha256:[0-9a-f]{64}$/.test(key) ||
+          (index > 0 && signerKeyIds[index - 1] >= key),
+      )
+    )
+      throw failure("INVALID_RESPONSE");
+    return {
+      cancelled: false,
+      manifest: {
+        fileName,
+        schemaVersion: 2,
+        representation: "g4ep_fragments",
+        title,
+        fileCount: 1,
+        totalBytes,
+        magnets: [],
+        contentVerified: false,
+        g4ep: {
+          contentId,
+          protocolVersion: 1,
+          codecId,
+          groupCount,
+          fragmentCount,
+          payloadSha256,
+          signerKeyIds,
+          publisherTrusted: false,
+        },
+      },
+    };
+  }
   if (
     m.schemaVersion !== 1 ||
+    m.g4ep !== undefined ||
     m.contentVerified !== false ||
     !["original_files", "g4_package"].includes(text(m.representation)) ||
     !title.trim() ||

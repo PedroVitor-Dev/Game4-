@@ -1,3 +1,4 @@
+import { G4epManifestDetails } from "./G4epManifestDetails";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { EverSummary } from "@game4/ipc-contracts";
@@ -64,6 +65,7 @@ export function EverReader({
             {formatBytes(result.totalBytes, i18n.language)}
           </p>
           <p>{t("ever.descriptorOnly")}</p>
+          {result.g4ep && <G4epManifestDetails summary={result.g4ep} />}
           {result.magnets.map((magnet, i) => (
             <div key={i}>
               <textarea
