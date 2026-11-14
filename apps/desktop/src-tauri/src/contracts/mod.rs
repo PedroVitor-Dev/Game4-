@@ -34,12 +34,15 @@ pub enum ImplementedCommand {
     TorrentDownload,
     TransfersList,
     TransferStop,
+    TransferPause,
+    TransferResume,
+    TransferForget,
     LibrarySaveBackup,
     LibraryPrepareRestore,
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 29] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 32] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -66,6 +69,9 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 29] = [
     ImplementedCommand::TorrentDownload,
     ImplementedCommand::TransfersList,
     ImplementedCommand::TransferStop,
+    ImplementedCommand::TransferPause,
+    ImplementedCommand::TransferResume,
+    ImplementedCommand::TransferForget,
     ImplementedCommand::LibrarySaveBackup,
     ImplementedCommand::LibraryPrepareRestore,
     ImplementedCommand::LibraryRestoreBackup,
@@ -686,6 +692,8 @@ pub enum TransferMode {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum TransferStatus {
+    Paused,
+    Resuming,
     Active,
     Stopping,
     Stopped,
@@ -752,4 +760,10 @@ pub struct TransferTelemetry {
 pub struct TransferMetricsInfo {
     pub connected_peer_metrics: bool,
     pub seed_after_download: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct TransferForgetResult {
+    pub forgotten: bool,
 }

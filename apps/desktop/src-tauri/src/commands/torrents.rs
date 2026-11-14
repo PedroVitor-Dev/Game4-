@@ -136,6 +136,7 @@ pub async fn torrent_download(
 pub async fn transfers_list(
     transfers: tauri::State<'_, Arc<Transfers>>,
 ) -> Result<TransferPage, IpcError> {
+    transfers.ensure_ready()?;
     Ok(transfers.list())
 }
 #[tauri::command]
@@ -214,4 +215,27 @@ pub fn transfer_metrics_info() -> TransferMetricsInfo {
         connected_peer_metrics: true,
         seed_after_download: true,
     }
+}
+
+#[tauri::command]
+pub async fn transfer_pause(
+    transfers: tauri::State<'_, Arc<Transfers>>,
+    request: TransferIdRequest,
+) -> Result<TransferSnapshot, IpcError> {
+    transfers.pause(&request.transfer_id).await
+}
+#[tauri::command]
+pub async fn transfer_resume(
+    transfers: tauri::State<'_, Arc<Transfers>>,
+    request: TransferIdRequest,
+) -> Result<TransferSnapshot, IpcError> {
+    transfers.resume(&request.transfer_id).await
+}
+
+#[tauri::command]
+pub async fn transfer_forget(
+    transfers: tauri::State<'_, Arc<Transfers>>,
+    request: TransferIdRequest,
+) -> Result<TransferForgetResult, IpcError> {
+    transfers.forget(&request.transfer_id).await
 }

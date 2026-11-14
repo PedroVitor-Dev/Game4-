@@ -38,6 +38,7 @@ import type {
   CancelMagnetResult,
   TorrentCreateResult,
   TorrentImportResult,
+  TransferForgetResult,
   TransferTelemetry,
   TransferMetricsInfo,
   TransferSnapshot,
@@ -628,9 +629,15 @@ export function parseTransferSnapshot(v: unknown): TransferSnapshot {
   const uploadedBytes = decimal(o.uploadedBytes);
   if (
     !["seed", "download"].includes(text(o.mode)) ||
-    !["active", "stopping", "stopped", "completed", "failed"].includes(
-      text(o.status),
-    ) ||
+    ![
+      "active",
+      "paused",
+      "resuming",
+      "stopping",
+      "stopped",
+      "completed",
+      "failed",
+    ].includes(text(o.status)) ||
     BigInt(totalBytes) > 1099511627776n ||
     BigInt(verifiedBytes) > BigInt(totalBytes) ||
     !/^([0-9a-f]{40})$/.test(text(o.infoHash))
@@ -780,4 +787,10 @@ export function parseTrackerList(v: unknown): TrackerList {
   )
     throw failure("INVALID_RESPONSE");
   return { trackers };
+}
+
+export function parseTransferForgetResult(v: unknown): TransferForgetResult {
+  const o = object(v);
+  if (typeof o.forgotten !== "boolean") throw failure("INVALID_RESPONSE");
+  return { forgotten: o.forgotten };
 }

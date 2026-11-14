@@ -66,6 +66,7 @@ pub fn typescript() -> String {
         TransferStatus::decl(&config),
         TransferTelemetry::decl(&config),
         TransferMetricsInfo::decl(&config),
+        TransferForgetResult::decl(&config),
         TransferSnapshot::decl(&config),
         TransferStartResult::decl(&config),
         TransferPage::decl(&config),

@@ -42,4 +42,7 @@ export const {
   downloadTorrent,
   listTransfers,
   stopTransfer,
+  pauseTransfer,
+  resumeTransfer,
+  forgetTransfer,
 } = client;

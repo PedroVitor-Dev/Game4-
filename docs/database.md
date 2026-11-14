@@ -63,3 +63,7 @@ The backup feature reads known tables under a transaction rather than copying a 
 Migration 0004 adds `file_identifications`, keyed by content ID with constrained header format/platform observations and detector version 1. Old rows are not scanned or relabeled as signature matches. Declared collection metadata is untouched; filename hints are derived per relative entry. Backups now include the eighth table and write v2/schema v4, while v1/schema v3 remains readable. See [identification](file-identification.md).
 
 Manual verification uses the existing location observation columns and verify task kind, with no schema change. Findings and completion commit atomically. See [manual integrity](library-integrity.md).
+
+## Transfer recovery — November 14, 2026
+
+Pause, reverified Resume and private transfer persistence are now implemented in a separate SQLite v1 store; catalog SQLite v4 and backup v2 remain unchanged. Interrupted work reopens Paused without networking. Owned downloads are repaired without duplication or truncation, while original seeding sources remain read-only. Inactive records can be forgotten without deleting content. See [transfer persistence](transfer-persistence.md) and [ADR 0020](decisions/0020-private-transfer-recovery.md) for storage, credentials, sidecars, limits and process-restart evidence.

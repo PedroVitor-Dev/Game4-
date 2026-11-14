@@ -122,7 +122,7 @@
     "torrentInvalid": "This torrent is malformed or uses unsupported metadata. This preview accepts regular public BitTorrent v1 files without padding.",
     "transferLimitExceeded": "Transfer limits reached (4 active sessions, 64 session records, 1,024 files or 1 TiB per torrent).",
     "transferFailed": "The transfer could not be started or continued. Check sources, free space, port availability and peer connectivity. Any new partial download folder is kept.",
-    "transferUnavailable": "The transfer engine is shutting down. Reopen the app to try again."
+    "transferUnavailable": "Transfers or their saved state are unavailable. Local Library operations remain available."
   },
   "backup": {
     "title": "Save and restore your library",
@@ -217,7 +217,7 @@
     "peer": "Initial peer (IPv4:port; optional with discovery)",
     "outputHint": "Choose a parent folder next. Game4∞ creates a new download subfolder and never overwrites existing files. Stopping keeps received data.",
     "startDownload": "Choose folder and download",
-    "sessions": "Sessions in this app run",
+    "sessions": "Saved transfers",
     "empty": "No transfer sessions. Nothing starts automatically on app launch.",
     "preparing": "Preparing files or updating the session. Large source checks may take a while.",
     "progress": "Verified pieces: {{verified}} / {{total}} · Uploaded: {{uploaded}}",
@@ -234,7 +234,9 @@
       "stopping": "Stopping",
       "stopped": "Stopped",
       "completed": "Completed; network session closed",
-      "failed": "Failed"
+      "failed": "Failed",
+      "paused": "Paused",
+      "resuming": "Checking local files before transfer"
     },
     "dht": "Enable DHT for the next network action",
     "dhtHint": "DHT contacts the public UDP network and can publish your info hash and IP. It needs reachable peers and does not bypass NAT or firewalls. Existing sessions keep their original setting.",
@@ -260,6 +262,10 @@
     "peerScope": "Counts describe this session, not the entire swarm. Other peers include incomplete copies and peers not yet classified. Advertised availability does not authenticate or verify their bytes.",
     "metricsUnavailable": "Live peer and speed observations unavailable while inactive or starting.",
     "availabilityFull_one": "Remote availability: {{count}} connected peer advertises a complete copy.",
-    "availabilityFull_other": "Remote availability: {{count}} connected peers advertise a complete copy."
+    "availabilityFull_other": "Remote availability: {{count}} connected peers advertise a complete copy.",
+    "persistenceHint": "Transfer state is saved privately on this computer. Interrupted sessions reopen paused; Resume rechecks local pieces before opening peer connections. Keep the ownership sidecar beside each download folder. Forgetting a row keeps all files but removes its resume record.",
+    "pause": "Pause",
+    "resume": "Resume and recheck",
+    "forget": "Forget record (keep files)"
   }
 }

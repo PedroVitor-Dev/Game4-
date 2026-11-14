@@ -19,6 +19,9 @@ import {
   seedTorrent,
   downloadTorrent,
   stopTransfer,
+  pauseTransfer,
+  resumeTransfer,
+  forgetTransfer,
 } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 import { formatBytes } from "../services/file-identification";
@@ -48,6 +51,7 @@ export function TransfersPage() {
   const [allFiles, setAllFiles] = useState(false);
   const [transfers, setTransfers] = useState<TransferSnapshot[]>([]);
   const [busy, setBusy] = useState(false);
+  const [resuming, setResuming] = useState<Set<string>>(new Set());
   const [stopping, setStopping] = useState<Set<string>>(new Set());
   const [error, setError] = useState<unknown>();
   const [saved, setSaved] = useState<{ name: string; magnet: string }>();
@@ -110,15 +114,37 @@ export function TransfersPage() {
       }
     }
   }
-  async function stop(id: string) {
+  async function stop(
+    id: string,
+    action: "stop" | "pause" | "forget" = "stop",
+  ) {
     setStopping((v) => new Set(v).add(id));
     try {
-      await stopTransfer({ transferId: id });
+      if (action === "pause") await pauseTransfer({ transferId: id });
+      else if (action === "forget") await forgetTransfer({ transferId: id });
+      else await stopTransfer({ transferId: id });
     } catch (e) {
       if (alive.current) setError(e);
     } finally {
       if (alive.current) {
         setStopping((v) => {
+          const next = new Set(v);
+          next.delete(id);
+          return next;
+        });
+        await refresh();
+      }
+    }
+  }
+  async function resume(id: string) {
+    setResuming((v) => new Set(v).add(id));
+    try {
+      await resumeTransfer({ transferId: id });
+    } catch (e) {
+      if (alive.current) setError(e);
+    } finally {
+      if (alive.current) {
+        setResuming((v) => {
           const next = new Set(v);
           next.delete(id);
           return next;
@@ -183,6 +209,7 @@ export function TransfersPage() {
         <h2>{t("transfers.connectionTitle")}</h2>
         <p>{t("transfers.connectionDescription")}</p>
         <p>{t("transfers.exposure")}</p>
+        <p>{t("transfers.persistenceHint")}</p>
         <label className="dht-choice">
           <input
             type="checkbox"
@@ -547,14 +574,42 @@ export function TransfersPage() {
               </p>
             )}
             {job.error && <p role="alert">{t(getIpcErrorKey(job.error))}</p>}
-            {job.status === "active" && (
-              <button
-                disabled={stopping.has(job.id)}
-                onClick={() => void stop(job.id)}
-              >
-                {t("transfers.stop")}
-              </button>
-            )}
+            <div className="actions">
+              {["paused", "stopped", "failed"].includes(job.status) && (
+                <button
+                  disabled={resuming.has(job.id) || stopping.has(job.id)}
+                  onClick={() => void resume(job.id)}
+                >
+                  {t("transfers.resume")}
+                </button>
+              )}
+              {job.status === "active" && (
+                <button
+                  disabled={stopping.has(job.id)}
+                  onClick={() => void stop(job.id, "pause")}
+                >
+                  {t("transfers.pause")}
+                </button>
+              )}
+              {["paused", "stopped", "failed", "completed"].includes(
+                job.status,
+              ) && (
+                <button
+                  disabled={resuming.has(job.id) || stopping.has(job.id)}
+                  onClick={() => void stop(job.id, "forget")}
+                >
+                  {t("transfers.forget")}
+                </button>
+              )}
+              {["active", "resuming"].includes(job.status) && (
+                <button
+                  disabled={stopping.has(job.id)}
+                  onClick={() => void stop(job.id)}
+                >
+                  {t("transfers.stop")}
+                </button>
+              )}
+            </div>
           </article>
         ))}
       </section>

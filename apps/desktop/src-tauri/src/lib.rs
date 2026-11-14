@@ -24,7 +24,14 @@ pub fn run() {
             app.manage(Arc::new(database::Database::open(&path)?));
             app.manage(Arc::new(library::ImportState::default()));
             app.manage(Arc::new(backups::BackupState::default()));
-            app.manage(Arc::new(torrents::Transfers::default()));
+            let transfers_path = app
+                .path()
+                .app_local_data_dir()?
+                .join("transfers/state.sqlite3");
+            app.manage(Arc::new(
+                torrents::Transfers::open(&transfers_path)
+                    .unwrap_or_else(|_| torrents::Transfers::unavailable()),
+            ));
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -54,6 +61,9 @@ pub fn run() {
             commands::torrents::torrent_download,
             commands::torrents::transfers_list,
             commands::torrents::transfer_stop,
+            commands::torrents::transfer_pause,
+            commands::torrents::transfer_resume,
+            commands::torrents::transfer_forget,
             commands::backups::library_save_backup,
             commands::backups::library_prepare_restore,
             commands::backups::library_restore_backup

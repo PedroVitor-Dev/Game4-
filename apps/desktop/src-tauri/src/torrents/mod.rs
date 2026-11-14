@@ -16,12 +16,14 @@ use std::{
     path::{Path, PathBuf},
     sync::{
         Arc, Mutex,
-        atomic::{AtomicBool, Ordering},
+        atomic::{AtomicBool, AtomicU64, Ordering},
     },
     time::{Duration, Instant},
 };
 use uuid::Uuid;
 mod magnets;
+mod persistence;
+use persistence::{Owned, Recipe, Saved, Store};
 mod storage;
 pub mod trackers;
 pub use magnets::normalize_magnet;
@@ -127,6 +129,8 @@ struct Runtime {
     handle: Arc<ManagedTorrent>,
     io: Handles,
     sample: Mutex<RateSample>,
+    base_received: u64,
+    base_uploaded: u64,
 }
 struct RateSample {
     at: Instant,
@@ -155,12 +159,14 @@ impl Runtime {
             .to_string();
         snapshot.uploaded_bytes = stats
             .uploaded_bytes
+            .saturating_add(self.base_uploaded)
             .max(snapshot.uploaded_bytes.parse().unwrap_or(0))
             .to_string();
         snapshot.is_seeding &= stats.finished && stats.live.is_some();
         snapshot.telemetry = stats.live.map(|live| {
             let received = live.snapshot.fetched_bytes;
             snapshot.received_bytes = received
+                .saturating_add(self.base_received)
                 .max(snapshot.received_bytes.parse().unwrap_or(0))
                 .to_string();
             let mut rate = self.sample.lock().unwrap_or_else(|e| e.into_inner());
@@ -192,8 +198,46 @@ struct Transfer {
     finish_gate: tokio::sync::Mutex<()>,
     snapshot: Mutex<TransferSnapshot>,
     runtime: Mutex<Option<Runtime>>,
+    saved: Mutex<Saved>,
+    store: Option<Arc<Store>>,
+    generation: AtomicU64,
+    operation: Mutex<Option<tokio_util::sync::CancellationToken>>,
 }
 impl Transfer {
+    fn new(saved: Saved, snapshot: TransferSnapshot, store: Option<Arc<Store>>) -> Arc<Self> {
+        Arc::new(Self {
+            finish_gate: tokio::sync::Mutex::new(()),
+            snapshot: Mutex::new(snapshot),
+            runtime: Mutex::new(None),
+            saved: Mutex::new(saved),
+            store,
+            generation: AtomicU64::new(0),
+            operation: Mutex::new(None),
+        })
+    }
+    async fn persist(&self, full: bool) -> Result<()> {
+        let Some(store) = self.store.clone() else {
+            return Ok(());
+        };
+        let snapshot = self.snapshot();
+        let saved = full.then(|| self.saved.lock().unwrap_or_else(|e| e.into_inner()).clone());
+        tokio::task::spawn_blocking(move || match saved {
+            Some(v) => store.save(&v, &snapshot),
+            None => store.snapshot(&snapshot),
+        })
+        .await
+        .map_err(|_| failed())?
+    }
+    fn cancel_operation(&self) {
+        if let Some(token) = self
+            .operation
+            .lock()
+            .unwrap_or_else(|e| e.into_inner())
+            .as_ref()
+        {
+            token.cancel();
+        }
+    }
     fn snapshot(&self) -> TransferSnapshot {
         let runtime = self.runtime.lock().unwrap_or_else(|e| e.into_inner());
         let mut snapshot = self.snapshot.lock().unwrap_or_else(|e| e.into_inner());
@@ -202,8 +246,11 @@ impl Transfer {
         }
         snapshot.clone()
     }
-    async fn continue_seeding(&self) -> bool {
+    async fn continue_seeding(&self, generation: u64) -> bool {
         let _finish = self.finish_gate.lock().await;
+        if self.generation.load(Ordering::SeqCst) != generation {
+            return true;
+        }
         let io = {
             let runtime = self.runtime.lock().unwrap_or_else(|e| e.into_inner());
             let Some(rt) = runtime.as_ref() else {
@@ -230,39 +277,70 @@ impl Transfer {
         s.verified_bytes = s.total_bytes.clone();
         true
     }
-    async fn finish(&self, mut status: TransferStatus) {
+    async fn finish(&self, status: TransferStatus) -> Result<()> {
+        self.cancel_operation();
+        self.finish_inner(status, None).await
+    }
+    async fn finish_inner(&self, mut status: TransferStatus, expected: Option<u64>) -> Result<()> {
         let _finish = self.finish_gate.lock().await;
+        if expected.is_some_and(|g| g != self.generation.load(Ordering::SeqCst)) {
+            return Ok(());
+        }
+        if status == TransferStatus::Paused
+            && matches!(
+                self.snapshot
+                    .lock()
+                    .unwrap_or_else(|e| e.into_inner())
+                    .status,
+                TransferStatus::Completed | TransferStatus::Failed | TransferStatus::Stopped
+            )
+        {
+            return Ok(());
+        }
+        self.generation.fetch_add(1, Ordering::SeqCst);
         let runtime = {
-            let mut runtime = self.runtime.lock().unwrap_or_else(|e| e.into_inner());
-            let rt = runtime.take();
-            if let Some(ref rt) = rt {
-                let mut s = self.snapshot.lock().unwrap_or_else(|e| e.into_inner());
-                rt.observe(&mut s);
-                s.telemetry = None;
-                s.is_seeding = false;
+            let mut rt = self.runtime.lock().unwrap_or_else(|e| e.into_inner());
+            let taken = rt.take();
+            let mut s = self.snapshot.lock().unwrap_or_else(|e| e.into_inner());
+            if let Some(ref r) = taken {
+                r.observe(&mut s);
                 s.status = TransferStatus::Stopping;
             }
-            rt
+            s.telemetry = None;
+            s.is_seeding = false;
+            taken
         };
         if let Some(rt) = runtime {
-            if status == TransferStatus::Completed {
-                let io = rt.io.clone();
-                if !tokio::task::spawn_blocking(move || io.flush())
-                    .await
-                    .is_ok_and(|r| r.is_ok())
-                {
-                    status = TransferStatus::Failed;
-                }
-            }
             rt.session.stop().await;
-            drop(rt);
-            let mut s = self.snapshot.lock().unwrap_or_else(|e| e.into_inner());
-            s.status = status;
-            s.listen_port = None;
-            if status == TransferStatus::Failed {
-                s.error = Some(failed());
+            let io = rt.io.clone();
+            let complete = status == TransferStatus::Completed;
+            if !tokio::task::spawn_blocking(move || {
+                if complete {
+                    io.flush()
+                } else {
+                    io.flush_partial()
+                }
+            })
+            .await
+            .is_ok_and(|v| v.is_ok())
+            {
+                status = TransferStatus::Failed;
             }
+            drop(rt);
         }
+        {
+            let mut s = self.snapshot.lock().unwrap_or_else(|e| e.into_inner());
+            if s.status != TransferStatus::Completed {
+                s.status = status;
+            }
+            s.listen_port = None;
+            s.error = if s.status == TransferStatus::Failed {
+                Some(failed())
+            } else {
+                None
+            };
+        }
+        self.persist(false).await
     }
 }
 struct StartSession {
@@ -278,6 +356,8 @@ struct StartSession {
     seed_after_download: bool,
     initial_peer: Option<SocketAddr>,
     output: Option<String>,
+    root: PathBuf,
+    owner: Option<Owned>,
 }
 struct Accepted {
     fingerprint: String,
@@ -293,6 +373,8 @@ pub struct Transfers {
     cancel: tokio_util::sync::CancellationToken,
     resolution: Mutex<Option<magnets::Resolution>>,
     dht_bootstrap: Option<Vec<String>>,
+    store: Option<Arc<Store>>,
+    unavailable: bool,
 }
 impl Default for Transfers {
     fn default() -> Self {
@@ -306,10 +388,46 @@ impl Default for Transfers {
             cancel: tokio_util::sync::CancellationToken::new(),
             resolution: Mutex::new(None),
             dht_bootstrap: None,
+            store: None,
+            unavailable: false,
         }
     }
 }
 impl Transfers {
+    pub fn open(path: &Path) -> Result<Self> {
+        let (store, records) = Store::open(path)?;
+        let manager = Self {
+            store: Some(store.clone()),
+            ..Default::default()
+        };
+        for (saved, snapshot) in records {
+            manager.requests.lock().map_err(|_| failed())?.insert(
+                saved.request.clone(),
+                Accepted {
+                    fingerprint: saved.fingerprint.clone(),
+                    id: snapshot.id.clone(),
+                },
+            );
+            manager.entries.lock().map_err(|_| failed())?.insert(
+                snapshot.id.clone(),
+                Transfer::new(saved, snapshot, Some(store.clone())),
+            );
+        }
+        Ok(manager)
+    }
+    pub fn unavailable() -> Self {
+        Self {
+            unavailable: true,
+            ..Default::default()
+        }
+    }
+    pub fn ensure_ready(&self) -> Result<()> {
+        if self.unavailable || self.closing.load(Ordering::SeqCst) {
+            Err(err(ErrorCode::TransferUnavailable))
+        } else {
+            Ok(())
+        }
+    }
     fn dht_config(&self, enabled: bool) -> Option<librqbit::DhtSessionConfig> {
         enabled.then(|| librqbit::DhtSessionConfig {
             bootstrap_addrs: self.dht_bootstrap.clone(),
@@ -378,9 +496,7 @@ impl Transfers {
         Ok(None)
     }
     fn available(&self) -> Result<()> {
-        if self.closing.load(Ordering::SeqCst) {
-            return Err(err(ErrorCode::TransferUnavailable));
-        }
+        self.ensure_ready()?;
         let entries = self.entries.lock().map_err(|_| failed())?;
         if entries.len() >= 64
             || entries
@@ -388,7 +504,9 @@ impl Transfers {
                 .filter(|t| {
                     matches!(
                         t.snapshot().status,
-                        TransferStatus::Active | TransferStatus::Stopping
+                        TransferStatus::Active
+                            | TransferStatus::Stopping
+                            | TransferStatus::Resuming
                     )
                 })
                 .count()
@@ -412,29 +530,180 @@ impl Transfers {
             seed_after_download,
             initial_peer,
             output,
+            root,
+            owner,
         } = input;
-        if self.closing.load(Ordering::SeqCst) {
-            return Err(err(ErrorCode::TransferUnavailable));
+        let snapshot = TransferSnapshot {
+            id: Uuid::new_v4().to_string(),
+            name: meta.name,
+            info_hash: meta.hash,
+            mode,
+            status: TransferStatus::Resuming,
+            total_bytes: total(&inspect(&raw)?).to_string(),
+            verified_bytes: "0".into(),
+            uploaded_bytes: "0".into(),
+            received_bytes: "0".into(),
+            seed_after_download,
+            is_seeding: false,
+            telemetry: None,
+            listen_port: None,
+            dht,
+            tracker_count: trackers.len() as u32,
+            output_name: output,
+            error: None,
+        };
+        let saved = Saved {
+            version: 1,
+            raw,
+            request: request.clone(),
+            fingerprint: fingerprint.clone(),
+            recipe: Recipe {
+                root,
+                owner,
+                mode,
+                port,
+                dht,
+                trackers,
+                seed_after_download,
+                initial_peer,
+            },
+        };
+        let entry = Transfer::new(saved, snapshot.clone(), self.store.clone());
+        entry.persist(true).await?;
+        self.entries
+            .lock()
+            .map_err(|_| failed())?
+            .insert(snapshot.id.clone(), entry.clone());
+        self.requests.lock().map_err(|_| failed())?.insert(
+            request,
+            Accepted {
+                fingerprint,
+                id: snapshot.id.clone(),
+            },
+        );
+        self.run(entry, Some(handles)).await
+    }
+    async fn run(
+        self: &Arc<Self>,
+        entry: Arc<Transfer>,
+        prepared: Option<Handles>,
+    ) -> Result<TransferSnapshot> {
+        let cancel = self.cancel.child_token();
+        *entry.operation.lock().map_err(|_| failed())? = Some(cancel.clone());
+        let _finish = entry.finish_gate.lock().await;
+        let generation = entry.generation.fetch_add(1, Ordering::SeqCst) + 1;
+        {
+            let mut s = entry.snapshot.lock().map_err(|_| failed())?;
+            s.status = TransferStatus::Resuming;
+            s.error = None;
+            s.telemetry = None;
+            s.is_seeding = false;
+            s.listen_port = None;
+            s.verified_bytes = "0".into();
         }
+        let result = async {
+            self.ensure_ready()?;
+            entry.persist(false).await?;
+            let saved = entry.saved.lock().map_err(|_| failed())?.clone();
+            let handles = match prepared {
+                Some(v) => v,
+                None => {
+                    let saved = saved.clone();
+                    tokio::task::spawn_blocking(move || {
+                        let meta = inspect(&saved.raw)?;
+                        match saved.recipe.mode {
+                            TransferMode::Seed => Handles::seed(&saved.recipe.root, &meta)
+                                .map_err(|_| err(ErrorCode::SourceUnavailable)),
+                            TransferMode::Download => {
+                                persistence::owned(
+                                    &saved.recipe.root,
+                                    saved.recipe.owner.as_ref().ok_or_else(failed)?,
+                                    &meta.hash,
+                                )?;
+                                Handles::resume(&saved.recipe.root, &meta)
+                                    .map_err(|_| err(ErrorCode::SourceUnavailable))
+                            }
+                        }
+                    })
+                    .await
+                    .map_err(|_| failed())??
+                }
+            };
+            if cancel.is_cancelled() {
+                return Err(err(ErrorCode::TransferUnavailable));
+            }
+            self.activate(&entry, &saved, handles, &cancel).await
+        }
+        .await;
+        *entry.operation.lock().map_err(|_| failed())? = None;
+        match result {
+            Ok(runtime) => {
+                {
+                    let mut slot = entry.runtime.lock().map_err(|_| failed())?;
+                    let mut snapshot = entry.snapshot.lock().map_err(|_| failed())?;
+                    snapshot.status = TransferStatus::Active;
+                    snapshot.listen_port = runtime.session.listen_addr().map(|p| p.port());
+                    snapshot.is_seeding = snapshot.mode == TransferMode::Seed;
+                    runtime.observe(&mut snapshot);
+                    *slot = Some(runtime);
+                }
+                if let Err(e) = entry.persist(false).await {
+                    drop(_finish);
+                    let _ = entry.finish(TransferStatus::Failed).await;
+                    return Err(e);
+                }
+                Self::monitor(entry.clone(), generation);
+                Ok(entry.snapshot())
+            }
+            Err(e) => {
+                {
+                    let mut s = entry.snapshot.lock().map_err(|_| failed())?;
+                    s.status = if cancel.is_cancelled() {
+                        TransferStatus::Paused
+                    } else {
+                        TransferStatus::Failed
+                    };
+                    s.error = if s.status == TransferStatus::Failed {
+                        Some(e.clone())
+                    } else {
+                        None
+                    };
+                }
+                entry.persist(false).await?;
+                if cancel.is_cancelled() {
+                    Ok(entry.snapshot())
+                } else {
+                    Err(e)
+                }
+            }
+        }
+    }
+    async fn activate(
+        self: &Arc<Self>,
+        entry: &Transfer,
+        saved: &Saved,
+        handles: Handles,
+        cancel: &tokio_util::sync::CancellationToken,
+    ) -> Result<Runtime> {
+        let r = &saved.recipe;
+        let session_token = cancel.child_token();
         let session = Session::new_with_opts(
             PathBuf::new(),
             SessionOptions {
-                cancellation_token: Some(self.cancel.child_token()),
-                dht: self.dht_config(dht),
-                disable_trackers: trackers.is_empty(),
+                cancellation_token: Some(session_token.clone()),
+                dht: self.dht_config(r.dht),
+                disable_trackers: r.trackers.is_empty(),
                 disable_local_service_discovery: true,
                 persistence: None,
                 fastresume: false,
                 ipv4_only: true,
                 listen: Some(ListenerOptions {
-                    listen_addr: SocketAddr::V4(SocketAddrV4::new(self.listen_ip, port)),
+                    listen_addr: SocketAddr::V4(SocketAddrV4::new(self.listen_ip, r.port)),
                     ipv4_only: true,
-                    // The engine suppresses loopback announcements by default. Tests use
-                    // an explicit bound port to exercise an isolated local DHT swarm.
-                    announce_port: ((dht || !trackers.is_empty())
+                    announce_port: ((r.dht || !r.trackers.is_empty())
                         && self.listen_ip.is_loopback()
-                        && port != 0)
-                        .then_some(port),
+                        && r.port != 0)
+                        .then_some(r.port),
                     enable_upnp_port_forwarding: false,
                     ..Default::default()
                 }),
@@ -443,17 +712,20 @@ impl Transfers {
             },
         )
         .await
-        .map_err(|_| failed())?;
+        .map_err(|_| {
+            session_token.cancel();
+            failed()
+        })?;
         let result = async {
             let handle = session
                 .add_torrent(
-                    AddTorrent::from_bytes(ever::route(&raw, &trackers)?),
+                    AddTorrent::from_bytes(ever::route(&saved.raw, &r.trackers)?),
                     Some(AddTorrentOptions {
                         paused: true,
-                        overwrite: false,
-                        disable_trackers: trackers.is_empty(),
+                        overwrite: true,
+                        disable_trackers: r.trackers.is_empty(),
                         storage_factory: Some(handles.clone().boxed()),
-                        initial_peers: initial_peer.map(|p| vec![p]),
+                        initial_peers: r.initial_peer.map(|p| vec![p]),
                         peer_limit: Some(8),
                         ..Default::default()
                     }),
@@ -462,104 +734,108 @@ impl Transfers {
                 .map_err(|_| failed())?
                 .into_handle()
                 .ok_or_else(failed)?;
-            tokio::time::timeout(Duration::from_secs(60), handle.wait_until_initialized())
-                .await
-                .map_err(|_| failed())?
-                .map_err(|_| failed())?;
-            if mode == TransferMode::Seed && !handle.stats().finished {
+            tokio::select! {
+                _=cancel.cancelled()=>return Err(err(ErrorCode::TransferUnavailable)),
+                initialized=handle.wait_until_initialized()=>initialized.map_err(|_|failed())?,
+            }
+            if r.mode == TransferMode::Seed && !handle.stats().finished {
                 return Err(err(ErrorCode::SourceChanged));
             }
-            if self.closing.load(Ordering::SeqCst) {
+            {
+                let mut stored = entry.saved.lock().map_err(|_| failed())?;
+                stored.recipe.port = session.listen_addr().ok_or_else(failed)?.port();
+            }
+            entry.persist(true).await?;
+            self.ensure_ready()?;
+            if cancel.is_cancelled() {
                 return Err(err(ErrorCode::TransferUnavailable));
             }
             session.unpause(&handle).await.map_err(|_| failed())?;
             Ok(handle)
         }
         .await;
-        let handle = match result {
-            Ok(h) => h,
+        match result {
+            Ok(handle) => {
+                let snapshot = entry.snapshot.lock().map_err(|_| failed())?;
+                Ok(Runtime {
+                    session,
+                    handle,
+                    io: handles,
+                    sample: Mutex::new(RateSample::default()),
+                    base_received: snapshot.received_bytes.parse().map_err(|_| failed())?,
+                    base_uploaded: snapshot.uploaded_bytes.parse().map_err(|_| failed())?,
+                })
+            }
             Err(e) => {
                 session.stop().await;
-                return Err(e);
+                Err(e)
             }
-        };
-        let total_bytes = total(&meta).to_string();
-        let snapshot = TransferSnapshot {
-            id: Uuid::new_v4().to_string(),
-            name: meta.name,
-            info_hash: meta.hash,
-            mode,
-            status: TransferStatus::Active,
-            total_bytes,
-            verified_bytes: handle.stats().progress_bytes.to_string(),
-            uploaded_bytes: "0".into(),
-            received_bytes: "0".into(),
-            seed_after_download,
-            is_seeding: mode == TransferMode::Seed,
-            telemetry: None,
-            listen_port: session.listen_addr().map(|a| a.port()),
-            dht,
-            tracker_count: trackers.len() as u32,
-            output_name: output,
-            error: None,
-        };
-        let entry = Arc::new(Transfer {
-            finish_gate: tokio::sync::Mutex::new(()),
-            snapshot: Mutex::new(snapshot.clone()),
-            runtime: Mutex::new(Some(Runtime {
-                session,
-                handle,
-                io: handles,
-                sample: Mutex::new(RateSample::default()),
-            })),
-        });
-        self.entries
-            .lock()
-            .map_err(|_| failed())?
-            .insert(snapshot.id.clone(), Arc::clone(&entry));
-        self.requests.lock().map_err(|_| failed())?.insert(
-            request,
-            Accepted {
-                fingerprint,
-                id: snapshot.id.clone(),
-            },
-        );
+        }
+    }
+    fn monitor(entry: Arc<Transfer>, generation: u64) {
         tokio::spawn(async move {
+            let mut checkpoint = Instant::now();
             loop {
                 tokio::time::sleep(Duration::from_millis(250)).await;
+                if entry.generation.load(Ordering::SeqCst) != generation {
+                    return;
+                }
                 let state = {
                     let rt = entry.runtime.lock().unwrap_or_else(|e| e.into_inner());
                     rt.as_ref().map(|r| {
-                        let stats = r.handle.stats();
+                        let s = r.handle.stats();
                         (
-                            stats.finished,
-                            stats.error.is_some()
-                                || matches!(stats.state, librqbit::TorrentStatsState::Error),
+                            s.finished,
+                            s.error.is_some()
+                                || matches!(s.state, librqbit::TorrentStatsState::Error),
                         )
                     })
                 };
                 match state {
                     None => return,
                     Some((_, true)) => {
-                        entry.finish(TransferStatus::Failed).await;
+                        let _ = entry
+                            .finish_inner(TransferStatus::Failed, Some(generation))
+                            .await;
                         return;
                     }
-                    Some((true, _)) if mode == TransferMode::Download => {
-                        if seed_after_download {
-                            if !entry.continue_seeding().await {
-                                entry.finish(TransferStatus::Failed).await;
+                    Some((true, _)) => {
+                        let snapshot = entry.snapshot();
+                        if snapshot.mode == TransferMode::Download {
+                            if snapshot.seed_after_download {
+                                if !entry.continue_seeding(generation).await {
+                                    let _ = entry
+                                        .finish_inner(TransferStatus::Failed, Some(generation))
+                                        .await;
+                                    return;
+                                }
+                            } else {
+                                let _ = entry
+                                    .finish_inner(TransferStatus::Completed, Some(generation))
+                                    .await;
                                 return;
                             }
-                        } else {
-                            entry.finish(TransferStatus::Completed).await;
-                            return;
                         }
                     }
                     _ => {}
                 }
+                if checkpoint.elapsed() >= Duration::from_secs(1) {
+                    let guard = entry.finish_gate.lock().await;
+                    if entry.generation.load(Ordering::SeqCst) != generation {
+                        return;
+                    }
+                    let result = entry.persist(false).await;
+                    drop(guard);
+                    if result.is_err() {
+                        let _ = entry
+                            .finish_inner(TransferStatus::Failed, Some(generation))
+                            .await;
+                        return;
+                    }
+                    checkpoint = Instant::now();
+                }
             }
         });
-        Ok(snapshot)
     }
     pub async fn seed(
         self: &Arc<Self>,
@@ -614,7 +890,7 @@ impl Transfers {
                 .map_err(|_| failed())?;
             let storage = Handles::seed(Path::new(&root), &meta)
                 .map_err(|_| err(ErrorCode::SourceUnavailable))?;
-            Ok((created.torrent, meta, storage))
+            Ok((created.torrent, meta, storage, PathBuf::from(root)))
         })
         .await
         .map_err(|_| failed())??;
@@ -631,6 +907,8 @@ impl Transfers {
             seed_after_download: false,
             initial_peer: None,
             output: None,
+            root: prepared.3,
+            owner: None,
         })
         .await
     }
@@ -668,7 +946,9 @@ impl Transfers {
             }
             let root = parent.join(name);
             std::fs::create_dir(&root).map_err(|_| failed())?;
-            Handles::download(&root, &meta).map_err(|_| failed())
+            let owner = persistence::own(&root, &meta.hash)?;
+            let handles = Handles::download(&root, &meta).map_err(|_| failed())?;
+            Ok((handles, root, owner))
         })
         .await
         .map_err(|_| failed())??;
@@ -676,7 +956,7 @@ impl Transfers {
             .start(StartSession {
                 raw: pending.raw,
                 meta: pending.meta,
-                handles: storage,
+                handles: storage.0,
                 mode: TransferMode::Download,
                 request: request.request_id,
                 fingerprint,
@@ -686,6 +966,8 @@ impl Transfers {
                 seed_after_download: request.seed_after_download,
                 initial_peer: addr,
                 output: Some(output_name),
+                root: storage.1,
+                owner: Some(storage.2),
             })
             .await?;
         self.pending
@@ -703,8 +985,73 @@ impl Transfers {
                 .get(id)
                 .ok_or_else(|| err(ErrorCode::NotFound))?,
         );
-        transfer.finish(TransferStatus::Stopped).await;
+        transfer.finish(TransferStatus::Stopped).await?;
         Ok(transfer.snapshot())
+    }
+    fn entry(&self, id: &str) -> Result<Arc<Transfer>> {
+        valid_uuid(id)?;
+        self.ensure_ready()?;
+        self.entries
+            .lock()
+            .map_err(|_| failed())?
+            .get(id)
+            .cloned()
+            .ok_or_else(|| err(ErrorCode::NotFound))
+    }
+    pub async fn pause(&self, id: &str) -> Result<TransferSnapshot> {
+        let entry = self.entry(id)?;
+        entry.finish(TransferStatus::Paused).await?;
+        Ok(entry.snapshot())
+    }
+    pub async fn resume(self: &Arc<Self>, id: &str) -> Result<TransferSnapshot> {
+        let _gate = self.gate.lock().await;
+        let entry = self.entry(id)?;
+        if entry.snapshot().status == TransferStatus::Active {
+            return Ok(entry.snapshot());
+        }
+        if entry.snapshot().status == TransferStatus::Completed {
+            return Err(library::invalid(ErrorField::Request));
+        }
+        if self
+            .entries
+            .lock()
+            .map_err(|_| failed())?
+            .values()
+            .filter(|e| {
+                matches!(
+                    e.snapshot().status,
+                    TransferStatus::Active | TransferStatus::Resuming | TransferStatus::Stopping
+                )
+            })
+            .count()
+            >= 4
+        {
+            return Err(limit());
+        }
+        self.run(entry, None).await
+    }
+    pub async fn forget(&self, id: &str) -> Result<TransferForgetResult> {
+        let _gate = self.gate.lock().await;
+        let entry = self.entry(id)?;
+        let _finish = entry.finish_gate.lock().await;
+        if matches!(
+            entry.snapshot().status,
+            TransferStatus::Active | TransferStatus::Resuming | TransferStatus::Stopping
+        ) {
+            return Err(library::invalid(ErrorField::Request));
+        }
+        if let Some(store) = self.store.clone() {
+            let id = id.to_owned();
+            tokio::task::spawn_blocking(move || store.delete(&id))
+                .await
+                .map_err(|_| failed())??;
+        }
+        self.entries.lock().map_err(|_| failed())?.remove(id);
+        self.requests
+            .lock()
+            .map_err(|_| failed())?
+            .retain(|_, a| a.id != id);
+        Ok(TransferForgetResult { forgotten: true })
     }
     pub fn abort(&self) {
         self.closing.store(true, Ordering::SeqCst);
@@ -722,7 +1069,7 @@ impl Transfers {
             .cloned()
             .collect();
         for e in entries {
-            e.finish(TransferStatus::Stopped).await;
+            let _ = e.finish(TransferStatus::Paused).await;
         }
     }
 }

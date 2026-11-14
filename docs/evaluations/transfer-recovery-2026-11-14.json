@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-14",
+  "engine": "librqbit 9.1.0",
+  "adapter": "desktop Transfers API",
+  "transfer_store_schema": 1,
+  "checkpoint_storage": "separate SQLite snapshot table",
+  "transport": "explicit IPv4 loopback; no DHT or trackers",
+  "payload_bytes": 8388625,
+  "intentional_exit_without_shutdown": true,
+  "verified_bytes_at_exit": 1048593,
+  "recovered_status": "paused",
+  "network_listener_on_recovery": false,
+  "cached_verified_bytes_on_recovery": 0,
+  "verified_bytes_after_explicit_resume_recheck": 1048593,
+  "same_record_and_payload_directory": true,
+  "completed": true,
+  "final_verified_bytes": 8388625,
+  "independent_sha256_matches": true,
+  "sha256": "ca1d758393b634d51aea5298b89b6d598403e41d5e72176e8114fc434b4dfe29",
+  "power_loss_certified": false,
+  "wan_or_independent_client_acceptance": false
+}

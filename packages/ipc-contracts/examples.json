@@ -52,6 +52,9 @@
       "torrent_download",
       "transfers_list",
       "transfer_stop",
+      "transfer_pause",
+      "transfer_resume",
+      "transfer_forget",
       "library_save_backup",
       "library_prepare_restore",
       "library_restore_backup"

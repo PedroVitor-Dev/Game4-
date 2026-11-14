@@ -50,3 +50,7 @@ Frontend contract tests validate no-argument picker commands, token-only confirm
 Native Windows smoke passed for saving a synthetic catalog, Portuguese success feedback, loading the written file for preview, correct counts, and a disabled restore action before the checkbox is selected. The preview was closed without native replacement; actual replacement, rollback, and reopening are covered by Rust integration tests. Independent inspection verified the saved backup and its source hashes/sizes.
 
 The original v1/schema v3 reader remains supported. Current writes/recovery copies use v2/schema v4, including `fileIdentifications` in row limits, fingerprints, validation, snapshots, and transactional replacement. Restored content evidence remains historical; location health always resets to unverified. See [identification compatibility](file-identification.md).
+
+## Transfer recovery — November 14, 2026
+
+Pause, reverified Resume and private transfer persistence are now implemented in a separate SQLite v1 store; catalog SQLite v4 and backup v2 remain unchanged. Interrupted work reopens Paused without networking. Owned downloads are repaired without duplication or truncation, while original seeding sources remain read-only. Inactive records can be forgotten without deleting content. See [transfer persistence](transfer-persistence.md) and [ADR 0020](decisions/0020-private-transfer-recovery.md) for storage, credentials, sidecars, limits and process-restart evidence.

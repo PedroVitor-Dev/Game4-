@@ -31,6 +31,56 @@ impl Handles {
         }
         Ok(())
     }
+    pub fn flush_partial(&self) -> Result<()> {
+        if !self.read_only.load(Ordering::Acquire) {
+            for slot in self.slots.iter() {
+                let f = slot.file.lock().map_err(|_| anyhow::anyhow!("file lock"))?;
+                ensure!(f.metadata()?.len() <= slot.len, "oversized file");
+                f.sync_all()?;
+            }
+        }
+        Ok(())
+    }
+    pub fn resume(root: &Path, meta: &Layout) -> Result<Self> {
+        let mut slots = Vec::new();
+        for (p, n) in &meta.files {
+            let path = root.join(p);
+            let parent = path.parent().ok_or_else(|| anyhow::anyhow!("no parent"))?;
+            library::reject_ancestors(parent)
+                .map_err(|_| anyhow::anyhow!("redirected directory"))?;
+            std::fs::create_dir_all(parent)?;
+            library::reject_ancestors(parent)
+                .map_err(|_| anyhow::anyhow!("redirected directory"))?;
+            let exists = path.try_exists()?;
+            if exists {
+                library::reject_ancestors(&path).map_err(|_| anyhow::anyhow!("redirected file"))?;
+            }
+            let mut options = OpenOptions::new();
+            options.read(true).write(true);
+            if !exists {
+                options.create_new(true);
+            }
+            #[cfg(windows)]
+            {
+                use std::os::windows::fs::OpenOptionsExt;
+                options.share_mode(1).custom_flags(0x00200000);
+            }
+            let f = options.open(&path)?;
+            ensure!(
+                f.metadata()?.is_file() && f.metadata()?.len() <= *n,
+                "invalid partial file"
+            );
+            slots.push(Slot {
+                file: Mutex::new(f),
+                len: *n,
+                path: PathBuf::from(p),
+            });
+        }
+        Ok(Self {
+            slots: Arc::new(slots),
+            read_only: Arc::new(AtomicBool::new(false)),
+        })
+    }
     pub fn seal(&self) -> Result<()> {
         self.flush()?;
         self.read_only.store(true, Ordering::Release);

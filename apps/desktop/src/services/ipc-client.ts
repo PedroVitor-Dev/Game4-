@@ -11,6 +11,7 @@ import {
   parsePackageOpenResult,
   parseEverOpenResult,
   parseEverExportResult,
+  parseTransferForgetResult,
   parseTransferMetricsInfo,
   parseTrackerList,
   parseMagnetLink,
@@ -83,6 +84,9 @@ const decoders = {
   torrent_download: parseTransferStartResult,
   transfers_list: parseTransferPage,
   transfer_stop: parseTransferSnapshot,
+  transfer_pause: parseTransferSnapshot,
+  transfer_resume: parseTransferSnapshot,
+  transfer_forget: parseTransferForgetResult,
   library_save_backup: parseLibraryBackupResult,
   library_prepare_restore: parseLibraryPrepareRestoreResult,
   library_restore_backup: parseLibraryRestoreResult,
@@ -190,6 +194,12 @@ export function createIpcClient(transport: IpcTransport) {
       return capable("torrent_download", request);
     },
     listTransfers: () => capable("transfers_list", undefined),
+    pauseTransfer: (request: TransferIdRequest) =>
+      capable("transfer_pause", request),
+    resumeTransfer: (request: TransferIdRequest) =>
+      capable("transfer_resume", request),
+    forgetTransfer: (request: TransferIdRequest) =>
+      capable("transfer_forget", request),
     stopTransfer: (request: TransferIdRequest) =>
       capable("transfer_stop", request),
     getAppInfo,

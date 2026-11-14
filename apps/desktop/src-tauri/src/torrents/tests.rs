@@ -123,7 +123,7 @@ async fn real_loopback_transfer_preserves_sources_and_completes_with_matching_sh
     assert_eq!(Sha256::digest(&received), Sha256::digest(&original));
     assert!(output.join("z-empty.bin").exists());
     assert_eq!(fs::metadata(output.join("z-empty.bin")).unwrap().len(), 0);
-    assert_eq!(fs::read_dir(&parent).unwrap().count(), 1);
+    assert_eq!(fs::read_dir(&parent).unwrap().count(), 2); // payload directory + ownership sidecar
     assert_eq!(
         [
             fs::read(root.join("a.bin")).unwrap(),
@@ -930,4 +930,359 @@ async fn upload_peer_observations_and_download_to_seeding_handoff_work_end_to_en
     receiver.shutdown().await;
     next.shutdown().await;
     source.shutdown().await;
+}
+
+fn persistent(path: &Path) -> Arc<Transfers> {
+    let mut m = Transfers::open(path).unwrap();
+    m.listen_ip = Ipv4Addr::LOCALHOST;
+    Arc::new(m)
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn persisted_partial_download_reopens_offline_rechecks_and_repairs_without_a_new_copy() {
+    use std::io::{Seek, SeekFrom, Write};
+    let (d, db, imports, _, original) = setup();
+    let source = manager();
+    let raw = ever::from_catalog(&db, "1").unwrap().torrent;
+    let seeded = source.seed(db, imports, seed_request()).await.unwrap();
+    {
+        let entries = source.entries.lock().unwrap();
+        let rt = entries[&seeded.id].runtime.lock().unwrap();
+        rt.as_ref()
+            .unwrap()
+            .session
+            .ratelimits
+            .set_upload_bps(std::num::NonZeroU32::new(262144));
+    }
+    let state = d.path().join("private/state.sqlite3");
+    let receive = persistent(&state);
+    let preview = receive.import(raw).unwrap();
+    let parent = d.path().join("received");
+    fs::create_dir(&parent).unwrap();
+    let request = StartDownloadRequest {
+        request_id: Uuid::new_v4().to_string(),
+        token: preview.token,
+        peer: format!("127.0.0.1:{}", seeded.listen_port.unwrap()),
+        dht: false,
+        trackers: vec![],
+        seed_after_download: false,
+    };
+    let started = receive
+        .download(request.clone(), parent.clone())
+        .await
+        .unwrap();
+    tokio::time::timeout(Duration::from_secs(20), async {
+        loop {
+            let row = receive.list().items[0].clone();
+            if row.verified_bytes.parse::<u64>().unwrap() >= 1048576 {
+                break;
+            }
+            assert_ne!(row.status, TransferStatus::Failed);
+            tokio::time::sleep(Duration::from_millis(50)).await;
+        }
+    })
+    .await
+    .unwrap();
+    let paused = receive.pause(&started.id).await.unwrap();
+    assert_eq!(paused.status, TransferStatus::Paused);
+    assert!(paused.telemetry.is_none());
+    assert!(paused.listen_port.is_none());
+    assert!(paused.verified_bytes.parse::<u64>().unwrap() < original.len() as u64);
+    let root = parent.join(paused.output_name.clone().unwrap());
+    let mut file = fs::OpenOptions::new()
+        .write(true)
+        .open(root.join("a.bin"))
+        .unwrap();
+    file.seek(SeekFrom::Start(0)).unwrap();
+    file.write_all(&[0xee]).unwrap();
+    file.sync_all().unwrap();
+    drop(file);
+    receive.shutdown().await;
+    drop(receive);
+    let restored = persistent(&state);
+    let row = restored.list().items[0].clone();
+    assert_eq!(row.id, started.id);
+    assert_eq!(row.status, TransferStatus::Paused);
+    assert!(row.telemetry.is_none());
+    assert!(
+        restored.entries.lock().unwrap()[&row.id]
+            .runtime
+            .lock()
+            .unwrap()
+            .is_none()
+    );
+    assert_eq!(
+        restored.download(request, parent.clone()).await.unwrap().id,
+        row.id,
+        "request replay survives restart"
+    );
+    source.entries.lock().unwrap()[&seeded.id]
+        .runtime
+        .lock()
+        .unwrap()
+        .as_ref()
+        .unwrap()
+        .session
+        .ratelimits
+        .set_upload_bps(None);
+    restored.resume(&row.id).await.unwrap();
+    let complete = tokio::time::timeout(Duration::from_secs(25), async {
+        loop {
+            let s = restored.list().items[0].clone();
+            if s.status == TransferStatus::Completed {
+                break s;
+            }
+            assert_ne!(s.status, TransferStatus::Failed);
+            tokio::time::sleep(Duration::from_millis(50)).await;
+        }
+    })
+    .await
+    .unwrap();
+    let received = [
+        fs::read(root.join("a.bin")).unwrap(),
+        fs::read(root.join("nested/β.bin")).unwrap(),
+    ]
+    .concat();
+    assert_eq!(Sha256::digest(&received), Sha256::digest(&original));
+    assert!(
+        complete.received_bytes.parse::<u64>().unwrap()
+            >= paused.received_bytes.parse::<u64>().unwrap() + 1048576
+    );
+    assert_eq!(
+        fs::read_dir(&parent)
+            .unwrap()
+            .filter(|e| e.as_ref().unwrap().path().is_dir())
+            .count(),
+        1
+    );
+    restored.forget(&row.id).await.unwrap();
+    assert!(restored.list().items.is_empty());
+    assert!(root.join("a.bin").exists());
+    assert!(persistent(&state).list().items.is_empty());
+    source.shutdown().await;
+    restored.shutdown().await;
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn persisted_seed_recovers_paused_refuses_changed_original_and_keeps_listening_port() {
+    let (d, db, imports, root, original) = setup();
+    let path = d.path().join("private/state.sqlite3");
+    let m = persistent(&path);
+    let seeded = m.seed(db, imports, seed_request()).await.unwrap();
+    let port = seeded.listen_port;
+    assert!(m.forget(&seeded.id).await.is_err());
+    m.pause(&seeded.id).await.unwrap();
+    m.shutdown().await;
+    drop(m);
+    let original_file = root.join("a.bin");
+    let mut changed = fs::read(&original_file).unwrap();
+    changed[0] = 0x33;
+    fs::write(&original_file, &changed).unwrap();
+    let restored = persistent(&path);
+    assert_eq!(restored.list().items[0].status, TransferStatus::Paused);
+    assert!(matches!(
+        restored.resume(&seeded.id).await.unwrap_err().code,
+        ErrorCode::SourceChanged
+    ));
+    assert_eq!(fs::read(&original_file).unwrap(), changed);
+    assert!(
+        restored.entries.lock().unwrap()[&seeded.id]
+            .runtime
+            .lock()
+            .unwrap()
+            .is_none()
+    );
+    fs::write(&original_file, &original[..1024 * 1024 - 3]).unwrap();
+    let (a, b) = tokio::join!(restored.resume(&seeded.id), restored.resume(&seeded.id));
+    assert_eq!(a.unwrap().listen_port, port);
+    assert_eq!(b.unwrap().listen_port, port);
+    assert!(restored.list().items[0].is_seeding);
+    restored.shutdown().await;
+    assert_eq!(
+        persistent(&path).list().items[0].status,
+        TransferStatus::Paused
+    );
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn unsafe_partial_ownership_oversized_files_and_cancelled_resume_never_open_payload_sessions()
+{
+    let (d, db, _, _, _) = setup();
+    let path = d.path().join("private/state.sqlite3");
+    let m = persistent(&path);
+    let preview = m
+        .import(ever::from_catalog(&db, "1").unwrap().torrent)
+        .unwrap();
+    let guard = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+    let job = m
+        .download(
+            StartDownloadRequest {
+                request_id: Uuid::new_v4().to_string(),
+                token: preview.token,
+                peer: guard.local_addr().unwrap().to_string(),
+                dht: false,
+                trackers: vec![],
+                seed_after_download: false,
+            },
+            d.path().into(),
+        )
+        .await
+        .unwrap();
+    m.pause(&job.id).await.unwrap();
+    let root = d.path().join(job.output_name.unwrap());
+    let marker = root.parent().unwrap().join(format!(
+        ".{}.owner.json",
+        root.file_name().unwrap().to_str().unwrap()
+    ));
+    let correct = fs::read(&marker).unwrap();
+    fs::write(&marker, b"{}").unwrap();
+    assert!(m.resume(&job.id).await.is_err());
+    assert_eq!(fs::metadata(root.join("a.bin")).unwrap().len(), 0);
+    fs::write(&marker, correct).unwrap();
+    let oversized = vec![0x44; 1024 * 1024];
+    fs::write(root.join("a.bin"), &oversized).unwrap();
+    assert!(m.resume(&job.id).await.is_err());
+    assert_eq!(fs::read(root.join("a.bin")).unwrap(), oversized);
+    fs::write(root.join("a.bin"), b"").unwrap();
+    let entry = m.entries.lock().unwrap()[&job.id].clone();
+    let held = entry.finish_gate.lock().await;
+    let resuming = tokio::spawn({
+        let m = m.clone();
+        let id = job.id.clone();
+        async move { m.resume(&id).await }
+    });
+    tokio::time::timeout(Duration::from_secs(5), async {
+        loop {
+            if entry.operation.lock().unwrap().is_some() {
+                break;
+            }
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .unwrap();
+    let pausing = tokio::spawn({
+        let m = m.clone();
+        let id = job.id.clone();
+        async move { m.pause(&id).await }
+    });
+    tokio::time::timeout(Duration::from_secs(5), async {
+        loop {
+            if entry
+                .operation
+                .lock()
+                .unwrap()
+                .as_ref()
+                .unwrap()
+                .is_cancelled()
+            {
+                break;
+            }
+            tokio::task::yield_now().await;
+        }
+    })
+    .await
+    .unwrap();
+    drop(held);
+    assert_eq!(
+        resuming.await.unwrap().unwrap().status,
+        TransferStatus::Paused
+    );
+    assert_eq!(
+        pausing.await.unwrap().unwrap().status,
+        TransferStatus::Paused
+    );
+    assert!(entry.runtime.lock().unwrap().is_none());
+    m.shutdown().await;
+}
+#[test]
+fn unsupported_or_corrupt_transfer_store_is_not_reset_and_does_not_affect_catalog() {
+    let (d, db, _, _, _) = setup();
+    let path = d.path().join("private/state.sqlite3");
+    let m = persistent(&path);
+    drop(m);
+    let c = rusqlite::Connection::open(&path).unwrap();
+    c.pragma_update(None, "user_version", 99).unwrap();
+    assert!(Transfers::open(&path).is_err());
+    assert_eq!(
+        c.pragma_query_value::<i64, _>(None, "user_version", |r| r.get(0))
+            .unwrap(),
+        99
+    );
+    c.pragma_update(None, "user_version", 1).unwrap();
+    c.execute(
+        "INSERT INTO transfers VALUES (?1,'not-json',?2,'{}')",
+        rusqlite::params![Uuid::new_v4().to_string(), b"bad metainfo".to_vec()],
+    )
+    .unwrap();
+    assert!(Transfers::open(&path).is_err());
+    assert_eq!(
+        c.query_row::<i64, _, _>("SELECT count(*) FROM transfers", [], |r| r.get(0))
+            .unwrap(),
+        1
+    );
+    assert_eq!(db.info().unwrap().item_count, 1);
+    assert!(Transfers::unavailable().ensure_ready().is_err());
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn checkpoint_write_failure_stops_sharing_without_resetting_saved_intent() {
+    let (d, db, imports, _, _) = setup();
+    let path = d.path().join("private/state.sqlite3");
+    let m = persistent(&path);
+    let seed = m.seed(db, imports, seed_request()).await.unwrap();
+    m.store.as_ref().unwrap().connection_for_test(true);
+    tokio::time::timeout(Duration::from_secs(6), async {
+        loop {
+            let row = m.list().items[0].clone();
+            if row.status == TransferStatus::Failed {
+                break;
+            }
+            tokio::time::sleep(Duration::from_millis(50)).await;
+        }
+    })
+    .await
+    .unwrap();
+    assert!(
+        m.entries.lock().unwrap()[&seed.id]
+            .runtime
+            .lock()
+            .unwrap()
+            .is_none()
+    );
+    m.store.as_ref().unwrap().connection_for_test(false);
+    let reopened = persistent(&path);
+    assert_eq!(reopened.list().items[0].status, TransferStatus::Paused);
+    reopened.resume(&seed.id).await.unwrap();
+    reopened.shutdown().await;
+    m.shutdown().await;
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn early_v1_inline_snapshots_upgrade_without_losing_identity_or_starting_network() {
+    let (d, db, imports, _, _) = setup();
+    let path = d.path().join("private/state.sqlite3");
+    let m = persistent(&path);
+    let seed = m.seed(db, imports, seed_request()).await.unwrap();
+    let paused = m.pause(&seed.id).await.unwrap();
+    m.shutdown().await;
+    drop(m);
+    let c = rusqlite::Connection::open(&path).unwrap();
+    c.execute(
+        "UPDATE transfers SET snapshot=?1",
+        [serde_json::to_string(&paused).unwrap()],
+    )
+    .unwrap();
+    c.execute_batch("DROP TABLE transfer_snapshots").unwrap();
+    drop(c);
+    let restored = persistent(&path);
+    let row = restored.list().items[0].clone();
+    assert_eq!(row.id, seed.id);
+    assert_eq!(row.status, TransferStatus::Paused);
+    assert!(row.listen_port.is_none());
+    assert!(
+        restored.entries.lock().unwrap()[&seed.id]
+            .runtime
+            .lock()
+            .unwrap()
+            .is_none()
+    );
+    restored.shutdown().await;
 }

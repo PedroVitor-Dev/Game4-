@@ -892,3 +892,54 @@ test("live transfer observations validate peer counts, rates and explicit contin
     code("CAPABILITY_UNAVAILABLE"),
   );
 });
+
+test("pause/resume/history validate states, gate capabilities and never expose stale live observations", async () => {
+  const paused = {
+    ...examples.activeTransfer,
+    status: "paused",
+    isSeeding: false,
+    telemetry: null,
+    listenPort: null,
+  };
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "transfer_forget") return { forgotten: true };
+    return command === "transfer_resume" ? examples.activeTransfer : paused;
+  });
+  const request = { transferId: examples.transfer.id };
+  assert.equal((await client.pauseTransfer(request)).status, "paused");
+  assert.equal((await client.resumeTransfer(request)).status, "active");
+  assert.deepEqual(await client.forgetTransfer(request), { forgotten: true });
+  assert.deepEqual(calls.slice(1), [
+    ["transfer_pause", { request }],
+    ["transfer_resume", { request }],
+    ["transfer_forget", { request }],
+  ]);
+  for (const change of [
+    { telemetry: examples.activeTransfer.telemetry },
+    { isSeeding: true },
+  ])
+    await assert.rejects(
+      make(async (c) =>
+        c === "app_info"
+          ? examples.appInfo
+          : { items: [{ ...paused, ...change }] },
+      ).listTransfers(),
+      code("INVALID_RESPONSE"),
+    );
+  assert.equal(
+    (
+      await make(async (c) =>
+        c === "app_info"
+          ? examples.appInfo
+          : { items: [{ ...paused, status: "resuming" }] },
+      ).listTransfers()
+    ).items[0].status,
+    "resuming",
+  );
+  const old = make(async () => ({ ...examples.appInfo, capabilities: [] }));
+  for (const method of ["pauseTransfer", "resumeTransfer", "forgetTransfer"])
+    await assert.rejects(old[method](request), code("CAPABILITY_UNAVAILABLE"));
+});
