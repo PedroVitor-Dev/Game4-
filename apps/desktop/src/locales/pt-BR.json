@@ -54,7 +54,25 @@
     "loadingFiles": "Carregando detalhes dos arquivos…",
     "moreFiles": "Carregar mais arquivos",
     "otherFormats_one": "+{{count}} outro grupo de formato",
-    "otherFormats_other": "+{{count}} outros grupos de formato"
+    "otherFormats_other": "+{{count}} outros grupos de formato",
+    "archiveLabel": "SEU ACERVO DIGITAL",
+    "archiveTitle": "Todo jogo tem uma história.",
+    "loadedItems": "Itens carregados",
+    "loadedSize": "Tamanho indexado carregado",
+    "loadedScope": "Busca, filtros de plataforma e totais se aplicam apenas aos itens carregados. Carregue mais para incluir o restante da coleção; o tamanho indexado não desconta cópias repetidas.",
+    "packageTools": "Abrir pacotes de preservação · .g4 / .g4e",
+    "filterLabel": "Filtros da coleção",
+    "search": "Buscar na coleção",
+    "searchPlaceholder": "Encontre um título entre os itens carregados…",
+    "platformFilter": "Plataforma",
+    "allPlatforms": "Todas as plataformas",
+    "view": "Visualização da coleção",
+    "gridView": "Grade",
+    "listView": "Lista",
+    "visibleItems": "{{shown}} de {{loaded}} itens carregados",
+    "noMatches": "Nenhum item carregado corresponde aos filtros.",
+    "clearFilters": "Limpar filtros",
+    "metadataDetails": "Plataformas, formatos e integridade"
   },
   "tasks": {
     "title": "Cada etapa, acompanhada.",
@@ -267,7 +285,23 @@
     "persistenceHint": "O estado é salvo de forma privada neste computador. Sessões interrompidas voltam pausadas; Retomar verifica as peças locais antes de reabrir conexões com peers. Mantenha o arquivo de identificação ao lado da pasta de download. Remover da lista mantém os arquivos, mas apaga o registro de retomada.",
     "pause": "Pausar",
     "resume": "Retomar e verificar",
-    "forget": "Remover da lista (manter arquivos)"
+    "forget": "Remover da lista (manter arquivos)",
+    "centerTitle": "Conecte. Transfira. Preserve.",
+    "newTransfer": "Nova transferência",
+    "downloadTab": "Baixar",
+    "seedTab": "Compartilhar originais",
+    "filterLabel": "Filtrar transferências salvas",
+    "filter": {
+      "all": "Todas as sessões",
+      "active": "Ativas",
+      "paused": "Pausadas",
+      "completed": "Concluídas",
+      "failed": "Falhas"
+    },
+    "loading": "Carregando transferências salvas…",
+    "emptyTitle": "Tudo pronto para começar.",
+    "noMatches": "Nenhuma transferência salva corresponde a este filtro.",
+    "sessionDetails": "Detalhes da conexão e magnet"
   },
   "dashboard": {
     "title": "Feito para durar.",

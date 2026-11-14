@@ -104,9 +104,10 @@ export function LibraryItemCard({
     });
   return (
     <article className={`content-card library-item ${open ? "expanded" : ""}`}>
-      <span className="item-icon" aria-hidden="true">
-        ▤
-      </span>
+      <div className="library-cover" aria-hidden="true">
+        <span>{item.title.slice(0, 1).toLocaleUpperCase(i18n.language)}</span>
+        <small>GAME4∞ / ARCHIVE</small>
+      </div>
       <h2>{item.title}</h2>
       <p title={exact(item.totalBytes)}>
         {t("library.fileCount", { count: item.fileCount })} ·{" "}
@@ -118,83 +119,92 @@ export function LibraryItemCard({
           {t("library.declaredPlatform")}: {item.platform}
         </p>
       )}
-      <div className="identification">
-        <h3>{t("library.platforms")}</h3>
-        {item.detectedPlatforms.length ? (
-          item.detectedPlatforms.map((p) => (
-            <span className="identification-chip" key={p.platform + p.evidence}>
-              {platformLabels[p.platform]} · {t(`identification.${p.evidence}`)}{" "}
-              · {p.fileCount}
+      <details className="item-observations">
+        <summary>{t("library.metadataDetails")}</summary>
+        <div className="identification">
+          <h3>{t("library.platforms")}</h3>
+          {item.detectedPlatforms.length ? (
+            item.detectedPlatforms.map((p) => (
+              <span
+                className="identification-chip"
+                key={p.platform + p.evidence}
+              >
+                {platformLabels[p.platform]} ·{" "}
+                {t(`identification.${p.evidence}`)} · {p.fileCount}
+              </span>
+            ))
+          ) : (
+            <span className="identification-unknown">
+              {t("library.platformUnknown")}
             </span>
-          ))
-        ) : (
-          <span className="identification-unknown">
-            {t("library.platformUnknown")}
-          </span>
-        )}
-        <h3>{t("library.formats")}</h3>
-        {item.formats.slice(0, 6).map((f) => (
-          <span className="identification-chip" key={f.format + f.evidence}>
-            {formatName(f.format)}
-            {f.evidence !== "unknown" && (
-              <> · {t(`identification.${f.evidence}`)}</>
-            )}{" "}
-            · {f.fileCount}
-          </span>
-        ))}
-        {!item.formats.length && (
-          <span className="identification-unknown">
-            {t("identification.unknown")}
-          </span>
-        )}
-        {item.formats.length > 6 && (
-          <span>
-            {t("library.otherFormats", { count: item.formats.length - 6 })}
-          </span>
-        )}
-      </div>
-      <section className="integrity-summary" aria-label={t("integrity.title")}>
-        <h3>{t("integrity.title")}</h3>
-        <p>{t("integrity.scope")}</p>
-        {health && (
-          <>
-            {health.changed +
-              health.missing +
-              health.inaccessible +
-              health.unlocated >
-              0 && <p role="status">{t("integrity.issues")}</p>}
-            <dl>
-              {(
-                [
-                  "verified",
-                  "changed",
-                  "missing",
-                  "inaccessible",
-                  "unverified",
-                  "unlocated",
-                ] as const
-              ).map((status) => (
-                <div key={status}>
-                  <dt>{t(`integrity.${status}`)}</dt>
-                  <dd>{health[status].toLocaleString(i18n.language)}</dd>
-                </div>
-              ))}
-            </dl>
-            <p>
-              {health.lastCheckedAt
-                ? t("integrity.lastChecked", {
-                    date: new Date(health.lastCheckedAt).toLocaleString(
-                      i18n.language,
-                    ),
-                  })
-                : t("integrity.neverChecked")}
-            </p>
-          </>
-        )}
-        {healthError !== undefined && (
-          <p role="alert">{t(getIpcErrorKey(healthError))}</p>
-        )}
-      </section>
+          )}
+          <h3>{t("library.formats")}</h3>
+          {item.formats.slice(0, 6).map((f) => (
+            <span className="identification-chip" key={f.format + f.evidence}>
+              {formatName(f.format)}
+              {f.evidence !== "unknown" && (
+                <> · {t(`identification.${f.evidence}`)}</>
+              )}{" "}
+              · {f.fileCount}
+            </span>
+          ))}
+          {!item.formats.length && (
+            <span className="identification-unknown">
+              {t("identification.unknown")}
+            </span>
+          )}
+          {item.formats.length > 6 && (
+            <span>
+              {t("library.otherFormats", { count: item.formats.length - 6 })}
+            </span>
+          )}
+        </div>
+        <section
+          className="integrity-summary"
+          aria-label={t("integrity.title")}
+        >
+          <h3>{t("integrity.title")}</h3>
+          <p>{t("integrity.scope")}</p>
+          {health && (
+            <>
+              {health.changed +
+                health.missing +
+                health.inaccessible +
+                health.unlocated >
+                0 && <p role="status">{t("integrity.issues")}</p>}
+              <dl>
+                {(
+                  [
+                    "verified",
+                    "changed",
+                    "missing",
+                    "inaccessible",
+                    "unverified",
+                    "unlocated",
+                  ] as const
+                ).map((status) => (
+                  <div key={status}>
+                    <dt>{t(`integrity.${status}`)}</dt>
+                    <dd>{health[status].toLocaleString(i18n.language)}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p>
+                {health.lastCheckedAt
+                  ? t("integrity.lastChecked", {
+                      date: new Date(health.lastCheckedAt).toLocaleString(
+                        i18n.language,
+                      ),
+                    })
+                  : t("integrity.neverChecked")}
+              </p>
+            </>
+          )}
+          {healthError !== undefined && (
+            <p role="alert">{t(getIpcErrorKey(healthError))}</p>
+          )}
+        </section>
+      </details>
       <span className="local-badge">{t("library.localItem")}</span>
       <div className="manifest-action actions">
         <button

@@ -23,10 +23,14 @@ import {
 import { EverReader } from "../components/EverReader";
 import { PackageReader } from "../components/PackageReader";
 import { LibraryItemCard } from "../components/LibraryItemCard";
+import { formatBytes, platformLabels } from "../services/file-identification";
 import { getIpcErrorKey } from "../services/errors";
 
 export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
   const { t, i18n } = useTranslation();
+  const [search, setSearch] = useState("");
+  const [platform, setPlatform] = useState("");
+  const [layout, setLayout] = useState<"grid" | "list">("grid");
   const [items, setItems] = useState<LibraryItemSummary[]>([]);
   const [tasks, setTasks] = useState<TaskSnapshot[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
@@ -215,10 +219,65 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
   );
   const number = (v: string | number) =>
     BigInt(v).toLocaleString(i18n.language);
+  const platforms = [
+    ...new Set(
+      items
+        .flatMap((item) => [
+          item.platform,
+          ...item.detectedPlatforms.map((p) => p.platform),
+        ])
+        .filter((p): p is string => Boolean(p)),
+    ),
+  ].sort();
+  const filtered = items.filter(
+    (item) =>
+      item.title
+        .toLocaleLowerCase(i18n.language)
+        .includes(search.toLocaleLowerCase(i18n.language)) &&
+      (!platform ||
+        item.platform === platform ||
+        item.detectedPlatforms.some((p) => p.platform === platform)),
+  );
   return (
-    <div className="library-workspace">
+    <div className={`library-workspace collection-workspace layout-${layout}`}>
       {!tasksOnly && (
-        <section className="content-card import-panel">
+        <>
+          <section className="workspace-banner">
+            <div>
+              <p className="eyebrow">{t("library.archiveLabel")}</p>
+              <h2>{t("library.archiveTitle")}</h2>
+              <p>{t("library.importDescription")}</p>
+            </div>
+            <div className="banner-symbol" aria-hidden="true">
+              ◫
+            </div>
+          </section>
+          <div className="workspace-metrics">
+            <article>
+              <span>{t("library.loadedItems")}</span>
+              <strong>{items.length.toLocaleString(i18n.language)}</strong>
+            </article>
+            <article>
+              <span>{t("library.loadedSize")}</span>
+              <strong>
+                {formatBytes(
+                  items
+                    .reduce((sum, item) => sum + BigInt(item.totalBytes), 0n)
+                    .toString(),
+                  i18n.language,
+                )}
+              </strong>
+            </article>
+            <article>
+              <span>{t("library.platforms")}</span>
+              <strong>{platforms.length.toLocaleString(i18n.language)}</strong>
+            </article>
+          </div>
+          <p className="dashboard-footnote">{t("library.loadedScope")}</p>
+        </>
+      )}
+      {!tasksOnly && (
+        <section className="content-card import-panel library-import">
           <div>
             <h2>{t("library.importTitle")}</h2>
             <p>{t("library.importDescription")}</p>
@@ -269,8 +328,15 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
           )}
         </section>
       )}
-      {!tasksOnly && <PackageReader disabled={busy || active} />}
-      {!tasksOnly && <EverReader disabled={busy || active} />}
+      {!tasksOnly && (
+        <details className="workspace-tools">
+          <summary>{t("library.packageTools")}</summary>
+          <div className="reader-grid">
+            <PackageReader disabled={busy || active} />
+            <EverReader disabled={busy || active} />
+          </div>
+        </details>
+      )}
       {everWorking && <p role="status">{t("ever.creating")}</p>}
       {everSaved && (
         <section className="content-card ever-export-result" role="status">
@@ -311,6 +377,73 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
           {t("library.manifestSaved", { fileName: exported })}
         </p>
       )}
+      {!tasksOnly && (
+        <section
+          className="collection-toolbar"
+          aria-label={t("library.filterLabel")}
+        >
+          <label className="search-field">
+            <span>{t("library.search")}</span>
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("library.searchPlaceholder")}
+            />
+          </label>
+          <label>
+            <span>{t("library.platformFilter")}</span>
+            <select
+              value={platform}
+              onChange={(e) => setPlatform(e.target.value)}
+            >
+              <option value="">{t("library.allPlatforms")}</option>
+              {platforms.map((p) => (
+                <option key={p} value={p}>
+                  {platformLabels[p as keyof typeof platformLabels] ?? p}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div
+            className="view-toggle"
+            role="group"
+            aria-label={t("library.view")}
+          >
+            <button
+              aria-pressed={layout === "grid"}
+              onClick={() => setLayout("grid")}
+            >
+              {t("library.gridView")}
+            </button>
+            <button
+              aria-pressed={layout === "list"}
+              onClick={() => setLayout("list")}
+            >
+              {t("library.listView")}
+            </button>
+          </div>
+          <span className="filter-count" role="status">
+            {t("library.visibleItems", {
+              shown: filtered.length,
+              loaded: items.length,
+            })}
+          </span>
+        </section>
+      )}
+      {!tasksOnly && items.length > 0 && filtered.length === 0 && (
+        <div className="content-card empty-state">
+          <h2>{t("library.noMatches")}</h2>
+          <button
+            onClick={() => {
+              setSearch("");
+              setPlatform("");
+            }}
+          >
+            {t("library.clearFilters")}
+          </button>
+        </div>
+      )}
       {loading && <p role="status">{t("library.loading")}</p>}
       {!tasksOnly &&
         !loading &&
@@ -324,7 +457,7 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
           </section>
         ) : (
           <section aria-label={t("nav.library")} className="library-grid">
-            {items.map((item) => (
+            {filtered.map((item) => (
               <LibraryItemCard
                 key={item.id}
                 item={item}

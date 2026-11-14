@@ -1028,3 +1028,429 @@ input:focus-visible {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Library and transfer workspaces share the dashboard's archive palette. */
+.workspace-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 32px;
+  border: 1px solid #3b5149;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at right, #365f4940, transparent 70%), #1b2528;
+}
+.workspace-banner h2 {
+  font-size: clamp(23px, 3vw, 32px);
+  letter-spacing: -0.8px;
+  margin: 12px 0;
+}
+.workspace-banner p:not(.eyebrow) {
+  color: #aebbc3;
+  font-size: 12px;
+  line-height: 1.9;
+  max-width: 630px;
+  margin: 0;
+}
+.banner-symbol {
+  font-size: 75px;
+  line-height: 1;
+  color: #a8d5bb;
+  padding: 0 16px;
+}
+.workspace-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.workspace-metrics article {
+  padding: 20px 24px;
+  border: 1px solid #303b42;
+  background: #192029;
+  border-radius: 12px;
+}
+.workspace-metrics article > span {
+  display: block;
+  font-size: 11px;
+  color: #aab6c6;
+  margin-bottom: 12px;
+}
+.workspace-metrics strong {
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+.library-import {
+  background: #171e25;
+}
+.library-import .actions {
+  margin-top: 18px;
+}
+.library-workspace button.primary,
+.library-import .actions > button:first-child {
+  background: #b1ebcd;
+  color: #14261e;
+  border-color: #b1ebcd;
+}
+.library-workspace button.primary:hover,
+.library-import .actions > button:first-child:hover {
+  background: #cff6e0;
+}
+.workspace-tools {
+  border: 1px solid #303b42;
+  border-radius: 12px;
+  background: #171c25;
+}
+.workspace-tools > summary {
+  padding: 20px 24px;
+  font-size: 13px;
+  color: #c2d6cb;
+}
+summary {
+  cursor: pointer;
+}
+summary:focus-visible {
+  outline: 2px solid #b1ebcd;
+  outline-offset: 4px;
+}
+.reader-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 0 20px 20px;
+}
+.reader-grid > section {
+  min-width: 0;
+}
+.collection-toolbar {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid #303b42;
+  background: #171c25;
+  border-radius: 12px;
+}
+.collection-toolbar label {
+  display: grid;
+  gap: 9px;
+  font-size: 11px;
+  color: #aab6c6;
+}
+.collection-toolbar .search-field {
+  flex: 1;
+  min-width: 180px;
+}
+.collection-toolbar input,
+.collection-toolbar select {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 12px;
+  border: 1px solid #3b4652;
+  border-radius: 7px;
+  color: #e8edf2;
+  background: #111820;
+  font: inherit;
+  font-size: 12px;
+}
+.view-toggle {
+  display: flex;
+  gap: 5px;
+}
+.view-toggle button,
+.composer-switch button {
+  font-size: 12px;
+  background: transparent;
+  border-color: #3b4652;
+}
+.view-toggle button[aria-pressed="true"],
+.composer-switch button[aria-pressed="true"] {
+  background: #283e34;
+  color: #b1ebcd;
+  border-color: #668e77;
+}
+.filter-count {
+  flex-basis: 100%;
+  color: #97a7b8;
+  font-size: 10px;
+}
+.collection-workspace .library-grid {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  align-items: start;
+}
+.library-item {
+  background: linear-gradient(140deg, #1d2630, #171c25);
+  border-color: #35424b;
+  padding: 20px;
+}
+.library-cover {
+  height: 135px;
+  border-radius: 9px;
+  margin-bottom: 22px;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 24px, #ffffff04 24px 25px),
+    linear-gradient(130deg, #355b49, #222e3b);
+  display: grid;
+  place-items: center;
+  position: relative;
+  color: #bae2ca;
+}
+.library-cover > span {
+  font-size: 48px;
+  font-weight: 300;
+}
+.library-cover small {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  font: 8px monospace;
+  letter-spacing: 2px;
+}
+.library-item:nth-child(3n + 2) .library-cover {
+  background-color: #3a3150;
+  background-image: linear-gradient(130deg, #55446d, #253343);
+  color: #dccaf4;
+}
+.library-item:nth-child(3n) .library-cover {
+  background-image: linear-gradient(130deg, #375365, #273434);
+  color: #bbdce9;
+}
+.library-item > h2 {
+  font-size: 18px;
+  line-height: 1.4;
+}
+.item-observations {
+  border-top: 1px solid #35424b;
+  border-bottom: 1px solid #35424b;
+  margin: 18px 0;
+  padding: 14px 0;
+}
+.item-observations summary {
+  color: #b9cbca;
+  font-size: 12px;
+}
+.item-observations .integrity-summary h3 {
+  font-size: 13px;
+}
+.library-item .manifest-action button {
+  font-size: 11px;
+  padding: 9px 11px;
+  background: #252c3a;
+  border-color: #414b60;
+}
+.library-item .manifest-action {
+  gap: 8px;
+}
+.layout-list .library-grid {
+  grid-template-columns: 1fr;
+}
+.layout-list .library-item {
+  display: block;
+  min-height: 190px;
+}
+.layout-list .library-cover {
+  float: left;
+  width: 120px;
+  height: 150px;
+  margin: 0 24px 16px 0;
+}
+.layout-list .library-item::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.layout-list .library-cover small {
+  letter-spacing: 0;
+  font-size: 7px;
+}
+.layout-list .item-files {
+  clear: both;
+}
+.transfers-workspace {
+  display: flex;
+  flex-direction: column;
+}
+.transfer-banner {
+  order: 0;
+}
+.transfer-metrics {
+  order: 1;
+}
+.transfers-workspace > .error-message,
+.transfers-workspace > [role="status"] {
+  order: 2;
+}
+.saved-sessions {
+  order: 3;
+}
+.composer-switch {
+  order: 4;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 8px;
+}
+.composer-switch > span {
+  margin-right: auto;
+  font-size: 15px;
+  font-weight: 600;
+}
+.transfer-composer {
+  order: 5;
+  background: #181f29;
+}
+.transfer-composer[hidden] {
+  display: none;
+}
+.connection-settings {
+  order: 6;
+  background: #171e25;
+}
+.connection-settings > summary {
+  color: #bfd4c9;
+  font-size: 14px;
+  font-weight: 600;
+}
+.connection-settings[open] > summary {
+  margin-bottom: 24px;
+}
+.transfer-panel > p {
+  max-width: 780px;
+}
+.session-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.session-heading h3 {
+  font-size: 17px;
+  margin: 0;
+}
+.session-heading label {
+  margin: 0;
+  font-size: 11px;
+}
+.session-status {
+  border: 1px solid #48546a;
+  border-radius: 20px;
+  padding: 6px 10px;
+  color: #c7d1e2;
+  font-size: 10px;
+}
+.status-active,
+.status-completed {
+  color: #b1ebcd;
+  background: #243c31;
+  border-color: #466a53;
+}
+.status-paused {
+  color: #d0b9f0;
+  background: #302740;
+  border-color: #5e497a;
+}
+.status-failed {
+  color: #ffb9b9;
+  background: #3b2830;
+  border-color: #704651;
+}
+.transfer-row {
+  margin-top: 18px;
+  padding: 22px;
+  border: 1px solid #35424b;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #1d2730, #181d28);
+}
+.transfer-row p {
+  margin-bottom: 12px;
+  max-width: none;
+  font-size: 12px;
+}
+.transfer-row progress {
+  display: block;
+  height: 7px;
+  margin: 20px 0;
+  accent-color: #b1ebcd;
+}
+.session-details {
+  border-top: 1px solid #34434b;
+  border-bottom: 1px solid #34434b;
+  padding: 12px 0;
+  margin-bottom: 16px;
+}
+.session-details summary {
+  color: #b4c8be;
+  font-size: 11px;
+}
+.session-details[open] > summary {
+  margin-bottom: 16px;
+}
+.transfer-row .actions {
+  margin-top: 22px;
+}
+.transfer-row .actions button {
+  font-size: 11px;
+  padding: 9px 12px;
+}
+.session-empty {
+  text-align: center;
+  padding: 32px 16px;
+}
+.session-empty > span {
+  font-size: 40px;
+  color: #a8d5bb;
+}
+.session-empty h3 {
+  margin: 14px 0;
+  font-size: 19px;
+}
+.session-empty p {
+  margin: 0 auto;
+  max-width: 420px;
+}
+@media (max-width: 900px) {
+  .reader-grid {
+    grid-template-columns: 1fr;
+  }
+  .workspace-metrics article {
+    padding: 16px;
+  }
+  .workspace-metrics strong {
+    font-size: 21px;
+  }
+}
+@media (max-width: 650px) {
+  .workspace-banner {
+    padding: 24px;
+  }
+  .banner-symbol {
+    display: none;
+  }
+  .workspace-metrics {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .workspace-metrics article {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .workspace-metrics article > span {
+    margin: 0;
+  }
+  .transfer-row {
+    padding: 16px;
+  }
+  .layout-list .library-cover {
+    float: none;
+    width: 100%;
+    height: 100px;
+    margin: 0 0 20px;
+  }
+}

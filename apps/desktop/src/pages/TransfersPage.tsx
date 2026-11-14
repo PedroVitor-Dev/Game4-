@@ -27,6 +27,9 @@ import { getIpcErrorKey } from "../services/errors";
 import { formatBytes } from "../services/file-identification";
 export function TransfersPage() {
   const { t, i18n } = useTranslation();
+  const [sessionFilter, setSessionFilter] = useState("all");
+  const [composer, setComposer] = useState<"seed" | "download">("download");
+  const [loaded, setLoaded] = useState(false);
   const [items, setItems] = useState<LibraryItemSummary[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [itemId, setItemId] = useState("");
@@ -62,7 +65,10 @@ export function TransfersPage() {
     if (!isTauri()) return;
     try {
       const result = await listTransfers();
-      if (alive.current) setTransfers(result.items);
+      if (alive.current) {
+        setTransfers(result.items);
+        setLoaded(true);
+      }
     } catch (e) {
       if (alive.current) setError(e);
     }
@@ -205,43 +211,30 @@ export function TransfersPage() {
   const bytes = (value: string) => formatBytes(value, i18n.language);
   return (
     <div className="library-workspace transfers-workspace">
-      <section className="content-card transfer-panel">
-        <h2>{t("transfers.connectionTitle")}</h2>
-        <p>{t("transfers.connectionDescription")}</p>
-        <p>{t("transfers.exposure")}</p>
-        <p>{t("transfers.persistenceHint")}</p>
-        <label className="dht-choice">
-          <input
-            type="checkbox"
-            checked={dht}
-            disabled={busy}
-            onChange={(e) => setDht(e.target.checked)}
-          />
-          {t("transfers.dht")}
-        </label>
-        <p>{t("transfers.dhtHint")}</p>
-        <label className="dht-choice">
-          <input
-            type="checkbox"
-            checked={useTrackers}
-            disabled={busy}
-            onChange={(e) => setUseTrackers(e.target.checked)}
-          />
-          {t("transfers.useTrackers")}
-        </label>
-        <label>
-          {t("transfers.trackerList")}
-          <textarea
-            maxLength={8192}
-            value={trackerText}
-            disabled={busy}
-            onChange={(e) => setTrackerText(e.target.value)}
-            placeholder="https://tracker.example/announce"
-          />
-        </label>
-        <p>{t("transfers.trackerHint")}</p>
-        {!isTauri() && <p>{t("errors.ipcUnavailable")}</p>}
+      <section className="workspace-banner transfer-banner">
+        <div>
+          <p className="eyebrow">BITTORRENT / P2P</p>
+          <h2>{t("transfers.centerTitle")}</h2>
+          <p>{t("transfers.persistenceHint")}</p>
+        </div>
+        <div className="banner-symbol" aria-hidden="true">
+          ⇄
+        </div>
       </section>
+      <div className="workspace-metrics transfer-metrics">
+        {["active", "paused", "completed"].map((status) => (
+          <article key={status}>
+            <span>{t(`transfers.filter.${status}`)}</span>
+            <strong>
+              {loaded
+                ? transfers
+                    .filter((job) => job.status === status)
+                    .length.toLocaleString(i18n.language)
+                : "—"}
+            </strong>
+          </article>
+        ))}
+      </div>
       {error !== undefined && (
         <p role="alert" className="error-message">
           {t(getIpcErrorKey(error))}
@@ -252,7 +245,196 @@ export function TransfersPage() {
           {t(resolving ? "transfers.resolving" : "transfers.preparing")}
         </p>
       )}
-      <section className="content-card transfer-panel">
+      <section className="content-card transfer-panel saved-sessions">
+        <div className="session-heading">
+          <h2>{t("transfers.sessions")}</h2>
+          <label>
+            <span className="sr-only">{t("transfers.filterLabel")}</span>
+            <select
+              value={sessionFilter}
+              onChange={(e) => setSessionFilter(e.target.value)}
+            >
+              {["all", "active", "paused", "completed", "failed"].map(
+                (status) => (
+                  <option key={status} value={status}>
+                    {t(`transfers.filter.${status}`)}
+                  </option>
+                ),
+              )}
+            </select>
+          </label>
+        </div>
+        {!isTauri() ? (
+          <p role="status">{t("errors.ipcUnavailable")}</p>
+        ) : !loaded ? (
+          <p role="status">{t("transfers.loading")}</p>
+        ) : !transfers.length ? (
+          <div className="session-empty">
+            <span aria-hidden="true">⇄</span>
+            <h3>{t("transfers.emptyTitle")}</h3>
+            <p>{t("transfers.empty")}</p>
+          </div>
+        ) : null}
+        {loaded &&
+          transfers.length > 0 &&
+          !transfers.some(
+            (job) => sessionFilter === "all" || job.status === sessionFilter,
+          ) && <p>{t("transfers.noMatches")}</p>}
+        {transfers
+          .filter(
+            (job) => sessionFilter === "all" || job.status === sessionFilter,
+          )
+          .map((job) => (
+            <article className="transfer-row" key={job.id}>
+              <div className="session-heading">
+                <h3>{job.name}</h3>
+                <span className={`session-status status-${job.status}`}>
+                  {t(`transfers.status.${job.status}`)}
+                </span>
+              </div>
+              <p>
+                {t(
+                  job.isSeeding
+                    ? "transfers.seedingNow"
+                    : `transfers.mode.${job.mode}`,
+                )}{" "}
+                · {t(`transfers.status.${job.status}`)}
+              </p>
+              <details className="session-details">
+                <summary>{t("transfers.sessionDetails")}</summary>
+                <p>{t(job.dht ? "transfers.dhtOn" : "transfers.dhtOff")}</p>
+                <p>
+                  {t("transfers.trackerCount", { count: job.trackerCount })}
+                </p>
+                <label>
+                  {t("ever.magnet")}
+                  <textarea
+                    readOnly
+                    value={`magnet:?xt=urn:btih:${job.infoHash}`}
+                  />
+                </label>
+              </details>
+              <p>
+                {t("transfers.progress", {
+                  verified: bytes(job.verifiedBytes),
+                  total: bytes(job.totalBytes),
+                  uploaded: bytes(job.uploadedBytes),
+                })}
+              </p>
+              <p>
+                {t("transfers.received", { bytes: bytes(job.receivedBytes) })}
+              </p>
+              {job.telemetry ? (
+                <div>
+                  <p>
+                    {t("transfers.speeds", {
+                      down: bytes(job.telemetry.downloadBps),
+                      up: bytes(job.telemetry.uploadBps),
+                    })}
+                  </p>
+                  <p>
+                    {t("transfers.connected", {
+                      peers: job.telemetry.connectedPeers,
+                      seeders: job.telemetry.seeders,
+                      leechers: job.telemetry.leechers,
+                    })}
+                  </p>
+                  <p>
+                    {t(
+                      job.telemetry.seeders > 0
+                        ? "transfers.availabilityFull"
+                        : "transfers.availabilityUnknown",
+                      { count: job.telemetry.seeders },
+                    )}
+                  </p>
+                  <p>{t("transfers.peerScope")}</p>
+                </div>
+              ) : (
+                <p>{t("transfers.metricsUnavailable")}</p>
+              )}
+              <progress
+                max="100"
+                value={Number(
+                  BigInt(job.totalBytes) > 0n
+                    ? (BigInt(job.verifiedBytes) * 100n) /
+                        BigInt(job.totalBytes)
+                    : 0n,
+                )}
+                aria-label={t("transfers.pieces")}
+              />
+              {job.listenPort !== null && (
+                <p>{t("transfers.listening", { port: job.listenPort })}</p>
+              )}
+              {job.outputName && (
+                <p className="transfer-output">
+                  {t("transfers.output", { name: job.outputName })}
+                </p>
+              )}
+              {job.error && <p role="alert">{t(getIpcErrorKey(job.error))}</p>}
+              <div className="actions">
+                {["paused", "stopped", "failed"].includes(job.status) && (
+                  <button
+                    disabled={resuming.has(job.id) || stopping.has(job.id)}
+                    onClick={() => void resume(job.id)}
+                  >
+                    {t("transfers.resume")}
+                  </button>
+                )}
+                {job.status === "active" && (
+                  <button
+                    disabled={stopping.has(job.id)}
+                    onClick={() => void stop(job.id, "pause")}
+                  >
+                    {t("transfers.pause")}
+                  </button>
+                )}
+                {["paused", "stopped", "failed", "completed"].includes(
+                  job.status,
+                ) && (
+                  <button
+                    disabled={resuming.has(job.id) || stopping.has(job.id)}
+                    onClick={() => void stop(job.id, "forget")}
+                  >
+                    {t("transfers.forget")}
+                  </button>
+                )}
+                {["active", "resuming"].includes(job.status) && (
+                  <button
+                    disabled={stopping.has(job.id)}
+                    onClick={() => void stop(job.id)}
+                  >
+                    {t("transfers.stop")}
+                  </button>
+                )}
+              </div>
+            </article>
+          ))}
+      </section>
+      <div
+        className="composer-switch"
+        role="group"
+        aria-label={t("transfers.newTransfer")}
+      >
+        <span>{t("transfers.newTransfer")}</span>
+        <button
+          disabled={busy}
+          aria-pressed={composer === "download"}
+          onClick={() => setComposer("download")}
+        >
+          {t("transfers.downloadTab")}
+        </button>
+        <button
+          disabled={busy}
+          aria-pressed={composer === "seed"}
+          onClick={() => setComposer("seed")}
+        >
+          {t("transfers.seedTab")}
+        </button>
+      </div>
+      <section
+        hidden={composer !== "seed"}
+        className="content-card transfer-panel transfer-composer"
+      >
         <h2>{t("transfers.seedTitle")}</h2>
         <p>{t("transfers.sourceHint")}</p>
         <label>
@@ -358,7 +540,10 @@ export function TransfersPage() {
           </div>
         )}
       </section>
-      <section className="content-card transfer-panel">
+      <section
+        hidden={composer !== "download"}
+        className="content-card transfer-panel transfer-composer"
+      >
         <h2>{t("transfers.downloadTitle")}</h2>
         <p>{t("transfers.importHint")}</p>
         <button
@@ -497,122 +682,43 @@ export function TransfersPage() {
           </div>
         )}
       </section>
-      <section className="content-card transfer-panel">
-        <h2>{t("transfers.sessions")}</h2>
-        {!transfers.length && <p>{t("transfers.empty")}</p>}
-        {transfers.map((job) => (
-          <article className="transfer-row" key={job.id}>
-            <h3>{job.name}</h3>
-            <p>
-              {t(
-                job.isSeeding
-                  ? "transfers.seedingNow"
-                  : `transfers.mode.${job.mode}`,
-              )}{" "}
-              · {t(`transfers.status.${job.status}`)}
-            </p>
-            <p>{t(job.dht ? "transfers.dhtOn" : "transfers.dhtOff")}</p>
-            <p>{t("transfers.trackerCount", { count: job.trackerCount })}</p>
-            <label>
-              {t("ever.magnet")}
-              <textarea
-                readOnly
-                value={`magnet:?xt=urn:btih:${job.infoHash}`}
-              />
-            </label>
-            <p>
-              {t("transfers.progress", {
-                verified: bytes(job.verifiedBytes),
-                total: bytes(job.totalBytes),
-                uploaded: bytes(job.uploadedBytes),
-              })}
-            </p>
-            <p>
-              {t("transfers.received", { bytes: bytes(job.receivedBytes) })}
-            </p>
-            {job.telemetry ? (
-              <div>
-                <p>
-                  {t("transfers.speeds", {
-                    down: bytes(job.telemetry.downloadBps),
-                    up: bytes(job.telemetry.uploadBps),
-                  })}
-                </p>
-                <p>
-                  {t("transfers.connected", {
-                    peers: job.telemetry.connectedPeers,
-                    seeders: job.telemetry.seeders,
-                    leechers: job.telemetry.leechers,
-                  })}
-                </p>
-                <p>
-                  {t(
-                    job.telemetry.seeders > 0
-                      ? "transfers.availabilityFull"
-                      : "transfers.availabilityUnknown",
-                    { count: job.telemetry.seeders },
-                  )}
-                </p>
-                <p>{t("transfers.peerScope")}</p>
-              </div>
-            ) : (
-              <p>{t("transfers.metricsUnavailable")}</p>
-            )}
-            <progress
-              max="100"
-              value={Number(
-                (BigInt(job.verifiedBytes) * 100n) / BigInt(job.totalBytes),
-              )}
-              aria-label={t("transfers.pieces")}
-            />
-            {job.listenPort !== null && (
-              <p>{t("transfers.listening", { port: job.listenPort })}</p>
-            )}
-            {job.outputName && (
-              <p className="transfer-output">
-                {t("transfers.output", { name: job.outputName })}
-              </p>
-            )}
-            {job.error && <p role="alert">{t(getIpcErrorKey(job.error))}</p>}
-            <div className="actions">
-              {["paused", "stopped", "failed"].includes(job.status) && (
-                <button
-                  disabled={resuming.has(job.id) || stopping.has(job.id)}
-                  onClick={() => void resume(job.id)}
-                >
-                  {t("transfers.resume")}
-                </button>
-              )}
-              {job.status === "active" && (
-                <button
-                  disabled={stopping.has(job.id)}
-                  onClick={() => void stop(job.id, "pause")}
-                >
-                  {t("transfers.pause")}
-                </button>
-              )}
-              {["paused", "stopped", "failed", "completed"].includes(
-                job.status,
-              ) && (
-                <button
-                  disabled={resuming.has(job.id) || stopping.has(job.id)}
-                  onClick={() => void stop(job.id, "forget")}
-                >
-                  {t("transfers.forget")}
-                </button>
-              )}
-              {["active", "resuming"].includes(job.status) && (
-                <button
-                  disabled={stopping.has(job.id)}
-                  onClick={() => void stop(job.id)}
-                >
-                  {t("transfers.stop")}
-                </button>
-              )}
-            </div>
-          </article>
-        ))}
-      </section>
+      <details className="content-card transfer-panel connection-settings">
+        <summary>{t("transfers.connectionTitle")}</summary>
+        <p>{t("transfers.connectionDescription")}</p>
+        <p>{t("transfers.exposure")}</p>
+        <p>{t("transfers.persistenceHint")}</p>
+        <label className="dht-choice">
+          <input
+            type="checkbox"
+            checked={dht}
+            disabled={busy}
+            onChange={(e) => setDht(e.target.checked)}
+          />
+          {t("transfers.dht")}
+        </label>
+        <p>{t("transfers.dhtHint")}</p>
+        <label className="dht-choice">
+          <input
+            type="checkbox"
+            checked={useTrackers}
+            disabled={busy}
+            onChange={(e) => setUseTrackers(e.target.checked)}
+          />
+          {t("transfers.useTrackers")}
+        </label>
+        <label>
+          {t("transfers.trackerList")}
+          <textarea
+            maxLength={8192}
+            value={trackerText}
+            disabled={busy}
+            onChange={(e) => setTrackerText(e.target.value)}
+            placeholder="https://tracker.example/announce"
+          />
+        </label>
+        <p>{t("transfers.trackerHint")}</p>
+        {!isTauri() && <p>{t("errors.ipcUnavailable")}</p>}
+      </details>
     </div>
   );
 }

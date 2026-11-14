@@ -54,7 +54,25 @@
     "loadingFiles": "Loading file details…",
     "moreFiles": "Load more files",
     "otherFormats_one": "+{{count}} other format group",
-    "otherFormats_other": "+{{count}} other format groups"
+    "otherFormats_other": "+{{count}} other format groups",
+    "archiveLabel": "YOUR DIGITAL ARCHIVE",
+    "archiveTitle": "Every game has a story.",
+    "loadedItems": "Loaded items",
+    "loadedSize": "Loaded indexed size",
+    "loadedScope": "Search, platform filters and totals apply to loaded items only. Load more to include the rest of your collection; indexed size is not deduplicated disk usage.",
+    "packageTools": "Open preservation packages · .g4 / .g4e",
+    "filterLabel": "Collection filters",
+    "search": "Search collection",
+    "searchPlaceholder": "Find a title among loaded items…",
+    "platformFilter": "Platform",
+    "allPlatforms": "All platforms",
+    "view": "Collection layout",
+    "gridView": "Grid",
+    "listView": "List",
+    "visibleItems": "{{shown}} of {{loaded}} loaded items",
+    "noMatches": "No loaded items match your filters.",
+    "clearFilters": "Clear filters",
+    "metadataDetails": "Platforms, formats and integrity"
   },
   "tasks": {
     "title": "Every step, accounted for.",
@@ -267,7 +285,23 @@
     "persistenceHint": "Transfer state is saved privately on this computer. Interrupted sessions reopen paused; Resume rechecks local pieces before opening peer connections. Keep the ownership sidecar beside each download folder. Forgetting a row keeps all files but removes its resume record.",
     "pause": "Pause",
     "resume": "Resume and recheck",
-    "forget": "Forget record (keep files)"
+    "forget": "Forget record (keep files)",
+    "centerTitle": "Connect. Transfer. Preserve.",
+    "newTransfer": "New transfer",
+    "downloadTab": "Download",
+    "seedTab": "Share originals",
+    "filterLabel": "Filter saved transfers",
+    "filter": {
+      "all": "All sessions",
+      "active": "Active",
+      "paused": "Paused",
+      "completed": "Completed",
+      "failed": "Failed"
+    },
+    "loading": "Loading saved transfers…",
+    "emptyTitle": "Ready when you are.",
+    "noMatches": "No saved transfers match this filter.",
+    "sessionDetails": "Connection details and magnet"
   },
   "dashboard": {
     "title": "Built to outlast.",
