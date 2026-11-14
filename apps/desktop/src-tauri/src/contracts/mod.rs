@@ -37,12 +37,13 @@ pub enum ImplementedCommand {
     TransferPause,
     TransferResume,
     TransferForget,
+    TransferSetLimits,
     LibrarySaveBackup,
     LibraryPrepareRestore,
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 32] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 33] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -72,6 +73,7 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 32] = [
     ImplementedCommand::TransferPause,
     ImplementedCommand::TransferResume,
     ImplementedCommand::TransferForget,
+    ImplementedCommand::TransferSetLimits,
     ImplementedCommand::LibrarySaveBackup,
     ImplementedCommand::LibraryPrepareRestore,
     ImplementedCommand::LibraryRestoreBackup,
@@ -631,6 +633,8 @@ pub struct TorrentCreateResult {
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct StartSeedRequest {
+    #[serde(default)]
+    pub limits: BandwidthLimits,
     pub request_id: String,
     pub item_id: String,
     pub listen_port: u16,
@@ -642,6 +646,8 @@ pub struct StartSeedRequest {
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct StartDownloadRequest {
+    #[serde(default)]
+    pub limits: BandwidthLimits,
     pub request_id: String,
     pub token: String,
     pub peer: String,
@@ -703,6 +709,8 @@ pub enum TransferStatus {
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
 pub struct TransferSnapshot {
+    #[serde(default)]
+    pub limits: BandwidthLimits,
     pub id: String,
     pub name: String,
     pub info_hash: String,
@@ -766,4 +774,18 @@ pub struct TransferMetricsInfo {
 #[serde(rename_all = "camelCase")]
 pub struct TransferForgetResult {
     pub forgotten: bool,
+}
+
+/// Payload bytes per second, per transfer. Zero disables that direction's limit.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct BandwidthLimits {
+    pub download_bps: u32,
+    pub upload_bps: u32,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TransferLimitsRequest {
+    pub transfer_id: String,
+    pub limits: BandwidthLimits,
 }

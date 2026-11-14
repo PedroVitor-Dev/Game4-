@@ -11,6 +11,8 @@ pub(super) struct Owned {
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(super) struct Recipe {
+    #[serde(default)]
+    pub limits: BandwidthLimits,
     pub root: PathBuf,
     pub owner: Option<Owned>,
     pub mode: TransferMode,
@@ -105,7 +107,9 @@ impl Store {
                 valid_uuid(&id)?;
                 valid_uuid(&saved.request)?;
                 let meta = inspect(&saved.raw)?;
-                if saved.version != 1
+                validate_limits(saved.recipe.limits)?;
+                if saved.recipe.limits != s.limits
+                    || saved.version != 1
                     || s.id != id
                     || s.mode != saved.recipe.mode
                     || s.info_hash != meta.hash

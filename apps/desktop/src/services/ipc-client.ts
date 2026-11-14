@@ -48,6 +48,8 @@ import type {
   StartSeedRequest,
   StartDownloadRequest,
   TransferIdRequest,
+  TransferLimitsRequest,
+  BandwidthLimits,
 } from "@game4/ipc-contracts";
 
 export type IpcTransport = {
@@ -87,6 +89,7 @@ const decoders = {
   transfer_pause: parseTransferSnapshot,
   transfer_resume: parseTransferSnapshot,
   transfer_forget: parseTransferForgetResult,
+  transfer_set_limits: parseTransferSnapshot,
   library_save_backup: parseLibraryBackupResult,
   library_prepare_restore: parseLibraryPrepareRestoreResult,
   library_restore_backup: parseLibraryRestoreResult,
@@ -149,6 +152,24 @@ export function createIpcClient(transport: IpcTransport) {
   async function requireTrackers(trackers: string[] | undefined) {
     if (trackers?.length) await capable("trackers_validate", { trackers });
   }
+  async function requireLimits(limits: BandwidthLimits | undefined) {
+    if (!limits) return;
+    if (
+      ![limits.downloadBps, limits.uploadBps].every(
+        (n) =>
+          Number.isInteger(n) &&
+          n >= 0 &&
+          n <= 4294967295 &&
+          (n === 0 || n >= 16384),
+      )
+    )
+      throw failure("INVALID_ARGUMENT");
+    if (
+      (limits.downloadBps || limits.uploadBps) &&
+      !(await getAppInfo()).capabilities.includes("transfer_set_limits")
+    )
+      throw failure("CAPABILITY_UNAVAILABLE");
+  }
   return {
     verifyItem: (request: StartVerifyRequest) =>
       capable("library_verify", request),
@@ -179,11 +200,13 @@ export function createIpcClient(transport: IpcTransport) {
     },
     importTorrent: () => capable("torrent_import", undefined),
     seedTorrent: async (request: StartSeedRequest) => {
+      await requireLimits(request.limits);
       await requireDht(request.dht);
       await requireTrackers(request.trackers);
       return capable("torrent_seed", request);
     },
     downloadTorrent: async (request: StartDownloadRequest) => {
+      await requireLimits(request.limits);
       if (
         request.seedAfterDownload &&
         !(await capable("transfer_metrics_info", undefined)).seedAfterDownload
@@ -192,6 +215,10 @@ export function createIpcClient(transport: IpcTransport) {
       await requireDht(request.dht);
       await requireTrackers(request.trackers);
       return capable("torrent_download", request);
+    },
+    setTransferLimits: async (request: TransferLimitsRequest) => {
+      await requireLimits(request.limits);
+      return capable("transfer_set_limits", request);
     },
     listTransfers: () => capable("transfers_list", undefined),
     pauseTransfer: (request: TransferIdRequest) =>

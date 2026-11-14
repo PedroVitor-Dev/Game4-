@@ -116,6 +116,7 @@ async fn main() -> anyhow::Result<()> {
         manager
             .download(
                 StartDownloadRequest {
+                    limits: Default::default(),
                     request_id: uuid::Uuid::new_v4().to_string(),
                     token: p.token,
                     peer: args

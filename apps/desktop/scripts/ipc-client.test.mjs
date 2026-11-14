@@ -987,3 +987,85 @@ test("live observations disappear on polling failure and all inactive transfer s
     null,
   );
 });
+
+const { parseBandwidthInput } =
+  await import("../src/services/transfer-metrics.ts");
+const { parseBandwidthLimits } = await import("@game4/ipc-contracts");
+test("bandwidth inputs convert KiB/s exactly and reject unsafe engine limits", () => {
+  assert.equal(parseBandwidthInput("0"), 0);
+  assert.equal(parseBandwidthInput("16"), 16384);
+  assert.equal(parseBandwidthInput("128.5"), 131584);
+  assert.equal(parseBandwidthInput("4194303.9990234375"), 4294967295);
+  for (const value of [
+    "",
+    "-1",
+    "1",
+    "15.9",
+    "NaN",
+    "Infinity",
+    "1e6",
+    "4194304",
+    "16.0001",
+  ])
+    assert.equal(parseBandwidthInput(value), null, value);
+  assert.deepEqual(parseBandwidthLimits({ downloadBps: 0, uploadBps: 16384 }), {
+    downloadBps: 0,
+    uploadBps: 16384,
+  });
+  for (const value of [-1, 1, 16383, 4294967296, 16384.5, "65536"])
+    assert.throws(
+      () => parseBandwidthLimits({ downloadBps: value, uploadBps: 0 }),
+      code("INVALID_RESPONSE"),
+    );
+});
+test("bandwidth commands are capability gated and older starts cannot silently ignore a cap", async () => {
+  const limits = { downloadBps: 65536, uploadBps: 131072 };
+  const calls = [];
+  const old = make(async (command) => {
+    calls.push(command);
+    if (command === "app_info")
+      return {
+        ...examples.appInfo,
+        capabilities: examples.appInfo.capabilities.filter(
+          (c) => c !== "transfer_set_limits",
+        ),
+      };
+    throw new Error("must not start");
+  });
+  await assert.rejects(
+    old.seedTorrent({ limits, dht: false, trackers: [] }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    old.downloadTorrent({
+      limits,
+      dht: false,
+      trackers: [],
+      seedAfterDownload: false,
+    }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    old.setTransferLimits({ transferId: examples.transfer.id, limits }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  assert.deepEqual(calls, ["app_info"]);
+  const client = make(async (command, args) => {
+    if (command === "app_info") return examples.appInfo;
+    assert.equal(command, "transfer_set_limits");
+    assert.deepEqual(args.request.limits, limits);
+    return { ...examples.transfer, limits };
+  });
+  const result = await client.setTransferLimits({
+    transferId: examples.transfer.id,
+    limits,
+  });
+  assert.deepEqual(result.limits, limits);
+  await assert.rejects(
+    client.setTransferLimits({
+      transferId: result.id,
+      limits: { ...limits, uploadBps: 1 },
+    }),
+    code("INVALID_ARGUMENT"),
+  );
+});

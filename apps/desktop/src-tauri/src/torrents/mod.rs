@@ -30,6 +30,22 @@ pub use magnets::normalize_magnet;
 use storage::Handles;
 const MAX_TOTAL: u64 = 1024 * 1024 * 1024 * 1024;
 const MAX_FILES: usize = 1024;
+// Governor's burst capacity must hold at least one standard 16 KiB piece request.
+fn validate_limits(limits: BandwidthLimits) -> Result<()> {
+    if [limits.download_bps, limits.upload_bps]
+        .into_iter()
+        .any(|n| n != 0 && n < 16 * 1024)
+    {
+        return Err(library::invalid(ErrorField::Request));
+    }
+    Ok(())
+}
+fn engine_limits(limits: BandwidthLimits) -> librqbit::limits::LimitsConfig {
+    librqbit::limits::LimitsConfig {
+        download_bps: std::num::NonZeroU32::new(limits.download_bps),
+        upload_bps: std::num::NonZeroU32::new(limits.upload_bps),
+    }
+}
 type Result<T> = std::result::Result<T, IpcError>;
 fn err(c: ErrorCode) -> IpcError {
     IpcError::new(c)
@@ -344,6 +360,7 @@ impl Transfer {
     }
 }
 struct StartSession {
+    limits: BandwidthLimits,
     raw: Vec<u8>,
     meta: Layout,
     handles: Handles,
@@ -518,6 +535,7 @@ impl Transfers {
     }
     async fn start(self: &Arc<Self>, input: StartSession) -> Result<TransferSnapshot> {
         let StartSession {
+            limits,
             raw,
             meta,
             handles,
@@ -534,6 +552,7 @@ impl Transfers {
             owner,
         } = input;
         let snapshot = TransferSnapshot {
+            limits,
             id: Uuid::new_v4().to_string(),
             name: meta.name,
             info_hash: meta.hash,
@@ -558,6 +577,7 @@ impl Transfers {
             request: request.clone(),
             fingerprint: fingerprint.clone(),
             recipe: Recipe {
+                limits,
                 root,
                 owner,
                 mode,
@@ -690,6 +710,7 @@ impl Transfers {
         let session = Session::new_with_opts(
             PathBuf::new(),
             SessionOptions {
+                ratelimits: engine_limits(r.limits),
                 cancellation_token: Some(session_token.clone()),
                 dht: self.dht_config(r.dht),
                 disable_trackers: r.trackers.is_empty(),
@@ -844,11 +865,20 @@ impl Transfers {
         request: StartSeedRequest,
     ) -> Result<TransferSnapshot> {
         let _gate = self.gate.lock().await;
+        validate_limits(request.limits)?;
         let trackers = trackers::normalize(&request.trackers)?;
         let fingerprint = format!(
             "seed:{}:{}:{}:{trackers:?}",
             request.item_id, request.listen_port, request.dht
         );
+        let fingerprint = if request.limits == BandwidthLimits::default() {
+            fingerprint
+        } else {
+            format!(
+                "{fingerprint}:limits:{}:{}",
+                request.limits.download_bps, request.limits.upload_bps
+            )
+        };
         if let Some(old) = self.replay(&request.request_id, &fingerprint)? {
             return Ok(old);
         }
@@ -895,6 +925,7 @@ impl Transfers {
         .await
         .map_err(|_| failed())??;
         self.start(StartSession {
+            limits: request.limits,
             raw: prepared.0,
             meta: prepared.1,
             handles: prepared.2,
@@ -918,12 +949,21 @@ impl Transfers {
         parent: PathBuf,
     ) -> Result<TransferSnapshot> {
         let _gate = self.gate.lock().await;
+        validate_limits(request.limits)?;
         let trackers = trackers::normalize(&request.trackers)?;
         let addr = magnets::initial_peer(&request.peer, request.dht || !trackers.is_empty())?;
         let fingerprint = format!(
             "download:{}:{addr:?}:{}:{trackers:?}:{}",
             request.token, request.dht, request.seed_after_download
         );
+        let fingerprint = if request.limits == BandwidthLimits::default() {
+            fingerprint
+        } else {
+            format!(
+                "{fingerprint}:limits:{}:{}",
+                request.limits.download_bps, request.limits.upload_bps
+            )
+        };
         if let Some(old) = self.replay(&request.request_id, &fingerprint)? {
             return Ok(old);
         }
@@ -954,6 +994,7 @@ impl Transfers {
         .map_err(|_| failed())??;
         let result = self
             .start(StartSession {
+                limits: request.limits,
                 raw: pending.raw,
                 meta: pending.meta,
                 handles: storage.0,
@@ -975,6 +1016,32 @@ impl Transfers {
             .map_err(|_| failed())?
             .remove(&request.token);
         Ok(result)
+    }
+    pub async fn set_limits(&self, request: TransferLimitsRequest) -> Result<TransferSnapshot> {
+        validate_limits(request.limits)?;
+        let _gate = self.gate.lock().await;
+        let entry = self.entry(&request.transfer_id)?;
+        let _finish = entry.finish_gate.lock().await;
+        if matches!(
+            entry.snapshot().status,
+            TransferStatus::Resuming | TransferStatus::Stopping
+        ) {
+            return Err(err(ErrorCode::TransferUnavailable));
+        }
+        let old = entry.saved.lock().map_err(|_| failed())?.recipe.limits;
+        entry.saved.lock().map_err(|_| failed())?.recipe.limits = request.limits;
+        entry.snapshot.lock().map_err(|_| failed())?.limits = request.limits;
+        if let Err(e) = entry.persist(true).await {
+            entry.saved.lock().map_err(|_| failed())?.recipe.limits = old;
+            entry.snapshot.lock().map_err(|_| failed())?.limits = old;
+            return Err(e);
+        }
+        if let Some(rt) = entry.runtime.lock().map_err(|_| failed())?.as_ref() {
+            let config = engine_limits(request.limits);
+            rt.session.ratelimits.set_download_bps(config.download_bps);
+            rt.session.ratelimits.set_upload_bps(config.upload_bps);
+        }
+        Ok(entry.snapshot())
     }
     pub async fn stop(&self, id: &str) -> Result<TransferSnapshot> {
         valid_uuid(id)?;

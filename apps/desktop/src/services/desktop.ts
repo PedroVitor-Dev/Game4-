@@ -41,6 +41,7 @@ export const {
   seedTorrent,
   downloadTorrent,
   listTransfers,
+  setTransferLimits,
   stopTransfer,
   pauseTransfer,
   resumeTransfer,

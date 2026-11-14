@@ -311,7 +311,16 @@
     "uploadedTotal": "Payload uploaded: {{bytes}}",
     "liveScope": "Sampled speeds and connected peers refresh about every second. Counts describe this session only.",
     "staleMetrics": "Update unavailable. Byte totals and progress are last known; live speeds and peer counts are hidden.",
-    "availabilityLabel": "Peer availability and observation scope"
+    "availabilityLabel": "Peer availability and observation scope",
+    "downloadLimit": "Download limit (KiB/s)",
+    "uploadLimit": "Upload limit (KiB/s)",
+    "limitsHint": "0 = unlimited. Otherwise use at least 16 KiB/s (1 KiB = 1,024 bytes). Limits apply per transfer to payload, allow short bursts and exclude protocol/discovery overhead. Multiple transfers each have their own allowance.",
+    "nextLimits": "Limits for the next seed or download",
+    "sessionLimits": "Upload and download limits",
+    "savedLimitsHint": "Apply to this session now and save for resume. Does not start or resume a transfer. In-flight requests can briefly use the previous allowance.",
+    "applyLimits": "Apply limits",
+    "savingLimits": "Saving limits…",
+    "limitsSaved": "Limits applied and saved."
   },
   "dashboard": {
     "title": "Built to outlast.",

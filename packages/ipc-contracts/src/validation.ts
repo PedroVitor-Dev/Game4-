@@ -622,6 +622,14 @@ function transferTelemetry(v: unknown): TransferTelemetry {
     throw failure("INVALID_RESPONSE");
   return { connectedPeers, seeders, leechers, downloadBps, uploadBps };
 }
+export function parseBandwidthLimits(v: unknown) {
+  const o = object(v);
+  const downloadBps = safeCount(o.downloadBps, 0, 4294967295);
+  const uploadBps = safeCount(o.uploadBps, 0, 4294967295);
+  if ([downloadBps, uploadBps].some((n) => n !== 0 && n < 16384))
+    throw failure("INVALID_RESPONSE");
+  return { downloadBps, uploadBps };
+}
 export function parseTransferSnapshot(v: unknown): TransferSnapshot {
   const o = object(v);
   const totalBytes = decimal(o.totalBytes, true);
@@ -696,6 +704,10 @@ export function parseTransferSnapshot(v: unknown): TransferSnapshot {
     verifiedBytes,
     uploadedBytes,
     receivedBytes,
+    limits:
+      o.limits === undefined
+        ? { downloadBps: 0, uploadBps: 0 }
+        : parseBandwidthLimits(o.limits),
     seedAfterDownload,
     isSeeding,
     telemetry,

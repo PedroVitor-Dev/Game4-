@@ -19,3 +19,16 @@ export function verifiedPercent(
 export function observedTelemetry(job: TransferSnapshot, fresh: boolean) {
   return fresh && job.status === "active" ? job.telemetry : null;
 }
+
+/** KiB/s input converted to exact integer bytes/s for the native u32 limiter. */
+export function parseBandwidthInput(value: string): number | null {
+  if (!/^\d+(?:\.\d{1,10})?$/.test(value)) return null;
+  const [whole, fraction = ""] = value.split(".");
+  const divisor = 10n ** BigInt(fraction.length);
+  const scaled = (BigInt(whole) * divisor + BigInt(fraction || "0")) * 1024n;
+  if (scaled % divisor !== 0n) return null;
+  const bps = scaled / divisor;
+  return bps <= 4294967295n && (bps === 0n || bps >= 16384n)
+    ? Number(bps)
+    : null;
+}

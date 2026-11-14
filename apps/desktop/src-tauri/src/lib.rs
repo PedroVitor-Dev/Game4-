@@ -64,6 +64,7 @@ pub fn run() {
             commands::torrents::transfer_pause,
             commands::torrents::transfer_resume,
             commands::torrents::transfer_forget,
+            commands::torrents::transfer_set_limits,
             commands::backups::library_save_backup,
             commands::backups::library_prepare_restore,
             commands::backups::library_restore_backup

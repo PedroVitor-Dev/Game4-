@@ -5,6 +5,10 @@
     "id": "7b22b2eb-a47e-43e2-975b-8c01b541db17",
     "infoHash": "f0d6cd560e79272cf3acd08e0ee78e193b535c04",
     "isSeeding": false,
+    "limits": {
+      "downloadBps": 0,
+      "uploadBps": 0
+    },
     "listenPort": 42420,
     "mode": "download",
     "name": "originals",
@@ -55,6 +59,7 @@
       "transfer_pause",
       "transfer_resume",
       "transfer_forget",
+      "transfer_set_limits",
       "library_save_backup",
       "library_prepare_restore",
       "library_restore_backup"
@@ -134,6 +139,10 @@
     "id": "7b22b2eb-a47e-43e2-975b-8c01b541db17",
     "infoHash": "f0d6cd560e79272cf3acd08e0ee78e193b535c04",
     "isSeeding": false,
+    "limits": {
+      "downloadBps": 0,
+      "uploadBps": 0
+    },
     "listenPort": null,
     "mode": "download",
     "name": "originals",

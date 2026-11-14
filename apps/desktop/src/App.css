@@ -1547,3 +1547,43 @@ summary:focus-visible {
     font-size: 24px;
   }
 }
+
+.new-bandwidth {
+  order: 4;
+}
+.bandwidth-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.bandwidth-inputs p,
+.session-bandwidth p {
+  font-size: 11px;
+  color: #a9b9c8;
+  line-height: 1.8;
+  max-width: 800px;
+}
+.bandwidth-fields input {
+  font-variant-numeric: tabular-nums;
+}
+.bandwidth-fields input[aria-invalid="true"] {
+  border-color: #df929e;
+}
+.session-bandwidth {
+  border-top: 1px solid #35424b;
+  margin: 16px 0;
+  padding: 12px 0;
+}
+.session-bandwidth > summary {
+  font-size: 12px;
+  color: #b6cfc0;
+}
+.session-bandwidth form {
+  padding-top: 8px;
+}
+@media (max-width: 650px) {
+  .bandwidth-fields {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

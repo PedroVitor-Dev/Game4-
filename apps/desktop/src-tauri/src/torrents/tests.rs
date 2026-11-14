@@ -34,6 +34,7 @@ fn manager() -> Arc<Transfers> {
 }
 fn seed_request() -> StartSeedRequest {
     StartSeedRequest {
+        limits: Default::default(),
         request_id: Uuid::new_v4().to_string(),
         item_id: "1".into(),
         listen_port: 0,
@@ -83,6 +84,7 @@ async fn real_loopback_transfer_preserves_sources_and_completes_with_matching_sh
     let parent = d.path().join("received");
     fs::create_dir(&parent).unwrap();
     let request = StartDownloadRequest {
+        limits: Default::default(),
         seed_after_download: false,
         request_id: Uuid::new_v4().to_string(),
         token: preview.token,
@@ -155,6 +157,7 @@ async fn invalid_requests_and_cancelled_shutdown_never_start_new_network_work() 
         assert!(peer(addr).is_err());
     }
     let req = StartDownloadRequest {
+        limits: Default::default(),
         seed_after_download: false,
         request_id: Uuid::new_v4().to_string(),
         token: Uuid::new_v4().to_string(),
@@ -177,6 +180,7 @@ async fn stopping_partial_download_preserves_files_and_rejects_conflicting_repla
     // Hold a local port without accepting BitTorrent, so the transfer remains incomplete.
     let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
     let request = StartDownloadRequest {
+        limits: Default::default(),
         seed_after_download: false,
         request_id: Uuid::new_v4().to_string(),
         token: preview.token,
@@ -228,6 +232,7 @@ async fn expired_preview_fails_before_creating_output() {
     assert!(
         m.download(
             StartDownloadRequest {
+                limits: Default::default(),
                 seed_after_download: false,
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
@@ -468,6 +473,7 @@ async fn isolated_dht_discovers_seed_and_resolves_magnet_without_an_initial_peer
     let transfer = download
         .download(
             StartDownloadRequest {
+                limits: Default::default(),
                 seed_after_download: false,
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
@@ -724,6 +730,7 @@ async fn tracker_roundtrip(udp: bool) {
     let job = download
         .download(
             StartDownloadRequest {
+                limits: Default::default(),
                 seed_after_download: false,
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
@@ -797,6 +804,7 @@ async fn upload_peer_observations_and_download_to_seeding_handoff_work_end_to_en
     }
     let preview = receiver.import(raw.clone()).unwrap();
     let request = StartDownloadRequest {
+        limits: Default::default(),
         request_id: Uuid::new_v4().to_string(),
         token: preview.token,
         peer: format!("127.0.0.1:{}", seeded.listen_port.unwrap()),
@@ -879,6 +887,7 @@ async fn upload_peer_observations_and_download_to_seeding_handoff_work_end_to_en
     let next_job = next
         .download(
             StartDownloadRequest {
+                limits: Default::default(),
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
                 peer: format!("127.0.0.1:{}", complete.listen_port.unwrap()),
@@ -959,6 +968,7 @@ async fn persisted_partial_download_reopens_offline_rechecks_and_repairs_without
     let parent = d.path().join("received");
     fs::create_dir(&parent).unwrap();
     let request = StartDownloadRequest {
+        limits: Default::default(),
         request_id: Uuid::new_v4().to_string(),
         token: preview.token,
         peer: format!("127.0.0.1:{}", seeded.listen_port.unwrap()),
@@ -1114,6 +1124,7 @@ async fn unsafe_partial_ownership_oversized_files_and_cancelled_resume_never_ope
     let job = m
         .download(
             StartDownloadRequest {
+                limits: Default::default(),
                 request_id: Uuid::new_v4().to_string(),
                 token: preview.token,
                 peer: guard.local_addr().unwrap().to_string(),
@@ -1285,4 +1296,204 @@ async fn early_v1_inline_snapshots_upgrade_without_losing_identity_or_starting_n
             .is_none()
     );
     restored.shutdown().await;
+}
+
+#[test]
+fn bandwidth_limits_validate_engine_capacity_and_legacy_defaults() {
+    for n in [1, 1024, 16383] {
+        assert!(
+            validate_limits(BandwidthLimits {
+                download_bps: n,
+                upload_bps: 0
+            })
+            .is_err()
+        );
+        assert!(
+            validate_limits(BandwidthLimits {
+                download_bps: 0,
+                upload_bps: n
+            })
+            .is_err()
+        );
+    }
+    for n in [0, 16384, 262144, u32::MAX] {
+        let limits = BandwidthLimits {
+            download_bps: n,
+            upload_bps: n,
+        };
+        validate_limits(limits).unwrap();
+        assert_eq!(
+            engine_limits(limits)
+                .download_bps
+                .map(|v| v.get())
+                .unwrap_or(0),
+            n
+        );
+        assert_eq!(
+            engine_limits(limits)
+                .upload_bps
+                .map(|v| v.get())
+                .unwrap_or(0),
+            n
+        );
+    }
+    let request: StartSeedRequest = serde_json::from_value(serde_json::json!({
+        "requestId": Uuid::new_v4().to_string(), "itemId": "1", "listenPort": 0
+    }))
+    .unwrap();
+    assert_eq!(request.limits, BandwidthLimits::default());
+}
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn limits_update_live_persist_resume_and_rollback_on_save_failure() {
+    let (d, db, imports, _, _) = setup();
+    let path = d.path().join("limits/state.sqlite3");
+    let m = persistent(&path);
+    let mut request = seed_request();
+    request.limits = BandwidthLimits {
+        download_bps: 65536,
+        upload_bps: 131072,
+    };
+    let seeded = m
+        .seed(Arc::clone(&db), Arc::clone(&imports), request.clone())
+        .await
+        .unwrap();
+    assert_eq!(seeded.limits, request.limits);
+    let mut conflicting = request.clone();
+    conflicting.limits.upload_bps = 262144;
+    assert!(
+        m.seed(Arc::clone(&db), Arc::clone(&imports), conflicting)
+            .await
+            .is_err()
+    );
+    let next = BandwidthLimits {
+        download_bps: 262144,
+        upload_bps: 524288,
+    };
+    let update = TransferLimitsRequest {
+        transfer_id: seeded.id.clone(),
+        limits: next,
+    };
+    m.set_limits(update.clone()).await.unwrap();
+    let assert_live = |m: &Transfers, expected| {
+        let entries = m.entries.lock().unwrap();
+        let rt = entries[&seeded.id].runtime.lock().unwrap();
+        assert_eq!(
+            rt.as_ref().unwrap().session.ratelimits.get_config(),
+            engine_limits(expected)
+        );
+    };
+    assert_live(&m, next);
+    m.store.as_ref().unwrap().connection_for_test(true);
+    assert!(
+        m.set_limits(TransferLimitsRequest {
+            transfer_id: seeded.id.clone(),
+            limits: BandwidthLimits::default()
+        })
+        .await
+        .is_err()
+    );
+    assert_eq!(m.list().items[0].limits, next);
+    assert_live(&m, next);
+    m.store.as_ref().unwrap().connection_for_test(false);
+    m.shutdown().await;
+    drop(m);
+    let restored = persistent(&path);
+    assert_eq!(restored.list().items[0].limits, next);
+    assert_eq!(restored.list().items[0].status, TransferStatus::Paused);
+    restored.resume(&seeded.id).await.unwrap();
+    assert_live(&restored, next);
+    restored
+        .set_limits(TransferLimitsRequest {
+            transfer_id: seeded.id.clone(),
+            limits: BandwidthLimits::default(),
+        })
+        .await
+        .unwrap();
+    assert_live(&restored, BandwidthLimits::default());
+    restored.shutdown().await;
+    assert_eq!(
+        persistent(&path).list().items[0].limits,
+        BandwidthLimits::default()
+    );
+    // Pre-limit private v1 rows deserialize as unlimited without migration or networking.
+    let connection = rusqlite::Connection::open(&path).unwrap();
+    connection.execute_batch("UPDATE transfers SET saved=json_remove(saved,'$.recipe.limits'),snapshot=json_remove(snapshot,'$.limits'); UPDATE transfer_snapshots SET snapshot=json_remove(snapshot,'$.limits');").unwrap();
+    drop(connection);
+    let legacy = persistent(&path);
+    assert_eq!(legacy.list().items[0].limits, BandwidthLimits::default());
+    assert_eq!(legacy.list().items[0].status, TransferStatus::Paused);
+}
+
+async fn bounded_loopback(upload: bool) {
+    let (d, db, imports, root, original) = setup();
+    let source = manager();
+    let receiver = manager();
+    let raw = ever::from_catalog(&db, "1").unwrap().torrent;
+    let mut req = seed_request();
+    const CAP: u32 = 131072;
+    if upload {
+        req.limits.upload_bps = CAP;
+    }
+    let seeded = source.seed(db, imports, req).await.unwrap();
+    let preview = receiver.import(raw).unwrap();
+    let output = d.path().join("limited-output");
+    fs::create_dir(&output).unwrap();
+    let at = Instant::now();
+    let download = receiver
+        .download(
+            StartDownloadRequest {
+                request_id: Uuid::new_v4().to_string(),
+                token: preview.token,
+                peer: format!("127.0.0.1:{}", seeded.listen_port.unwrap()),
+                dht: false,
+                trackers: vec![],
+                seed_after_download: false,
+                limits: BandwidthLimits {
+                    download_bps: if upload { 0 } else { CAP },
+                    upload_bps: 0,
+                },
+            },
+            output.clone(),
+        )
+        .await
+        .unwrap();
+    let completed = tokio::time::timeout(Duration::from_secs(45), async {
+        loop {
+            let snapshot = receiver.list().items[0].clone();
+            assert_ne!(snapshot.status, TransferStatus::Failed);
+            if snapshot.status == TransferStatus::Completed {
+                break snapshot;
+            }
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+    })
+    .await
+    .unwrap();
+    // Allow one second's initial token burst and two seconds of timing tolerance.
+    let minimum = original.len() as f64 / CAP as f64 - 3.;
+    assert!(
+        at.elapsed().as_secs_f64() >= minimum,
+        "payload escaped the selected limiter: {:?}",
+        at.elapsed()
+    );
+    assert_eq!(completed.verified_bytes, completed.total_bytes);
+    let root_out = output.join(download.output_name.unwrap());
+    let received = [
+        fs::read(root_out.join("a.bin")).unwrap(),
+        fs::read(root_out.join("nested/β.bin")).unwrap(),
+    ]
+    .concat();
+    assert_eq!(Sha256::digest(&received), Sha256::digest(&original));
+    assert_eq!(fs::read(root.join("a.bin")).unwrap()[0], 0x5a);
+    source.shutdown().await;
+    receiver.shutdown().await;
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn real_loopback_download_limit_controls_payload_and_preserves_integrity() {
+    bounded_loopback(false).await;
+}
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn real_loopback_upload_limit_controls_payload_and_preserves_integrity() {
+    bounded_loopback(true).await;
 }

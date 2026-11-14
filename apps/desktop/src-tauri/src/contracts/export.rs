@@ -67,6 +67,8 @@ pub fn typescript() -> String {
         TransferTelemetry::decl(&config),
         TransferMetricsInfo::decl(&config),
         TransferForgetResult::decl(&config),
+        BandwidthLimits::decl(&config),
+        TransferLimitsRequest::decl(&config),
         TransferSnapshot::decl(&config),
         TransferStartResult::decl(&config),
         TransferPage::decl(&config),
@@ -85,7 +87,7 @@ pub fn typescript() -> String {
     ));
     output.push_str(&format!(
         "export const IMPLEMENTED_COMMANDS = {} as const;\n",
-        serde_json::to_string(&IMPLEMENTED_COMMANDS).unwrap()
+        serde_json::to_string(IMPLEMENTED_COMMANDS.as_slice()).unwrap()
     ));
     output.push_str(&format!(
         "export const DRAFT_COMMANDS = {} as const;\n",
@@ -183,6 +185,7 @@ pub fn examples() -> String {
         magnet: Some(magnet),
     };
     let transfer = TransferSnapshot {
+        limits: BandwidthLimits::default(),
         id: "7b22b2eb-a47e-43e2-975b-8c01b541db17".into(),
         name: "originals".into(),
         info_hash: "f0d6cd560e79272cf3acd08e0ee78e193b535c04".into(),

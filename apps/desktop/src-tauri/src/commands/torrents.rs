@@ -239,3 +239,11 @@ pub async fn transfer_forget(
 ) -> Result<TransferForgetResult, IpcError> {
     transfers.forget(&request.transfer_id).await
 }
+
+#[tauri::command]
+pub async fn transfer_set_limits(
+    transfers: tauri::State<'_, Arc<Transfers>>,
+    request: TransferLimitsRequest,
+) -> Result<TransferSnapshot, IpcError> {
+    transfers.set_limits(request).await
+}

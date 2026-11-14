@@ -26,8 +26,19 @@ import {
 import { getIpcErrorKey } from "../services/errors";
 import { formatBytes } from "../services/file-identification";
 import { TransferMetrics } from "../components/TransferMetrics";
+import {
+  BandwidthInputs,
+  TransferLimitsControl,
+} from "../components/BandwidthInputs";
+import { parseBandwidthInput } from "../services/transfer-metrics";
 export function TransfersPage() {
   const { t, i18n } = useTranslation();
+  const [downloadLimit, setDownloadLimit] = useState("0");
+  const [uploadLimit, setUploadLimit] = useState("0");
+  const downloadBps = parseBandwidthInput(downloadLimit);
+  const uploadBps = parseBandwidthInput(uploadLimit);
+  const validLimits = downloadBps !== null && uploadBps !== null;
+  const limits = { downloadBps: downloadBps ?? 0, uploadBps: uploadBps ?? 0 };
   const [sessionFilter, setSessionFilter] = useState("all");
   const [composer, setComposer] = useState<"seed" | "download">("download");
   const [fresh, setFresh] = useState(false);
@@ -166,6 +177,7 @@ export function TransfersPage() {
     }
   }
   function seed() {
+    if (!validLimits) return;
     const listenPort = Number(port);
     if (!Number.isInteger(listenPort) || listenPort < 0 || listenPort > 65535)
       return;
@@ -174,12 +186,14 @@ export function TransfersPage() {
         seedPending.current?.itemId !== itemId ||
         seedPending.current.listenPort !== listenPort ||
         seedPending.current.dht !== dht ||
+        JSON.stringify(seedPending.current.limits) !== JSON.stringify(limits) ||
         JSON.stringify(seedPending.current.trackers) !==
           JSON.stringify(trackers)
       )
         seedPending.current = {
           requestId: crypto.randomUUID(),
           itemId,
+          limits,
           listenPort,
           dht,
           trackers,
@@ -189,19 +203,22 @@ export function TransfersPage() {
     });
   }
   function download() {
-    if (!preview) return;
+    if (!preview || !validLimits) return;
     void act(async () => {
       if (
         downloadPending.current?.token !== preview.token ||
         downloadPending.current.peer !== peer.trim() ||
         downloadPending.current.dht !== dht ||
         downloadPending.current.seedAfterDownload !== seedAfterDownload ||
+        JSON.stringify(downloadPending.current.limits) !==
+          JSON.stringify(limits) ||
         JSON.stringify(downloadPending.current.trackers) !==
           JSON.stringify(trackers)
       )
         downloadPending.current = {
           requestId: crypto.randomUUID(),
           token: preview.token,
+          limits,
           seedAfterDownload,
           peer: peer.trim(),
           dht,
@@ -321,6 +338,7 @@ export function TransfersPage() {
                 </label>
               </details>
               <TransferMetrics transfer={job} fresh={fresh} />
+              <TransferLimitsControl transfer={job} onSaved={refresh} />
               {job.listenPort !== null && (
                 <p>{t("transfers.listening", { port: job.listenPort })}</p>
               )}
@@ -368,6 +386,16 @@ export function TransfersPage() {
               </div>
             </article>
           ))}
+      </section>
+      <section className="content-card transfer-panel new-bandwidth">
+        <h2>{t("transfers.nextLimits")}</h2>
+        <BandwidthInputs
+          download={downloadLimit}
+          upload={uploadLimit}
+          onDownload={setDownloadLimit}
+          onUpload={setUploadLimit}
+          disabled={busy}
+        />
       </section>
       <div
         className="composer-switch"
@@ -476,7 +504,7 @@ export function TransfersPage() {
           </button>
           <button
             className="primary"
-            disabled={busy || !itemId || !isTauri()}
+            disabled={busy || !itemId || !isTauri() || !validLimits}
             onClick={seed}
           >
             {t("transfers.startSeed")}
@@ -633,7 +661,7 @@ export function TransfersPage() {
             <p>{t("transfers.keepSeedingHint")}</p>
             <button
               className="primary"
-              disabled={busy || (!discovery && !peer.trim())}
+              disabled={busy || !validLimits || (!discovery && !peer.trim())}
               onClick={download}
             >
               {t("transfers.startDownload")}

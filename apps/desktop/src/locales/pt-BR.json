@@ -311,7 +311,16 @@
     "uploadedTotal": "Conteúdo enviado: {{bytes}}",
     "liveScope": "Velocidades amostradas e peers conectados atualizam aproximadamente a cada segundo. As contagens representam apenas esta sessão.",
     "staleMetrics": "Atualização indisponível. Totais e progresso são os últimos conhecidos; velocidades e peers ao vivo ficam ocultos.",
-    "availabilityLabel": "Disponibilidade dos peers e alcance das observações"
+    "availabilityLabel": "Disponibilidade dos peers e alcance das observações",
+    "downloadLimit": "Limite de download (KiB/s)",
+    "uploadLimit": "Limite de upload (KiB/s)",
+    "limitsHint": "0 = sem limite. Caso contrário, use pelo menos 16 KiB/s (1 KiB = 1.024 bytes). Os limites são por transferência e para o conteúdo, permitem pequenas rajadas e não incluem protocolo/descoberta. Cada transferência tem sua própria cota.",
+    "nextLimits": "Limites para o próximo seeding ou download",
+    "sessionLimits": "Limites de upload e download",
+    "savedLimitsHint": "Aplica nesta sessão agora e salva para a retomada. Não inicia nem retoma a transferência. Requisições em andamento podem usar brevemente a cota anterior.",
+    "applyLimits": "Aplicar limites",
+    "savingLimits": "Salvando limites…",
+    "limitsSaved": "Limites aplicados e salvos."
   },
   "dashboard": {
     "title": "Feito para durar.",
