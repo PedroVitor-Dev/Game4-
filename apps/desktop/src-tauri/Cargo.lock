@@ -1331,6 +1331,7 @@ name = "game4-desktop"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "futures-util",
  "librqbit",
  "rfd",
  "rusqlite",

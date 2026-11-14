@@ -16,6 +16,9 @@
       "package_open",
       "library_export_ever",
       "ever_open",
+      "magnet_generate",
+      "magnet_resolve",
+      "magnet_cancel",
       "torrent_create",
       "torrent_import",
       "torrent_seed",
@@ -75,6 +78,10 @@
       "totalBytes": "40"
     }
   },
+  "magnetLink": {
+    "infoHash": "f0d6cd560e79272cf3acd08e0ee78e193b535c04",
+    "magnet": "magnet:?xt=urn:btih:f0d6cd560e79272cf3acd08e0ee78e193b535c04"
+  },
   "torrentImport": {
     "cancelled": false,
     "preview": {
@@ -91,6 +98,7 @@
     }
   },
   "transfer": {
+    "dht": false,
     "error": null,
     "id": "7b22b2eb-a47e-43e2-975b-8c01b541db17",
     "infoHash": "f0d6cd560e79272cf3acd08e0ee78e193b535c04",

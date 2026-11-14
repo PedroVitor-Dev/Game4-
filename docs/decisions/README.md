@@ -38,3 +38,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0015](0015-ever-create-read.md) | Accepted reference implementation | Native .g4e create/read, original-file torrents and explicit verification |
 
 | [0016](0016-desktop-bittorrent.md) | Accepted experimental integration | Real desktop BitTorrent, offline .torrent actions and original-safe storage |
+
+| [0017](0017-magnets-and-dht.md) | Accepted experimental integration | Magnet generation/acquisition, bounded cancellation and optional ephemeral DHT |

@@ -595,3 +595,116 @@ test("torrent IPC validates previews, exact progress, cancellation and capabilit
     code("IPC_UNAVAILABLE"),
   );
 });
+
+test("magnet commands are capability gated, wrap requests and bind generated identity", async () => {
+  const calls = [];
+  const client = make(async (command, args) => {
+    calls.push([command, args]);
+    if (command === "app_info") return examples.appInfo;
+    if (command === "magnet_generate") return examples.magnetLink;
+    if (command === "magnet_cancel") return { cancelled: true };
+    return examples.torrentImport;
+  });
+  assert.deepEqual(
+    await client.generateMagnet({ itemId: "1" }),
+    examples.magnetLink,
+  );
+  const request = {
+    requestId: examples.transfer.id,
+    magnet: examples.magnetLink.magnet,
+    peer: "",
+    dht: true,
+  };
+  assert.deepEqual(await client.resolveMagnet(request), examples.torrentImport);
+  assert.deepEqual(calls[2], ["magnet_resolve", { request }]);
+  assert.deepEqual(
+    await client.cancelMagnet({ requestId: request.requestId }),
+    { cancelled: true },
+  );
+  assert.deepEqual(calls[3], [
+    "magnet_cancel",
+    { request: { requestId: request.requestId } },
+  ]);
+  for (const result of [
+    { ...examples.magnetLink, infoHash: "0".repeat(40) },
+    { ...examples.magnetLink, magnet: "https://invalid.example/" },
+    { ...examples.magnetLink, infoHash: "invalid" },
+  ]) {
+    await assert.rejects(
+      make(async (command) =>
+        command === "app_info" ? examples.appInfo : result,
+      ).generateMagnet({ itemId: "1" }),
+      code("INVALID_RESPONSE"),
+    );
+  }
+  await assert.rejects(
+    make(async (command) =>
+      command === "app_info" ? examples.appInfo : { cancelled: "true" },
+    ).cancelMagnet({ requestId: request.requestId }),
+    code("INVALID_RESPONSE"),
+  );
+  await assert.rejects(
+    make(async (command) =>
+      command === "app_info"
+        ? examples.appInfo
+        : { items: [{ ...examples.transfer, dht: "true" }] },
+    ).listTransfers(),
+    code("INVALID_RESPONSE"),
+  );
+  const old = make(async () => ({ ...examples.appInfo, capabilities: [] }));
+  await assert.rejects(
+    old.resolveMagnet(request),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    old.generateMagnet({ itemId: "1" }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    old.cancelMagnet({ requestId: request.requestId }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+});
+
+test("DHT requests cannot be silently ignored by an older v1 backend", async () => {
+  const capabilities = examples.appInfo.capabilities.filter(
+    (c) => !c.startsWith("magnet_"),
+  );
+  const client = make(async (command) =>
+    command === "app_info"
+      ? { ...examples.appInfo, capabilities }
+      : examples.transfer,
+  );
+  await assert.rejects(
+    client.seedTorrent({
+      requestId: examples.transfer.id,
+      itemId: "1",
+      listenPort: 0,
+      dht: true,
+    }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    client.downloadTorrent({
+      requestId: examples.transfer.id,
+      token: examples.transfer.id,
+      peer: "",
+      dht: true,
+    }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  const { dht, ...legacy } = examples.transfer;
+  assert.equal(
+    (
+      await make(async (command) =>
+        command === "app_info" ? examples.appInfo : legacy,
+      ).seedTorrent({
+        requestId: examples.transfer.id,
+        itemId: "1",
+        listenPort: 0,
+        dht: false,
+      })
+    ).dht,
+    false,
+  );
+});

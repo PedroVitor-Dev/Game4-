@@ -11,6 +11,8 @@ import {
   parsePackageOpenResult,
   parseEverOpenResult,
   parseEverExportResult,
+  parseMagnetLink,
+  parseCancelMagnetResult,
   parseTorrentCreateResult,
   parseTorrentImportResult,
   parseTransferSnapshot,
@@ -36,6 +38,8 @@ import type {
   ExportManifestRequest,
   LibraryRestoreRequest,
   LibraryItemFilesRequest,
+  ResolveMagnetRequest,
+  CancelMagnetRequest,
   StartSeedRequest,
   StartDownloadRequest,
   TransferIdRequest,
@@ -64,6 +68,9 @@ const decoders = {
   package_open: parsePackageOpenResult,
   library_export_ever: parseEverExportResult,
   ever_open: parseEverOpenResult,
+  magnet_generate: parseMagnetLink,
+  magnet_resolve: parseTorrentImportResult,
+  magnet_cancel: parseCancelMagnetResult,
   torrent_create: parseTorrentCreateResult,
   torrent_import: parseTorrentImportResult,
   torrent_seed: parseTransferSnapshot,
@@ -120,6 +127,15 @@ export function createIpcClient(transport: IpcTransport) {
       throw failure("CAPABILITY_UNAVAILABLE");
     return call(command, request);
   }
+  async function requireDht(enabled: boolean) {
+    // The magnet-resolution capability was introduced with optional DHT.
+    // Older v1 backends must never silently ignore a requested DHT action.
+    if (
+      enabled &&
+      !(await getAppInfo()).capabilities.includes("magnet_resolve")
+    )
+      throw failure("CAPABILITY_UNAVAILABLE");
+  }
   return {
     verifyItem: (request: StartVerifyRequest) =>
       capable("library_verify", request),
@@ -131,13 +147,23 @@ export function createIpcClient(transport: IpcTransport) {
     exportEver: (request: ExportManifestRequest) =>
       capable("library_export_ever", request),
     openEver: () => capable("ever_open", undefined),
+    generateMagnet: (request: ExportManifestRequest) =>
+      capable("magnet_generate", request),
+    resolveMagnet: (request: ResolveMagnetRequest) =>
+      capable("magnet_resolve", request),
+    cancelMagnet: (request: CancelMagnetRequest) =>
+      capable("magnet_cancel", request),
     createTorrent: (request: ExportManifestRequest) =>
       capable("torrent_create", request),
     importTorrent: () => capable("torrent_import", undefined),
-    seedTorrent: (request: StartSeedRequest) =>
-      capable("torrent_seed", request),
-    downloadTorrent: (request: StartDownloadRequest) =>
-      capable("torrent_download", request),
+    seedTorrent: async (request: StartSeedRequest) => {
+      await requireDht(request.dht);
+      return capable("torrent_seed", request);
+    },
+    downloadTorrent: async (request: StartDownloadRequest) => {
+      await requireDht(request.dht);
+      return capable("torrent_download", request);
+    },
     listTransfers: () => capable("transfers_list", undefined),
     stopTransfer: (request: TransferIdRequest) =>
       capable("transfer_stop", request),

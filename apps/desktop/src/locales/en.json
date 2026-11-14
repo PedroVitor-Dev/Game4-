@@ -197,9 +197,9 @@
   },
   "transfers": {
     "title": "P2P transfers",
-    "description": "Create torrents, seed originals and download from an explicit peer.",
+    "description": "Create torrents and magnets, seed originals and discover peers.",
     "connectionTitle": "BitTorrent connections",
-    "connectionDescription": "This preview connects over IPv4 TCP using an initial peer address. Automatic tracker, DHT, local discovery and router port mapping are off.",
+    "connectionDescription": "Connect over IPv4 TCP with an initial peer or optional DHT discovery. Trackers, local discovery and automatic router port mapping remain off.",
     "exposure": "Starting a seed or download opens a network session and can expose your IP to peers. Downloads also upload received pieces; the download session stops automatically when complete.",
     "seedTitle": "Create a torrent or seed originals",
     "sourceHint": "The existing imported source is checked and opened read-only. No .g4 conversion or payload copy is needed. Creating the .torrent alone does not start sharing.",
@@ -214,7 +214,7 @@
     "import": "Import .torrent",
     "infoHash": "Info hash",
     "showFiles": "Show all files",
-    "peer": "Initial seeder peer (IPv4:port)",
+    "peer": "Initial peer (IPv4:port; optional with DHT)",
     "outputHint": "Choose a parent folder next. Game4∞ creates a new download subfolder and never overwrites existing files. Stopping keeps received data.",
     "startDownload": "Choose folder and download",
     "sessions": "Sessions in this app run",
@@ -235,6 +235,15 @@
       "stopped": "Stopped",
       "completed": "Completed; network session closed",
       "failed": "Failed"
-    }
+    },
+    "dht": "Enable DHT for the next network action",
+    "dhtHint": "DHT contacts the public UDP network and can publish your info hash and IP. It needs reachable peers and does not bypass NAT or firewalls. Existing sessions keep their original setting.",
+    "generateMagnet": "Generate magnet link",
+    "resolveMagnet": "Fetch magnet metadata",
+    "magnetHint": "Fetching metadata starts network connections for up to 60 seconds, without downloading payload files. Review the resulting file list before choosing a destination. Embedded trackers and web sources are ignored or rejected.",
+    "resolving": "Fetching magnet metadata… No payload files are being downloaded.",
+    "cancelResolve": "Cancel metadata lookup",
+    "dhtOn": "DHT enabled for this session",
+    "dhtOff": "DHT disabled for this session"
   }
 }

@@ -9,6 +9,9 @@ import type {
 } from "@game4/ipc-contracts";
 import {
   isTauri,
+  generateMagnet,
+  resolveMagnet,
+  cancelMagnet,
   listLibrary,
   listTransfers,
   createTorrent,
@@ -26,6 +29,11 @@ export function TransfersPage() {
   const [itemId, setItemId] = useState("");
   const [port, setPort] = useState("0");
   const [peer, setPeer] = useState("");
+  const [dht, setDht] = useState(false);
+  const [magnet, setMagnet] = useState("");
+  const [generatedMagnet, setGeneratedMagnet] = useState("");
+  const [resolving, setResolving] = useState<string | null>(null);
+  const resolvingRef = useRef<string | null>(null);
   const [preview, setPreview] = useState<TorrentPreview>();
   const [allFiles, setAllFiles] = useState(false);
   const [transfers, setTransfers] = useState<TransferSnapshot[]>([]);
@@ -72,6 +80,8 @@ export function TransfersPage() {
     return () => {
       alive.current = false;
       ended = true;
+      if (resolvingRef.current)
+        void cancelMagnet({ requestId: resolvingRef.current }).catch(() => {});
       clearTimeout(timer);
     };
   }, []);
@@ -96,12 +106,14 @@ export function TransfersPage() {
     void act(async () => {
       if (
         seedPending.current?.itemId !== itemId ||
-        seedPending.current.listenPort !== listenPort
+        seedPending.current.listenPort !== listenPort ||
+        seedPending.current.dht !== dht
       )
         seedPending.current = {
           requestId: crypto.randomUUID(),
           itemId,
           listenPort,
+          dht,
         };
       await seedTorrent(seedPending.current);
       seedPending.current = null;
@@ -112,12 +124,14 @@ export function TransfersPage() {
     void act(async () => {
       if (
         downloadPending.current?.token !== preview.token ||
-        downloadPending.current.peer !== peer.trim()
+        downloadPending.current.peer !== peer.trim() ||
+        downloadPending.current.dht !== dht
       )
         downloadPending.current = {
           requestId: crypto.randomUUID(),
           token: preview.token,
           peer: peer.trim(),
+          dht,
         };
       const result = await downloadTorrent(downloadPending.current);
       if (!result.cancelled) {
@@ -133,6 +147,16 @@ export function TransfersPage() {
         <h2>{t("transfers.connectionTitle")}</h2>
         <p>{t("transfers.connectionDescription")}</p>
         <p>{t("transfers.exposure")}</p>
+        <label className="dht-choice">
+          <input
+            type="checkbox"
+            checked={dht}
+            disabled={busy}
+            onChange={(e) => setDht(e.target.checked)}
+          />
+          {t("transfers.dht")}
+        </label>
+        <p>{t("transfers.dhtHint")}</p>
         {!isTauri() && <p>{t("errors.ipcUnavailable")}</p>}
       </section>
       {error !== undefined && (
@@ -140,7 +164,11 @@ export function TransfersPage() {
           {t(getIpcErrorKey(error))}
         </p>
       )}
-      {busy && <p role="status">{t("transfers.preparing")}</p>}
+      {busy && (
+        <p role="status">
+          {t(resolving ? "transfers.resolving" : "transfers.preparing")}
+        </p>
+      )}
       <section className="content-card transfer-panel">
         <h2>{t("transfers.seedTitle")}</h2>
         <p>{t("transfers.sourceHint")}</p>
@@ -149,7 +177,11 @@ export function TransfersPage() {
           <select
             value={itemId}
             disabled={busy}
-            onChange={(e) => setItemId(e.target.value)}
+            onChange={(e) => {
+              setItemId(e.target.value);
+              setGeneratedMagnet("");
+              setSaved(undefined);
+            }}
           >
             {items.map((item) => (
               <option key={item.id} value={item.id}>
@@ -194,6 +226,17 @@ export function TransfersPage() {
             disabled={busy || !itemId || !isTauri()}
             onClick={() =>
               void act(async () => {
+                const result = await generateMagnet({ itemId });
+                if (alive.current) setGeneratedMagnet(result.magnet);
+              })
+            }
+          >
+            {t("transfers.generateMagnet")}
+          </button>
+          <button
+            disabled={busy || !itemId || !isTauri()}
+            onClick={() =>
+              void act(async () => {
                 const result = await createTorrent({ itemId });
                 if (
                   alive.current &&
@@ -215,6 +258,12 @@ export function TransfersPage() {
             {t("transfers.startSeed")}
           </button>
         </div>
+        {generatedMagnet && (
+          <label>
+            {t("ever.magnet")}
+            <textarea readOnly value={generatedMagnet} />
+          </label>
+        )}
         {saved && (
           <div role="status">
             <p>{t("transfers.created", { fileName: saved.name })}</p>
@@ -244,6 +293,68 @@ export function TransfersPage() {
         >
           {t("transfers.import")}
         </button>
+        <label>
+          {t("ever.magnet")}
+          <textarea
+            value={magnet}
+            maxLength={4096}
+            disabled={busy}
+            onChange={(e) => setMagnet(e.target.value)}
+            placeholder="magnet:?xt=urn:btih:…"
+          />
+        </label>
+        <label>
+          {t("transfers.peer")}
+          <input
+            value={peer}
+            onChange={(e) => setPeer(e.target.value)}
+            placeholder="100.x.x.x:42420"
+            disabled={busy}
+          />
+        </label>
+        <p>{t("transfers.magnetHint")}</p>
+        <button
+          disabled={
+            busy || !isTauri() || !magnet.trim() || (!dht && !peer.trim())
+          }
+          onClick={() =>
+            void act(async () => {
+              const requestId = crypto.randomUUID();
+              resolvingRef.current = requestId;
+              setResolving(requestId);
+              setPreview(undefined);
+              try {
+                const result = await resolveMagnet({
+                  requestId,
+                  magnet: magnet.trim(),
+                  peer: peer.trim(),
+                  dht,
+                });
+                if (alive.current && result.preview) {
+                  setPreview(result.preview);
+                  setAllFiles(false);
+                  downloadPending.current = null;
+                }
+              } finally {
+                resolvingRef.current = null;
+                if (alive.current) setResolving(null);
+              }
+            })
+          }
+        >
+          {t("transfers.resolveMagnet")}
+        </button>
+        {resolving && (
+          <button
+            onClick={() =>
+              void cancelMagnet({ requestId: resolving }).catch((e) =>
+                setError(e),
+              )
+            }
+          >
+            {t("transfers.cancelResolve")}
+          </button>
+        )}
         {preview && (
           <div>
             <h3>{preview.name}</h3>
@@ -266,19 +377,10 @@ export function TransfersPage() {
                 {t("transfers.showFiles")}
               </button>
             )}
-            <label>
-              {t("transfers.peer")}
-              <input
-                value={peer}
-                onChange={(e) => setPeer(e.target.value)}
-                placeholder="100.x.x.x:42420"
-                disabled={busy}
-              />
-            </label>
             <p>{t("transfers.outputHint")}</p>
             <button
               className="primary"
-              disabled={busy || !peer.trim()}
+              disabled={busy || (!dht && !peer.trim())}
               onClick={download}
             >
               {t("transfers.startDownload")}
@@ -296,6 +398,14 @@ export function TransfersPage() {
               {t(`transfers.mode.${job.mode}`)} ·{" "}
               {t(`transfers.status.${job.status}`)}
             </p>
+            <p>{t(job.dht ? "transfers.dhtOn" : "transfers.dhtOff")}</p>
+            <label>
+              {t("ever.magnet")}
+              <textarea
+                readOnly
+                value={`magnet:?xt=urn:btih:${job.infoHash}`}
+              />
+            </label>
             <p>
               {t("transfers.progress", {
                 verified: bytes(job.verifiedBytes),

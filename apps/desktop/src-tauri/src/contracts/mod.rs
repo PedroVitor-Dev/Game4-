@@ -23,6 +23,9 @@ pub enum ImplementedCommand {
     PackageOpen,
     LibraryExportEver,
     EverOpen,
+    MagnetGenerate,
+    MagnetResolve,
+    MagnetCancel,
     TorrentCreate,
     TorrentImport,
     TorrentSeed,
@@ -34,7 +37,7 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 24] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 27] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -50,6 +53,9 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 24] = [
     ImplementedCommand::PackageOpen,
     ImplementedCommand::LibraryExportEver,
     ImplementedCommand::EverOpen,
+    ImplementedCommand::MagnetGenerate,
+    ImplementedCommand::MagnetResolve,
+    ImplementedCommand::MagnetCancel,
     ImplementedCommand::TorrentCreate,
     ImplementedCommand::TorrentImport,
     ImplementedCommand::TorrentSeed,
@@ -617,6 +623,8 @@ pub struct StartSeedRequest {
     pub request_id: String,
     pub item_id: String,
     pub listen_port: u16,
+    #[serde(default)]
+    pub dht: bool,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -624,6 +632,32 @@ pub struct StartDownloadRequest {
     pub request_id: String,
     pub token: String,
     pub peer: String,
+    #[serde(default)]
+    pub dht: bool,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct MagnetLink {
+    pub magnet: String,
+    pub info_hash: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct ResolveMagnetRequest {
+    pub request_id: String,
+    pub magnet: String,
+    pub peer: String,
+    pub dht: bool,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct CancelMagnetRequest {
+    pub request_id: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct CancelMagnetResult {
+    pub cancelled: bool,
 }
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -657,6 +691,7 @@ pub struct TransferSnapshot {
     pub verified_bytes: String,
     pub uploaded_bytes: String,
     pub listen_port: Option<u16>,
+    pub dht: bool,
     pub output_name: Option<String>,
     pub error: Option<IpcError>,
 }

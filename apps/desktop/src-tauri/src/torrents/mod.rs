@@ -21,7 +21,9 @@ use std::{
     time::{Duration, Instant},
 };
 use uuid::Uuid;
+mod magnets;
 mod storage;
+pub use magnets::normalize_magnet;
 use storage::Handles;
 const MAX_TOTAL: u64 = 1024 * 1024 * 1024 * 1024;
 const MAX_FILES: usize = 1024;
@@ -188,6 +190,7 @@ struct StartSession {
     request: String,
     fingerprint: String,
     port: u16,
+    dht: bool,
     initial_peer: Option<SocketAddr>,
     output: Option<String>,
 }
@@ -203,6 +206,8 @@ pub struct Transfers {
     closing: AtomicBool,
     listen_ip: Ipv4Addr,
     cancel: tokio_util::sync::CancellationToken,
+    resolution: Mutex<Option<magnets::Resolution>>,
+    dht_bootstrap: Option<Vec<String>>,
 }
 impl Default for Transfers {
     fn default() -> Self {
@@ -214,10 +219,19 @@ impl Default for Transfers {
             closing: AtomicBool::new(false),
             listen_ip: Ipv4Addr::UNSPECIFIED,
             cancel: tokio_util::sync::CancellationToken::new(),
+            resolution: Mutex::new(None),
+            dht_bootstrap: None,
         }
     }
 }
 impl Transfers {
+    fn dht_config(&self, enabled: bool) -> Option<librqbit::DhtSessionConfig> {
+        enabled.then(|| librqbit::DhtSessionConfig {
+            bootstrap_addrs: self.dht_bootstrap.clone(),
+            port: Some(0),
+            persistence: None,
+        })
+    }
     pub fn import(&self, raw: Vec<u8>) -> Result<TorrentPreview> {
         let meta = inspect(&raw)?;
         let mut pending = self.pending.lock().map_err(|_| failed())?;
@@ -307,6 +321,7 @@ impl Transfers {
             request,
             fingerprint,
             port,
+            dht,
             initial_peer,
             output,
         } = input;
@@ -317,7 +332,7 @@ impl Transfers {
             PathBuf::new(),
             SessionOptions {
                 cancellation_token: Some(self.cancel.child_token()),
-                dht: None,
+                dht: self.dht_config(dht),
                 disable_trackers: true,
                 disable_local_service_discovery: true,
                 persistence: None,
@@ -326,6 +341,10 @@ impl Transfers {
                 listen: Some(ListenerOptions {
                     listen_addr: SocketAddr::V4(SocketAddrV4::new(self.listen_ip, port)),
                     ipv4_only: true,
+                    // The engine suppresses loopback announcements by default. Tests use
+                    // an explicit bound port to exercise an isolated local DHT swarm.
+                    announce_port: (dht && self.listen_ip.is_loopback() && port != 0)
+                        .then_some(port),
                     enable_upnp_port_forwarding: false,
                     ..Default::default()
                 }),
@@ -385,6 +404,7 @@ impl Transfers {
             verified_bytes: handle.stats().progress_bytes.to_string(),
             uploaded_bytes: "0".into(),
             listen_port: session.listen_addr().map(|a| a.port()),
+            dht,
             output_name: output,
             error: None,
         };
@@ -445,7 +465,10 @@ impl Transfers {
         request: StartSeedRequest,
     ) -> Result<TransferSnapshot> {
         let _gate = self.gate.lock().await;
-        let fingerprint = format!("seed:{}:{}", request.item_id, request.listen_port);
+        let fingerprint = format!(
+            "seed:{}:{}:{}",
+            request.item_id, request.listen_port, request.dht
+        );
         if let Some(old) = self.replay(&request.request_id, &fingerprint)? {
             return Ok(old);
         }
@@ -499,6 +522,7 @@ impl Transfers {
             request: request.request_id,
             fingerprint,
             port: request.listen_port,
+            dht: request.dht,
             initial_peer: None,
             output: None,
         })
@@ -510,8 +534,8 @@ impl Transfers {
         parent: PathBuf,
     ) -> Result<TransferSnapshot> {
         let _gate = self.gate.lock().await;
-        let addr = peer(&request.peer)?;
-        let fingerprint = format!("download:{}:{addr}", request.token);
+        let addr = magnets::initial_peer(&request.peer, request.dht)?;
+        let fingerprint = format!("download:{}:{addr:?}:{}", request.token, request.dht);
         if let Some(old) = self.replay(&request.request_id, &fingerprint)? {
             return Ok(old);
         }
@@ -547,7 +571,8 @@ impl Transfers {
                 request: request.request_id,
                 fingerprint,
                 port: 0,
-                initial_peer: Some(addr),
+                dht: request.dht,
+                initial_peer: addr,
                 output: Some(output_name),
             })
             .await?;

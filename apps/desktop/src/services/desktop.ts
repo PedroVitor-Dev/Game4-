@@ -31,6 +31,9 @@ export const { exportPackage, openPackage } = client;
 export const { exportEver, openEver } = client;
 
 export const {
+  generateMagnet,
+  resolveMagnet,
+  cancelMagnet,
   createTorrent,
   importTorrent,
   seedTorrent,

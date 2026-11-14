@@ -572,3 +572,12 @@ input:focus-visible {
 .transfer-row progress {
   width: 100%;
 }
+
+.dht-choice {
+  display: flex !important;
+  align-items: center;
+  gap: 0.75rem;
+}
+.dht-choice input {
+  width: auto;
+}

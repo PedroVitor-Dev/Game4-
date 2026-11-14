@@ -108,7 +108,9 @@ pub async fn torrent_download(
     transfers: tauri::State<'_, Arc<Transfers>>,
     request: StartDownloadRequest,
 ) -> Result<TransferStartResult, IpcError> {
-    torrents::peer(&request.peer)?;
+    if !request.peer.trim().is_empty() || !request.dht {
+        torrents::peer(&request.peer)?;
+    }
     let parent = tokio::task::spawn_blocking(move || {
         rfd::FileDialog::new().set_parent(&window).pick_folder()
     })
@@ -137,4 +139,56 @@ pub async fn transfer_stop(
     request: TransferIdRequest,
 ) -> Result<TransferSnapshot, IpcError> {
     transfers.stop(&request.transfer_id).await
+}
+
+#[tauri::command]
+pub async fn magnet_generate(
+    database: tauri::State<'_, Arc<Database>>,
+    state: tauri::State<'_, Arc<ImportState>>,
+    request: ExportManifestRequest,
+) -> Result<MagnetLink, IpcError> {
+    crate::manifests::item_id(&request.item_id)?;
+    let db = Arc::clone(database.inner());
+    let state = Arc::clone(state.inner());
+    tokio::task::spawn_blocking(move || {
+        let _gate = state
+            .gate
+            .try_lock()
+            .map_err(|_| IpcError::new(ErrorCode::LibraryBusy))?;
+        let _worker = state
+            .worker
+            .try_lock()
+            .map_err(|_| IpcError::new(ErrorCode::LibraryBusy))?;
+        let active: bool = db
+            .connection
+            .lock()
+            .map_err(|_| IpcError::new(ErrorCode::DatabaseUnavailable))?
+            .query_row(
+                "SELECT EXISTS(SELECT 1 FROM tasks WHERE status IN ('queued','running'))",
+                [],
+                |r| r.get(0),
+            )
+            .map_err(|_| IpcError::new(ErrorCode::DatabaseUnavailable))?;
+        if active {
+            return Err(IpcError::new(ErrorCode::LibraryBusy));
+        }
+        let created = ever::from_catalog(&db, &request.item_id)?;
+        torrents::normalize_magnet(&created.document.torrents[0].magnet)
+    })
+    .await
+    .map_err(|_| IpcError::new(ErrorCode::UnexpectedError))?
+}
+#[tauri::command]
+pub async fn magnet_resolve(
+    transfers: tauri::State<'_, Arc<Transfers>>,
+    request: ResolveMagnetRequest,
+) -> Result<TorrentImportResult, IpcError> {
+    transfers.resolve_magnet(request).await
+}
+#[tauri::command]
+pub async fn magnet_cancel(
+    transfers: tauri::State<'_, Arc<Transfers>>,
+    request: CancelMagnetRequest,
+) -> Result<CancelMagnetResult, IpcError> {
+    transfers.cancel_magnet(request)
 }

@@ -33,6 +33,8 @@ import type {
   PackageOpenResult,
   EverOpenResult,
   EverExportResult,
+  MagnetLink,
+  CancelMagnetResult,
   TorrentCreateResult,
   TorrentImportResult,
   TransferSnapshot,
@@ -632,6 +634,14 @@ export function parseTransferSnapshot(v: unknown): TransferSnapshot {
     verifiedBytes,
     uploadedBytes,
     listenPort,
+    dht:
+      o.dht === undefined
+        ? false
+        : typeof o.dht === "boolean"
+          ? o.dht
+          : (() => {
+              throw failure("INVALID_RESPONSE");
+            })(),
     outputName,
     error,
   };
@@ -654,4 +664,21 @@ export function parseTransferPage(v: unknown): TransferPage {
   )
     throw failure("INVALID_RESPONSE");
   return { items };
+}
+
+export function parseMagnetLink(v: unknown): MagnetLink {
+  const o = object(v);
+  const magnet = everMagnet(o.magnet);
+  const infoHash = text(o.infoHash);
+  if (
+    !/^[0-9a-f]{40}$/.test(infoHash) ||
+    magnet !== `magnet:?xt=urn:btih:${infoHash}`
+  )
+    throw failure("INVALID_RESPONSE");
+  return { magnet, infoHash };
+}
+export function parseCancelMagnetResult(v: unknown): CancelMagnetResult {
+  const o = object(v);
+  if (typeof o.cancelled !== "boolean") throw failure("INVALID_RESPONSE");
+  return { cancelled: o.cancelled };
 }

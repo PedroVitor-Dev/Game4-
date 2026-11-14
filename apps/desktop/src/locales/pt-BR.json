@@ -197,9 +197,9 @@
   },
   "transfers": {
     "title": "Transferências P2P",
-    "description": "Crie torrents, semeie originais e baixe de um peer informado.",
+    "description": "Crie torrents e magnets, semeie originais e descubra peers.",
     "connectionTitle": "Conexões BitTorrent",
-    "connectionDescription": "Esta prévia conecta por TCP IPv4 a partir de um peer inicial informado. Trackers, DHT, descoberta local e abertura automática de portas no roteador estão desativados.",
+    "connectionDescription": "Conecte por TCP IPv4 com um peer inicial ou descoberta opcional por DHT. Trackers, descoberta local e abertura automática de portas no roteador continuam desativados.",
     "exposure": "Iniciar semeadura ou download abre uma sessão de rede e pode expor seu IP aos peers. Downloads também enviam peças recebidas; a sessão de download para automaticamente ao concluir.",
     "seedTitle": "Criar torrent ou semear originais",
     "sourceHint": "A origem já importada é conferida e aberta somente para leitura. Não é preciso converter para .g4 nem copiar o conteúdo. Criar o .torrent sozinho não inicia compartilhamento.",
@@ -214,7 +214,7 @@
     "import": "Importar .torrent",
     "infoHash": "Info hash",
     "showFiles": "Mostrar todos os arquivos",
-    "peer": "Peer inicial semeador (IPv4:porta)",
+    "peer": "Peer inicial (IPv4:porta; opcional com DHT)",
     "outputHint": "Escolha a pasta de destino a seguir. O Game4∞ cria uma subpasta nova e não sobrescreve arquivos existentes. Parar mantém os dados recebidos.",
     "startDownload": "Escolher pasta e baixar",
     "sessions": "Sessões desta execução do app",
@@ -235,6 +235,15 @@
       "stopped": "Parada",
       "completed": "Concluída; sessão de rede encerrada",
       "failed": "Falhou"
-    }
+    },
+    "dht": "Ativar DHT na próxima ação de rede",
+    "dhtHint": "O DHT consulta a rede UDP pública e pode publicar seu info hash e IP. Ele depende de peers alcançáveis e não contorna NAT ou firewall. Sessões existentes mantêm a opção usada ao iniciar.",
+    "generateMagnet": "Gerar magnet link",
+    "resolveMagnet": "Buscar metadados do magnet",
+    "magnetHint": "Buscar metadados inicia conexões de rede por até 60 segundos, sem baixar os arquivos do conteúdo. Revise a lista antes de escolher o destino. Trackers e fontes web embutidos são ignorados ou rejeitados.",
+    "resolving": "Buscando metadados do magnet… Os arquivos do conteúdo não estão sendo baixados.",
+    "cancelResolve": "Cancelar busca de metadados",
+    "dhtOn": "DHT ativado nesta sessão",
+    "dhtOff": "DHT desativado nesta sessão"
   }
 }

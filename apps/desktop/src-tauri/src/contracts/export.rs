@@ -49,6 +49,10 @@ pub fn typescript() -> String {
         EverSummary::decl(&config),
         EverOpenResult::decl(&config),
         EverExportResult::decl(&config),
+        MagnetLink::decl(&config),
+        ResolveMagnetRequest::decl(&config),
+        CancelMagnetRequest::decl(&config),
+        CancelMagnetResult::decl(&config),
         TorrentFileEntry::decl(&config),
         TorrentPreview::decl(&config),
         TorrentImportResult::decl(&config),
@@ -183,6 +187,7 @@ pub fn examples() -> String {
         verified_bytes: "40".into(),
         uploaded_bytes: "0".into(),
         listen_port: None,
+        dht: false,
         output_name: Some("game4-download-example".into()),
         error: None,
     };
@@ -199,7 +204,11 @@ pub fn examples() -> String {
             }],
         }),
     };
-    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export,"torrentImport":torrent_import,"transfer":transfer})).unwrap())
+    let magnet_link = MagnetLink {
+        magnet: format!("magnet:?xt=urn:btih:{}", transfer.info_hash),
+        info_hash: transfer.info_hash.clone(),
+    };
+    format!("{}\n", serde_json::to_string_pretty(&serde_json::json!({"appInfo": app_info, "databaseInfo": database_info, "error": error, "draftTaskEvent": event,"everOpen":ever_open,"everExport":ever_export,"torrentImport":torrent_import,"transfer":transfer,"magnetLink":magnet_link})).unwrap())
 }
 
 #[cfg(test)]
