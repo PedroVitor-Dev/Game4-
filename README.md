@@ -1,6 +1,11 @@
 <div align="center">
 
-# 🎮 Game4∞
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/White_SF.png" />
+  <img src="assets/Black_SF.png" width="240" alt="Game4∞ — Game For Ever" />
+</picture>
+
+# Game4∞
 
 ### Preserve the Past. Share the Future.
 
@@ -19,7 +24,9 @@
 
 See the [documentation index](docs/README.md) for the product plan, estimated schedule, architecture, preservation strategy, security, risks, decisions, and progress records.
 
-The features below are planned. See the [project log](docs/project-log.md) for actual implementation status.
+The desktop currently supports a bilingual local Library, file integrity checks, .g4/.g4e preservation formats, explicit BitTorrent downloads/sharing, paused restart recovery and per-transfer upload/download limits. Home provides direct Download and Share journeys; community participation/catalogs are still planned.
+
+Read the [current vision and experience baseline](docs/vision-and-experience.md) for what works today, what remains planned and how the app follows the preservation mission. Features described below outside that implemented scope are plans; the [project log](docs/project-log.md) records validation.
 
 ## 🌌 About
 

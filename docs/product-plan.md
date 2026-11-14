@@ -1,5 +1,7 @@
 # Product plan
 
+Current product/experience baseline (November 14, 2026): [vision and user experience](vision-and-experience.md). It reconciles the renewed community preservation plan with implemented local Library, direct P2P, recovery and speed controls; older dated scope notes below are historical. Community catalog/discovery and .g4lib remain planned.
+
 ## Vision and audiences
 
 Game4∞ should help people and communities maintain verifiable, recoverable, usable collections even without services operated by the project's creators. The initial platform is Windows, with local functionality and no mandatory account.

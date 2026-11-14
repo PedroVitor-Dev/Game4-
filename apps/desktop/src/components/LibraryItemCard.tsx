@@ -20,9 +20,11 @@ export function LibraryItemCard({
   onVerify,
   onPackage,
   onEver,
+  onShare,
 }: {
   item: LibraryItemSummary;
   busy: boolean;
+  onShare: () => void;
   onExport: (id: string) => void;
   onVerify: (id: string) => void;
   onPackage: (id: string) => void;
@@ -106,7 +108,7 @@ export function LibraryItemCard({
     <article className={`content-card library-item ${open ? "expanded" : ""}`}>
       <div className="library-cover" aria-hidden="true">
         <span>{item.title.slice(0, 1).toLocaleUpperCase(i18n.language)}</span>
-        <small>GAME4∞ / ARCHIVE</small>
+        <small>Game For Ever</small>
       </div>
       <h2>{item.title}</h2>
       <p title={exact(item.totalBytes)}>
@@ -208,18 +210,11 @@ export function LibraryItemCard({
       <span className="local-badge">{t("library.localItem")}</span>
       <div className="manifest-action actions">
         <button
+          className="primary"
           disabled={busy || !isTauri()}
-          onClick={() => onEver(item.id)}
-          aria-label={t("ever.exportLabel", { title: item.title })}
+          onClick={onShare}
         >
-          {t("ever.export")}
-        </button>
-        <button
-          disabled={busy || !isTauri()}
-          onClick={() => onPackage(item.id)}
-          aria-label={t("packages.exportLabel", { title: item.title })}
-        >
-          {t("packages.export")}
+          {t("library.share")}
         </button>
         <button
           disabled={busy || !isTauri()}
@@ -227,13 +222,6 @@ export function LibraryItemCard({
           aria-label={t("integrity.verifyLabel", { title: item.title })}
         >
           {t("integrity.verify")}
-        </button>
-        <button
-          disabled={busy || !isTauri()}
-          aria-label={t("library.exportManifestLabel", { title: item.title })}
-          onClick={() => onExport(item.id)}
-        >
-          {t("library.exportManifest")}
         </button>
         <button
           disabled={!isTauri()}
@@ -252,6 +240,34 @@ export function LibraryItemCard({
           {t(open ? "library.hideFiles" : "library.viewFiles")}
         </button>
       </div>
+      <details className="item-export-tools">
+        <summary>{t("library.exportTools")}</summary>
+        <p>{t("library.exportHint")}</p>
+        <div className="actions">
+          <button
+            disabled={busy || !isTauri()}
+            onClick={() => onEver(item.id)}
+            aria-label={t("ever.exportLabel", { title: item.title })}
+          >
+            {t("ever.export")}
+          </button>
+          <button
+            disabled={busy || !isTauri()}
+            onClick={() => onPackage(item.id)}
+            aria-label={t("packages.exportLabel", { title: item.title })}
+          >
+            {t("packages.export")}
+          </button>
+
+          <button
+            disabled={busy || !isTauri()}
+            aria-label={t("library.exportManifestLabel", { title: item.title })}
+            onClick={() => onExport(item.id)}
+          >
+            {t("library.exportManifest")}
+          </button>
+        </div>
+      </details>
       {open && (
         <section
           className="item-files"

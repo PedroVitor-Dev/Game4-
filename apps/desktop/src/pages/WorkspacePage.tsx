@@ -6,20 +6,41 @@ import { LanguageSelect } from "../components/LanguageSelect";
 
 import { DashboardPage } from "./DashboardPage";
 
-export type Page = "dashboard" | "library" | "transfers" | "tasks" | "settings";
+import { CommunityPage } from "./CommunityPage";
+import type { LibraryItemSummary } from "@game4/ipc-contracts";
+import { transferView, type Navigate, type Page } from "../services/navigation";
+export type { Page } from "../services/navigation";
 
 export function WorkspacePage({
   page,
   onNavigate,
+  source,
 }: {
   page: Page;
-  onNavigate: (page: Page) => void;
+  onNavigate: Navigate;
+  source?: LibraryItemSummary;
 }) {
   const { t } = useTranslation();
   if (page === "dashboard") return <DashboardPage onNavigate={onNavigate} />;
-  if (page === "transfers") return <TransfersPage />;
+  if (page === "community") return <CommunityPage onNavigate={onNavigate} />;
+  const view = transferView(page);
+  if (view)
+    return (
+      <TransfersPage
+        key={`${page}:${source?.id ?? ""}`}
+        view={view}
+        source={source}
+        onNavigate={onNavigate}
+      />
+    );
   if (page !== "settings")
-    return <LibraryPage key={page} tasksOnly={page === "tasks"} />;
+    return (
+      <LibraryPage
+        key={page}
+        tasksOnly={page === "tasks"}
+        onShare={(item) => onNavigate("share", item)}
+      />
+    );
   return (
     <>
       <section className="content-card settings-card">

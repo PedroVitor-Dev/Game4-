@@ -5,34 +5,58 @@ import { useAppInfo } from "./hooks/useAppInfo";
 import { getIpcErrorKey } from "./services/errors";
 import { WorkspacePage, type Page } from "./pages/WorkspacePage";
 import "./App.css";
+import brandLogo from "../../../assets/White_SF.png";
+import type { LibraryItemSummary } from "@game4/ipc-contracts";
+import type { Navigate } from "./services/navigation";
 
 export default function App() {
   const { t } = useTranslation();
   const [page, setPage] = useState<Page>("dashboard");
+  const [source, setSource] = useState<LibraryItemSummary>();
+  const navigate: Navigate = (next, selected) => {
+    setSource(selected);
+    setPage(next);
+    window.scrollTo({ top: 0 });
+  };
   const { runtime, version, failure } = useAppInfo();
 
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#main" aria-label="Game4∞">
-          <span className="brand-mark">∞</span>Game4
-          <span className="brand-infinity">∞</span>
-        </a>
+        <button
+          className="brand brand-home"
+          onClick={() => navigate("dashboard")}
+          aria-label={t("nav.homeLabel")}
+        >
+          <img src={brandLogo} alt="Game4∞ — Game For Ever" />
+        </button>
         <p className="sidebar-caption">{t("app.workspace")}</p>
         <nav aria-label={t("nav.label")}>
           {(
-            ["dashboard", "library", "transfers", "tasks", "settings"] as const
+            [
+              "dashboard",
+              "download",
+              "share",
+              "library",
+              "transfers",
+              "community",
+              "tasks",
+              "settings",
+            ] as const
           ).map((item, index) => (
             <button
               key={item}
               className={`nav-item ${page === item ? "active" : ""}`}
               aria-current={page === item ? "page" : undefined}
-              onClick={() => setPage(item)}
+              onClick={() => navigate(item)}
             >
               <span className="nav-number" aria-hidden="true">
                 0{index + 1}
               </span>
               {t(`nav.${item}`)}
+              {item === "community" && (
+                <span className="nav-soon">{t("community.soon")}</span>
+              )}
             </button>
           ))}
         </nav>
@@ -52,7 +76,7 @@ export default function App() {
           <h1>{t(`${page}.title`)}</h1>
           <p>{t(`${page}.description`)}</p>
         </section>
-        <WorkspacePage page={page} onNavigate={setPage} />
+        <WorkspacePage page={page} onNavigate={navigate} source={source} />
         <footer className="runtime-status" role="status">
           <span>
             {failure ? t(getIpcErrorKey(failure)) : t(`runtime.${runtime}`)}

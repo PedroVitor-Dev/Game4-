@@ -9,13 +9,10 @@ import {
 } from "../services/desktop";
 import { formatBytes } from "../services/file-identification";
 import { getIpcErrorKey } from "../services/errors";
-import type { Page } from "./WorkspacePage";
+import type { Navigate } from "../services/navigation";
+import brandLogo from "../../../../assets/White_SF.png";
 
-export function DashboardPage({
-  onNavigate,
-}: {
-  onNavigate: (page: Page) => void;
-}) {
+export function DashboardPage({ onNavigate }: { onNavigate: Navigate }) {
   const { t, i18n } = useTranslation();
   const [library, setLibrary] = useState<LibraryPage>();
   const [tasks, setTasks] = useState<TaskPage>();
@@ -93,28 +90,42 @@ export function DashboardPage({
           <div className="actions">
             <button
               className="dashboard-primary"
-              onClick={() => onNavigate("library")}
+              onClick={() => onNavigate("download")}
             >
-              {t("dashboard.openLibrary")} <span aria-hidden="true">↗</span>
+              {t("journeys.downloadAction")} <span aria-hidden="true">↗</span>
             </button>
             <button
               className="dashboard-secondary"
-              onClick={() => onNavigate("transfers")}
+              onClick={() => onNavigate("share")}
             >
-              {t("dashboard.openTransfers")}
+              {t("journeys.shareAction")}
             </button>
           </div>
         </div>
-        <div className="archive-art" aria-hidden="true">
-          <div className="archive-orbit" />
-          <div className="archive-tile tile-back">.g4e</div>
-          <div className="archive-tile tile-front">
-            <span>GAME4</span>
-            <strong>∞</strong>
-            <small>.g4 / SHA-256</small>
-          </div>
-          <span className="art-coordinate">PRESERVE / CONNECT / REPEAT</span>
+        <div className="mission-art" aria-hidden="true">
+          <img src={brandLogo} alt="" />
+          <p>{t("app.tagline")}</p>
         </div>
+      </section>
+      <section className="journey-grid" aria-label={t("journeys.title")}>
+        {(["download", "share", "community"] as const).map((action, index) => (
+          <article key={action}>
+            <span className="journey-index" aria-hidden="true">
+              0{index + 1}
+            </span>
+            {action === "community" && (
+              <span className="planned-label">{t("community.soon")}</span>
+            )}
+            <h2>{t(`journeys.${action}Title`)}</h2>
+            <p>{t(`journeys.${action}Text`)}</p>
+            <button
+              className="dashboard-link"
+              onClick={() => onNavigate(action)}
+            >
+              {t(`journeys.${action}Action`)} →
+            </button>
+          </article>
+        ))}
       </section>
       <div className="dashboard-section-heading">
         <h2>{t("dashboard.collection")}</h2>
@@ -151,10 +162,11 @@ export function DashboardPage({
           </article>
         ))}
       </div>
-      <p className="dashboard-footnote">
+      <details className="dashboard-footnote metric-scope">
+        <summary>{t("dashboard.metricScope")}</summary>
         {t("dashboard.scope")} {library?.nextCursor && t("dashboard.partial")}{" "}
         {t("dashboard.transferScope")}
-      </p>
+      </details>
       <div className="dashboard-columns">
         <section className="dashboard-panel">
           <div className="dashboard-section-heading">
@@ -179,7 +191,7 @@ export function DashboardPage({
                     aria-hidden="true"
                   >
                     {item.title.slice(0, 1).toLocaleUpperCase(i18n.language)}
-                    <small>G4 / ARCHIVE</small>
+                    <small>Game For Ever</small>
                   </span>
                   <strong>{item.title}</strong>
                   <span>

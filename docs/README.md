@@ -21,6 +21,8 @@ See [torrent engine evaluation](torrent-engine-evaluation.md) and [two-computer 
 
 See [frontend–backend IPC contracts](ipc-contracts.md) for active commands, generated types, errors, and draft task/event boundaries.
 
+See the [current vision and user experience](vision-and-experience.md) for the November 14 product baseline, implemented download/share journeys and the boundary around future community catalogs.
+
 ## Maintenance and status vocabulary
 
 - Planned: development direction, not implemented functionality.

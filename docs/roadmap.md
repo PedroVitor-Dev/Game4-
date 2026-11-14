@@ -1,5 +1,7 @@
 # Schedule and milestones
 
+Current product/experience baseline (November 14, 2026): [vision and user experience](vision-and-experience.md). It reconciles the renewed community preservation plan with implemented local Library, direct P2P, recovery and speed controls; older dated scope notes below are historical. Community catalog/discovery and .g4lib remain planned.
+
 Baseline: November 3, 2026. Initial estimate: 16 active weeks for a P2P alpha, followed by a 4-week contingency. Assumes one main developer with regular availability and project-owner review. The estimate has not been validated against historical delivery velocity.
 
 Weeks start when implementation actually begins. Holidays, availability, incompatibilities, and scope changes may shift dates. Review estimates after each milestone; acceptance criteria take precedence over dates.

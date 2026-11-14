@@ -31,7 +31,18 @@ import {
   TransferLimitsControl,
 } from "../components/BandwidthInputs";
 import { parseBandwidthInput } from "../services/transfer-metrics";
-export function TransfersPage() {
+import { sourceChoices, type Navigate } from "../services/navigation";
+import { DownloadLink } from "../components/DownloadLink";
+import { EverReader } from "../components/EverReader";
+export function TransfersPage({
+  view,
+  source,
+  onNavigate,
+}: {
+  view: "seed" | "download" | "sessions";
+  source?: LibraryItemSummary;
+  onNavigate: Navigate;
+}) {
   const { t, i18n } = useTranslation();
   const [downloadLimit, setDownloadLimit] = useState("0");
   const [uploadLimit, setUploadLimit] = useState("0");
@@ -40,7 +51,9 @@ export function TransfersPage() {
   const validLimits = downloadBps !== null && uploadBps !== null;
   const limits = { downloadBps: downloadBps ?? 0, uploadBps: uploadBps ?? 0 };
   const [sessionFilter, setSessionFilter] = useState("all");
-  const [composer, setComposer] = useState<"seed" | "download">("download");
+  const composer = view === "seed" ? "seed" : "download";
+  const [started, setStarted] = useState(false);
+  const connections = useRef<HTMLDetailsElement>(null);
   const [fresh, setFresh] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [items, setItems] = useState<LibraryItemSummary[]>([]);
@@ -106,9 +119,9 @@ export function TransfersPage() {
       }).then(
         (p) => {
           if (alive.current) {
-            setItems(p.items);
+            setItems(sourceChoices(p.items, source));
             setCursor(p.nextCursor);
-            setItemId(p.items[0]?.id ?? "");
+            setItemId(source?.id ?? p.items[0]?.id ?? "");
           }
         },
         (e) => {
@@ -198,7 +211,13 @@ export function TransfersPage() {
           dht,
           trackers,
         };
-      await seedTorrent(seedPending.current);
+      const result = await seedTorrent(seedPending.current);
+      if (alive.current) {
+        setStarted(true);
+        setGeneratedMagnet(
+          `magnet:?xt=urn:btih:${result.infoHash}${trackers.map((tracker) => `&tr=${encodeURIComponent(tracker)}`).join("")}`,
+        );
+      }
       seedPending.current = null;
     });
   }
@@ -227,14 +246,20 @@ export function TransfersPage() {
       const result = await downloadTorrent(downloadPending.current);
       if (!result.cancelled) {
         downloadPending.current = null;
-        if (alive.current) setPreview(undefined);
+        if (alive.current) {
+          setPreview(undefined);
+          setStarted(true);
+        }
       }
     });
   }
   const bytes = (value: string) => formatBytes(value, i18n.language);
   return (
     <div className="library-workspace transfers-workspace">
-      <section className="workspace-banner transfer-banner">
+      <section
+        hidden={view !== "sessions"}
+        className="workspace-banner transfer-banner"
+      >
         <div>
           <p className="eyebrow">BITTORRENT / P2P</p>
           <h2>{t("transfers.centerTitle")}</h2>
@@ -244,7 +269,10 @@ export function TransfersPage() {
           ⇄
         </div>
       </section>
-      <div className="workspace-metrics transfer-metrics">
+      <div
+        hidden={view !== "sessions"}
+        className="workspace-metrics transfer-metrics"
+      >
         {["active", "paused", "completed"].map((status) => (
           <article key={status}>
             <span>{t(`transfers.filter.${status}`)}</span>
@@ -268,7 +296,10 @@ export function TransfersPage() {
           {t(resolving ? "transfers.resolving" : "transfers.preparing")}
         </p>
       )}
-      <section className="content-card transfer-panel saved-sessions">
+      <section
+        hidden={view !== "sessions"}
+        className="content-card transfer-panel saved-sessions"
+      >
         <div className="session-heading">
           <h2>{t("transfers.sessions")}</h2>
           <label>
@@ -329,13 +360,7 @@ export function TransfersPage() {
                 <p>
                   {t("transfers.trackerCount", { count: job.trackerCount })}
                 </p>
-                <label>
-                  {t("ever.magnet")}
-                  <textarea
-                    readOnly
-                    value={`magnet:?xt=urn:btih:${job.infoHash}`}
-                  />
-                </label>
+                <DownloadLink value={`magnet:?xt=urn:btih:${job.infoHash}`} />
               </details>
               <TransferMetrics transfer={job} fresh={fresh} />
               <TransferLimitsControl transfer={job} onSaved={refresh} />
@@ -387,39 +412,27 @@ export function TransfersPage() {
             </article>
           ))}
       </section>
-      <section className="content-card transfer-panel new-bandwidth">
-        <h2>{t("transfers.nextLimits")}</h2>
-        <BandwidthInputs
-          download={downloadLimit}
-          upload={uploadLimit}
-          onDownload={setDownloadLimit}
-          onUpload={setUploadLimit}
-          disabled={busy}
-        />
-      </section>
-      <div
-        className="composer-switch"
-        role="group"
-        aria-label={t("transfers.newTransfer")}
-      >
-        <span>{t("transfers.newTransfer")}</span>
-        <button
-          disabled={busy}
-          aria-pressed={composer === "download"}
-          onClick={() => setComposer("download")}
-        >
-          {t("transfers.downloadTab")}
-        </button>
-        <button
-          disabled={busy}
-          aria-pressed={composer === "seed"}
-          onClick={() => setComposer("seed")}
-        >
-          {t("transfers.seedTab")}
-        </button>
-      </div>
+      {view === "sessions" && (
+        <div className="actions session-next-actions">
+          <button className="primary" onClick={() => onNavigate("download")}>
+            {t("journeys.downloadAction")}
+          </button>
+          <button onClick={() => onNavigate("share")}>
+            {t("journeys.shareAction")}
+          </button>
+        </div>
+      )}
+      {started && (
+        <section className="transfer-started content-card" role="status">
+          <h2>{t("transfers.startedTitle")}</h2>
+          <p>{t("transfers.startedHint")}</p>
+          <button className="primary" onClick={() => onNavigate("transfers")}>
+            {t("transfers.follow")}
+          </button>
+        </section>
+      )}
       <section
-        hidden={composer !== "seed"}
+        hidden={view === "sessions" || composer !== "seed"}
         className="content-card transfer-panel transfer-composer"
       >
         <h2>{t("transfers.seedTitle")}</h2>
@@ -433,6 +446,7 @@ export function TransfersPage() {
               setItemId(e.target.value);
               setGeneratedMagnet("");
               setSaved(undefined);
+              setStarted(false);
             }}
           >
             {items.map((item) => (
@@ -442,7 +456,14 @@ export function TransfersPage() {
             ))}
           </select>
         </label>
-        {!items.length && <p>{t("transfers.noSource")}</p>}
+        {!items.length && (
+          <div className="source-empty">
+            <p>{t("transfers.noSource")}</p>
+            <button onClick={() => onNavigate("library")}>
+              {t("library.addToLibrary")}
+            </button>
+          </div>
+        )}
         {cursor && (
           <button
             disabled={busy}
@@ -453,7 +474,12 @@ export function TransfersPage() {
                   query: null,
                 });
                 if (alive.current) {
-                  setItems((v) => [...v, ...p.items]);
+                  setItems((v) => [
+                    ...v,
+                    ...p.items.filter(
+                      (item) => !v.some((old) => old.id === item.id),
+                    ),
+                  ]);
                   setCursor(p.nextCursor);
                 }
               })
@@ -462,46 +488,9 @@ export function TransfersPage() {
             {t("library.loadMore")}
           </button>
         )}
-        <label>
-          {t("transfers.port")}
-          <input
-            type="number"
-            min="0"
-            max="65535"
-            value={port}
-            disabled={busy}
-            onChange={(e) => setPort(e.target.value)}
-          />
-        </label>
+        <p className="sharing-notice">{t("transfers.sharingNotice")}</p>
+        <p>{t("transfers.permissionHint")}</p>
         <div className="actions">
-          <button
-            disabled={busy || !itemId || !isTauri()}
-            onClick={() =>
-              void act(async () => {
-                const result = await generateMagnet({ itemId, trackers });
-                if (alive.current) setGeneratedMagnet(result.magnet);
-              })
-            }
-          >
-            {t("transfers.generateMagnet")}
-          </button>
-          <button
-            disabled={busy || !itemId || !isTauri()}
-            onClick={() =>
-              void act(async () => {
-                const result = await createTorrent({ itemId, trackers });
-                if (
-                  alive.current &&
-                  !result.cancelled &&
-                  result.fileName &&
-                  result.magnet
-                )
-                  setSaved({ name: result.fileName, magnet: result.magnet });
-              })
-            }
-          >
-            {t("transfers.create")}
-          </button>
           <button
             className="primary"
             disabled={busy || !itemId || !isTauri() || !validLimits}
@@ -510,11 +499,45 @@ export function TransfersPage() {
             {t("transfers.startSeed")}
           </button>
         </div>
+        <details className="share-reference-tools">
+          <summary>{t("transfers.referenceTools")}</summary>
+          <p>{t("transfers.referenceHint")}</p>{" "}
+          <div className="actions">
+            <button
+              disabled={busy || !itemId || !isTauri()}
+              onClick={() =>
+                void act(async () => {
+                  const result = await generateMagnet({ itemId, trackers });
+                  if (alive.current) setGeneratedMagnet(result.magnet);
+                })
+              }
+            >
+              {t("transfers.generateMagnet")}
+            </button>
+            <button
+              disabled={busy || !itemId || !isTauri()}
+              onClick={() =>
+                void act(async () => {
+                  const result = await createTorrent({ itemId, trackers });
+                  if (
+                    alive.current &&
+                    !result.cancelled &&
+                    result.fileName &&
+                    result.magnet
+                  )
+                    setSaved({ name: result.fileName, magnet: result.magnet });
+                })
+              }
+            >
+              {t("transfers.create")}
+            </button>
+          </div>
+        </details>
         {generatedMagnet && (
-          <label>
-            {t("ever.magnet")}
-            <textarea readOnly value={generatedMagnet} />
-          </label>
+          <>
+            <DownloadLink key={generatedMagnet} value={generatedMagnet} />
+            <p>{t("transfers.linkHint")}</p>
+          </>
         )}
         {saved && (
           <div role="status">
@@ -528,7 +551,7 @@ export function TransfersPage() {
         )}
       </section>
       <section
-        hidden={composer !== "download"}
+        hidden={view === "sessions" || composer !== "download"}
         className="content-card transfer-panel transfer-composer"
       >
         <h2>{t("transfers.downloadTitle")}</h2>
@@ -540,6 +563,7 @@ export function TransfersPage() {
               const result = await importTorrent();
               if (alive.current && result.preview) {
                 setPreview(result.preview);
+                setMagnet("");
                 setTrackerText(result.preview.trackers.join("\n"));
                 setUseTrackers(false);
                 setAllFiles(false);
@@ -558,6 +582,10 @@ export function TransfersPage() {
             disabled={busy}
             onChange={(e) => {
               setMagnet(e.target.value);
+              setPreview(undefined);
+              downloadPending.current = null;
+              setTrackerText("");
+              setUseTrackers(false);
               try {
                 const tr = new URL(e.target.value.trim()).searchParams.getAll(
                   "tr",
@@ -573,15 +601,49 @@ export function TransfersPage() {
             placeholder="magnet:?xt=urn:btih:…"
           />
         </label>
-        <label>
-          {t("transfers.peer")}
-          <input
-            value={peer}
-            onChange={(e) => setPeer(e.target.value)}
-            placeholder="100.x.x.x:42420"
+        <details className="download-descriptor">
+          <summary>{t("transfers.haveManifest")}</summary>
+          <EverReader
             disabled={busy}
+            onUseMagnet={(value) => {
+              setMagnet(value);
+              setPreview(undefined);
+              setTrackerText(
+                new URL(value).searchParams.getAll("tr").join("\n"),
+              );
+              setUseTrackers(false);
+              downloadPending.current = null;
+            }}
           />
+        </details>
+        <label className="dht-choice">
+          <input
+            type="checkbox"
+            checked={dht}
+            disabled={busy}
+            onChange={(e) => setDht(e.target.checked)}
+          />
+          {t("transfers.findParticipants")}
         </label>
+        <p>{t("transfers.discoveryConsent")}</p>
+        {!discovery && !peer.trim() && (
+          <p className="connection-needed">
+            {t("transfers.connectionNeeded")}{" "}
+            <button
+              onClick={() => {
+                if (connections.current) {
+                  connections.current.open = true;
+                  connections.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                  });
+                }
+              }}
+            >
+              {t("transfers.configureConnection")}
+            </button>
+          </p>
+        )}
         <p>{t("transfers.magnetHint")}</p>
         <button
           disabled={
@@ -633,9 +695,12 @@ export function TransfersPage() {
               {t("library.fileCount", { count: preview.files.length })} ·{" "}
               {bytes(preview.totalBytes)}
             </p>
-            <code>
-              {t("transfers.infoHash")}: {preview.infoHash}
-            </code>
+            <details className="preview-identity">
+              <summary>{t("transfers.identityDetails")}</summary>
+              <code>
+                {t("transfers.infoHash")}: {preview.infoHash}
+              </code>
+            </details>
             <ul>
               {preview.files.slice(0, allFiles ? undefined : 20).map((file) => (
                 <li key={file.path}>
@@ -649,6 +714,7 @@ export function TransfersPage() {
               </button>
             )}
             <p>{t("transfers.outputHint")}</p>
+            <p className="sharing-notice">{t("transfers.downloadNotice")}</p>
             <label className="dht-choice">
               <input
                 type="checkbox"
@@ -669,9 +735,46 @@ export function TransfersPage() {
           </div>
         )}
       </section>
-      <details className="content-card transfer-panel connection-settings">
+      <details
+        hidden={view === "sessions"}
+        className="content-card transfer-panel new-bandwidth"
+      >
+        <summary>{t("transfers.nextLimits")}</summary>
+        <BandwidthInputs
+          download={downloadLimit}
+          upload={uploadLimit}
+          onDownload={setDownloadLimit}
+          onUpload={setUploadLimit}
+          disabled={busy}
+        />
+      </details>
+      <details
+        ref={connections}
+        hidden={view === "sessions"}
+        className="content-card transfer-panel connection-settings"
+      >
         <summary>{t("transfers.connectionTitle")}</summary>
-        <p>{t("transfers.connectionDescription")}</p>
+        <p>{t("transfers.connectionDescription")}</p>{" "}
+        <label>
+          {t("transfers.port")}
+          <input
+            type="number"
+            min="0"
+            max="65535"
+            value={port}
+            disabled={busy}
+            onChange={(e) => setPort(e.target.value)}
+          />
+        </label>
+        <label>
+          {t("transfers.peer")}
+          <input
+            value={peer}
+            onChange={(e) => setPeer(e.target.value)}
+            placeholder="100.x.x.x:42420"
+            disabled={busy}
+          />
+        </label>
         <p>{t("transfers.exposure")}</p>
         <p>{t("transfers.persistenceHint")}</p>
         <label className="dht-choice">

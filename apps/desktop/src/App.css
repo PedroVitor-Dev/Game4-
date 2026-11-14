@@ -1587,3 +1587,263 @@ summary:focus-visible {
     gap: 0;
   }
 }
+
+/* Intent-led navigation: choose an action first, technical tools when needed. */
+[hidden] {
+  display: none !important;
+}
+.brand-home {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+}
+.brand-home img {
+  width: 180px;
+  height: 145px;
+  object-fit: contain;
+}
+.sidebar {
+  padding-top: 8px;
+}
+.sidebar-caption {
+  margin-top: 8px;
+}
+.sidebar nav {
+  gap: 3px;
+}
+.sidebar .nav-item {
+  padding: 11px 10px;
+  gap: 10px;
+  font-size: 12px;
+  align-items: center;
+}
+.nav-soon {
+  font-size: 8px;
+  color: #b4c9bd;
+  border: 1px solid #455e4f;
+  border-radius: 4px;
+  padding: 3px 5px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.sidebar .nav-item:nth-last-child(2) {
+  margin-top: 18px;
+}
+.sidebar-bottom {
+  padding-top: 24px;
+}
+.mission-art {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-width: 0;
+  background: radial-gradient(ellipse, #4b70553b, transparent 70%);
+}
+.mission-art img {
+  width: min(100%, 280px);
+  height: 240px;
+  object-fit: contain;
+}
+.mission-art p {
+  font-size: 10px;
+  color: #c0d3c7;
+  text-align: center;
+  line-height: 1.8;
+  margin: 0 0 15px;
+}
+.journey-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.journey-grid article {
+  padding: 24px;
+  border: 1px solid #34463e;
+  border-radius: 12px;
+  background: linear-gradient(130deg, #1e2b29, #191e2a);
+  min-width: 0;
+}
+.journey-grid h2 {
+  font-size: 17px;
+  margin-top: 18px;
+}
+.journey-grid p {
+  color: #aebbc7;
+  font-size: 12px;
+  line-height: 1.9;
+  margin: 0 0 15px;
+}
+.journey-index {
+  color: #b1ebcd;
+  font: 11px monospace;
+  margin-right: 10px;
+}
+.journey-grid .dashboard-link {
+  font-size: 12px !important;
+}
+.community-page {
+  display: grid;
+  gap: 24px;
+}
+.community-current {
+  padding: 28px;
+}
+.community-current p {
+  max-width: 750px;
+}
+.item-export-tools {
+  clear: both;
+  border-top: 1px solid #35424b;
+  padding-top: 12px;
+  margin-top: 16px;
+  font-size: 11px;
+  color: #b6cfc0;
+}
+.item-export-tools p {
+  margin-top: 12px;
+  font-size: 11px;
+}
+.item-export-tools button {
+  font-size: 10px;
+}
+.library-item .manifest-action button.primary {
+  background: #b1ebcd;
+  color: #14261e;
+  border-color: #b1ebcd;
+}
+.share-reference-tools,
+.download-descriptor {
+  border-top: 1px solid #35424b;
+  border-bottom: 1px solid #35424b;
+  padding: 14px 0;
+  margin: 22px 0;
+  font-size: 12px;
+  color: #bfd3c6;
+}
+.share-reference-tools p {
+  margin-top: 14px;
+}
+.transfer-composer {
+  order: 3;
+}
+.new-bandwidth {
+  order: 5;
+}
+.new-bandwidth summary {
+  font-size: 13px;
+  color: #bfd3c6;
+}
+.new-bandwidth h2 {
+  font-size: 15px;
+}
+.transfer-started {
+  order: 2;
+  padding: 24px;
+  border-color: #61836e;
+  background: #21382c;
+}
+.transfer-started p {
+  margin-bottom: 18px;
+}
+.session-next-actions {
+  order: 4;
+}
+.sharing-notice {
+  border-left: 2px solid #749e85;
+  padding-left: 12px;
+  color: #c5d4cc !important;
+}
+.connection-needed {
+  padding: 14px;
+  border: 1px solid #4b5264;
+  border-radius: 8px;
+  background: #242b36;
+}
+.connection-needed button {
+  margin-top: 8px;
+  font-size: 11px;
+}
+.source-empty {
+  padding: 14px;
+  border: 1px solid #384b42;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+.preview-identity {
+  margin: 18px 0;
+  font-size: 11px;
+  color: #b6cfc0;
+}
+.preview-identity code {
+  display: block;
+  margin-top: 12px;
+}
+.metric-scope summary {
+  font-size: 11px;
+  color: #b6cfc0;
+  padding-bottom: 6px;
+}
+@media (max-width: 1050px) {
+  .journey-grid {
+    grid-template-columns: 1fr;
+  }
+  .journey-grid article {
+    padding: 22px;
+  }
+  .journey-grid h2 {
+    margin-top: 8px;
+  }
+  .mission-art img {
+    height: 190px;
+  }
+}
+@media (max-width: 760px) {
+  .mission-art {
+    display: none;
+  }
+  .brand-home img {
+    width: 145px;
+    height: 120px;
+  }
+  .sidebar .nav-item {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 540px) {
+  .brand-home {
+    width: 150px;
+    margin: auto;
+  }
+  .brand-home img {
+    height: 100px;
+  }
+  .sidebar .nav-item:nth-last-child(2) {
+    margin-top: 0;
+  }
+  .nav-soon {
+    display: none;
+  }
+}
+.download-link {
+  margin: 18px 0;
+}
+.download-link > label {
+  display: block;
+  color: #c6d6cc;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.download-link > span {
+  display: block;
+  color: #b1ebcd;
+  font-size: 11px;
+  margin-top: 10px;
+}
+.download-link button {
+  margin-top: 10px;
+}

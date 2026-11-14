@@ -26,7 +26,13 @@ import { LibraryItemCard } from "../components/LibraryItemCard";
 import { formatBytes, platformLabels } from "../services/file-identification";
 import { getIpcErrorKey } from "../services/errors";
 
-export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
+export function LibraryPage({
+  tasksOnly = false,
+  onShare,
+}: {
+  tasksOnly?: boolean;
+  onShare: (item: LibraryItemSummary) => void;
+}) {
   const { t, i18n } = useTranslation();
   const [search, setSearch] = useState("");
   const [platform, setPlatform] = useState("");
@@ -281,7 +287,6 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
           <div>
             <h2>{t("library.importTitle")}</h2>
             <p>{t("library.importDescription")}</p>
-            <p>{t("library.manifestHint")}</p>
           </div>
           <div className="actions">
             <button
@@ -462,6 +467,7 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
                 key={item.id}
                 item={item}
                 busy={busy || active}
+                onShare={() => onShare(item)}
                 onVerify={(id) => void verify(id)}
                 onPackage={(id) => void savePackage(id)}
                 onEver={(id) => void saveEver(id)}
@@ -484,9 +490,7 @@ export function LibraryPage({ tasksOnly = false }: { tasksOnly?: boolean }) {
           {tasks.map((job) => (
             <article key={job.id} className="task-row">
               <div>
-                <strong>
-                  {t(`tasks.kind.${job.kind}`)} #{job.id}
-                </strong>
+                <strong>{t(`tasks.kind.${job.kind}`)}</strong>
                 <span className={`task-status ${job.status}`}>
                   {t(`tasks.status.${job.status}`)}
                 </span>

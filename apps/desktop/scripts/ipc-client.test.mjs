@@ -1069,3 +1069,23 @@ test("bandwidth commands are capability gated and older starts cannot silently i
     code("INVALID_ARGUMENT"),
   );
 });
+
+const { transferView, sourceChoices } =
+  await import("../src/services/navigation.ts");
+test("download, share and monitoring routes lead to distinct transfer views", () => {
+  assert.equal(transferView("download"), "download");
+  assert.equal(transferView("share"), "seed");
+  assert.equal(transferView("transfers"), "sessions");
+  for (const page of ["dashboard", "library", "community", "tasks", "settings"])
+    assert.equal(transferView(page), null);
+});
+test("sharing keeps the selected collection even outside the first source page", () => {
+  const first = { id: "1", title: "First collection" };
+  const selected = { id: "300", title: "Selected collection" };
+  assert.deepEqual(sourceChoices([first], selected), [selected, first]);
+  assert.deepEqual(sourceChoices([first, selected], selected), [
+    first,
+    selected,
+  ]);
+  assert.deepEqual(sourceChoices([first]), [first]);
+});

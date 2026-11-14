@@ -4,7 +4,13 @@ import type { EverSummary } from "@game4/ipc-contracts";
 import { openEver, isTauri } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 import { formatBytes } from "../services/file-identification";
-export function EverReader({ disabled }: { disabled: boolean }) {
+export function EverReader({
+  disabled,
+  onUseMagnet,
+}: {
+  disabled: boolean;
+  onUseMagnet?: (magnet: string) => void;
+}) {
   const { t, i18n } = useTranslation();
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<EverSummary>();
@@ -54,12 +60,21 @@ export function EverReader({ disabled }: { disabled: boolean }) {
           </p>
           <p>{t("ever.descriptorOnly")}</p>
           {result.magnets.map((magnet, i) => (
-            <textarea
-              key={i}
-              readOnly
-              aria-label={`${t("ever.magnet")} ${i + 1}`}
-              value={magnet}
-            />
+            <div key={i}>
+              <textarea
+                readOnly
+                aria-label={`${t("ever.magnet")} ${i + 1}`}
+                value={magnet}
+              />
+              {onUseMagnet && (
+                <button
+                  disabled={disabled || busy}
+                  onClick={() => onUseMagnet(magnet)}
+                >
+                  {t("ever.useLink")}
+                </button>
+              )}
+            </div>
           ))}
         </div>
       )}
