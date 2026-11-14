@@ -25,10 +25,12 @@ import {
 } from "../services/desktop";
 import { getIpcErrorKey } from "../services/errors";
 import { formatBytes } from "../services/file-identification";
+import { TransferMetrics } from "../components/TransferMetrics";
 export function TransfersPage() {
   const { t, i18n } = useTranslation();
   const [sessionFilter, setSessionFilter] = useState("all");
   const [composer, setComposer] = useState<"seed" | "download">("download");
+  const [fresh, setFresh] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [items, setItems] = useState<LibraryItemSummary[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
@@ -67,10 +69,14 @@ export function TransfersPage() {
       const result = await listTransfers();
       if (alive.current) {
         setTransfers(result.items);
+        setFresh(true);
         setLoaded(true);
       }
     } catch (e) {
-      if (alive.current) setError(e);
+      if (alive.current) {
+        setError(e);
+        setFresh(false);
+      }
     }
   }
   useEffect(() => {
@@ -314,54 +320,7 @@ export function TransfersPage() {
                   />
                 </label>
               </details>
-              <p>
-                {t("transfers.progress", {
-                  verified: bytes(job.verifiedBytes),
-                  total: bytes(job.totalBytes),
-                  uploaded: bytes(job.uploadedBytes),
-                })}
-              </p>
-              <p>
-                {t("transfers.received", { bytes: bytes(job.receivedBytes) })}
-              </p>
-              {job.telemetry ? (
-                <div>
-                  <p>
-                    {t("transfers.speeds", {
-                      down: bytes(job.telemetry.downloadBps),
-                      up: bytes(job.telemetry.uploadBps),
-                    })}
-                  </p>
-                  <p>
-                    {t("transfers.connected", {
-                      peers: job.telemetry.connectedPeers,
-                      seeders: job.telemetry.seeders,
-                      leechers: job.telemetry.leechers,
-                    })}
-                  </p>
-                  <p>
-                    {t(
-                      job.telemetry.seeders > 0
-                        ? "transfers.availabilityFull"
-                        : "transfers.availabilityUnknown",
-                      { count: job.telemetry.seeders },
-                    )}
-                  </p>
-                  <p>{t("transfers.peerScope")}</p>
-                </div>
-              ) : (
-                <p>{t("transfers.metricsUnavailable")}</p>
-              )}
-              <progress
-                max="100"
-                value={Number(
-                  BigInt(job.totalBytes) > 0n
-                    ? (BigInt(job.verifiedBytes) * 100n) /
-                        BigInt(job.totalBytes)
-                    : 0n,
-                )}
-                aria-label={t("transfers.pieces")}
-              />
+              <TransferMetrics transfer={job} fresh={fresh} />
               {job.listenPort !== null && (
                 <p>{t("transfers.listening", { port: job.listenPort })}</p>
               )}

@@ -301,7 +301,17 @@
     "loading": "Loading saved transfers…",
     "emptyTitle": "Ready when you are.",
     "noMatches": "No saved transfers match this filter.",
-    "sessionDetails": "Connection details and magnet"
+    "sessionDetails": "Connection details and magnet",
+    "measurements": "Transfer measurements",
+    "downloadSpeed": "Download",
+    "uploadSpeed": "Upload",
+    "peersLabel": "Connected peers",
+    "seedersLabel": "Seeders",
+    "leechersLabel": "Leechers / other",
+    "uploadedTotal": "Payload uploaded: {{bytes}}",
+    "liveScope": "Sampled speeds and connected peers refresh about every second. Counts describe this session only.",
+    "staleMetrics": "Update unavailable. Byte totals and progress are last known; live speeds and peer counts are hidden.",
+    "availabilityLabel": "Peer availability and observation scope"
   },
   "dashboard": {
     "title": "Built to outlast.",

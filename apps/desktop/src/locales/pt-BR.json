@@ -301,7 +301,17 @@
     "loading": "Carregando transferências salvas…",
     "emptyTitle": "Tudo pronto para começar.",
     "noMatches": "Nenhuma transferência salva corresponde a este filtro.",
-    "sessionDetails": "Detalhes da conexão e magnet"
+    "sessionDetails": "Detalhes da conexão e magnet",
+    "measurements": "Indicadores da transferência",
+    "downloadSpeed": "Download",
+    "uploadSpeed": "Upload",
+    "peersLabel": "Peers conectados",
+    "seedersLabel": "Seeders",
+    "leechersLabel": "Leechers / outros",
+    "uploadedTotal": "Conteúdo enviado: {{bytes}}",
+    "liveScope": "Velocidades amostradas e peers conectados atualizam aproximadamente a cada segundo. As contagens representam apenas esta sessão.",
+    "staleMetrics": "Atualização indisponível. Totais e progresso são os últimos conhecidos; velocidades e peers ao vivo ficam ocultos.",
+    "availabilityLabel": "Disponibilidade dos peers e alcance das observações"
   },
   "dashboard": {
     "title": "Feito para durar.",

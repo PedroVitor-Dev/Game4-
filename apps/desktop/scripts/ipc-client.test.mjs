@@ -943,3 +943,47 @@ test("pause/resume/history validate states, gate capabilities and never expose s
   for (const method of ["pauseTransfer", "resumeTransfer", "forgetTransfer"])
     await assert.rejects(old[method](request), code("CAPABILITY_UNAVAILABLE"));
 });
+
+// Progress must stay exact for large payloads and never round unfinished data to 100%.
+const { verifiedPercent, observedTelemetry } =
+  await import("../src/services/transfer-metrics.ts");
+test("verified transfer percentages handle partial, complete, zero and large byte totals", () => {
+  assert.equal(verifiedPercent("0", "0"), 0);
+  assert.equal(verifiedPercent("1", "3"), 33.3);
+  assert.equal(
+    verifiedPercent("999999999999999999", "1000000000000000000"),
+    99.9,
+  );
+  assert.equal(
+    verifiedPercent("1000000000000000000", "1000000000000000000"),
+    100,
+  );
+  assert.equal(verifiedPercent("12", "10"), 100);
+});
+test("live observations disappear on polling failure and all inactive transfer states", () => {
+  const telemetry = {
+    downloadBps: "0",
+    uploadBps: "512",
+    connectedPeers: 2,
+    seeders: 1,
+    leechers: 1,
+  };
+  assert.equal(
+    observedTelemetry({ status: "active", telemetry }, true),
+    telemetry,
+  );
+  assert.equal(observedTelemetry({ status: "active", telemetry }, false), null);
+  for (const status of [
+    "paused",
+    "resuming",
+    "stopping",
+    "stopped",
+    "failed",
+    "completed",
+  ])
+    assert.equal(observedTelemetry({ status, telemetry }, true), null);
+  assert.equal(
+    observedTelemetry({ status: "active", telemetry: null }, true),
+    null,
+  );
+});
