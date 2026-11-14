@@ -19,8 +19,8 @@ use std::{
 };
 use uuid::Uuid;
 const FORMAT: &str = "game4-library-backup";
-const VERSION: u32 = 2;
-const DATABASE_SCHEMA: u32 = 4;
+const VERSION: u32 = 3;
+const DATABASE_SCHEMA: u32 = 5;
 const MAX_BYTES: usize = 64 * 1024 * 1024;
 const MAX_ROWS: usize = 500_000;
 type Result<T> = std::result::Result<T, IpcError>;
@@ -97,6 +97,8 @@ table!(Identification,"file_identifications","file_id",{file_id:Decimal,format_i
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 struct Data {
+    #[serde(default)]
+    archive: ArchiveData,
     files: Vec<Content>,
     file_locations: Vec<Location>,
     collection_items: Vec<Item>,
@@ -120,6 +122,7 @@ struct Backup {
 impl Data {
     fn read(c: &Connection) -> Result<Self> {
         let data = Self {
+            archive: ArchiveData::read(c)?,
             files: Content::read(c)?,
             file_locations: Location::read(c)?,
             collection_items: Item::read(c)?,
@@ -192,6 +195,9 @@ impl Data {
         Ok(())
     }
     fn insert(&self, tx: &Transaction<'_>) -> Result<()> {
+        tx.pragma_update(None, "defer_foreign_keys", true)
+            .map_err(sql_error)?;
+        ArchiveData::clear(tx)?;
         for r in &self.files {
             r.insert(tx)?;
         }
@@ -216,6 +222,8 @@ impl Data {
         for r in &self.collection_manifest_ids {
             r.insert(tx)?;
         }
+        self.archive.insert(tx)?;
+        self.archive.validate(tx)?;
         Ok(())
     }
     fn fingerprint(&self) -> Result<Vec<u8>> {
@@ -247,7 +255,7 @@ impl Backup {
     fn validate(&self) -> Result<()> {
         if !matches!(
             (self.backup_version, self.database_schema_version),
-            (1, 3) | (2, 4)
+            (1, 3) | (2, 4) | (3, 5)
         ) {
             return Err(error(ErrorCode::BackupVersionUnsupported));
         }
@@ -297,9 +305,13 @@ impl Backup {
             value.get("databaseSchemaVersion").and_then(|v| v.as_u64()),
         );
         if let (Some(version), Some(schema)) = pair
-            && !matches!((version, schema), (1, 3) | (2, 4))
+            && !matches!((version, schema), (1, 3) | (2, 4) | (3, 5))
         {
             return Err(error(ErrorCode::BackupVersionUnsupported));
+        }
+        if pair == (Some(3), Some(5)) && value.get("data").and_then(|d| d.get("archive")).is_none()
+        {
+            return Err(invalid());
         }
         if pair == (Some(2), Some(4))
             && value
@@ -490,6 +502,7 @@ impl BackupState {
     }
 }
 fn replace(tx: &Transaction<'_>, data: &Data) -> Result<()> {
+    ArchiveData::clear(tx)?;
     tx.execute_batch("DELETE FROM file_identifications; DELETE FROM collection_manifest_ids; DELETE FROM import_sources; DELETE FROM collection_item_files; DELETE FROM file_locations; DELETE FROM collection_items; DELETE FROM files; DELETE FROM tasks;").map_err(sql_error)?;
     data.insert(tx)?;
     tx.execute(

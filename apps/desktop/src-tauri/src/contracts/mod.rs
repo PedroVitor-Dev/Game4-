@@ -8,6 +8,7 @@ pub const TASK_UPDATED_EVENT: &str = "game4://task-updated";
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
 #[serde(rename_all = "snake_case")]
 pub enum ImplementedCommand {
+    ArchiveRequest,
     AppInfo,
     DatabaseInfo,
     LibrarySelectSources,
@@ -48,7 +49,8 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 38] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 39] = [
+    ImplementedCommand::ArchiveRequest,
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -860,3 +862,6 @@ pub struct AssociatedFileResult {
     pub package: Option<PackageSummary>,
     pub manifest: Option<EverSummary>,
 }
+
+mod archive;
+pub use archive::*;

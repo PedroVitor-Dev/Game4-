@@ -12,7 +12,7 @@ fn creates_database_and_preserves_records_after_reopening() {
     let (_directory, path) = temporary_database();
     {
         let database = Database::open(&path).unwrap();
-        assert_eq!(database.info().unwrap().schema_version, 4);
+        assert_eq!(database.info().unwrap().schema_version, 5);
         database
             .connection
             .lock()
@@ -161,7 +161,7 @@ fn rejects_future_schema_without_downgrading_or_resetting_data() {
         Database::open(&path),
         Err(DatabaseError::NewerSchema {
             found: 99,
-            supported: 4
+            supported: 5
         })
     ));
     let connection = Connection::open(&path).unwrap();
@@ -195,7 +195,7 @@ fn upgrades_v1_without_losing_catalog_and_recovers_running_tasks() {
     .unwrap();
     drop(c);
     let db = Database::open(&path).unwrap();
-    assert_eq!(db.info().unwrap().schema_version, 4);
+    assert_eq!(db.info().unwrap().schema_version, 5);
     assert_eq!(db.info().unwrap().item_count, 1);
     let snapshot = crate::library::task_get(&db, "1").unwrap();
     assert!(matches!(

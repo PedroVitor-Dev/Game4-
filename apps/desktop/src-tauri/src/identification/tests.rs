@@ -329,7 +329,7 @@ fn schema3_migration_preserves_catalog_and_does_not_invent_signature_observation
     c.execute_batch("INSERT INTO collection_items(id,title,platform) VALUES (1,'Keep','Declared'); INSERT INTO collection_item_files VALUES (1,1,'old.nes'); PRAGMA user_version=3;").unwrap();
     drop(c);
     let db = crate::database::Database::open(&path).unwrap();
-    assert_eq!(db.info().unwrap().schema_version, 4);
+    assert_eq!(db.info().unwrap().schema_version, 5);
     let c = db.connection.lock().unwrap();
     let records = files(&c, 1, "", 50).unwrap();
     assert_eq!(

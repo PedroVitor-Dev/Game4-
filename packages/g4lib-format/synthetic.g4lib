@@ -1,0 +1,109 @@
+{
+  "format": "game4-community-catalog",
+  "schemaVersion": 1,
+  "id": "synthetic-catalog",
+  "name": "Synthetic interoperability catalog",
+  "attribution": "Game4 test fixture; metadata only.",
+  "data": {
+    "platforms": [
+      {
+        "id": "synthetic-platform",
+        "name": "Synthetic test computer",
+        "manufacturer": "Test fixture",
+        "year": null,
+        "description": "Test metadata, not a historical platform."
+      }
+    ],
+    "games": [
+      {
+        "id": "synthetic-game",
+        "title": "Synthetic homebrew fixture",
+        "year": 2026,
+        "developer": "Game4 test fixture",
+        "publisher": "",
+        "genre": "Puzzle",
+        "description": "Synthetic metadata for interoperability testing. No commercial game or payload is included.",
+        "history": "",
+        "createdAt": "2026-11-14T00:00:00.000Z",
+        "updatedAt": "2026-11-14T00:00:00.000Z"
+      }
+    ],
+    "releases": [
+      {
+        "id": "synthetic-release",
+        "gameId": "synthetic-game",
+        "platformId": "synthetic-platform",
+        "region": "World",
+        "languages": "English",
+        "titleId": ""
+      }
+    ],
+    "editions": [
+      {
+        "id": "synthetic-edition",
+        "releaseId": "synthetic-release",
+        "name": "Standard",
+        "medium": "Digital"
+      }
+    ],
+    "contents": [
+      {
+        "id": "synthetic-base",
+        "editionId": "synthetic-edition",
+        "kind": "version",
+        "name": "synthetic-base",
+        "version": "revision-A",
+        "build": "",
+        "releaseDate": "",
+        "format": "",
+        "baseId": null,
+        "description": "Synthetic test record.",
+        "changelog": "",
+        "identifier": ""
+      },
+      {
+        "id": "synthetic-update",
+        "editionId": "synthetic-edition",
+        "kind": "update",
+        "name": "synthetic-update",
+        "version": "r2",
+        "build": "",
+        "releaseDate": "",
+        "format": "",
+        "baseId": "synthetic-base",
+        "description": "Synthetic test record.",
+        "changelog": "",
+        "identifier": ""
+      },
+      {
+        "id": "synthetic-dlc",
+        "editionId": "synthetic-edition",
+        "kind": "dlc",
+        "name": "synthetic-dlc",
+        "version": "pack-A",
+        "build": "",
+        "releaseDate": "",
+        "format": "",
+        "baseId": "synthetic-base",
+        "description": "Synthetic test record.",
+        "changelog": "",
+        "identifier": ""
+      }
+    ],
+    "dependencies": [
+      {
+        "contentId": "synthetic-dlc",
+        "requiredId": "synthetic-update"
+      }
+    ],
+    "preservationFiles": [],
+    "p2pSources": [],
+    "assets": [],
+    "catalogs": [],
+    "catalogEntries": [],
+    "collections": [],
+    "collectionEntries": [],
+    "preferences": [],
+    "metadataSources": []
+  }
+}

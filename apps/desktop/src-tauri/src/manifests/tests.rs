@@ -136,7 +136,7 @@ fn upgrades_v2_catalog_without_changing_existing_collection_rows() {
     c.pragma_update(None, "user_version", 2).unwrap();
     drop(c);
     let db = Database::open(&path).unwrap();
-    assert_eq!(db.info().unwrap().schema_version, 4);
+    assert_eq!(db.info().unwrap().schema_version, 5);
     assert_eq!(db.info().unwrap().item_count, 1);
     let c = db.connection.lock().unwrap();
     let title: String = c

@@ -304,6 +304,7 @@ fn schema3_backup_v1_restores_without_signature_claims() {
     import(&db, &file);
     let backup = Backup::snapshot(&db.connection.lock().unwrap()).unwrap();
     let mut legacy = serde_json::to_value(&backup).unwrap();
+    legacy["data"].as_object_mut().unwrap().remove("archive");
     legacy["backupVersion"] = serde_json::json!(1);
     legacy["databaseSchemaVersion"] = serde_json::json!(3);
     legacy["data"]
@@ -456,4 +457,68 @@ fn full_local_workflow_preserves_original_tree_bytes_names_mtime_and_attributes(
     assert!(crate::packages::create(&d.path().join("invalid.g4"), &incorrect, &paths).is_err());
     assert_eq!(snapshot(&root), before, "failed exports modified originals");
     assert!(!d.path().join("invalid.g4").exists());
+}
+
+#[test]
+fn historical_archive_artwork_preferences_and_links_roundtrip_with_backup_v3() {
+    let (d, db, imports) = setup();
+    let original = source(d.path(), "homebrew.bin");
+    import(&db, &original);
+    {
+        let mut c = db.connection.lock().unwrap();
+        let request = serde_json::json!({"kind":"saveGame","value":{"id":"test-game","title":"Synthetic homebrew","year":null,"developer":"Test","publisher":"","genre":"","description":"","history":"","createdAt":"","updatedAt":""}});
+        crate::archive::execute(&mut c, serde_json::from_value(request).unwrap()).unwrap();
+        c.execute("INSERT INTO archive_releases VALUES('release','test-game','platform-20','World','English','')",[]).unwrap();
+        c.execute(
+            "INSERT INTO archive_editions VALUES('edition','release','Standard','Digital')",
+            [],
+        )
+        .unwrap();
+        c.execute("INSERT INTO archive_contents VALUES('base','edition','version','Base','r1','','','original',NULL,'','','')",[]).unwrap();
+        crate::archive::execute(
+            &mut c,
+            ArchiveRequest::LinkItem {
+                content_id: "base".into(),
+                item_id: "1".into(),
+            },
+        )
+        .unwrap();
+        crate::archive::execute(
+            &mut c,
+            ArchiveRequest::Preference {
+                game_id: "test-game".into(),
+                favorite: true,
+                in_library: true,
+            },
+        )
+        .unwrap();
+        crate::archive::add_asset(
+            &mut c,
+            ArchiveRequest::AddAsset {
+                owner_kind: "game".into(),
+                owner_id: "test-game".into(),
+                role: "cover".into(),
+                source: "Owner-supplied project artwork".into(),
+                license: "Authorized project test".into(),
+                attribution: "Game4 owner".into(),
+            },
+            include_bytes!("../../../../../assets/White_SF.png").to_vec(),
+        )
+        .unwrap();
+    }
+    let path = d.path().join("archive-backup.json");
+    save(&db, &imports, &path).unwrap();
+    let backup = read_backup(&path).unwrap();
+    assert_eq!(backup.backup_version, 3);
+    assert_eq!(backup.data.archive.games.len(), 1);
+    assert_eq!(backup.data.archive.assets.len(), 1);
+    let mut c = db.connection.lock().unwrap();
+    let tx = c.transaction().unwrap();
+    replace(&tx, &backup.data).unwrap();
+    tx.commit().unwrap();
+    let data = ArchiveData::read(&c).unwrap();
+    assert_eq!(data.games[0].title, "Synthetic homebrew");
+    assert!(data.preferences[0].favorite);
+    assert_eq!(data.preservation_files[0].item_id.as_deref(), Some("1"));
+    assert_eq!(std::fs::read(original).unwrap(), b"abc");
 }

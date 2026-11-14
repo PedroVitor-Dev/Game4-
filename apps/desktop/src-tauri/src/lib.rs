@@ -1,3 +1,4 @@
+pub mod archive;
 pub mod backups;
 pub mod commands;
 pub mod contracts;
@@ -19,6 +20,7 @@ use tauri::Manager;
 pub fn run() {
     tauri::Builder::default()
         .manage(Arc::new(file_associations::FileInbox::default()))
+        .manage(Arc::new(archive::ArchiveState::default()))
         .plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
             app.state::<Arc<file_associations::FileInbox>>().enqueue(
                 args.into_iter().skip(1).map(std::ffi::OsString::from),
@@ -57,6 +59,7 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             commands::application::app_info,
+            commands::archive::archive_request,
             commands::associations::associated_file_next,
             commands::associations::associated_file_read,
             commands::storage::storage_settings_get,

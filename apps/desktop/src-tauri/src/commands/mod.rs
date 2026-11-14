@@ -12,3 +12,5 @@ pub mod torrents;
 pub mod storage;
 
 pub mod associations;
+
+pub mod archive;

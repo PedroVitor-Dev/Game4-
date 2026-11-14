@@ -67,3 +67,7 @@ Manual verification uses the existing location observation columns and verify ta
 ## Transfer recovery — November 14, 2026
 
 Pause, reverified Resume and private transfer persistence are now implemented in a separate SQLite v1 store; catalog SQLite v4 and backup v2 remain unchanged. Interrupted work reopens Paused without networking. Owned downloads are repaired without duplication or truncation, while original seeding sources remain read-only. Inactive records can be forgotten without deleting content. See [transfer persistence](transfer-persistence.md) and [ADR 0020](decisions/0020-private-transfer-recovery.md) for storage, credentials, sidecars, limits and process-restart evidence.
+
+## Schema 5: historical archive
+
+Migration 0005 adds the normalized offline historical archive without changing existing physical files or imports. See [Game Archive](game-archive.md) for entity boundaries, compatibility constraints and backup v3 behavior.

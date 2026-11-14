@@ -1,0 +1,661 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:game4:community-catalog:1",
+  "title": "Game4 Community Catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schemaVersion", "id", "name", "attribution", "data"],
+  "properties": {
+    "format": {
+      "const": "game4-community-catalog"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "attribution": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platforms",
+        "games",
+        "releases",
+        "editions",
+        "contents",
+        "dependencies",
+        "preservationFiles",
+        "p2pSources",
+        "assets",
+        "catalogs",
+        "catalogEntries",
+        "collections",
+        "collectionEntries",
+        "preferences",
+        "metadataSources"
+      ],
+      "properties": {
+        "platforms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/platforms"
+          },
+          "maxItems": 100000
+        },
+        "games": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/games"
+          },
+          "maxItems": 100000
+        },
+        "releases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/releases"
+          },
+          "maxItems": 100000
+        },
+        "editions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/editions"
+          },
+          "maxItems": 100000
+        },
+        "contents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/contents"
+          },
+          "maxItems": 100000
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependencies"
+          },
+          "maxItems": 100000
+        },
+        "preservationFiles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/preservation_files"
+          },
+          "maxItems": 100000
+        },
+        "p2pSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/p2p_sources"
+          },
+          "maxItems": 100000
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assets"
+          },
+          "maxItems": 100000
+        },
+        "catalogs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/catalogs"
+          },
+          "maxItems": 0
+        },
+        "catalogEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/catalog_entries"
+          },
+          "maxItems": 0
+        },
+        "collections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/collections"
+          },
+          "maxItems": 0
+        },
+        "collectionEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/collection_entries"
+          },
+          "maxItems": 0
+        },
+        "preferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/preferences"
+          },
+          "maxItems": 0
+        },
+        "metadataSources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metadata_sources"
+          },
+          "maxItems": 100000
+        }
+      }
+    }
+  },
+  "$defs": {
+    "platforms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "manufacturer", "year", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "manufacturer": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "year": {
+          "type": ["integer", "null"],
+          "minimum": 1950,
+          "maximum": 2200
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "games": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "year",
+        "developer",
+        "publisher",
+        "genre",
+        "description",
+        "history",
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "year": {
+          "type": ["integer", "null"],
+          "minimum": 1950,
+          "maximum": 2200
+        },
+        "developer": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "publisher": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "genre": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "history": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "updatedAt": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "releases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "gameId",
+        "platformId",
+        "region",
+        "languages",
+        "titleId"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "gameId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "platformId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "region": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "languages": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "titleId": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "editions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "releaseId", "name", "medium"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "releaseId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "medium": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "contents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "editionId",
+        "kind",
+        "name",
+        "version",
+        "build",
+        "releaseDate",
+        "format",
+        "baseId",
+        "description",
+        "changelog",
+        "identifier"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "editionId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "kind": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "version": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "build": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "releaseDate": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "format": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "baseId": {
+          "type": ["string", "null"]
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "changelog": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "identifier": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contentId", "requiredId"],
+      "properties": {
+        "contentId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "requiredId": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "preservation_files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "contentId",
+        "name",
+        "format",
+        "sizeBytes",
+        "sha256",
+        "itemId",
+        "fileId"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "contentId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "format": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "sizeBytes": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^([a-fA-F0-9]{64})?$"
+        },
+        "itemId": {
+          "type": "null"
+        },
+        "fileId": {
+          "type": "null"
+        }
+      }
+    },
+    "p2p_sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "contentId",
+        "magnet",
+        "license",
+        "attribution",
+        "authorized"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "contentId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "magnet": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "license": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "attribution": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "authorized": {
+          "type": "boolean"
+        }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "platformId",
+        "gameId",
+        "contentId",
+        "role",
+        "mime",
+        "bytes",
+        "source",
+        "license",
+        "attribution"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "platformId": {
+          "type": ["string", "null"]
+        },
+        "gameId": {
+          "type": ["string", "null"]
+        },
+        "contentId": {
+          "type": ["string", "null"]
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "mime": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "bytes": {
+          "type": "array",
+          "maxItems": 4194304,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          }
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "license": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "attribution": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "catalogs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "digest", "attribution", "importedAt"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "digest": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "attribution": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "importedAt": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "catalog_entries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalogId", "gameId"],
+      "properties": {
+        "catalogId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "gameId": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "collections": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "collection_entries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["collectionId", "gameId"],
+      "properties": {
+        "collectionId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "gameId": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gameId", "favorite", "inLibrary", "visitedAt"],
+      "properties": {
+        "gameId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "favorite": {
+          "type": "boolean"
+        },
+        "inLibrary": {
+          "type": "boolean"
+        },
+        "visitedAt": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "metadata_sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "gameId",
+        "source",
+        "attribution",
+        "note",
+        "createdAt"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "gameId": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "attribution": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      }
+    }
+  }
+}

@@ -30,6 +30,7 @@
   },
   "appInfo": {
     "capabilities": [
+      "archive_request",
       "app_info",
       "database_info",
       "library_select_sources",
@@ -76,7 +77,7 @@
     "fileCount": 0,
     "itemCount": 0,
     "locationCount": 0,
-    "schemaVersion": 4,
+    "schemaVersion": 5,
     "taskCount": 0
   },
   "draftTaskEvent": {

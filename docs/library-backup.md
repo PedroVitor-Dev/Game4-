@@ -58,3 +58,7 @@ Pause, reverified Resume and private transfer persistence are now implemented in
 ## Storage folder preferences — November 14, 2026
 
 Independent defaults for download, preservation-file and backup dialogs are implemented. They do not move existing sources, transfer payloads, internal databases or recovery files, and are excluded from catalog backup v2. Every save/download destination remains explicitly confirmed. See [storage folders](storage-folders.md) for controls, private settings and failure behavior.
+
+## Archive extension
+
+The current writer uses backup v3 / database schema 5 and includes historical records, cached artwork, personal preferences/collections and existing-file links. Readers retain v1/schema 3 and v2/schema 4 support. A full restore replaces the archive too; old backups restore an empty historical archive. See [Game Archive](game-archive.md).
