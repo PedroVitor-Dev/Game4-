@@ -12,7 +12,8 @@
     "library": "Biblioteca",
     "tasks": "Tarefas",
     "settings": "Configurações",
-    "transfers": "Transferências"
+    "transfers": "Transferências",
+    "dashboard": "Visão geral"
   },
   "language": {
     "label": "Idioma",
@@ -267,5 +268,40 @@
     "pause": "Pausar",
     "resume": "Retomar e verificar",
     "forget": "Remover da lista (manter arquivos)"
+  },
+  "dashboard": {
+    "title": "Feito para durar.",
+    "description": "Sua coleção. Seus arquivos. Um futuro que vale preservar.",
+    "heroLabel": "O PRÓXIMO CAPÍTULO DA PRESERVAÇÃO DE JOGOS",
+    "heroTitle": "Mantenha o jogo vivo.",
+    "heroText": "Construa seu acervo, confira o que importa e compartilhe do seu jeito. Tudo começa no seu dispositivo.",
+    "openLibrary": "Explorar biblioteca",
+    "openTransfers": "Gerenciar transferências",
+    "collection": "Visão da coleção",
+    "items": "Itens na biblioteca",
+    "storage": "Tamanho indexado",
+    "active": "Transferências ativas",
+    "paused": "Transferências pausadas",
+    "scope": "Os indicadores da biblioteca cobrem os primeiros 50 itens; os tamanhos contam cada item, não o uso único em disco.",
+    "partial": "Há mais itens disponíveis na Biblioteca.",
+    "preview": "Prévia da interface. Abra o Game4∞ para carregar seus dados locais.",
+    "loading": "Lendo seu espaço de trabalho…",
+    "recent": "Dentro da sua coleção",
+    "viewAll": "Ver tudo",
+    "empty": "Seu acervo é uma tela em branco.",
+    "emptyText": "Importe seus primeiros arquivos ou uma pasta na Biblioteca. Os originais ficam onde estão.",
+    "activity": "Atividade recente",
+    "noActivity": "Suas importações e verificações de integridade aparecerão aqui.",
+    "activityScope": "Exibindo até 5 das últimas 50 tarefas.",
+    "principles": "Criado para preservar",
+    "originals": "Originais continuam originais",
+    "originalsText": "Catalogue e compartilhe sem conversão obrigatória.",
+    "integrity": "Integridade desde o início",
+    "integrityText": "Execute verificações manuais SHA-256 na Biblioteca.",
+    "network": "Compartilhar é sua escolha",
+    "networkText": "Transferências salvas reabrem pausadas. Você decide quando retomar.",
+    "refresh": "Atualizar dashboard",
+    "unavailable": "Indisponível",
+    "transferScope": "Sessões salvas atuais. Este dashboard não inicia sessões de rede."
   }
 }

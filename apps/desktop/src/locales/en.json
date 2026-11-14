@@ -12,7 +12,8 @@
     "library": "Library",
     "tasks": "Tasks",
     "settings": "Settings",
-    "transfers": "Transfers"
+    "transfers": "Transfers",
+    "dashboard": "Overview"
   },
   "language": {
     "label": "Language",
@@ -267,5 +268,40 @@
     "pause": "Pause",
     "resume": "Resume and recheck",
     "forget": "Forget record (keep files)"
+  },
+  "dashboard": {
+    "title": "Built to outlast.",
+    "description": "Your collection. Your files. A future worth preserving.",
+    "heroLabel": "THE NEXT CHAPTER OF GAME PRESERVATION",
+    "heroTitle": "Keep the game alive.",
+    "heroText": "Build your archive, check what matters and share on your terms. It all starts on your device.",
+    "openLibrary": "Explore library",
+    "openTransfers": "Manage transfers",
+    "collection": "Collection overview",
+    "items": "Library items",
+    "storage": "Indexed size",
+    "active": "Active transfers",
+    "paused": "Paused transfers",
+    "scope": "Library metrics cover the first 50 catalog items; sizes count each item, not unique disk usage.",
+    "partial": "More items are available in the Library.",
+    "preview": "Desktop preview. Open Game4∞ to load your local data.",
+    "loading": "Reading your workspace…",
+    "recent": "Inside your collection",
+    "viewAll": "View all",
+    "empty": "Your archive is a blank canvas.",
+    "emptyText": "Import your first files or folder in the Library. Originals stay where they are.",
+    "activity": "Recent activity",
+    "noActivity": "Your imports and integrity checks will appear here.",
+    "activityScope": "Showing up to 5 of the latest 50 tasks.",
+    "principles": "Made for preservation",
+    "originals": "Originals stay original",
+    "originalsText": "Index and share without mandatory conversion.",
+    "integrity": "Integrity, by design",
+    "integrityText": "Run manual SHA-256 checks from your Library.",
+    "network": "Sharing is your choice",
+    "networkText": "Saved transfers reopen paused. You decide when to resume.",
+    "refresh": "Refresh dashboard",
+    "unavailable": "Unavailable",
+    "transferScope": "Current saved sessions. No network sessions are started by this dashboard."
   }
 }

@@ -8,7 +8,7 @@ import "./App.css";
 
 export default function App() {
   const { t } = useTranslation();
-  const [page, setPage] = useState<Page>("library");
+  const [page, setPage] = useState<Page>("dashboard");
   const { runtime, version, failure } = useAppInfo();
 
   return (
@@ -20,21 +20,21 @@ export default function App() {
         </a>
         <p className="sidebar-caption">{t("app.workspace")}</p>
         <nav aria-label={t("nav.label")}>
-          {(["library", "transfers", "tasks", "settings"] as const).map(
-            (item, index) => (
-              <button
-                key={item}
-                className={`nav-item ${page === item ? "active" : ""}`}
-                aria-current={page === item ? "page" : undefined}
-                onClick={() => setPage(item)}
-              >
-                <span className="nav-number" aria-hidden="true">
-                  0{index + 1}
-                </span>
-                {t(`nav.${item}`)}
-              </button>
-            ),
-          )}
+          {(
+            ["dashboard", "library", "transfers", "tasks", "settings"] as const
+          ).map((item, index) => (
+            <button
+              key={item}
+              className={`nav-item ${page === item ? "active" : ""}`}
+              aria-current={page === item ? "page" : undefined}
+              onClick={() => setPage(item)}
+            >
+              <span className="nav-number" aria-hidden="true">
+                0{index + 1}
+              </span>
+              {t(`nav.${item}`)}
+            </button>
+          ))}
         </nav>
         <div className="sidebar-bottom">
           <span className="status-dot" />
@@ -52,7 +52,7 @@ export default function App() {
           <h1>{t(`${page}.title`)}</h1>
           <p>{t(`${page}.description`)}</p>
         </section>
-        <WorkspacePage page={page} />
+        <WorkspacePage page={page} onNavigate={setPage} />
         <footer className="runtime-status" role="status">
           <span>
             {failure ? t(getIpcErrorKey(failure)) : t(`runtime.${runtime}`)}

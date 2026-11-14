@@ -4,10 +4,19 @@ import { LibraryPage } from "./LibraryPage";
 import { LibraryBackup } from "../components/LibraryBackup";
 import { LanguageSelect } from "../components/LanguageSelect";
 
-export type Page = "library" | "transfers" | "tasks" | "settings";
+import { DashboardPage } from "./DashboardPage";
 
-export function WorkspacePage({ page }: { page: Page }) {
+export type Page = "dashboard" | "library" | "transfers" | "tasks" | "settings";
+
+export function WorkspacePage({
+  page,
+  onNavigate,
+}: {
+  page: Page;
+  onNavigate: (page: Page) => void;
+}) {
   const { t } = useTranslation();
+  if (page === "dashboard") return <DashboardPage onNavigate={onNavigate} />;
   if (page === "transfers") return <TransfersPage />;
   if (page !== "settings")
     return <LibraryPage key={page} tasksOnly={page === "tasks"} />;
