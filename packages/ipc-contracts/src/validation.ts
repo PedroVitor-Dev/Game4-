@@ -45,6 +45,8 @@ import type {
   TransferStartResult,
   TransferPage,
   StorageSettingsInfo,
+  AssociatedFile,
+  AssociatedFileResult,
   StorageDirectoryChoice,
 } from "./generated.ts";
 
@@ -839,4 +841,33 @@ export function parseStorageDirectoryChoice(
     cancelled: o.cancelled,
     settings: parseStorageSettingsInfo(o.settings),
   };
+}
+
+export function parseAssociatedFile(value: unknown): AssociatedFile | null {
+  if (value === null) return null;
+  const o = object(value);
+  if (o.kind !== "g4" && o.kind !== "g4e") throw failure("INVALID_RESPONSE");
+  return { token: uuid(o.token), fileName: filename(o.fileName), kind: o.kind };
+}
+export function parseAssociatedFileResult(
+  value: unknown,
+): AssociatedFileResult {
+  const o = object(value);
+  if (o.kind === "g4" && o.manifest === null && o.package !== null) {
+    return {
+      kind: "g4",
+      package: parsePackageOpenResult({ cancelled: false, package: o.package })
+        .package,
+      manifest: null,
+    };
+  }
+  if (o.kind === "g4e" && o.package === null && o.manifest !== null) {
+    return {
+      kind: "g4e",
+      package: null,
+      manifest: parseEverOpenResult({ cancelled: false, manifest: o.manifest })
+        .manifest,
+    };
+  }
+  throw failure("INVALID_RESPONSE");
 }

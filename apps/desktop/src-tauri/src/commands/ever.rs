@@ -72,24 +72,9 @@ pub async fn ever_open(window: tauri::WebviewWindow) -> Result<EverOpenResult, I
                 manifest: None,
             });
         };
-        let doc = ever::read(&path)?;
-        let total = ever::validate(&doc)?;
         Ok(EverOpenResult {
             cancelled: false,
-            manifest: Some(EverSummary {
-                file_name: path
-                    .file_name()
-                    .ok_or_else(|| IpcError::new(ErrorCode::G4eInvalid))?
-                    .to_string_lossy()
-                    .into_owned(),
-                schema_version: 1,
-                representation: doc.representation,
-                title: doc.manifest.collection.title,
-                file_count: doc.manifest.files.len() as u32,
-                total_bytes: total.to_string(),
-                magnets: doc.torrents.into_iter().map(|t| t.magnet).collect(),
-                content_verified: false,
-            }),
+            manifest: Some(crate::file_associations::inspect_ever(&path)?),
         })
     })
     .await

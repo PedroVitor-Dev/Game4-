@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-14",
+  "platform": "Windows x64",
+  "buildProfile": "debug",
+  "installer": "Game4∞_0.1.0_x64-setup.exe",
+  "installerBytes": 8033312,
+  "installerSha256": "a1474532fea0b5a0b72cc6a7189a44853f81006b88374eea44d06d482a22c8b4",
+  "nsisRegistrationAndRemovalVerified": true,
+  "quotedExecutableAndFilename": true,
+  "coldStartG4Inspected": true,
+  "warmG4eForwardedToSameProcess": true,
+  "secondProcessExited": true,
+  "remainingAppProcessesObserved": 1,
+  "pendingPreviewWasNotReplaced": true,
+  "g4eLinkPrefilledDownloadWithReviewStillDisabled": true,
+  "fixtureSourceHashesUnchanged": true,
+  "rustTestsPassed": 101,
+  "javascriptTestsPassed": 44,
+  "installedRegistryAndExplorerDoubleClickTested": false
+}

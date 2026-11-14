@@ -1924,3 +1924,57 @@ summary:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+.associated-file {
+  padding: 26px;
+  margin-bottom: 26px;
+  border-color: #638573;
+  background: linear-gradient(125deg, #21342d, #1a202d);
+}
+.associated-file > p {
+  max-width: 800px;
+}
+.associated-filename {
+  overflow-wrap: anywhere;
+  color: #cce8d8 !important;
+}
+.associated-file h3 {
+  font-size: 18px;
+  margin: 16px 0 12px;
+}
+.associated-file .session-heading button {
+  border: 1px solid #587161;
+  background: #243c30;
+  color: #d5e9de;
+  padding: 9px 12px;
+  border-radius: 7px;
+  font-size: 12px;
+}
+.associated-file button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.associated-file textarea {
+  width: 100%;
+  min-height: 70px;
+  padding: 12px;
+  color: #d5e9de;
+  background: #14201b;
+  border: 1px solid #587161;
+  border-radius: 8px;
+  resize: vertical;
+  overflow-wrap: anywhere;
+}
+.associated-file .download-link button {
+  border: 1px solid #587161;
+  padding: 8px 12px;
+  border-radius: 7px;
+  background: #243c30;
+  color: #d5e9de;
+  font-size: 12px;
+}
+.associated-download {
+  margin-top: 20px;
+  border-top: 1px solid #3c5345;
+  padding-top: 10px;
+}

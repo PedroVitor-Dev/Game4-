@@ -8,7 +8,11 @@ export type Page =
   | "community"
   | "tasks"
   | "settings";
-export type Navigate = (page: Page, source?: LibraryItemSummary) => void;
+export type Navigate = (
+  page: Page,
+  source?: LibraryItemSummary,
+  magnet?: string,
+) => void;
 export function transferView(
   page: Page,
 ): "download" | "seed" | "sessions" | null {

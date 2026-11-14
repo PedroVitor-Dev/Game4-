@@ -1162,3 +1162,98 @@ test("storage operations are capability gated and accept directory kinds rather 
     code("CAPABILITY_UNAVAILABLE"),
   );
 });
+
+const { parseAssociatedFile, parseAssociatedFileResult } =
+  await import("@game4/ipc-contracts");
+const associated = {
+  token: "7b22b2eb-a47e-43e2-975b-8c01b541db17",
+  fileName: "Coleção ∞.g4",
+  kind: "g4",
+};
+const associatedPackage = {
+  fileName: associated.fileName,
+  packageVersion: 1,
+  collectionId: associated.token,
+  title: "Fixture",
+  fileCount: 3,
+  totalBytes: "40",
+  verified: true,
+};
+test("associated file responses preserve native tokens and enforce format-specific inspection results", () => {
+  assert.equal(parseAssociatedFile(null), null);
+  assert.deepEqual(parseAssociatedFile(associated), associated);
+  assert.deepEqual(
+    parseAssociatedFileResult({
+      kind: "g4",
+      package: associatedPackage,
+      manifest: null,
+    }).package,
+    associatedPackage,
+  );
+  assert.equal(
+    parseAssociatedFileResult({
+      kind: "g4e",
+      package: null,
+      manifest: examples.everOpen.manifest,
+    }).manifest.contentVerified,
+    false,
+  );
+  for (const value of [
+    { ...associated, token: "path" },
+    { ...associated, kind: "exe" },
+    { ...associated, fileName: "C:\\file.g4" },
+  ])
+    assert.throws(() => parseAssociatedFile(value), code("INVALID_RESPONSE"));
+  for (const value of [
+    { kind: "g4", package: null, manifest: null },
+    {
+      kind: "g4e",
+      package: associatedPackage,
+      manifest: examples.everOpen.manifest,
+    },
+    {
+      kind: "g4",
+      package: { ...associatedPackage, verified: false },
+      manifest: null,
+    },
+  ])
+    assert.throws(
+      () => parseAssociatedFileResult(value),
+      code("INVALID_RESPONSE"),
+    );
+});
+test("associated file inspection is capability gated and forwards only an opaque native token", async () => {
+  const client = make(async (command, args) => {
+    if (command === "app_info") return examples.appInfo;
+    if (command === "associated_file_next") return associated;
+    assert.equal(command, "associated_file_read");
+    assert.deepEqual(args, { request: { token: associated.token } });
+    return { kind: "g4", package: associatedPackage, manifest: null };
+  });
+  assert.equal(
+    (await client.nextAssociatedFile()).fileName,
+    associated.fileName,
+  );
+  assert.equal(
+    (await client.readAssociatedFile({ token: associated.token })).package
+      .verified,
+    true,
+  );
+  const old = make(async (command) => {
+    assert.equal(command, "app_info");
+    return {
+      ...examples.appInfo,
+      capabilities: examples.appInfo.capabilities.filter(
+        (c) => !c.startsWith("associated_file_"),
+      ),
+    };
+  });
+  await assert.rejects(
+    old.nextAssociatedFile(),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+  await assert.rejects(
+    old.readAssociatedFile({ token: associated.token }),
+    code("CAPABILITY_UNAVAILABLE"),
+  );
+});

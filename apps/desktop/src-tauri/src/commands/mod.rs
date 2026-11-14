@@ -10,3 +10,5 @@ pub mod ever;
 pub mod torrents;
 
 pub mod storage;
+
+pub mod associations;

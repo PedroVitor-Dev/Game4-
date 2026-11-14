@@ -53,3 +53,5 @@ export const {
   chooseStorageDirectory,
   resetStorageDirectory,
 } = client;
+
+export const { nextAssociatedFile, readAssociatedFile } = client;

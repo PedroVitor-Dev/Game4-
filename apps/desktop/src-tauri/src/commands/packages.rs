@@ -72,22 +72,9 @@ pub async fn package_open(window: tauri::WebviewWindow) -> Result<PackageOpenRes
                 package: None,
             });
         };
-        let verified = packages::read(&path)?;
         Ok(PackageOpenResult {
             cancelled: false,
-            package: Some(PackageSummary {
-                file_name: path
-                    .file_name()
-                    .ok_or_else(|| IpcError::new(ErrorCode::PackageInvalid))?
-                    .to_string_lossy()
-                    .into_owned(),
-                package_version: packages::VERSION,
-                collection_id: verified.manifest.collection.id,
-                title: verified.manifest.collection.title,
-                file_count: verified.manifest.files.len() as u32,
-                total_bytes: verified.total_bytes.to_string(),
-                verified: true,
-            }),
+            package: Some(crate::file_associations::inspect_package(&path)?),
         })
     })
     .await

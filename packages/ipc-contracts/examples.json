@@ -60,6 +60,8 @@
       "transfer_resume",
       "transfer_forget",
       "transfer_set_limits",
+      "associated_file_next",
+      "associated_file_read",
       "storage_settings_get",
       "storage_directory_choose",
       "storage_directory_reset",

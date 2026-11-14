@@ -38,6 +38,8 @@ pub enum ImplementedCommand {
     TransferResume,
     TransferForget,
     TransferSetLimits,
+    AssociatedFileNext,
+    AssociatedFileRead,
     StorageSettingsGet,
     StorageDirectoryChoose,
     StorageDirectoryReset,
@@ -46,7 +48,7 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 36] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 38] = [
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
     ImplementedCommand::LibrarySelectSources,
@@ -77,6 +79,8 @@ pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 36] = [
     ImplementedCommand::TransferResume,
     ImplementedCommand::TransferForget,
     ImplementedCommand::TransferSetLimits,
+    ImplementedCommand::AssociatedFileNext,
+    ImplementedCommand::AssociatedFileRead,
     ImplementedCommand::StorageSettingsGet,
     ImplementedCommand::StorageDirectoryChoose,
     ImplementedCommand::StorageDirectoryReset,
@@ -829,4 +833,30 @@ pub struct StorageSettingsInfo {
 pub struct StorageDirectoryChoice {
     pub cancelled: bool,
     pub settings: StorageSettingsInfo,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, TS)]
+#[serde(rename_all = "snake_case")]
+pub enum AssociatedFileKind {
+    G4,
+    G4e,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct AssociatedFile {
+    pub token: String,
+    pub file_name: String,
+    pub kind: AssociatedFileKind,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct AssociatedFileRequest {
+    pub token: String,
+}
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct AssociatedFileResult {
+    pub kind: AssociatedFileKind,
+    pub package: Option<PackageSummary>,
+    pub manifest: Option<EverSummary>,
 }

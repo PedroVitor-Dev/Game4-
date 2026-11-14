@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { AssociatedFiles } from "./components/AssociatedFiles";
 import { LanguageSelect } from "./components/LanguageSelect";
 import { useAppInfo } from "./hooks/useAppInfo";
 import { getIpcErrorKey } from "./services/errors";
@@ -13,7 +14,9 @@ export default function App() {
   const { t } = useTranslation();
   const [page, setPage] = useState<Page>("dashboard");
   const [source, setSource] = useState<LibraryItemSummary>();
-  const navigate: Navigate = (next, selected) => {
+  const [initialMagnet, setInitialMagnet] = useState<string>();
+  const navigate: Navigate = (next, selected, magnet) => {
+    setInitialMagnet(magnet);
     setSource(selected);
     setPage(next);
     window.scrollTo({ top: 0 });
@@ -76,7 +79,15 @@ export default function App() {
           <h1>{t(`${page}.title`)}</h1>
           <p>{t(`${page}.description`)}</p>
         </section>
-        <WorkspacePage page={page} onNavigate={navigate} source={source} />
+        <AssociatedFiles
+          onDownloadLink={(magnet) => navigate("download", undefined, magnet)}
+        />
+        <WorkspacePage
+          page={page}
+          onNavigate={navigate}
+          source={source}
+          initialMagnet={initialMagnet}
+        />
         <footer className="runtime-status" role="status">
           <span>
             {failure ? t(getIpcErrorKey(failure)) : t(`runtime.${runtime}`)}

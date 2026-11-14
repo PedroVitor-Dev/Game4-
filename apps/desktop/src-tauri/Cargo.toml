@@ -36,6 +36,7 @@ librqbit-tracker-comms = "=9.1.0"
 reqwest = { version = "0.13", default-features = false, features = ["rustls"] }
 tokio = { version = "1", features = ["sync", "time", "rt-multi-thread", "macros", "net", "io-util"] }
 tokio-util = { version = "0.7", features = ["rt"] }
+tauri-plugin-single-instance = "2"
 
 [profile.release]
 codegen-units = 1

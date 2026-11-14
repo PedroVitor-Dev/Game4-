@@ -3,6 +3,8 @@ import {
   IpcFailure,
   normalizeIpcError,
   parseAppInfo,
+  parseAssociatedFile,
+  parseAssociatedFileResult,
   parseStorageSettingsInfo,
   parseStorageDirectoryChoice,
   parseDatabaseInfo,
@@ -52,6 +54,7 @@ import type {
   TransferIdRequest,
   TransferLimitsRequest,
   BandwidthLimits,
+  AssociatedFileRequest,
   StorageDirectoryRequest,
 } from "@game4/ipc-contracts";
 
@@ -64,6 +67,8 @@ export type IpcTransport = {
 };
 const decoders = {
   app_info: parseAppInfo,
+  associated_file_next: parseAssociatedFile,
+  associated_file_read: parseAssociatedFileResult,
   storage_settings_get: parseStorageSettingsInfo,
   storage_directory_choose: parseStorageDirectoryChoice,
   storage_directory_reset: parseStorageSettingsInfo,
@@ -244,6 +249,9 @@ export function createIpcClient(transport: IpcTransport) {
       capable("transfer_forget", request),
     stopTransfer: (request: TransferIdRequest) =>
       capable("transfer_stop", request),
+    nextAssociatedFile: () => capable("associated_file_next", undefined),
+    readAssociatedFile: (request: AssociatedFileRequest) =>
+      capable("associated_file_read", request),
     getAppInfo,
     getStorageSettings: () => capable("storage_settings_get", undefined),
     chooseStorageDirectory: async (request: StorageDirectoryRequest) =>

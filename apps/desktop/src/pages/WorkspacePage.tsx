@@ -16,10 +16,12 @@ export function WorkspacePage({
   page,
   onNavigate,
   source,
+  initialMagnet,
 }: {
   page: Page;
   onNavigate: Navigate;
   source?: LibraryItemSummary;
+  initialMagnet?: string;
 }) {
   const { t } = useTranslation();
   if (page === "dashboard") return <DashboardPage onNavigate={onNavigate} />;
@@ -28,9 +30,10 @@ export function WorkspacePage({
   if (view)
     return (
       <TransfersPage
-        key={`${page}:${source?.id ?? ""}`}
+        key={`${page}:${source?.id ?? ""}:${initialMagnet ?? ""}`}
         view={view}
         source={source}
+        initialMagnet={initialMagnet}
         onNavigate={onNavigate}
       />
     );

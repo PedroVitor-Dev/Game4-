@@ -3,6 +3,7 @@ pub mod commands;
 pub mod contracts;
 pub mod database;
 pub mod ever;
+pub mod file_associations;
 pub mod identification;
 pub mod library;
 pub mod manifests;
@@ -17,7 +18,23 @@ use tauri::Manager;
 
 pub fn run() {
     tauri::Builder::default()
+        .manage(Arc::new(file_associations::FileInbox::default()))
+        .plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
+            app.state::<Arc<file_associations::FileInbox>>().enqueue(
+                args.into_iter().skip(1).map(std::ffi::OsString::from),
+                std::path::Path::new(&cwd),
+            );
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.show();
+                let _ = window.unminimize();
+                let _ = window.set_focus();
+            }
+        }))
         .setup(|app| {
+            if let Ok(cwd) = std::env::current_dir() {
+                app.state::<Arc<file_associations::FileInbox>>()
+                    .enqueue(std::env::args_os().skip(1), &cwd);
+            }
             let path = app
                 .path()
                 .app_local_data_dir()?
@@ -40,6 +57,8 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             commands::application::app_info,
+            commands::associations::associated_file_next,
+            commands::associations::associated_file_read,
             commands::storage::storage_settings_get,
             commands::storage::storage_directory_choose,
             commands::storage::storage_directory_reset,

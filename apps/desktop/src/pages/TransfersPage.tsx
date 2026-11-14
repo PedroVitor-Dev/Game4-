@@ -37,10 +37,12 @@ import { EverReader } from "../components/EverReader";
 export function TransfersPage({
   view,
   source,
+  initialMagnet,
   onNavigate,
 }: {
   view: "seed" | "download" | "sessions";
   source?: LibraryItemSummary;
+  initialMagnet?: string;
   onNavigate: Navigate;
 }) {
   const { t, i18n } = useTranslation();
@@ -64,7 +66,15 @@ export function TransfersPage({
   const [dht, setDht] = useState(false);
   const [seedAfterDownload, setSeedAfterDownload] = useState(false);
   const [useTrackers, setUseTrackers] = useState(false);
-  const [trackerText, setTrackerText] = useState("");
+  const [trackerText, setTrackerText] = useState(() => {
+    try {
+      return initialMagnet
+        ? new URL(initialMagnet).searchParams.getAll("tr").join("\n")
+        : "";
+    } catch {
+      return "";
+    }
+  });
   const trackers = useTrackers
     ? trackerText
         .split(/\r?\n/)
@@ -72,7 +82,7 @@ export function TransfersPage({
         .filter(Boolean)
     : [];
   const discovery = dht || trackers.length > 0;
-  const [magnet, setMagnet] = useState("");
+  const [magnet, setMagnet] = useState(initialMagnet ?? "");
   const [generatedMagnet, setGeneratedMagnet] = useState("");
   const [resolving, setResolving] = useState<string | null>(null);
   const resolvingRef = useRef<string | null>(null);

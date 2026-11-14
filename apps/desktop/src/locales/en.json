@@ -441,5 +441,10 @@
     "internal": "Where Game4∞ keeps its internal data",
     "internalHint": "The catalog, transfer history and preferences stay here. Game4∞ manages this location; changing the folders above does not move it.",
     "existingHint": "Existing files, library originals and ongoing downloads stay in their current locations. No sharing starts when you choose a folder."
+  },
+  "associations": {
+    "opened": "File opened from Windows",
+    "close": "Close preview",
+    "readOnly": "Read-only preview. Nothing was extracted, executed, imported, downloaded or shared."
   }
 }

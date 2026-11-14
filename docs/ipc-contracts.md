@@ -235,3 +235,7 @@ Per-transfer upload/download limits are now applied before unpausing, can be upd
 ## Storage folder preferences — November 14, 2026
 
 Independent defaults for download, preservation-file and backup dialogs are implemented. They do not move existing sources, transfer payloads, internal databases or recovery files, and are excluded from catalog backup v2. Every save/download destination remains explicitly confirmed. See [storage folders](storage-folders.md) for controls, private settings and failure behavior.
+
+## Windows-associated file inspection — November 14, 2026
+
+`associated_file_next` exposes a native-queued token/basename/kind, and `associated_file_read` consumes that token for background .g4/.g4e validation. No arbitrary frontend filesystem path is accepted. Contract v1 remains unchanged; 38 commands are advertised. See [Windows file associations](windows-file-associations.md).

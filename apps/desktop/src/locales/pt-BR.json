@@ -441,5 +441,10 @@
     "internal": "Onde o Game4∞ guarda os dados internos",
     "internalHint": "O catálogo, histórico de transferências e preferências ficam aqui. O Game4∞ gerencia este local; alterar as pastas acima não o move.",
     "existingHint": "Arquivos existentes, originais da biblioteca e downloads em andamento continuam nos locais atuais. Escolher uma pasta não inicia compartilhamento."
+  },
+  "associations": {
+    "opened": "Arquivo aberto pelo Windows",
+    "close": "Fechar prévia",
+    "readOnly": "Prévia somente para leitura. Nada foi extraído, executado, importado, baixado ou compartilhado."
   }
 }
