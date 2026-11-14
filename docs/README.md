@@ -81,3 +81,5 @@ See [feedback and in-app notifications](feedback-and-notifications.md) for loadi
 - [.g4lib public catalog specification](../packages/g4lib-format/spec-v1.md)
 
 - [G4EP step 1: architecture, service ports and private-MVP acceptance](g4ep/architecture.md)
+
+- [G4EP step 2: streaming Reed–Solomon encoder and local CLI](g4ep/encoding.md)

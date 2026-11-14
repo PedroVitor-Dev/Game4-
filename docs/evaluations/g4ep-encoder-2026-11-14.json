@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-14",
+  "scope": "Offline local streaming encoder and stored-fragment verification; no network or whole-file decoder",
+  "build": "Windows x64 debug",
+  "codec": "g4ep-rs16-leopard-high-8-4-v1",
+  "library": "reed-solomon-simd 3.1.0; explicit high rate GF(2^16)",
+  "source": {
+    "kind": "Synthetic authorized bytes",
+    "generator": "Python random.Random(0x47444550).randbytes, 1 MiB chunks; synthetic authorized bytes",
+    "bytes": "700000000",
+    "sha256": "1e44ac2640ad44bd24b64721b4e062d54696458b997e7e4020c0ef1637d753ec",
+    "unchangedAfterRun": true
+  },
+  "encode": {
+    "codec": "g4ep-rs16-leopard-high-8-4-v1",
+    "elapsedSeconds": 73.3315908,
+    "encodedBytes": "1056964608",
+    "fragmentBytes": 1048576,
+    "fragments": "1008",
+    "groups": "84",
+    "networkStarted": false,
+    "operation": "encode",
+    "sourceBytes": "700000000",
+    "sourceSha256": "1e44ac2640ad44bd24b64721b4e062d54696458b997e7e4020c0ef1637d753ec"
+  },
+  "encodeProcess": {
+    "exitCode": 0,
+    "peakWorkingSetBytes": 29462528
+  },
+  "verify": {
+    "codec": "g4ep-rs16-leopard-high-8-4-v1",
+    "elapsedSeconds": 22.2292674,
+    "encodedBytes": "1056964608",
+    "fragmentBytes": 1048576,
+    "fragments": "1008",
+    "groups": "84",
+    "networkStarted": false,
+    "operation": "verify",
+    "sourceBytes": "700000000",
+    "sourceSha256": "1e44ac2640ad44bd24b64721b4e062d54696458b997e7e4020c0ef1637d753ec"
+  },
+  "verifyProcess": {
+    "exitCode": 0,
+    "peakWorkingSetBytes": 6156288
+  },
+  "onDiskFragmentCount": 1008,
+  "onDiskFragmentBytes": "1056964608",
+  "codecRecoveryTest": {
+    "distinctIntactRequired": 8,
+    "perGroupTotal": 12,
+    "testedEightShardSubsets": 495,
+    "allSubsetsPassed": true,
+    "data": "Non-linear deterministic xorshift64-star fixture",
+    "sevenShardRejected": true
+  },
+  "measurementNotes": "One development-host run with other development workload; process peak working set sampled using PeakWorkingSet64, excludes filesystem cache outside the process. Not a performance guarantee."
+}

@@ -5,6 +5,20 @@ use tokio_util::sync::CancellationToken;
 pub type Result<T> = std::result::Result<T, Error>;
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("source length differs from its declared length")]
+    SourceLengthMismatch,
+    #[error("source changed while encoding")]
+    SourceChanged,
+    #[error("fragment sink did not consume the complete fragment")]
+    IncompleteSink,
+    #[error("destination already exists")]
+    DestinationExists,
+    #[error("invalid experimental encoding bundle")]
+    InvalidBundle,
+    #[error("experimental bundle metadata limit exceeded")]
+    MetadataLimit,
+    #[error("Reed-Solomon operation failed")]
+    Codec(#[from] reed_solomon_simd::Error),
     #[error("invalid coding profile")]
     InvalidProfile,
     #[error("source exceeds the supported planning limit")]

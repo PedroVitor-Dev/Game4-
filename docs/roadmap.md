@@ -86,3 +86,7 @@ Validation includes migration/backup integrity, catalog interoperability, depend
 ## G4EP architecture — November 14, 2026
 
 Step 1 prepares isolated internal service ports and checked planning values for arbitrary-file fragmentation, integrity, reconstruction and repair in a private network. No codec, storage node, network service or 700 MB result is claimed yet. See [G4EP architecture and acceptance gates](g4ep/architecture.md). Existing product formats and databases remain unchanged.
+
+## G4EP streaming encoder — November 14, 2026
+
+Step 2 implements actual streaming RS(8,4) groups with SHA-256 per fragment/original, configurable shard sizes and a local encode/verify CLI. A real synthetic 700 MB run produced 1,008 independent fragments with bounded memory; codec tests cover all 495 sets of eight shards. Decoder application, authenticated nodes/transfers and repair remain later work. See [implementation and evidence](g4ep/encoding.md).

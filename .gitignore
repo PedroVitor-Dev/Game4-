@@ -27,3 +27,8 @@ game4-library-backup*.json
 *.torrent
 !packages/g4e-format/examples/*.g4e
 !packages/g4e-format/examples/*.torrent
+
+# Experimental G4EP payloads remain local; only synthetic digest vectors are committed.
+*.g4frag
+*.g4ep-experiment.json
+.game4-g4ep-incomplete

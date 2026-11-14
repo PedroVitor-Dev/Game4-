@@ -1,6 +1,6 @@
 # G4EP — architecture and integration, step 1
 
-Status: internal architecture and compile-checked ports, November 14, 2026. **No encoder, decoder, storage server, fragment transport, private authentication or repair worker is implemented in this increment.** No G4EP IPC command, UI button, migration, socket or automatic startup hook is registered. The approximately 700 MB acceptance transfer is a later gate, not a result claimed here.
+Status: step 1 architecture baseline, November 14, 2026. At that checkpoint no codec/runtime was installed. **Step 2 now implements the offline streaming encoder and local verification utility; see [encoding and validation](encoding.md).** A decoder application, storage server, fragment transport, private authentication and repair worker remain later work. No G4EP IPC command, UI button, migration, socket or automatic startup hook is registered. The multi-computer acceptance transfer remains a later gate.
 
 G4EP (Game4∞ Eternal Preservation Protocol) preserves arbitrary bytes. ISO, ROM, ZIP, video and other input types follow the same pipeline. Original files remain read-only; packaging in .g4 and importing into the historical catalog are optional. The protocol name expresses intent, not a guarantee of eternal availability.
 
@@ -89,7 +89,7 @@ There is **no migration/store constructor now**, so existing catalog schema 5, b
 5. Add bounded observations/repair and the real Tauri commands, generated TS DTOs, progress/errors and reused React controls, with no inactive success buttons.
 6. Run the authorized ~700 MB acceptance: original SHA-256, encode, distribute to two real computers, verify every received fragment, lose controlled indexes within m per stripe, reconstruct to a **new** file, compare SHA-256/length, restart/resume, corrupt a fragment, exceed recovery limits and test repair under explicit session consent. Record actual bytes, time, memory, disk, topology, routing/relay and failure domains.
 
-The owner has supplied step 1 of their ten-step plan; this sequence describes dependencies, not invented instructions for the remaining nine steps. A later scheduled repair can be automatic **inside an explicitly enabled session**, with quotas/rates and cancellation; opening the app or importing metadata must not silently enroll the device.
+The owner has supplied steps 1 and 2 of their ten-step plan; this sequence describes dependencies, not invented instructions for the remaining nine steps. A later scheduled repair can be automatic **inside an explicitly enabled session**, with quotas/rates and cancellation; opening the app or importing metadata must not silently enroll the device.
 
 ## Primary references
 

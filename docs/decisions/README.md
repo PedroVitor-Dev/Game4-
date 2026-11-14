@@ -48,3 +48,5 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0020](0020-private-transfer-recovery.md) | Accepted experimental integration | Private SQLite transfer intent, paused startup and reverified resume |
 
 | [0021](0021-g4ep-private-mvp.md) | Accepted architecture only | Isolated G4EP service ports, private enrollment and bounded recovery planning |
+
+| [0022](0022-g4ep-streaming-reed-solomon.md) | Accepted experimental implementation | Streaming RS(8,4), pinned GF(2^16) high-rate codec, local fragment verification |
