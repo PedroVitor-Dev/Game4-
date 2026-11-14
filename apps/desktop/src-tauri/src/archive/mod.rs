@@ -162,6 +162,10 @@ fn dependency(c: &Connection, v: &ArchiveDependency) -> Result<()> {
     {
         return Err(invalid());
     }
+    let same_edition:bool=c.query_row("SELECT (SELECT edition_id FROM archive_contents WHERE id=?1)=(SELECT edition_id FROM archive_contents WHERE id=?2)",params![v.content_id,v.required_id],|r|r.get(0)).map_err(sql_error)?;
+    if !same_edition {
+        return Err(invalid());
+    }
     let cycle:bool=c.query_row("WITH RECURSIVE reach(id) AS (SELECT required_id FROM archive_dependencies WHERE content_id=?1 UNION SELECT d.required_id FROM archive_dependencies d JOIN reach r ON d.content_id=r.id) SELECT EXISTS(SELECT 1 FROM reach WHERE id=?2)",params![v.required_id,v.content_id],|r|r.get(0)).map_err(sql_error)?;
     if cycle {
         return Err(invalid());
@@ -834,8 +838,9 @@ pub fn attach_ever(
     let doc = crate::ever::parse(bytes)?;
     let tx = c.transaction().map_err(sql_error)?;
     for t in doc.torrents {
+        let key = format!("{content_id}:{}", t.info_hash_v1);
         let source = ArchiveSource {
-            id: id(),
+            id: format!("reference-{:x}", Sha256::digest(key.as_bytes())),
             content_id: content_id.into(),
             magnet: crate::torrents::normalize_magnet(&t.magnet)?.magnet,
             license: license.into(),
@@ -851,8 +856,10 @@ pub fn attach_ever(
         source.put(&tx)?;
     }
     for f in doc.manifest.files {
+        let key = serde_json::to_vec(&(content_id, &f.path, &f.sha256, &f.size_bytes))
+            .map_err(|_| invalid())?;
         let record = ArchiveFile {
-            id: id(),
+            id: format!("manifest-{:x}", Sha256::digest(key)),
             content_id: content_id.into(),
             name: f.path,
             format: "original".into(),

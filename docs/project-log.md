@@ -330,3 +330,9 @@ Added SQLite schema 5 with independent historical games/platform releases, comme
 Added public .g4lib v1 specification, JSON Schema and synthetic metadata-only interoperability fixture. Native validation uses an isolated candidate database and enforces relationship integrity, duplicate identities, source normalization and private-reference exclusion. Explicit reviewed imports namespace snapshots, are idempotent for identical documents and never overwrite existing local metadata or start a transfer. Exported/imported authorization declarations are cleared. Private backup v3 includes archive/artwork/preferences while retaining v1/v2 readers and atomic replacement/recovery; restoring older backups intentionally restores no historical archive.
 
 Validation: 110 Rust tests passed, including cross-edition update/DLC rejection, dependency cycles, non-destructive catalog roundtrip, malformed/public-private input rejection, backup/artwork/local-link preservation, database reopening and a bounded query over 10,000 synthetic games. Strict all-target Clippy passed; generated Rust/TypeScript artifacts and public fixture compatibility were checked. The frontend integration and native visual acceptance are recorded in the next entry. No push was performed.
+
+## 2026-11-14 — Archive compatibility and snapshot hardening
+
+Follow-up validation now rejects dependencies across commercial editions, makes repeated .g4e association idempotent for identical content hashes/references, and refuses oversized table snapshots instead of silently truncating backup/export rows. The public .g4lib compatibility profile documents same-edition dependencies explicitly.
+
+Validation: 111 native tests passed, including repeated-manifest association and cross-edition dependency rejection; strict all-target Clippy passed. The normal Windows debug desktop build passed after isolated QA and was restored to the production identifier. No push was performed.

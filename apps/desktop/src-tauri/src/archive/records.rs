@@ -2,6 +2,12 @@ use super::*;
 use rusqlite::{Connection, params};
 impl ArchivePlatform {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_platforms", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q = c
             .prepare(
                 "SELECT id,name,manufacturer,year,description FROM archive_platforms LIMIT 100001",
@@ -27,6 +33,12 @@ impl ArchivePlatform {
 }
 impl ArchiveGame {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_games", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q=c.prepare("SELECT id,title,year,developer,publisher,genre,description,history,created_at,updated_at FROM archive_games LIMIT 100001").map_err(sql_error)?;
         q.query_map([], |r| {
             Ok(Self {
@@ -53,6 +65,12 @@ impl ArchiveGame {
 }
 impl ArchiveRelease {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_releases", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q=c.prepare("SELECT id,game_id,platform_id,region,languages,title_id FROM archive_releases LIMIT 100001").map_err(sql_error)?;
         q.query_map([], |r| {
             Ok(Self {
@@ -75,6 +93,12 @@ impl ArchiveRelease {
 }
 impl ArchiveEdition {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_editions", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q = c
             .prepare("SELECT id,release_id,name,medium FROM archive_editions LIMIT 100001")
             .map_err(sql_error)?;
@@ -97,6 +121,12 @@ impl ArchiveEdition {
 }
 impl ArchiveContent {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_contents", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q=c.prepare("SELECT id,edition_id,kind,name,version,build,release_date,format,base_id,description,changelog,identifier FROM archive_contents LIMIT 100001").map_err(sql_error)?;
         q.query_map([], |r| {
             Ok(Self {
@@ -125,6 +155,14 @@ impl ArchiveContent {
 }
 impl ArchiveDependency {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_dependencies", [], |r| {
+                r.get(0)
+            })
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q = c
             .prepare("SELECT content_id,required_id FROM archive_dependencies LIMIT 100001")
             .map_err(sql_error)?;
@@ -145,6 +183,14 @@ impl ArchiveDependency {
 }
 impl ArchiveFile {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_preservation_files", [], |r| {
+                r.get(0)
+            })
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q=c.prepare("SELECT id,content_id,name,format,size_bytes,sha256,item_id,file_id FROM archive_preservation_files LIMIT 100001").map_err(sql_error)?;
         q.query_map([], |r| {
             Ok(Self {
@@ -169,6 +215,12 @@ impl ArchiveFile {
 }
 impl ArchiveSource {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_p2p_sources", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q=c.prepare("SELECT id,content_id,magnet,license,attribution,authorized FROM archive_p2p_sources LIMIT 100001").map_err(sql_error)?;
         q.query_map([], |r| {
             Ok(Self {
@@ -191,6 +243,12 @@ impl ArchiveSource {
 }
 impl ArchiveAsset {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_assets", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q=c.prepare("SELECT id,platform_id,game_id,content_id,role,mime,bytes,source,license,attribution FROM archive_assets LIMIT 100001").map_err(sql_error)?;
         q.query_map([], |r| {
             Ok(Self {
@@ -217,6 +275,12 @@ impl ArchiveAsset {
 }
 impl ArchiveCatalog {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_catalogs", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q = c
             .prepare(
                 "SELECT id,name,digest,attribution,imported_at FROM archive_catalogs LIMIT 100001",
@@ -242,6 +306,14 @@ impl ArchiveCatalog {
 }
 impl ArchiveCatalogEntry {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_catalog_entries", [], |r| {
+                r.get(0)
+            })
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q = c
             .prepare("SELECT catalog_id,game_id FROM archive_catalog_entries LIMIT 100001")
             .map_err(sql_error)?;
@@ -262,6 +334,12 @@ impl ArchiveCatalogEntry {
 }
 impl ArchiveCollection {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_collections", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q = c
             .prepare("SELECT id,name FROM archive_collections LIMIT 100001")
             .map_err(sql_error)?;
@@ -282,6 +360,14 @@ impl ArchiveCollection {
 }
 impl ArchiveCollectionEntry {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_collection_entries", [], |r| {
+                r.get(0)
+            })
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q = c
             .prepare("SELECT collection_id,game_id FROM archive_collection_entries LIMIT 100001")
             .map_err(sql_error)?;
@@ -302,6 +388,12 @@ impl ArchiveCollectionEntry {
 }
 impl ArchivePreference {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_preferences", [], |r| r.get(0))
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q=c.prepare("SELECT game_id,favorite,in_library,visited_at FROM archive_preferences LIMIT 100001").map_err(sql_error)?;
         q.query_map([], |r| {
             Ok(Self {
@@ -322,6 +414,14 @@ impl ArchivePreference {
 }
 impl ArchiveMetadataSource {
     pub(super) fn read(c: &Connection) -> Result<Vec<Self>> {
+        let count: u32 = c
+            .query_row("SELECT count(*) FROM archive_metadata_sources", [], |r| {
+                r.get(0)
+            })
+            .map_err(sql_error)?;
+        if count > 100_000 {
+            return Err(invalid());
+        }
         let mut q=c.prepare("SELECT id,game_id,source,attribution,note,created_at FROM archive_metadata_sources LIMIT 100001").map_err(sql_error)?;
         q.query_map([], |r| {
             Ok(Self {

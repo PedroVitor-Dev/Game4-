@@ -321,3 +321,51 @@ fn large_catalog_reads_only_a_bounded_page() {
     assert_eq!(total, 1);
     assert_eq!(rows.len(), 1);
 }
+
+#[test]
+fn repeated_manifest_attachment_is_idempotent_and_dependencies_do_not_cross_editions() {
+    let (_d, db) = db();
+    let mut c = db.connection.lock().unwrap();
+    let (_g, e, b) = setup(&mut c);
+    let bytes = include_bytes!("../../../../../packages/g4e-format/examples/original-files.g4e");
+    attach_ever(&mut c, &b, "Synthetic fixture permission", true, bytes).unwrap();
+    attach_ever(&mut c, &b, "Synthetic fixture permission", true, bytes).unwrap();
+    assert_eq!(
+        c.query_row("SELECT count(*) FROM archive_preservation_files", [], |r| r
+            .get::<_, u32>(0))
+            .unwrap(),
+        3
+    );
+    assert_eq!(
+        c.query_row("SELECT count(*) FROM archive_p2p_sources", [], |r| r
+            .get::<_, u32>(0))
+            .unwrap(),
+        1
+    );
+    let release: String = c
+        .query_row(
+            "SELECT release_id FROM archive_editions WHERE id=?",
+            [e],
+            |r| r.get(0),
+        )
+        .unwrap();
+    let other = ArchiveEdition {
+        id: id(),
+        release_id: release,
+        name: "Different edition".into(),
+        medium: "Digital".into(),
+    };
+    other.put(&c).unwrap();
+    let otherbase = content(&other.id, "version", None);
+    otherbase.put(&c).unwrap();
+    assert!(
+        dependency(
+            &c,
+            &ArchiveDependency {
+                content_id: b,
+                required_id: otherbase.id
+            }
+        )
+        .is_err()
+    );
+}
