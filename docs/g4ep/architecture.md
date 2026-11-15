@@ -98,3 +98,7 @@ The owner has supplied steps 1 and 2 of their ten-step plan; this sequence descr
 - Repository source and existing [BitTorrent guide](../bittorrent.md), [format .g4e v1](../../packages/g4e-format/spec-v1.md), [catalog architecture](../game-archive.md) and [transfer recovery](../transfer-persistence.md) are the inspected implementation baseline.
 
 G4EP step 3: see the [public v2 reconstruction manifest specification](../../packages/g4e-format/spec-v2.md) and ADR 0023. Version 1 payload workflows remain unchanged.
+
+## Guardian storage — November 14, 2026
+
+G4EP step 4 adds opt-in fragment admission, atomic storage, persistent inventory, quotas, directional limits and bilingual desktop controls. Participation reopens disabled. A real local two-store fragment copy passed integrity checks; authenticated network transport remains a separate milestone. See [implementation and limits](guardian-node.md).

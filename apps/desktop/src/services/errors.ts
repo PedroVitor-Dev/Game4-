@@ -40,6 +40,9 @@ const keys = {
   TRANSFER_LIMIT_EXCEEDED: "transferLimitExceeded",
   TRANSFER_FAILED: "transferFailed",
   TRANSFER_UNAVAILABLE: "transferUnavailable",
+  GUARDIAN_DISABLED: "guardianDisabled",
+  GUARDIAN_NOT_APPROVED: "guardianNotApproved",
+  GUARDIAN_QUOTA_EXCEEDED: "guardianQuotaExceeded",
   STORAGE_UNAVAILABLE: "storageUnavailable",
 } as const satisfies Record<ErrorCode, keyof typeof en.errors>;
 

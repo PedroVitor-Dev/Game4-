@@ -154,7 +154,10 @@
     "transferLimitExceeded": "Limite de transferências atingido (4 sessões ativas, 64 registros, 1.024 arquivos ou 1 TiB por torrent).",
     "transferFailed": "Não foi possível iniciar ou continuar a transferência. Confira as origens, espaço livre, porta disponível e conexão com o peer. Uma nova pasta parcial de download será mantida.",
     "transferUnavailable": "As transferências ou seu estado salvo estão indisponíveis. A Biblioteca local continua disponível.",
-    "storageUnavailable": "Uma pasta de armazenamento ou suas preferências estão indisponíveis. Confira Pastas de armazenamento nas Configurações; reconecte o disco ou escolha outra pasta."
+    "storageUnavailable": "Uma pasta de armazenamento ou suas preferências estão indisponíveis. Confira Pastas de armazenamento nas Configurações; reconecte o disco ou escolha outra pasta.",
+    "guardianDisabled": "Ative a participação do Guardian nesta sessão antes de armazenar ou compartilhar fragmentos.",
+    "guardianNotApproved": "Este fragmento não está autorizado para esta operação. Confira as permissões de armazenamento e compartilhamento.",
+    "guardianQuotaExceeded": "O fragmento ultrapassa o espaço reservado. Aumente a cota ou remova fragmentos que não deseja manter."
   },
   "backup": {
     "title": "Salvar e restaurar sua Biblioteca",
@@ -748,5 +751,54 @@
   "preservation": {
     "title": "Preservação",
     "description": "Observações de integridade e conteúdos locais vinculados."
+  },
+  "guardian": {
+    "description": "Ajude a preservar fragmentos individuais sem guardar um jogo completo.",
+    "localScope": "Serviço de armazenamento local. Esta etapa ainda não abre conexões de rede.",
+    "updated": "Operação concluída. Confira o estado atual abaixo.",
+    "refresh": "Atualizar",
+    "directory": "Pasta de armazenamento",
+    "chooseDirectory": "Escolher pasta",
+    "directoryHelp": "Desative a participação antes de trocar a pasta. Os fragmentos existentes ficam na pasta anterior; nada é movido ou excluído.",
+    "quota": "Espaço reservado (MiB)",
+    "upload": "Limite de upload (KiB/s)",
+    "download": "Limite de download (KiB/s)",
+    "limitsHelp": "0 KiB/s significa sem limite. A cota considera os bytes dos fragmentos, incluindo gravações temporárias; os metadados usam espaço adicional.",
+    "save": "Salvar limites",
+    "active": "Participação ativada",
+    "inactive": "Participação desativada",
+    "used": "{{used}} MiB armazenados · {{count}} fragmentos",
+    "disable": "Desativar participação",
+    "enable": "Ativar nesta sessão",
+    "verify": "Verificar fragmentos armazenados",
+    "approveTitle": "Escolha o que preservar",
+    "approveHelp": "Selecione um grupo e fragmento de um manifesto .g4e v2. Apenas esse fragmento será autorizado. Você pode permitir o armazenamento sem compartilhá-lo. A numeração começa em 0. Revogar uma permissão mantém os bytes armazenados até você removê-los explicitamente.",
+    "group": "Grupo",
+    "fragment": "Fragmento",
+    "allowSharing": "Permitir compartilhar este fragmento",
+    "approve": "Escolher manifesto e autorizar",
+    "fragments": "Fragmentos autorizados",
+    "empty": "Nenhum fragmento autorizado. Escolha um manifesto para começar.",
+    "coordinate": "Grupo {{group}} · Fragmento {{index}}",
+    "shareAllowed": "Armazenamento e compartilhamento permitidos",
+    "storageOnly": "Somente armazenamento",
+    "import": "Armazenar arquivo de fragmento",
+    "export": "Salvar cópia compartilhada",
+    "revoke": "Revogar permissão",
+    "delete": "Revogar e excluir",
+    "deleteConfirm": "Revogar esta permissão e excluir o fragmento armazenado se nenhuma outra permissão precisar dele?",
+    "previous": "Anterior",
+    "next": "Próxima",
+    "health": {
+      "ready": "Pronto",
+      "attention": "Precisa de atenção",
+      "unchecked": "Integridade não verificada",
+      "unknown": "Não verificado",
+      "verified": "Verificado",
+      "missing": "Não armazenado ou ausente",
+      "corrupt": "Falha de integridade"
+    },
+    "prune": "Remover fragmentos sem permissão",
+    "pruneConfirm": "Excluir os arquivos de fragmentos que não têm mais nenhuma permissão? Os demais serão mantidos."
   }
 }

@@ -1481,3 +1481,55 @@ test("G4EP summary inspection keeps fragment references out of original-download
     );
   }
 });
+
+test("Guardian snapshots validate capacity, scoped permissions, inventory bounds and offline state", async () => {
+  const { parseGuardianSnapshot } = await import("@game4/ipc-contracts");
+  const value = {
+    nodeId: "a".repeat(64),
+    directory: "C:\\Guardian",
+    config: {
+      active: false,
+      quotaBytes: "1048576",
+      uploadBps: 1024,
+      downloadBps: 2048,
+    },
+    usedBytes: "65536",
+    fragmentCount: 1,
+    health: "ready",
+    entries: [
+      {
+        id: 1,
+        contentId: "urn:sha256:" + "b".repeat(64),
+        name: "test.bin",
+        group: "0",
+        index: 0,
+        sha256: "c".repeat(64),
+        sizeBytes: 65536,
+        sharing: false,
+        health: "verified",
+      },
+    ],
+    offset: 0,
+    total: 1,
+    networkStarted: false,
+  };
+  assert.deepEqual(parseGuardianSnapshot(value), value);
+  for (const modify of [
+    (d) => (d.config.quotaBytes = "01"),
+    (d) => (d.config.uploadBps = -1),
+    (d) => (d.config.downloadBps = 1e10),
+    (d) => (d.networkStarted = true),
+    (d) => (d.entries[0].sharing = "yes"),
+    (d) => (d.entries[0].index = 12),
+    (d) => (d.entries[0].name = "../test.bin"),
+    (d) => (d.entries[0].sizeBytes = 0),
+    (d) => (d.entries[0].sha256 = "bad"),
+    (d) => d.entries.push(d.entries[0]),
+    (d) => (d.total = 0),
+    (d) => (d.unknown = true),
+  ]) {
+    const bad = structuredClone(value);
+    modify(bad);
+    assert.throws(() => parseGuardianSnapshot(bad), code("INVALID_RESPONSE"));
+  }
+});

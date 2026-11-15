@@ -38,6 +38,9 @@ pub fn run() {
                 app.state::<Arc<file_associations::FileInbox>>()
                     .enqueue(std::env::args_os().skip(1), &cwd);
             }
+            app.manage(Arc::new(commands::guardian::GuardianState::new(
+                app.path().app_local_data_dir()?,
+            )));
             let path = app
                 .path()
                 .app_local_data_dir()?
@@ -60,6 +63,7 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             commands::application::app_info,
+            commands::guardian::guardian_request,
             commands::archive::archive_request,
             commands::associations::associated_file_next,
             commands::associations::associated_file_read,

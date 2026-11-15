@@ -2206,3 +2206,81 @@ summary:focus-visible {
 .g4ep-manifest-details p {
   line-height: 1.6;
 }
+
+.guardian-settings {
+  display: grid;
+  gap: 1rem;
+}
+.guardian-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+.guardian-controls label {
+  display: grid;
+  gap: 0.4rem;
+}
+.guardian-path,
+.guardian-fragments code {
+  overflow-wrap: anywhere;
+}
+.guardian-fragments {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.guardian-fragments li {
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 12px;
+}
+.guardian-settings button {
+  margin-right: 0.5rem;
+}
+
+.guardian-settings {
+  justify-items: start;
+}
+.guardian-settings > *,
+.guardian-settings form {
+  max-width: 100%;
+}
+.guardian-settings p {
+  margin: 0;
+  line-height: 1.7;
+}
+.guardian-settings h2 {
+  margin: 0;
+}
+.guardian-settings h3 {
+  margin: 1rem 0 0;
+}
+.guardian-controls {
+  margin: 1rem 0;
+}
+.guardian-controls input:not([type="checkbox"]),
+.guardian-controls select {
+  width: 190px;
+  max-width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #475363;
+  border-radius: 7px;
+  background: #10151f;
+  color: #e9f0f5;
+  font: inherit;
+}
+.guardian-controls label {
+  font-size: 12px;
+  color: #c8d3df;
+}
+.guardian-fragments {
+  width: 100%;
+}
+.guardian-fragments li {
+  border-color: #35424b;
+}
+.guardian-fragments button {
+  margin-top: 0.6rem;
+}

@@ -8,6 +8,7 @@ pub const TASK_UPDATED_EVENT: &str = "game4://task-updated";
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
 #[serde(rename_all = "snake_case")]
 pub enum ImplementedCommand {
+    GuardianRequest,
     ArchiveRequest,
     AppInfo,
     DatabaseInfo,
@@ -49,7 +50,8 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 39] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 40] = [
+    ImplementedCommand::GuardianRequest,
     ImplementedCommand::ArchiveRequest,
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
@@ -139,9 +141,12 @@ pub enum ErrorCode {
     TransferFailed,
     TransferUnavailable,
     StorageUnavailable,
+    GuardianDisabled,
+    GuardianNotApproved,
+    GuardianQuotaExceeded,
 }
 
-pub const ERROR_CODES: [ErrorCode; 38] = [
+pub const ERROR_CODES: [ErrorCode; 41] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -180,6 +185,9 @@ pub const ERROR_CODES: [ErrorCode; 38] = [
     ErrorCode::TransferFailed,
     ErrorCode::TransferUnavailable,
     ErrorCode::StorageUnavailable,
+    ErrorCode::GuardianDisabled,
+    ErrorCode::GuardianNotApproved,
+    ErrorCode::GuardianQuotaExceeded,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -249,6 +257,7 @@ pub struct DatabaseInfo {
 pub enum TaskKind {
     Import,
     Verify,
+    Prune,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, TS)]
@@ -881,3 +890,36 @@ pub struct AssociatedFileResult {
 
 mod archive;
 pub use archive::*;
+
+pub use crate::g4ep::guardian::{GuardianConfig, GuardianEntry, GuardianSnapshot};
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(tag = "action", rename_all = "snake_case", deny_unknown_fields)]
+pub enum GuardianRequest {
+    Status {
+        offset: u32,
+    },
+    Configure {
+        config: GuardianConfig,
+    },
+    ChooseDirectory,
+    Approve {
+        group: String,
+        index: u8,
+        sharing: bool,
+    },
+    Import {
+        #[ts(type = "number")]
+        id: i64,
+    },
+    Export {
+        #[ts(type = "number")]
+        id: i64,
+    },
+    Revoke {
+        #[ts(type = "number")]
+        id: i64,
+        delete: bool,
+    },
+    Verify,
+    Prune,
+}

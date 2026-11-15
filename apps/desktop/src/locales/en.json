@@ -154,7 +154,10 @@
     "transferLimitExceeded": "Transfer limits reached (4 active sessions, 64 session records, 1,024 files or 1 TiB per torrent).",
     "transferFailed": "The transfer could not be started or continued. Check sources, free space, port availability and peer connectivity. Any new partial download folder is kept.",
     "transferUnavailable": "Transfers or their saved state are unavailable. Local Library operations remain available.",
-    "storageUnavailable": "A storage folder or its saved settings are unavailable. Check Storage folders in Settings; reconnect the drive or choose another folder."
+    "storageUnavailable": "A storage folder or its saved settings are unavailable. Check Storage folders in Settings; reconnect the drive or choose another folder.",
+    "guardianDisabled": "Enable Guardian participation for this session before storing or sharing fragments.",
+    "guardianNotApproved": "This fragment is not authorized for this operation. Review its storage and sharing permissions.",
+    "guardianQuotaExceeded": "The fragment exceeds your reserved space. Increase the quota or remove fragments you no longer want to keep."
   },
   "backup": {
     "title": "Save and restore your library",
@@ -748,5 +751,54 @@
   "preservation": {
     "title": "Preservation",
     "description": "Integrity observations and locally linked content."
+  },
+  "guardian": {
+    "description": "Help preserve individual fragments without storing a complete game.",
+    "localScope": "Local storage service. No network listener is started in this step.",
+    "updated": "Operation finished. Review the current state below.",
+    "refresh": "Refresh",
+    "directory": "Storage folder",
+    "chooseDirectory": "Choose folder",
+    "directoryHelp": "Disable participation before changing folders. Existing fragments stay in the previous folder; nothing is moved or deleted.",
+    "quota": "Reserved space (MiB)",
+    "upload": "Upload limit (KiB/s)",
+    "download": "Download limit (KiB/s)",
+    "limitsHelp": "0 KiB/s means unlimited. The quota covers fragment bytes, including staged writes; metadata uses additional space.",
+    "save": "Save limits",
+    "active": "Participation enabled",
+    "inactive": "Participation disabled",
+    "used": "{{used}} MiB stored · {{count}} fragments",
+    "disable": "Disable participation",
+    "enable": "Enable for this session",
+    "verify": "Check stored fragments",
+    "approveTitle": "Choose what to preserve",
+    "approveHelp": "Select a group and fragment from a .g4e v2 manifest. Only that fragment is authorized. You can permit storage without sharing it. Numbering starts at 0. Revoking permission keeps stored bytes until you explicitly remove them.",
+    "group": "Group",
+    "fragment": "Fragment",
+    "allowSharing": "Allow sharing this fragment",
+    "approve": "Choose manifest and authorize",
+    "fragments": "Authorized fragments",
+    "empty": "No authorized fragments yet. Select a manifest to begin.",
+    "coordinate": "Group {{group}} · Fragment {{index}}",
+    "shareAllowed": "Storage and sharing allowed",
+    "storageOnly": "Storage only",
+    "import": "Store fragment file",
+    "export": "Save shared copy",
+    "revoke": "Revoke permission",
+    "delete": "Revoke and delete",
+    "deleteConfirm": "Revoke this permission and delete the stored fragment if no other permission needs it?",
+    "previous": "Previous",
+    "next": "Next",
+    "health": {
+      "ready": "Ready",
+      "attention": "Needs attention",
+      "unchecked": "Integrity not checked",
+      "unknown": "Not checked",
+      "verified": "Verified",
+      "missing": "Not stored or missing",
+      "corrupt": "Integrity mismatch"
+    },
+    "prune": "Remove fragments without permission",
+    "pruneConfirm": "Delete stored fragment files that no longer have any permission? Other fragments will be kept."
   }
 }

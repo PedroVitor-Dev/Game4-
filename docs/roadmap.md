@@ -94,3 +94,7 @@ Step 2 implements actual streaming RS(8,4) groups with SHA-256 per fragment/orig
 ## G4EP reconstruction manifests — November 14, 2026
 
 Step 3 implements `.g4e` v2 with exact codec geometry, original identity, fragment hashes, private discovery references, deterministic metadata authentication and optional Ed25519 signatures. Existing v1 workflows remain supported. Native/Node validators and local fragment verification passed on the retained 700 MB fixture. Automatic reconstruction, storage nodes and distributed repair remain open. See the [public format](../packages/g4e-format/spec-v2.md).
+
+## Guardian storage — November 14, 2026
+
+G4EP step 4 adds opt-in fragment admission, atomic storage, persistent inventory, quotas, directional limits and bilingual desktop controls. Participation reopens disabled. A real local two-store fragment copy passed integrity checks; authenticated network transport remains a separate milestone. See [implementation and limits](g4ep/guardian-node.md).

@@ -370,3 +370,9 @@ A real synthetic authorized 700,000,000-byte input encoded to 84 groups and 1,00
 Implemented compatible `.g4e` v2 dispatch, complete codec/group/fragment metadata, private discovery references, deterministic metadata hashing and optional Ed25519 signing with explicit origin pinning. Added offline native and Node validation, shared signed/unsigned fixtures and 31 invalid cases, local export/inspection/fragment checks, and bilingual desktop previews that distinguish valid signatures from trusted publishers. No game bytes or absolute source paths enter the descriptor.
 
 Validation: 131 native tests, frontend checks, contract generation consistency and Clippy; the retained 700,000,000-byte synthetic fixture exported 84 groups/1,008 fragments, validated in Rust and Node, and passed all fragment hashes. Reconstruction/network repair is not claimed by this milestone. See [specification](../packages/g4e-format/spec-v2.md) and [evidence](evaluations/g4ep-manifest-2026-11-14.json).
+
+## Guardian storage — November 14, 2026
+
+G4EP step 4 adds opt-in fragment admission, atomic storage, persistent inventory, quotas, directional limits and bilingual desktop controls. Participation reopens disabled. A real local two-store fragment copy passed integrity checks; authenticated network transport remains a separate milestone. See [implementation and limits](g4ep/guardian-node.md).
+
+Guardian acceptance: 141 Rust and 60 JavaScript tests passed, contracts verified, strict Clippy passed, and the native Windows settings layout was reviewed in an isolated app instance. Real 1 MiB fragment import/export at 256 KiB/s took approximately 4.08/4.17 seconds, with matching SHA-256 and disabled participation after restart. See [recorded evidence](evaluations/guardian-node-2026-11-14.json).

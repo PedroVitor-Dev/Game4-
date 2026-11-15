@@ -30,6 +30,7 @@
   },
   "appInfo": {
     "capabilities": [
+      "guardian_request",
       "archive_request",
       "app_info",
       "database_info",

@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-14",
+  "scope": "Two independent local Guardian stores; no computer-to-computer transport claimed",
+  "sourceOriginalBytes": "700000000",
+  "fragmentBytes": 1048576,
+  "storedFragmentsPerNode": 1,
+  "storedBytesPerNode": "1048576",
+  "fragmentSha256": "fdc5593c36e79c68981a8d4378342976d48a90050a0a647f2b24e00064c997de",
+  "copySha256Matches": true,
+  "storedFragmentIntegrityVerified": true,
+  "nodeIdsDistinct": true,
+  "quotaBytes": "1048576",
+  "uploadBps": 262144,
+  "downloadBps": 262144,
+  "importSeconds": 4.078,
+  "exportSeconds": 4.172,
+  "restartParticipationDisabled": true,
+  "networkStarted": false,
+  "rustTestsPassed": 141,
+  "javascriptTestsPassed": 60,
+  "guardianNativeTestsPassed": 10,
+  "nativeVisualAcceptance": {
+    "isolatedApp": true,
+    "settingsLoadedWithoutError": true,
+    "participationDisabled": true,
+    "capacityAndRateInputsVisible": true,
+    "sharingDefaultOff": true,
+    "emptyInventoryExplained": true,
+    "spacingReviewed": true
+  },
+  "contractsVerified": true
+}

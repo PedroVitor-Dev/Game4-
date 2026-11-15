@@ -3,6 +3,7 @@
 //! Types are internal Rust contracts, not a published wire format or an IPC capability.
 //! See docs/g4ep/architecture.md for ownership, privacy, adapter and acceptance rules.
 pub mod encoder;
+pub mod guardian;
 pub mod local;
 pub mod manifest;
 pub mod ports;

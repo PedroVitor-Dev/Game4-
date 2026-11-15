@@ -52,3 +52,7 @@ Template: title, date, status, context, alternatives, decision, consequences, an
 | [0022](0022-g4ep-streaming-reed-solomon.md) | Accepted experimental implementation | Streaming RS(8,4), pinned GF(2^16) high-rate codec, local fragment verification |
 
 G4EP step 3: see the [public v2 reconstruction manifest specification](../../packages/g4e-format/spec-v2.md) and ADR 0023. Version 1 payload workflows remain unchanged.
+
+## Guardian storage — November 14, 2026
+
+G4EP step 4 adds opt-in fragment admission, atomic storage, persistent inventory, quotas, directional limits and bilingual desktop controls. Participation reopens disabled. A real local two-store fragment copy passed integrity checks; authenticated network transport remains a separate milestone. See [implementation and limits](0024-guardian-local-fragment-storage.md).

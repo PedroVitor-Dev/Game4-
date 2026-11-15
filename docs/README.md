@@ -85,3 +85,7 @@ See [feedback and in-app notifications](feedback-and-notifications.md) for loadi
 - [G4EP step 2: streaming Reed–Solomon encoder and local CLI](g4ep/encoding.md)
 
 G4EP step 3: see the [public v2 reconstruction manifest specification](../packages/g4e-format/spec-v2.md) and ADR 0023. Version 1 payload workflows remain unchanged.
+
+## Guardian storage — November 14, 2026
+
+G4EP step 4 adds opt-in fragment admission, atomic storage, persistent inventory, quotas, directional limits and bilingual desktop controls. Participation reopens disabled. A real local two-store fragment copy passed integrity checks; authenticated network transport remains a separate milestone. See [implementation and limits](g4ep/guardian-node.md).

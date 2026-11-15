@@ -9,6 +9,10 @@ pub fn typescript() -> String {
     let config = ts_rs::Config::default();
     let declarations = [
         ImplementedCommand::decl(&config),
+        GuardianConfig::decl(&config),
+        GuardianEntry::decl(&config),
+        GuardianSnapshot::decl(&config),
+        GuardianRequest::decl(&config),
         ArchivePlatform::decl(&config),
         ArchiveGame::decl(&config),
         ArchiveRelease::decl(&config),

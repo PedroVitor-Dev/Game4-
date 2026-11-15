@@ -1,5 +1,6 @@
 import {
   failure,
+  parseGuardianSnapshot,
   parseArchiveResponse,
   IpcFailure,
   normalizeIpcError,
@@ -67,6 +68,7 @@ export type IpcTransport = {
   ) => Promise<unknown>;
 };
 const decoders = {
+  guardian_request: parseGuardianSnapshot,
   archive_request: parseArchiveResponse,
   app_info: parseAppInfo,
   associated_file_next: parseAssociatedFile,

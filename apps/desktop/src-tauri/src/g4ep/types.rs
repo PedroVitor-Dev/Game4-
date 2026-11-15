@@ -5,6 +5,12 @@ use tokio_util::sync::CancellationToken;
 pub type Result<T> = std::result::Result<T, Error>;
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("guardian participation is disabled")]
+    GuardianDisabled,
+    #[error("fragment is not approved for this operation")]
+    GuardianNotApproved,
+    #[error("guardian storage is unavailable or locked")]
+    GuardianUnavailable,
     #[error("source length differs from its declared length")]
     SourceLengthMismatch,
     #[error("source changed while encoding")]
