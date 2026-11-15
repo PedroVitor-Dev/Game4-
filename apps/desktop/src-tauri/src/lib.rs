@@ -64,6 +64,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::application::app_info,
             commands::guardian::guardian_request,
+            commands::guardian_network::guardian_network_request,
             commands::archive::archive_request,
             commands::associations::associated_file_next,
             commands::associations::associated_file_read,

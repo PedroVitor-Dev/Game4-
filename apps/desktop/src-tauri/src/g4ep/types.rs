@@ -5,6 +5,14 @@ use tokio_util::sync::CancellationToken;
 pub type Result<T> = std::result::Result<T, Error>;
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("peer authentication failed")]
+    PeerAuthentication,
+    #[error("invalid fragment transport message")]
+    Protocol,
+    #[error("peer connection limit reached")]
+    ConnectionLimit,
+    #[error("peer request timed out")]
+    NetworkTimeout,
     #[error("guardian participation is disabled")]
     GuardianDisabled,
     #[error("fragment is not approved for this operation")]

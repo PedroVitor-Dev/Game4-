@@ -50,7 +50,7 @@ export function parseGuardianSnapshot(value: unknown): GuardianSnapshot {
     !["ready", "attention", "unchecked"].includes(d.health as string) ||
     !integer(d.offset, 4294967295) ||
     !integer(d.total, 100000) ||
-    d.networkStarted !== false ||
+    typeof d.networkStarted !== "boolean" ||
     !Array.isArray(d.entries) ||
     d.entries.length > 100
   )

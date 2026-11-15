@@ -37,7 +37,8 @@
     "g4e": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example ever --",
     "g4lib:test": "node --test packages/g4lib-format/test.mjs",
     "g4ep": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example g4ep --",
-    "guardian": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example guardian --"
+    "guardian": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example guardian --",
+    "guardian:network": "cargo run --locked --manifest-path apps/desktop/src-tauri/Cargo.toml --example guardian_net --"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

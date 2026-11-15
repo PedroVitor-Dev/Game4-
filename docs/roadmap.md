@@ -98,3 +98,7 @@ Step 3 implements `.g4e` v2 with exact codec geometry, original identity, fragme
 ## Guardian storage — November 14, 2026
 
 G4EP step 4 adds opt-in fragment admission, atomic storage, persistent inventory, quotas, directional limits and bilingual desktop controls. Participation reopens disabled. A real local two-store fragment copy passed integrity checks; authenticated network transport remains a separate milestone. See [implementation and limits](g4ep/guardian-node.md).
+
+## G4EP direct private networking — November 14, 2026
+
+Step 5 adds explicit private-IP peer enrollment, mutual TLS identities, requested fragment availability, direct push/fetch, bounded retries/timeouts/connections and shared bandwidth limits. Saved configuration does not start networking after restart. Public DHT and decentralized discovery remain future work. See the [implementation, protocol and two-PC acceptance procedure](g4ep/direct-network.md).

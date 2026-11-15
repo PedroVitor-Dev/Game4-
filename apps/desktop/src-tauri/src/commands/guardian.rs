@@ -12,6 +12,7 @@ use std::{
 pub struct GuardianState {
     pub node: Mutex<Option<Arc<GuardianNode>>>,
     pub base: PathBuf,
+    pub network: tokio::sync::Mutex<Option<crate::g4ep::network::RunningNode>>,
 }
 fn error() -> IpcError {
     IpcError::new(ErrorCode::StorageUnavailable)
@@ -37,9 +38,10 @@ impl GuardianState {
         Self {
             node: Mutex::new(None),
             base,
+            network: tokio::sync::Mutex::new(None),
         }
     }
-    fn get(&self) -> std::result::Result<Arc<GuardianNode>, IpcError> {
+    pub(super) fn get(&self) -> std::result::Result<Arc<GuardianNode>, IpcError> {
         let mut state = self.node.lock().map_err(|_| error())?;
         if let Some(node) = state.as_ref() {
             return Ok(Arc::clone(node));
@@ -142,7 +144,12 @@ pub async fn guardian_request(
             GuardianRequest::Verify => node.verify_all(&context()).map_err(mapped)?,
             GuardianRequest::Prune => node.prune().map_err(mapped)?,
         }
-        node.snapshot(offset).map_err(mapped)
+        let mut snapshot = node.snapshot(offset).map_err(mapped)?;
+        snapshot.network_started = state
+            .network
+            .try_lock()
+            .is_ok_and(|s| s.as_ref().is_some_and(|s| s.running()));
+        Ok(snapshot)
     })
     .await
     .map_err(|_| error())?

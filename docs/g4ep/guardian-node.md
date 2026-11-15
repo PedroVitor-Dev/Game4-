@@ -46,3 +46,7 @@ IDs come from `status`; do not assume they remain constant after removing/reappr
 Native tests cover bad hashes, short/long input, duplicate admission, quota races, process/store exclusion, active reader lifetime, disabled/revoked reads, throttled write interruption, restart staging recovery, corrupt/missing/orphan detection, explicit deletion and shared directional limits. IPC tests reject malformed permissions, inventory bounds and unexpected network state.
 
 The [recorded local acceptance](../evaluations/guardian-node-2026-11-14.json) admitted one 1 MiB shard from the retained 700,000,000-byte synthetic fixture into each of two independent stores. The shared copy retained SHA-256 and 256 KiB/s limits were exercised in both directions. This is local adapter evidence; it is not a two-computer network test, distributed durability proof or reconstruction claim. Automatic placement, authentication, remote admission, peer transfer and repair remain open.
+
+## G4EP direct private networking — November 14, 2026
+
+Step 5 adds explicit private-IP peer enrollment, mutual TLS identities, requested fragment availability, direct push/fetch, bounded retries/timeouts/connections and shared bandwidth limits. Saved configuration does not start networking after restart. Public DHT and decentralized discovery remain future work. See the [implementation, protocol and two-PC acceptance procedure](direct-network.md).

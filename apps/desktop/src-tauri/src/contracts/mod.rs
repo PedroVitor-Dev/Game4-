@@ -9,6 +9,7 @@ pub const TASK_UPDATED_EVENT: &str = "game4://task-updated";
 #[serde(rename_all = "snake_case")]
 pub enum ImplementedCommand {
     GuardianRequest,
+    GuardianNetworkRequest,
     ArchiveRequest,
     AppInfo,
     DatabaseInfo,
@@ -50,8 +51,9 @@ pub enum ImplementedCommand {
     LibraryRestoreBackup,
 }
 
-pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 40] = [
+pub const IMPLEMENTED_COMMANDS: [ImplementedCommand; 41] = [
     ImplementedCommand::GuardianRequest,
+    ImplementedCommand::GuardianNetworkRequest,
     ImplementedCommand::ArchiveRequest,
     ImplementedCommand::AppInfo,
     ImplementedCommand::DatabaseInfo,
@@ -144,9 +146,13 @@ pub enum ErrorCode {
     GuardianDisabled,
     GuardianNotApproved,
     GuardianQuotaExceeded,
+    GuardianPeerAuthentication,
+    GuardianNetworkTimeout,
+    GuardianConnectionLimit,
+    GuardianNetworkFailed,
 }
 
-pub const ERROR_CODES: [ErrorCode; 41] = [
+pub const ERROR_CODES: [ErrorCode; 45] = [
     ErrorCode::IpcUnavailable,
     ErrorCode::ContractMismatch,
     ErrorCode::InvalidResponse,
@@ -188,6 +194,10 @@ pub const ERROR_CODES: [ErrorCode; 41] = [
     ErrorCode::GuardianDisabled,
     ErrorCode::GuardianNotApproved,
     ErrorCode::GuardianQuotaExceeded,
+    ErrorCode::GuardianPeerAuthentication,
+    ErrorCode::GuardianNetworkTimeout,
+    ErrorCode::GuardianConnectionLimit,
+    ErrorCode::GuardianNetworkFailed,
 ];
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, TS)]
@@ -922,4 +932,46 @@ pub enum GuardianRequest {
     },
     Verify,
     Prune,
+}
+
+pub use crate::g4ep::network::{ManualConfig, NetworkOutcome, NetworkSnapshot, PeerProfile};
+#[derive(Debug, Clone, Serialize, Deserialize, TS)]
+#[serde(tag = "action", rename_all = "snake_case", deny_unknown_fields)]
+pub enum GuardianNetworkRequest {
+    Status,
+    Configure {
+        bind: String,
+        max_connections: u8,
+        timeout_seconds: u32,
+        retries: u8,
+    },
+    AddPeer {
+        address: String,
+    },
+    RemovePeer {
+        node_id: String,
+    },
+    ExportProfile {
+        address: String,
+    },
+    Start,
+    Stop,
+    Probe {
+        node_id: String,
+    },
+    Availability {
+        node_id: String,
+        #[ts(type = "number")]
+        id: i64,
+    },
+    Fetch {
+        node_id: String,
+        #[ts(type = "number")]
+        id: i64,
+    },
+    Push {
+        node_id: String,
+        #[ts(type = "number")]
+        id: i64,
+    },
 }

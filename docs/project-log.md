@@ -376,3 +376,9 @@ Validation: 131 native tests, frontend checks, contract generation consistency a
 G4EP step 4 adds opt-in fragment admission, atomic storage, persistent inventory, quotas, directional limits and bilingual desktop controls. Participation reopens disabled. A real local two-store fragment copy passed integrity checks; authenticated network transport remains a separate milestone. See [implementation and limits](g4ep/guardian-node.md).
 
 Guardian acceptance: 141 Rust and 60 JavaScript tests passed, contracts verified, strict Clippy passed, and the native Windows settings layout was reviewed in an isolated app instance. Real 1 MiB fragment import/export at 256 KiB/s took approximately 4.08/4.17 seconds, with matching SHA-256 and disabled participation after restart. See [recorded evidence](evaluations/guardian-node-2026-11-14.json).
+
+## G4EP direct private networking — November 14, 2026
+
+Step 5 adds explicit private-IP peer enrollment, mutual TLS identities, requested fragment availability, direct push/fetch, bounded retries/timeouts/connections and shared bandwidth limits. Saved configuration does not start networking after restart. Public DHT and decentralized discovery remain future work. See the [implementation, protocol and two-PC acceptance procedure](g4ep/direct-network.md).
+
+Direct-network validation: 150 Rust tests, 61 JavaScript tests, strict Clippy and generated IPC contracts passed. Independent Windows CLI processes exchanged the retained 1 MiB synthetic shard over mutual TLS: push 4.17 s and fetch 4.16 s at 256 KiB/s, with matching SHA-256. Physical two-computer acceptance remains pending because the second machine was unavailable. The isolated native app opened, but concurrent user input interrupted settings visual inspection; no complete visual acceptance is claimed. See [evidence](evaluations/g4ep-direct-network-2026-11-14.json).

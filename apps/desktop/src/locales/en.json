@@ -157,7 +157,11 @@
     "storageUnavailable": "A storage folder or its saved settings are unavailable. Check Storage folders in Settings; reconnect the drive or choose another folder.",
     "guardianDisabled": "Enable Guardian participation for this session before storing or sharing fragments.",
     "guardianNotApproved": "This fragment is not authorized for this operation. Review its storage and sharing permissions.",
-    "guardianQuotaExceeded": "The fragment exceeds your reserved space. Increase the quota or remove fragments you no longer want to keep."
+    "guardianQuotaExceeded": "The fragment exceeds your reserved space. Increase the quota or remove fragments you no longer want to keep.",
+    "guardianPeerAuthentication": "The peer certificate or identity does not match its enrolled profile. Check the public fingerprint through a trusted channel.",
+    "guardianNetworkTimeout": "The peer request timed out. Check the connection and adjust the timeout for your bandwidth limit.",
+    "guardianConnectionLimit": "The connection limit was reached, or the network must be stopped before this change.",
+    "guardianNetworkFailed": "The direct connection failed or was stopped. Check the peer IP, port, enrollment and network access, then try again."
   },
   "backup": {
     "title": "Save and restore your library",
@@ -754,7 +758,7 @@
   },
   "guardian": {
     "description": "Help preserve individual fragments without storing a complete game.",
-    "localScope": "Local storage service. No network listener is started in this step.",
+    "localScope": "Storage stays under your control. The private network below starts only when you enable it.",
     "updated": "Operation finished. Review the current state below.",
     "refresh": "Refresh",
     "directory": "Storage folder",
@@ -800,5 +804,43 @@
     },
     "prune": "Remove fragments without permission",
     "pruneConfirm": "Delete stored fragment files that no longer have any permission? Other fragments will be kept."
+  },
+  "guardianNetwork": {
+    "title": "Direct Guardian connections",
+    "description": "Exchange authorized fragments directly with enrolled computers over mutual TLS. No central transfer server, public DHT or trackers are used.",
+    "enrollmentHelp": "Exchange public profiles through a trusted channel and compare their certificate fingerprints before enrolling. Each computer must enroll the other and authorize the same fragment. Never share the private identity files.",
+    "running": "Listening for enrolled peers",
+    "stopped": "Network stopped",
+    "connections": "{{count}} / {{max}} active connections",
+    "identity": "This node and its certificate fingerprint",
+    "bind": "This computer IP:port",
+    "maxConnections": "Concurrent connections",
+    "timeout": "Timeout per attempt (seconds)",
+    "retries": "Retries after failure",
+    "save": "Save network settings",
+    "bindHelp": "Use this computer’s LAN or Tailscale IP and an available port. 127.0.0.1 works only on this computer. Stop the network before changing settings or peers. Allow the chosen TCP port in your existing network setup.",
+    "exportProfile": "Save my public profile",
+    "start": "Start private network",
+    "stop": "Stop network and transfers",
+    "remoteAddress": "Peer IP:port (optional override)",
+    "importPeer": "Choose trusted peer profile",
+    "peers": "Enrolled computers",
+    "noPeers": "No peers enrolled. Exchange public profiles with the other computer to begin.",
+    "selectedFragment": "Fragment for these actions",
+    "chooseFragment": "Choose an authorized fragment",
+    "fragmentHelp": "This selector shows the current page of authorized fragments. Availability is checked only for the selected fragment; peers do not expose their entire inventory.",
+    "peerIdentity": "Peer identity and certificate fingerprint",
+    "probe": "Test connection",
+    "availability": "Check availability",
+    "fetch": "Receive fragment",
+    "push": "Send fragment",
+    "removePeer": "Remove peer",
+    "available": "The peer has verified bytes and permits sharing this fragment.",
+    "unavailable": "The peer is not offering this fragment. It may be missing, unverified or not authorized for sharing.",
+    "result": {
+      "probe": "Authenticated connection succeeded ({{attempts}} attempt(s)).",
+      "download": "Received and verified {{bytes}} bytes in {{attempts}} attempt(s).",
+      "upload": "The peer acknowledged {{bytes}} bytes after integrity verification ({{attempts}} attempt(s))."
+    }
   }
 }

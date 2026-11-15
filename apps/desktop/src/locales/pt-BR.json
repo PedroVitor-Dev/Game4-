@@ -157,7 +157,11 @@
     "storageUnavailable": "Uma pasta de armazenamento ou suas preferências estão indisponíveis. Confira Pastas de armazenamento nas Configurações; reconecte o disco ou escolha outra pasta.",
     "guardianDisabled": "Ative a participação do Guardian nesta sessão antes de armazenar ou compartilhar fragmentos.",
     "guardianNotApproved": "Este fragmento não está autorizado para esta operação. Confira as permissões de armazenamento e compartilhamento.",
-    "guardianQuotaExceeded": "O fragmento ultrapassa o espaço reservado. Aumente a cota ou remova fragmentos que não deseja manter."
+    "guardianQuotaExceeded": "O fragmento ultrapassa o espaço reservado. Aumente a cota ou remova fragmentos que não deseja manter.",
+    "guardianPeerAuthentication": "O certificado ou identidade do peer não corresponde ao perfil cadastrado. Confira a impressão digital por um canal confiável.",
+    "guardianNetworkTimeout": "A solicitação ao peer excedeu o tempo limite. Confira a conexão e ajuste o timeout conforme o limite de banda.",
+    "guardianConnectionLimit": "O limite de conexões foi atingido ou a rede precisa ser parada antes desta alteração.",
+    "guardianNetworkFailed": "A conexão direta falhou ou foi interrompida. Confira o IP, a porta, o cadastro e o acesso à rede do peer e tente novamente."
   },
   "backup": {
     "title": "Salvar e restaurar sua Biblioteca",
@@ -754,7 +758,7 @@
   },
   "guardian": {
     "description": "Ajude a preservar fragmentos individuais sem guardar um jogo completo.",
-    "localScope": "Serviço de armazenamento local. Esta etapa ainda não abre conexões de rede.",
+    "localScope": "O armazenamento continua sob seu controle. A rede privada abaixo só inicia quando você a ativa.",
     "updated": "Operação concluída. Confira o estado atual abaixo.",
     "refresh": "Atualizar",
     "directory": "Pasta de armazenamento",
@@ -800,5 +804,43 @@
     },
     "prune": "Remover fragmentos sem permissão",
     "pruneConfirm": "Excluir os arquivos de fragmentos que não têm mais nenhuma permissão? Os demais serão mantidos."
+  },
+  "guardianNetwork": {
+    "title": "Conexões diretas entre guardiões",
+    "description": "Troque fragmentos autorizados diretamente com computadores cadastrados usando TLS mútuo. Não usa servidor central de transferência, DHT público ou trackers.",
+    "enrollmentHelp": "Troquem os perfis públicos por um canal confiável e confiram as impressões digitais dos certificados antes de cadastrar. Cada computador deve cadastrar o outro e autorizar o mesmo fragmento. Nunca compartilhe os arquivos privados de identidade.",
+    "running": "Aguardando conexões de peers cadastrados",
+    "stopped": "Rede parada",
+    "connections": "{{count}} / {{max}} conexões ativas",
+    "identity": "Este nó e a impressão digital do certificado",
+    "bind": "IP:porta deste computador",
+    "maxConnections": "Conexões simultâneas",
+    "timeout": "Timeout por tentativa (segundos)",
+    "retries": "Retentativas após falha",
+    "save": "Salvar configuração da rede",
+    "bindHelp": "Use o IP da rede local ou Tailscale deste computador e uma porta disponível. 127.0.0.1 funciona apenas neste computador. Pare a rede antes de alterar configurações ou peers. A porta TCP escolhida deve estar acessível na sua rede.",
+    "exportProfile": "Salvar meu perfil público",
+    "start": "Iniciar rede privada",
+    "stop": "Parar rede e transferências",
+    "remoteAddress": "IP:porta do peer (substituição opcional)",
+    "importPeer": "Escolher perfil de peer confiável",
+    "peers": "Computadores cadastrados",
+    "noPeers": "Nenhum peer cadastrado. Troque os perfis públicos com o outro computador para começar.",
+    "selectedFragment": "Fragmento para estas ações",
+    "chooseFragment": "Escolha um fragmento autorizado",
+    "fragmentHelp": "O seletor mostra a página atual de fragmentos autorizados. A disponibilidade é consultada apenas para o fragmento escolhido; os peers não expõem todo o inventário.",
+    "peerIdentity": "Identidade do peer e impressão digital do certificado",
+    "probe": "Testar conexão",
+    "availability": "Consultar disponibilidade",
+    "fetch": "Receber fragmento",
+    "push": "Enviar fragmento",
+    "removePeer": "Remover peer",
+    "available": "O peer tem os bytes verificados e permite compartilhar este fragmento.",
+    "unavailable": "O peer não está oferecendo este fragmento. Ele pode estar ausente, sem integridade confirmada ou sem permissão de compartilhamento.",
+    "result": {
+      "probe": "Conexão autenticada concluída ({{attempts}} tentativa(s)).",
+      "download": "Recebidos e verificados {{bytes}} bytes em {{attempts}} tentativa(s).",
+      "upload": "O peer confirmou {{bytes}} bytes após verificar a integridade ({{attempts}} tentativa(s))."
+    }
   }
 }

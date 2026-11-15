@@ -1,6 +1,7 @@
 import {
   failure,
   parseGuardianSnapshot,
+  parseNetworkSnapshot,
   parseArchiveResponse,
   IpcFailure,
   normalizeIpcError,
@@ -69,6 +70,7 @@ export type IpcTransport = {
 };
 const decoders = {
   guardian_request: parseGuardianSnapshot,
+  guardian_network_request: parseNetworkSnapshot,
   archive_request: parseArchiveResponse,
   app_info: parseAppInfo,
   associated_file_next: parseAssociatedFile,

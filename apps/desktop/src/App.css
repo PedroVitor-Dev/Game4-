@@ -2284,3 +2284,23 @@ summary:focus-visible {
 .guardian-fragments button {
   margin-top: 0.6rem;
 }
+
+.guardian-network {
+  width: 100%;
+  border-block: 1px solid #35424b;
+  padding-block: 1.5rem;
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+}
+.guardian-network code {
+  overflow-wrap: anywhere;
+}
+.guardian-network select {
+  max-width: 100%;
+  background: #10151f;
+  color: #e9f0f5;
+  padding: 10px;
+  border: 1px solid #475363;
+  border-radius: 7px;
+}

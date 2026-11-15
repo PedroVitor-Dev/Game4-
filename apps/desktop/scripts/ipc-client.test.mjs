@@ -1518,7 +1518,6 @@ test("Guardian snapshots validate capacity, scoped permissions, inventory bounds
     (d) => (d.config.quotaBytes = "01"),
     (d) => (d.config.uploadBps = -1),
     (d) => (d.config.downloadBps = 1e10),
-    (d) => (d.networkStarted = true),
     (d) => (d.entries[0].sharing = "yes"),
     (d) => (d.entries[0].index = 12),
     (d) => (d.entries[0].name = "../test.bin"),
@@ -1532,4 +1531,62 @@ test("Guardian snapshots validate capacity, scoped permissions, inventory bounds
     modify(bad);
     assert.throws(() => parseGuardianSnapshot(bad), code("INVALID_RESPONSE"));
   }
+});
+
+test("Guardian network snapshots enforce explicit peers, TLS metadata and bounded outcomes", async () => {
+  const { parseNetworkSnapshot } = await import("@game4/ipc-contracts");
+  const value = {
+    running: false,
+    nodeId: "a".repeat(64),
+    certificateSha256: "b".repeat(64),
+    config: {
+      bind: "127.0.0.1:42430",
+      maxConnections: 4,
+      timeoutSeconds: 120,
+      retries: 2,
+      peers: [
+        {
+          version: 1,
+          nodeId: "c".repeat(64),
+          address: "127.0.0.1:42431",
+          certificateSha256: "d".repeat(64),
+          certificateDer: "abcd",
+        },
+      ],
+    },
+    connections: 0,
+    outcome: null,
+  };
+  assert.deepEqual(parseNetworkSnapshot(value), value);
+  for (const modify of [
+    (d) => (d.connections = 1),
+    (d) => (d.config.maxConnections = 99),
+    (d) => (d.config.timeoutSeconds = 0),
+    (d) => (d.config.retries = 4),
+    (d) => d.config.peers.push(d.config.peers[0]),
+    (d) => (d.config.peers[0].nodeId = d.nodeId),
+    (d) => (d.config.peers[0].certificateDer = "private"),
+    (d) => (d.privateKey = "secret"),
+    (d) =>
+      (d.outcome = {
+        operation: "download",
+        peerId: "e".repeat(64),
+        bytes: "1",
+        attempts: 1,
+        available: null,
+      }),
+  ]) {
+    const bad = structuredClone(value);
+    modify(bad);
+    assert.throws(() => parseNetworkSnapshot(bad), code("INVALID_RESPONSE"));
+  }
+  const complete = structuredClone(value);
+  complete.outcome = {
+    operation: "download",
+    peerId: "c".repeat(64),
+    bytes: "1048576",
+    attempts: 2,
+    available: null,
+  };
+  assert.deepEqual(parseNetworkSnapshot(complete), complete);
 });

@@ -16,3 +16,5 @@ pub mod associations;
 pub mod archive;
 
 pub mod guardian;
+
+pub mod guardian_network;

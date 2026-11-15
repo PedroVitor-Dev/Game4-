@@ -364,6 +364,88 @@ impl GuardianNode {
         sql(inner.db.execute("INSERT INTO approvals(content,name,group_idx,shard,hash,bytes,sharing) VALUES(?1,?2,?3,?4,?5,?6,?7) ON CONFLICT(content,group_idx,shard) DO UPDATE SET sharing=excluded.sharing,hash=excluded.hash,bytes=excluded.bytes,name=excluded.name",params![doc.content_id,doc.manifest.files[0].path,group as i64,index,local::hex(f.sha256),f.bytes,sharing]))?;
         Ok(())
     }
+    pub(super) fn storage_root(&self) -> &Path {
+        &self.root
+    }
+    pub fn participation_active(&self) -> bool {
+        self.gate.active.load(Ordering::Acquire)
+    }
+    pub fn can_receive(&self, f: &FragmentDescriptor) -> Result<()> {
+        if !self.participation_active() {
+            return Err(Error::GuardianDisabled);
+        }
+        let inner = self.inner.lock().map_err(|_| storage())?;
+        if !allowed(&inner.db, f, false)? {
+            return Err(Error::GuardianNotApproved);
+        }
+        let extra = if self.blob(f.sha256).exists() {
+            0
+        } else {
+            u64::from(f.bytes)
+        };
+        if self
+            .used()?
+            .0
+            .checked_add(extra)
+            .is_none_or(|n| n > quota(&config(&inner.db).unwrap_or_default()).unwrap_or(0))
+        {
+            return Err(Error::QuotaExceeded);
+        }
+        Ok(())
+    }
+    pub(super) fn pace_transfer(
+        &self,
+        upload: bool,
+        bytes: usize,
+        ctx: &OperationContext,
+    ) -> Result<()> {
+        let c = {
+            let inner = self.inner.lock().map_err(|_| storage())?;
+            config(&inner.db)?
+        };
+        pace(
+            &self.gate,
+            upload,
+            bytes,
+            if upload { c.upload_bps } else { c.download_bps },
+            ctx,
+        )
+    }
+    pub(super) fn can_share(&self, f: &FragmentDescriptor) -> Result<()> {
+        if !self.participation_active() {
+            return Err(Error::GuardianDisabled);
+        }
+        let inner = self.inner.lock().map_err(|_| storage())?;
+        if !allowed(&inner.db, f, true)? {
+            return Err(Error::GuardianNotApproved);
+        }
+        Ok(())
+    }
+    pub fn shared_availability(
+        &self,
+        requested: &[FragmentDescriptor],
+        ctx: &OperationContext,
+    ) -> Result<Vec<bool>> {
+        if requested.len() > 100 {
+            return Err(Error::MetadataLimit);
+        }
+        if !self.participation_active() {
+            return Err(Error::GuardianDisabled);
+        }
+        let inner = self.inner.lock().map_err(|_| storage())?;
+        requested
+            .iter()
+            .map(|f| {
+                ctx.checkpoint()?;
+                if !allowed(&inner.db, f, true)? {
+                    return Ok(false);
+                }
+                Ok(open(&self.blob(f.sha256))
+                    .and_then(|mut file| verify(&mut file, f, ctx))
+                    .is_ok())
+            })
+            .collect()
+    }
     pub fn import_file(
         &self,
         f: &FragmentDescriptor,

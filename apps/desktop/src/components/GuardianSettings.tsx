@@ -1,3 +1,4 @@
+import { GuardianNetworkSettings } from "./GuardianNetworkSettings";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { GuardianSnapshot, GuardianRequest } from "@game4/ipc-contracts";
@@ -188,6 +189,12 @@ export function GuardianSettings() {
           >
             {t("guardian.prune")}
           </button>
+          <GuardianNetworkSettings
+            guardian={data}
+            onChanged={() =>
+              void run({ action: "status", offset: data.offset })
+            }
+          />
           <h3>{t("guardian.approveTitle")}</h3>
           <p>{t("guardian.approveHelp")}</p>
           <form
